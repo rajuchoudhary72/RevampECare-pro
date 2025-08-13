@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/ubuntu_bold"
-                        android:text="All"
+                        android:text="@string/all"
                         app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
                         />
 
@@ -69,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/ubuntu_bold"
-                        android:text="My"
+                        android:text="@string/my"
                         app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
                         />
 
@@ -114,7 +114,7 @@
             android:gravity="center"
             android:visibility="gone"
             android:layout_centerInParent="true"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
 
             />

@@ -102,7 +102,7 @@
                     android:gravity="center"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="5dp"
-                    android:text="No House Assign"
+                    android:text="@string/no_house_assign"
                     android:textColor="@color/sub_text_color"
                     android:textColorHint="@color/sub_text_color" />
             </LinearLayout>

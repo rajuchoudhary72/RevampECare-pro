@@ -811,7 +811,7 @@ class AddSyllabusFragment : Fragment() {
 
 
     private fun createImageFile(): File {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
         val storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
     }

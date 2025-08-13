@@ -52,7 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:text="@string/select_year" />
+                    android:text="@string/general_select_year" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,7 +72,7 @@
                     android:inputType="none"
                     android:textSize="10sp"
                     android:focusable="false"
-                    android:text="Select Date" />
+                    android:text="@string/general_select_date" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -93,7 +93,7 @@
                 android:gravity="center"
                 android:id="@+id/tvSession"
                 android:padding="@dimen/_5sdp"
-                android:text="@string/attendance_in_session_2021_2022"
+                android:text="@string/attendance_in_session"
                 android:textColor="@color/black" />
 
             <LinearLayout
@@ -225,7 +225,7 @@
                 android:gravity="center"
                 android:id="@+id/tvHeadingDateRange"
                 android:padding="@dimen/_5sdp"
-                android:text="@string/attendance_between_01_aug_2021_to_09_oct_2021"
+                android:text="@string/attendance_in_between"
                 android:textColor="@color/black" />
 
             <LinearLayout
@@ -370,7 +370,7 @@
                     android:gravity="center"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="S.No" />
+                    android:text="@string/s_no" />
 
                 <View
                     android:layout_width="0.5dp"
@@ -385,7 +385,7 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:paddingVertical="10dp"
-                    android:text="Date"
+                    android:text="@string/general_date"
 
                     />
 
@@ -403,7 +403,7 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:paddingVertical="10dp"
-                    android:text="Day" />
+                    android:text="@string/general_day" />
 
                 <View
                     android:layout_width="0.5dp"
@@ -418,7 +418,7 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:paddingVertical="10dp"
-                    android:text="Status" />
+                    android:text="@string/general_status" />
 
 
                 <View
@@ -434,7 +434,7 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:paddingVertical="10dp"
-                    android:text="Is Late" />
+                    android:text="@string/general_is_late" />
 
                 <View
                     android:layout_width="0.5dp"
@@ -465,7 +465,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
-            android:text="@string/no_Attendance_available"
+            android:text="@string/attendance_no_attendance_available"
             android:textSize="16sp"
             android:visibility="gone"
 

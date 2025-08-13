@@ -323,7 +323,7 @@ class DashboardFragment : Fragment() {
         minDateString: String?,
         onDateSelected: (String) -> Unit
     ) {
-        val options = arrayOf("Today", "Yesterday", "Select Date")
+        val options = arrayOf(getString(R.string.general_today), getString(R.string.general_yesterday), getString(R.string.general_select_date))
         val dateFormat = "yyyy-MM-dd"
 
         // Parse the minDateString to a Long value
@@ -342,7 +342,7 @@ class DashboardFragment : Fragment() {
                         modeByCollectionFilter = "Today"
                         val today = Calendar.getInstance().time
                         val formattedDate =
-                            SimpleDateFormat(dateFormat, Locale.getDefault()).format(today)
+                            SimpleDateFormat(dateFormat, Locale.ENGLISH).format(today)
                         onDateSelected(formattedDate)
                     }
 
@@ -352,7 +352,7 @@ class DashboardFragment : Fragment() {
                         calendar.add(Calendar.DAY_OF_YEAR, -1)
                         val yesterday = calendar.time
                         val formattedDate =
-                            SimpleDateFormat(dateFormat, Locale.getDefault()).format(yesterday)
+                            SimpleDateFormat(dateFormat, Locale.ENGLISH).format(yesterday)
                         onDateSelected(formattedDate)
                     }
 
@@ -365,14 +365,14 @@ class DashboardFragment : Fragment() {
                             .build()
 
                         val datePicker = MaterialDatePicker.Builder.datePicker()
-                            .setTitleText("Select date")
+                            .setTitleText(getString(R.string.general_select_date))
                             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                             .setCalendarConstraints(constraintsBuilder)
                             .build()
 
                         datePicker.addOnPositiveButtonClickListener {
                             val selectedDate =
-                                SimpleDateFormat(dateFormat, Locale.getDefault()).format(it)
+                                SimpleDateFormat(dateFormat, Locale.ENGLISH).format(it)
                             modeByCollectionFilter = selectedDate
                             onDateSelected(selectedDate)
                         }
@@ -452,7 +452,7 @@ class DashboardFragment : Fragment() {
             CalendarConstraints.Builder() // You can add constraints here if needed
 
         val datePicker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTitleText("Select Date Range")
+            .setTitleText(getString(R.string.select_date_range))
             .setCalendarConstraints(
                 constraintsBuilder.setValidator(DateValidatorPointBackward.now()).build()
             )
@@ -460,9 +460,9 @@ class DashboardFragment : Fragment() {
 
         datePicker.addOnPositiveButtonClickListener { selection ->
             val startDate =
-                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selection.first)
+                SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(selection.first)
             val endDate =
-                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selection.second)
+                SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(selection.second)
             callback(startDate, endDate)
         }
 
@@ -494,7 +494,7 @@ class DashboardFragment : Fragment() {
 
     private fun formatDate(inputDate: String): String {
         val inputFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
-        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
 
         val date = inputFormat.parse(inputDate)
         return outputFormat.format(date)

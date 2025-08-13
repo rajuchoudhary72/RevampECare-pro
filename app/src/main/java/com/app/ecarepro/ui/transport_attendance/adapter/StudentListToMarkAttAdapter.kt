@@ -60,19 +60,19 @@ class StudentListToMarkAttAdapter(
             bin.apply {
                 tvStuName.text =  data.stName
                 tvStopName.text = buildString {
-                    append("Stop: ")
+                    append(transportAttendanceFragment.getString(R.string.stop))
                     append(data.stop)
                 }
                 tvRollNo.text = buildString {
-                    append("Roll No: ")
+                    append(transportAttendanceFragment.getString(R.string.general_roll_no_pun))
                     append(data.rollNo)
                 }
                 tvClassName.text = buildString {
-                    append("Class: ")
+                    append(transportAttendanceFragment.getString(R.string.general_classes_pun))
                     append(data.className)
                 }
                 tvAdmissionNo.text = buildString {
-                    append("Admission No: ")
+                    append(transportAttendanceFragment.getString(R.string.general_admission_no_pun))
                     append(data.admissionNo)
                 }
                 tvSerialNumber.text = (absoluteAdapterPosition + 1).toString()
@@ -108,7 +108,8 @@ class StudentListToMarkAttAdapter(
                     statusNew.isVisible = false
 
                     llTransportAtt.isVisible = false
-                    tvTripTypeStatus.text = "Drop  Status"
+                    tvTripTypeStatus.text =
+                        transportAttendanceFragment.getString(R.string.drop_status)
                     if (stuLstList[absoluteAdapterPosition].isdropped) {
                          tvDrop.isVisible = false
                         tvDropped.isVisible = true
@@ -153,12 +154,12 @@ class StudentListToMarkAttAdapter(
                     statusNew.isVisible = true
                     if (stuLstList[absoluteAdapterPosition].pickupStatus==Constant.PRESENT){
                         statusNew.setTextColor(transportAttendanceFragment.resources.getColor(R.color.green))
-                        statusNew.text = "Present"
+                        statusNew.text = transportAttendanceFragment.getString(R.string.present)
                     } else if (stuLstList[absoluteAdapterPosition].pickupStatus==Constant.ABSENT){
                         statusNew.setTextColor(transportAttendanceFragment.resources.getColor(R.color.red))
-                        statusNew.text = "Absent"
+                        statusNew.text = transportAttendanceFragment.getString(R.string.absent)
                     }
-                    tvTripTypeStatus.text = "Up Trip Status: "
+                    tvTripTypeStatus.text = transportAttendanceFragment.getString(R.string.up_trip_status_pun)
                     opView.visibility=View.VISIBLE
                     tvMarkLeave.visibility=View.VISIBLE
                     updateUI(stuLstList[absoluteAdapterPosition].dropStatus, bin)
@@ -176,7 +177,8 @@ class StudentListToMarkAttAdapter(
                             transportAttendanceFragment.onItemClick(stuLstList[absoluteAdapterPosition], absoluteAdapterPosition, Constant.PRESENT)
                             updateUI(Constant.PRESENT, bin)
                         }else{
-                            SuccessAlertPopup("Alert", "Absent student  status can not be change ")
+                            SuccessAlertPopup("Alert",
+                                transportAttendanceFragment.getString(R.string.absent_student_status_can_not_be_change))
 
 
                         }
@@ -206,7 +208,9 @@ class StudentListToMarkAttAdapter(
                             transportAttendanceFragment.onItemClick(stuLstList[absoluteAdapterPosition], absoluteAdapterPosition, Constant.OP)
                             updateUI(Constant.OP, bin)
                         }else{
-                            SuccessAlertPopup("Alert", "Absent student  status can not be change ")
+                            SuccessAlertPopup(transportAttendanceFragment.getString(R.string.alert),
+                                transportAttendanceFragment.getString(R.string.absent_student_status_can_not_be_change)
+                                )
 
                         }
 

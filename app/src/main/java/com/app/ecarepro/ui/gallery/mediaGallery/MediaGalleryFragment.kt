@@ -59,8 +59,7 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
     private var searchJob: Job? = null  // Job to handle debounce logic
     private val debounceTime = 300L  // 300ms delay
 
-    private val searchByList =
-        mutableListOf<String>("All Search", "NewsPaper", "Headline", "Publish Date", "Year")
+
 
     private var yearList = mutableListOf<String>()
 
@@ -73,7 +72,7 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
     ): View {
         binding = FragmentMediaGalleryBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.toolbar.title = "Media Gallery"
+        binding.toolbar.title = getString(R.string.media_gallery_title)
         binding.toolbar.isVisible = true
         mediaGalleryAdapter = MediaGalleryAdapter(this@MediaGalleryFragment)
 
@@ -268,6 +267,10 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
     }
 
     private fun popUpSearchBy() {
+         val searchByList =
+            mutableListOf<String>(getString(R.string.mediaGallery_search_all_search),
+                getString(R.string.mediaGallery_search_newspaper), getString(R.string.mediaGallery_search_headline),
+                getString(R.string.mediaGallery_search_publish_date), getString(R.string.mediaGallery_search_year))
 
         val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
         val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
@@ -276,7 +279,7 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
         val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
 
-        tvHeading.text = "Select Search By"
+        tvHeading.text = getString(R.string.select_search_by)
         builder.setView(view)
 
 
@@ -326,7 +329,7 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
         val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
 
-        tvHeading.text = "Select Year"
+        tvHeading.text = getString(R.string.select_year)
         builder.setView(view)
 
 
@@ -392,7 +395,7 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
                 1 -> {
                     binding.tvYear.isVisible = false
                     binding.edSearch.isVisible = true
-                    binding.edSearch.hint = "Enter Newspaper"
+                    binding.edSearch.hint = getString(R.string.enter_newspaper)
                     binding.edSearch.setText("")
 
                     binding.tvPubDate.isVisible = false
@@ -401,7 +404,7 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
                 2 -> {
                     binding.tvYear.isVisible = false
                     binding.edSearch.isVisible = true
-                    binding.edSearch.hint = "Enter Headline"
+                    binding.edSearch.hint = getString(R.string.enter_headline)
                     binding.tvPubDate.isVisible = false
                     binding.edSearch.setText("")
                 }

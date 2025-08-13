@@ -20,7 +20,6 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentBookLibraryBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.book_library.view_model.BookLibraryViewModel
-import com.app.ecarepro.ui.mainActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -42,7 +41,7 @@ class BookLibraryFragment : Fragment() {
 
         bookLibraryBinding=FragmentBookLibraryBinding.inflate(inflater,container,false)
         bookLibraryBinding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        bookLibraryBinding.includeToolbar.toolbarTitle.text = getString(R.string.library)
+        bookLibraryBinding.includeToolbar.toolbarTitle.text = getString(R.string.library_title)
 
         return bookLibraryBinding.root
     }

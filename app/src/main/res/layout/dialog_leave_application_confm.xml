@@ -63,7 +63,7 @@
                         android:id="@+id/tv_from"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/from_"
+                        android:text="@string/general_from_pun"
                         android:fontFamily="@font/ubuntu_medium"
                         android:textSize="@dimen/_9sdp" />
 
@@ -100,7 +100,7 @@
                         android:id="@+id/tv_to"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/to_"
+                        android:text="@string/general_to_pun"
                         android:fontFamily="@font/ubuntu_medium"
                         android:textSize="@dimen/_9sdp" />
 
@@ -154,7 +154,7 @@
                     android:padding="@dimen/_2sdp"
                     android:fontFamily="@font/ubuntu_medium"
                     android:textSize="@dimen/_12sdp"
-                    android:text="@string/name" />
+                    android:text="@string/general_name" />
 
             </RelativeLayout>
 

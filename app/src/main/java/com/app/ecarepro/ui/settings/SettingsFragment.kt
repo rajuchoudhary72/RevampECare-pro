@@ -57,6 +57,9 @@ class SettingsFragment : Fragment() {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
             cardChangePassword.setOnClickListener { findNavController().navigate(R.id.changePasswordFragment) }
             cardChangeUsername.setOnClickListener { findNavController().navigate(R.id.changeUsernameFragment) }
+            cardChangeLang.setOnClickListener {
+                findNavController().navigate(R.id.languageSelect)
+            }
             cardSyncData.setOnClickListener {
                 /*sync  manually  from user click sync button  on setting screen */
                 lifecycleScope.launch {

@@ -46,7 +46,7 @@ class ShowAttendanceFragment : Fragment() {
         }
     }
     private val dateFrom: Calendar = Calendar.getInstance()
-    val dateFormateForApi = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val dateFormateForApi = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
     private val dateTo: Calendar = Calendar.getInstance()
     private var yId = 0
      private var studentID: String = ""
@@ -83,7 +83,7 @@ class ShowAttendanceFragment : Fragment() {
         }
         updateDateFilterText()
         callApi()
-        binding.tvSession.text = getString(R.string.attendance_in_session_2021_2022, "")
+        binding.tvSession.text = getString(R.string.attendance_in_session, "")
 
         binding.autoCompleteYear.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, pos, id ->
@@ -91,7 +91,7 @@ class ShowAttendanceFragment : Fragment() {
                 yId = sessionAdapter.getItem(pos)?.yrID ?: 0
                 val session = sessionAdapter.getItem(pos)?.session ?: ""
                 binding.tvSession.text =
-                    getString(R.string.attendance_in_session_2021_2022, session)
+                    getString(R.string.attendance_in_session, session)
                 callApi()
 
             }
@@ -99,7 +99,7 @@ class ShowAttendanceFragment : Fragment() {
     }
 
     private fun updateDateFilterText(setAsFilter: Boolean = false) {
-        val dateFormate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        val dateFormate = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
         dateFormate.format(Date(dateFrom.timeInMillis))
           from = dateFormate.format(Date(dateFrom.timeInMillis))
           to = dateFormate.format(Date(dateTo.timeInMillis))
@@ -109,7 +109,7 @@ class ShowAttendanceFragment : Fragment() {
         binding.apply {
             dateRange.setText("$from - $to")
             tvHeadingDateRange.text = getString(
-                R.string.attendance_between_01_aug_2021_to_09_oct_2021,
+                R.string.attendance_in_between,
                 "$from to $to"
             )
              if (toStartDate!="" && toEndDate!=""){
@@ -127,13 +127,13 @@ class ShowAttendanceFragment : Fragment() {
 
                 dateRange.setText("$from - $to")
                 tvHeadingDateRange.text = getString(
-                    R.string.attendance_between_01_aug_2021_to_09_oct_2021,
+                    R.string.attendance_in_between,
                     "$toStartDate to $toEndDate"
                 )
             } else {
                 dateRange.setText("$from - $to")
                 tvHeadingDateRange.text = getString(
-                    R.string.attendance_between_01_aug_2021_to_09_oct_2021,
+                    R.string.attendance_in_between,
                     "$from to $to"
                 )
             }

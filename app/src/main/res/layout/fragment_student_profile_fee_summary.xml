@@ -44,7 +44,7 @@
                     android:paddingLeft="@dimen/_10sdp"
                     android:paddingEnd="@dimen/_10sdp"
                     android:paddingRight="@dimen/_10sdp"
-                    android:text="@string/select_year"
+                    android:text="@string/general_select_year"
                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_14sdp"
                     android:visibility="visible"
@@ -97,7 +97,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
-                    android:text="@string/installment"
+                    android:text="@string/Installment"
                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_10sdp" />
 
@@ -167,7 +167,7 @@
                     android:layout_weight="0.8"
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
-                    android:text="@string/total"
+                    android:text="@string/general_total"
                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_12sdp" />
 
@@ -368,7 +368,7 @@
                 android:id="@+id/tvNoData"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/no_record_found"
+                android:text="@string/general_no_record_found"
                android:layout_centerInParent="true"
                 android:visibility="gone"
                  android:gravity="center"

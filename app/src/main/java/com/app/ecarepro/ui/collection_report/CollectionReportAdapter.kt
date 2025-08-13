@@ -42,8 +42,8 @@ class CollectionReportAdapter(private var collectionReports: List<CollectionRepo
 
 
 private fun String.changeDateFormat(): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val outputFormat = SimpleDateFormat("MMM dd",Locale.getDefault())
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+    val outputFormat = SimpleDateFormat("MMM dd",Locale.ENGLISH)
     val inputDateStr = this
     val date = inputFormat.parse(inputDateStr)
     return date?.let { outputFormat.format(it) } ?: this

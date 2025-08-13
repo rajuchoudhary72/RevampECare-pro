@@ -114,10 +114,10 @@ class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
                     classID = 0
                     subID = 0
                     binding.recyclerNotice.isVisible = false
-                    binding.includeToolbar.btnSave.isVisible = false
-                    binding.autoCompleteSub.setText("Select Subject ", false)
-                    binding.autoCompleteClass.setText("Select Class ", false)
-                    from = getString(R.string.class_attendance)
+                    binding.includeToolbar.btnSave.isVisible=false
+                    binding.autoCompleteSub.setText(getString(R.string.select_subject),false)
+                    binding.autoCompleteClass.setText(getString(R.string.select_class),false)
+                    from=getString(R.string.class_attendance)
                     getClassList()
                     binding.includeToolbar.toolbarTitle.text = from
                 }
@@ -126,10 +126,10 @@ class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
                     classID = 0
                     subID = 0
                     binding.recyclerNotice.isVisible = false
-                    binding.includeToolbar.btnSave.isVisible = false
-                    binding.autoCompleteSub.setText("Select Subject ", false)
-                    binding.autoCompleteClass.setText("Select Class ", false)
-                    from = getString(R.string.subject_attendance)
+                    binding.includeToolbar.btnSave.isVisible=false
+                    binding.autoCompleteSub.setText(getString(R.string.select_subject),false)
+                    binding.autoCompleteClass.setText(getString(R.string.select_class),false)
+                    from=getString(R.string.subject_attendance)
                     getClassList()
                     binding.includeToolbar.toolbarTitle.text = from
                 }
@@ -151,12 +151,12 @@ class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
                     classID = classesForSubTeaches[pos].classID
                     className = classesForSubTeaches[pos].className
                     getSubjectList(classID)
-                } else {
-                    subID = 0
-                    binding.autoCompleteSub.setText("Select Subject ", false)
-                    classID = classesForClsTeaches[pos].classID
-                    className = classesForClsTeaches[pos].className
-                    getStudentListToMarkAtt(classID, subID, orderBY)
+                }else{
+                    subID=0
+                    binding.autoCompleteSub.setText(getString(R.string.select_subject),false)
+                    classID=classesForClsTeaches[pos].classID
+                    className=classesForClsTeaches[pos].className
+                    getStudentListToMarkAtt(classID,subID,orderBY)
                 }
 
             }
@@ -301,12 +301,13 @@ class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
                                 binding.includeToolbar.btnSave.isVisible = true
                                 binding.recyclerNotice.isVisible = true
                                 binding.tvNoData.isVisible = false
-                                if (it.data.hasMarked) {
-                                    binding.includeToolbar.btnSave.isVisible = editMode
-                                    binding.includeToolbar.btnSave.text = "Modify"
-                                } else {
-                                    binding.includeToolbar.btnSave.text = "Save"
-                                }
+                                 if (it.data.hasMarked){
+                                     binding.includeToolbar.btnSave.isVisible = editMode
+                                     binding.includeToolbar.btnSave.text =
+                                         getString(R.string.modify)
+                                 }else{
+                                     binding.includeToolbar.btnSave.text = getString(R.string.save)
+                                 }
 
                                 if (!it.data.freezingTime.isNullOrEmpty()) {
                                     binding.includeToolbar.btnSave.isVisible =
@@ -379,7 +380,7 @@ class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
         dialog.setContentView(R.layout.dialog_pendong_leave)
         tv_pending_leave = dialog.findViewById<TextView>(R.id.tv_pending_leave)
 
-        tv_pending_leave.text = "Pending Leave: $pendingLeave"
+        tv_pending_leave.text = getString(R.string.pending_leave)+" $pendingLeave"
 
         cv_yes = dialog.findViewById<CardView>(R.id.cv_yes)
         cv_no = dialog.findViewById<CardView>(R.id.cv_no)
@@ -588,19 +589,20 @@ class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
 
         tv_working_holiday.text = wh.toString() + ""
         tv_absent_count.text = a.toString() + ""
-        if (approve_leave > 0 && (l - approve_leave) > 0) {
+        if (approve_leave>0 && (l-approve_leave)>0){
+        tv_leave_count.text = buildString {
+        append(l)
+        append(" (")
+        append(l-approve_leave)
+        append(getString(R.string.marked))
+        append(" , ")
+        append(approve_leave)
+        append(getString(R.string.pre_approved))
+        append(" )")
+       } } else if (approve_leave>0){
             tv_leave_count.text = buildString {
-                append(l)
-                append(" (")
-                append(l - approve_leave)
-                append(" Marked, ")
                 append(approve_leave)
-                append(" Pre-Approved)")
-            }
-        } else if (approve_leave > 0) {
-            tv_leave_count.text = buildString {
-                append(approve_leave)
-                append(" (Pre-Approved)")
+                append(getString(R.string.pre_approved_bra))
             }
         } else {
             tv_leave_count.text = l.toString() + ""
@@ -693,7 +695,7 @@ class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
     }
 
     override fun onItemClick(t: StudentAtt, pos: Int, boolean: Boolean) {
-        // uploadStudentList.add( t)
+       // uploadStudentList.add( t)
 //       val data= studentList[pos]
 //        data.status=t.status
 //        data.isLate=t.isLate
@@ -764,28 +766,28 @@ class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
         } else
 
             if (markAttModel.smsAlertEnable) {
-                rb1.visibility = View.GONE
-                rb2.visibility = View.GONE
-                tv_sub_text.visibility = View.VISIBLE
-                tv_sub_text.text = "Do you want to sent SMS Alert ?"
-                rbType = 1
-                ll_yes_no.visibility = View.VISIBLE
-                tv_done.visibility = View.GONE
-            } else if (markAttModel.msgAlertEnable) {
-                rb1.visibility = View.GONE
-                rb2.visibility = View.GONE
-                tv_sub_text.visibility = View.VISIBLE
-                tv_sub_text.text = "Do you want to sent App Message Alert ?"
-                rbType = 2
-                ll_yes_no.visibility = View.VISIBLE
-                tv_done.visibility = View.GONE
-            } else {
-                rb1.visibility = View.GONE
-                rb2.visibility = View.GONE
-                tv_sub_text.visibility = View.GONE
-                ll_yes_no.visibility = View.GONE
-                tv_done.visibility = View.VISIBLE
-            }
+            rb1.visibility = View.GONE
+            rb2.visibility = View.GONE
+            tv_sub_text.visibility = View.VISIBLE
+            tv_sub_text.text = getString(R.string.do_you_want_to_sent_sms_alert)
+            rbType = 1
+            ll_yes_no.visibility = View.VISIBLE
+            tv_done.visibility = View.GONE
+        } else if (markAttModel.msgAlertEnable) {
+            rb1.visibility = View.GONE
+            rb2.visibility = View.GONE
+            tv_sub_text.visibility = View.VISIBLE
+            tv_sub_text.text = getString(R.string.do_you_want_to_sent_app_message_alert)
+            rbType = 2
+            ll_yes_no.visibility = View.VISIBLE
+            tv_done.visibility = View.GONE
+        } else {
+            rb1.visibility = View.GONE
+            rb2.visibility = View.GONE
+            tv_sub_text.visibility = View.GONE
+            ll_yes_no.visibility = View.GONE
+            tv_done.visibility = View.VISIBLE
+        }
         rb1.setOnCheckedChangeListener { buttonView, isChecked -> if (isChecked) rbType = 1 }
         rb2.setOnCheckedChangeListener { buttonView, isChecked -> if (isChecked) rbType = 2 }
         tvCancel.setOnClickListener {
@@ -800,7 +802,8 @@ class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
         }
         tvOk.setOnClickListener(View.OnClickListener {
             if (rbType == 0) {
-                Toast.makeText(context, "Please select Notification type", Toast.LENGTH_SHORT)
+                Toast.makeText(context,
+                    getString(R.string.please_select_notification_type), Toast.LENGTH_SHORT)
                     .show()
             } else {
                 if (rbType == 1) {
@@ -816,13 +819,13 @@ class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
                         ) { isSuccess, message ->
                             (requireActivity() as MainActivity).showLoader(false)
                             if (isSuccess) {
-                                mainActivity().showMessage("SMS Sent Successfully")
+                                mainActivity().showMessage(getString(R.string.sms_sent_successfully))
                             } else {
                                 mainActivity().showMessage(message)
                             }
                         }
                     } else {
-                        Toast.makeText(context, "Sms Template not defined", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, R.string.sms_template_not_defined, Toast.LENGTH_SHORT)
                             .show()
                     }
                 } else {

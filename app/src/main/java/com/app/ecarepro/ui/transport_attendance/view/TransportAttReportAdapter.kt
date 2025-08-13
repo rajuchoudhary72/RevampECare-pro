@@ -64,9 +64,9 @@ class TransportAttReportAdapter(
                     .placeholder(transportAttendanceFragment.resources.getDrawable(R.drawable.default_profile))
                     .into(civ_stu_img)
                 name.text = item.stName
-                tv_class.text = "Class: " + item.className
-                tv_roll_no.text = "Roll No.:" + item.rollNo
-                tv_admission_no.text = "Admission No. : " + item.admissionNo
+                tv_class.text = transportAttendanceFragment.getString(R.string.general_classes_pun) + item.className
+                tv_roll_no.text = transportAttendanceFragment.getString(R.string.general_roll_no_pun)+ item.rollNo
+                tv_admission_no.text = transportAttendanceFragment.getString(R.string.general_admission_no_pun) + item.admissionNo
                 tvSerialNumber.text = globalPosition.toString()
                 when (item.pickupAtt) {
                     "Present" -> {

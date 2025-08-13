@@ -46,7 +46,8 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
 
 
     private val filterList =
-        listOf<String>("Name", "Admission Number", "Class", "Father Name", "Contact Number")
+        listOf<String>(getString(R.string.name), getString(R.string.admission_no),
+            getString(R.string.classes), getString(R.string.father_name), getString(R.string.contact_number))
 
     @Inject
     lateinit var userDataStore: UserDataStore

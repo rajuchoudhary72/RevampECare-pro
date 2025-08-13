@@ -206,7 +206,7 @@ public class Generic {
 
     public static long convertApiDateTimeToTimeStamp(String serverDate) {
         try {
-            return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SS", Locale.getDefault()).parse(serverDate).getTime();
+            return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SS", Locale.ENGLISH).parse(serverDate).getTime();
         } catch (ParseException e) {
             e.printStackTrace();
             return 0;
@@ -318,7 +318,7 @@ public class Generic {
     }
 
     public static boolean checkDateRange(String toDate, String fromDate) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd"/*,Locale.getDefault()*/);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd"/*,Locale.ENGLISH*/);
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
         Date date1 = null;
         Date date2 = null;
@@ -336,7 +336,7 @@ public class Generic {
         return false;
     }
     public static boolean checkDateRangeLessonPlan(String toDate, String fromDate) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd"/*,Locale.getDefault()*/);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd"/*,Locale.ENGLISH*/);
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
         Date date1 = null;
         Date date2 = null;

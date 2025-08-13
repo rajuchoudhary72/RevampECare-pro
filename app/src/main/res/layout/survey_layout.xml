@@ -40,7 +40,7 @@
             android:layout_centerInParent="true"
             android:drawablePadding="@dimen/_10sdp"
             android:gravity="center"
-            android:text="No Survey Available"
+            android:text="@string/no_survey_available"
             android:textSize="@dimen/_20sdp"
             android:visibility="gone"
             app:drawableTopCompat="@drawable/ic_no_servey" />

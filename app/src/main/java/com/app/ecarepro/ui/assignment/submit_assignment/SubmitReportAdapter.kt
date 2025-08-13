@@ -1,6 +1,5 @@
 package com.app.ecarepro.ui.assignment.submit_assignment
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,15 +8,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.AssignmentSubmitReportListItemBinding
-import com.app.ecarepro.databinding.FileListItemBinding
 
-import com.app.ecarepro.databinding.SubmittedStuListBinding
- import com.app.ecarepro.model.AssignSubmitStudent
+import com.app.ecarepro.model.AssignSubmitStudent
 
 
 class SubmitReportAdapter(
     private var activityLST: List<AssignSubmitStudent>,
-    private var listner :(AssignSubmitStudent,Int) -> Unit
+    private val submitAssignmentFragment: SubmitAssignmentFragment,
+    private var listner: (AssignSubmitStudent, Int) -> Unit
 ) :
     RecyclerView.Adapter<SubmitReportAdapter.AssignmentListAdapter>() {
 
@@ -36,7 +34,7 @@ class SubmitReportAdapter(
         val binding= DataBindingUtil.bind<AssignmentSubmitReportListItemBinding>(holder.itemView)
         binding?.apply {
              tvSubmitOn.text = buildString {
-                 append("Submitted On : ")
+                 append(submitAssignmentFragment.getString(R.string.general_submitted_on))
                  append(activityLST[position].submittedOn)
              }
             tvtittle.text = buildString {

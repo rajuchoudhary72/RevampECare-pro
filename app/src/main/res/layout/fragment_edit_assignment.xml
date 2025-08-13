@@ -58,7 +58,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/subject"
+                        android:text="@string/general_subject"
 
 
 
@@ -88,7 +88,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/assignment_date"
+                            android:text="@string/assignment_assignment_date"
                             android:layout_marginStart="15dp"
                             />
 
@@ -104,7 +104,7 @@
                             android:fontFamily="@font/ubuntu_light"
                             android:gravity="center_vertical"
                             android:padding="10dp"
-                            android:text="@string/assignment_date"
+                            android:text="@string/assignment_assignment_date"
 
                             android:visibility="visible" />
 
@@ -123,7 +123,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/submission_date"
+                            android:text="@string/assignment_submission_date"
                             android:layout_marginStart="15dp"
                             />
 
@@ -139,7 +139,7 @@
                         android:fontFamily="@font/ubuntu_light"
                         android:gravity="center_vertical"
                         android:padding="10dp"
-                        android:text="@string/submission_date"
+                        android:text="@string/assignment_submission_date"
 
                         android:visibility="visible" />
 
@@ -157,7 +157,7 @@
                       <TextView
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:text="@string/title"
+                          android:text="@string/general_title_pun"
                           android:layout_marginStart="15dp"
                           />
 
@@ -171,7 +171,7 @@
                           android:background="@drawable/shape_line"
                           android:fontFamily="@font/ubuntu_light"
                           android:gravity="center_vertical"
-                          android:hint="@string/title"
+                          android:hint="@string/general_title"
                           android:lines="1"
                           android:padding="10dp"
                           android:visibility="visible"
@@ -191,7 +191,7 @@
                     android:background="@drawable/shape_line"
                     android:fontFamily="@font/ubuntu_light"
                     android:gravity="center_vertical"
-                    android:hint="@string/type_your_assignment"
+                    android:hint="@string/assignment_type_your_assignment"
                     android:lines="4"
                     android:maxLines="6"
                     android:padding="10dp"
@@ -221,7 +221,7 @@
                             android:fontFamily="@font/ubuntu_medium"
                             android:lines="1"
                             android:padding="7dp"
-                            android:text="@string/attachment"
+                            android:text="@string/general_attachment"
                             android:textColor="#545454" />
 
                         <ImageView
@@ -247,7 +247,7 @@
 
                         android:drawablePadding="6dp"
                         android:gravity="center_vertical"
-                        android:text="Browse file"
+                        android:text="@string/general_browse_file"
                         app:drawableRightCompat="@drawable/ic_add_green_fil" />
 
                 </RelativeLayout>
@@ -258,7 +258,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:fontFamily="@font/ubuntu_light"
-                    android:text="@string/lbl_assignment_support_file_details" />
+                    android:text="@string/assignment_support_file_size" />
 
                 <CheckBox
                     android:id="@+id/cbMultipleActive"
@@ -267,7 +267,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="@string/allow_student_for_multiple_submission"
+                    android:text="@string/assignment_allow_student_for_multiple_submission"
 
                     android:textSize="16sp" />
 
@@ -277,7 +277,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="@string/active" />
+                    android:text="@string/general_active" />
 
                 <Button
                     android:id="@+id/btnSubmit"
@@ -286,7 +286,7 @@
                     android:layout_gravity="center"
                     android:layout_marginVertical="12dp"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="@string/update"
+                    android:text="@string/general_update"
                     android:textColor="@color/white" />
 
 

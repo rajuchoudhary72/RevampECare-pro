@@ -76,7 +76,7 @@ class DashboardViewModel @Inject constructor(
     }
     init {
         getFeeCollection()
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         getTodayModeWiseCollection(sdf.format(Date())) { _, _ ->
         }
         getFeeDefaulters(0, 0.toString())

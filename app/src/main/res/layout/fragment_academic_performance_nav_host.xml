@@ -99,7 +99,7 @@
                                 android:paddingLeft="@dimen/_10sdp"
                                 android:paddingEnd="@dimen/_10sdp"
                                 android:paddingRight="@dimen/_10sdp"
-                                android:text="@string/select_year"
+                                android:text="@string/general_select_year"
                                 android:textColor="@color/grey_60"
                                 android:textSize="@dimen/_14sdp"
                                 android:visibility="visible"
@@ -166,7 +166,7 @@
             android:gravity="center"
             android:visibility="gone"
             android:layout_marginTop="@dimen/_200sdp"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
 
             />

@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -102,21 +101,21 @@ class EditAssignmentFragment : Fragment() {
 
         if ( binding.etTitle.text.toString().isEmpty()){
             isValidate=false
-            mainActivity().showMessage("Enter Title")
+            mainActivity().showMessage(getString(R.string.general_enter_title))
         }
-        if ( binding.ctvAssignmentDt.text.toString()==getString(R.string.assignment_date)){
+        if ( binding.ctvAssignmentDt.text.toString()==getString(R.string.assignment_assignment_date)){
             isValidate=false
-            mainActivity().showMessage("Select Assignment Date")
+            mainActivity().showMessage(getString(R.string.assignment_select_assignment_date))
         }
         if (viewAssignmentData!!.submitDate!=""){
-            if ( binding.tvSubmissionDt.text.toString()==getString(R.string.submission_date)){
+            if ( binding.tvSubmissionDt.text.toString()==getString(R.string.assignment_submission_date)){
                 isValidate=false
-                mainActivity().showMessage("Select Submission Date")
+                mainActivity().showMessage(getString(R.string.assignment_select_submission_date))
             }
         }
         if ( binding.etDescription.text.toString().isEmpty()){
             isValidate=false
-            mainActivity().showMessage("Enter Date")
+            mainActivity().showMessage(getString(R.string.general_enter_date))
         }
 
 
@@ -158,7 +157,7 @@ class EditAssignmentFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                     } is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        mainActivity().showMessage("Assignment Updated Successfully")
+                        mainActivity().showMessage(getString(R.string.assignment_updated_successfully))
                         findNavController().popBackStack()
                     }  }
                 } }
@@ -169,20 +168,20 @@ class EditAssignmentFragment : Fragment() {
 
     private fun selectImageOptionDialog() {
         val items = arrayOf<CharSequence>(
-            getString(R.string.take_photo),
-            getString(R.string.choose_library),
-            getString(R.string.cancel)
+            getString(R.string.general_take_photo),
+            getString(R.string.general_choose_library),
+            getString(R.string.general_cancel)
 
         )
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(getString(R.string.add_photo))
+        builder.setTitle(getString(R.string.general_add_photo))
         builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
             FileAccess.checkPermission(this@EditAssignmentFragment)
-            if (items[item] == getString(R.string.take_photo)) {
+            if (items[item] == getString(R.string.general_take_photo)) {
                 cameraLauncher.launch(FileAccess.cameraIntent())
-            } else if (items[item] == getString(R.string.choose_library)) {
+            } else if (items[item] == getString(R.string.general_choose_library)) {
                 galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] == getString(R.string.cancel)) {
+            } else if (items[item] == getString(R.string.general_cancel)) {
                 dialog.dismiss()
             }
         })

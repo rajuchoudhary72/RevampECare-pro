@@ -140,10 +140,10 @@ class FeeCertificateFragment : Fragment() {
                                      )
                                  }
                              }else{
-                                 mainActivity().showMessage("Fee Certificate Not Found")
+                                 mainActivity().showMessage(getString(R.string.fee_certificate_not_found))
                              }
                          }else{
-                             mainActivity().showMessage("Not Data Found")
+                             mainActivity().showMessage(getString(R.string.general_no_data_found))
                          }
   } }
             }
@@ -171,7 +171,7 @@ class FeeCertificateFragment : Fragment() {
 
     private fun openDownloadedPDF(fileName: String) {
 
-        mainActivity().showMessage("Fee Certificate Saved Successfully in Download Folder")
+        mainActivity().showMessage(getString(R.string.fee_certificate_saved_successfully_in_download_folder))
 
         val file = File(getFilePath(fileName))
 
@@ -190,7 +190,7 @@ class FeeCertificateFragment : Fragment() {
             try {
                 startActivity(chooserIntent)
             } catch (e: ActivityNotFoundException) {
-                Log.e("TAG", "Failed to open PDF  ${e.localizedMessage}")
+                Log.e("TAG", getString(R.string.failed_to_open_pdf)+" ${e.localizedMessage}")
             }
         }
     }

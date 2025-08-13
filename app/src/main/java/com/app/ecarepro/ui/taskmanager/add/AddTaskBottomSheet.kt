@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -18,7 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.view.get
 import java.util.Date
 
 import com.app.ecarepro.databinding.DialogAddTaskBinding
@@ -40,8 +38,6 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import android.text.Editable
-import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
@@ -113,13 +109,13 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
 
         binding.apply {
             startDate.setOnClickListener {
-                selectDate("Select start date") {
+                selectDate(getString(R.string.select_start_date)) {
                     mViewModel.startDate = it
                     startDate.setText(it)
                 }
             }
             endDate.setOnClickListener {
-                selectDate("Select end date") {
+                selectDate(getString(R.string.select_end_date)) {
                     mViewModel.endDate = it
                     endDate.setText(it)
                 }
@@ -145,7 +141,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
 
             selectAssinee.setOnClickListener {
                 if (mViewModel.selectedTitle.value?.assignees.isNullOrEmpty()) {
-                    mainActivity().showMessage("Please select task first to select assignee.")
+                    mainActivity().showMessage(getString(R.string.please_select_task_first_to_select_assignee))
                     return@setOnClickListener
                 }
                 mViewModel.selectedTitle.value?.assignees?.let { it1 -> selectAssignee(it1) }
@@ -246,7 +242,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         // Show dialog
         AlertDialog.Builder(context)
             .setView(dialogView)
-            .setPositiveButton("OK") { _, _ ->
+            .setPositiveButton(getString(R.string.ok)) { _, _ ->
                 /*buildAssigneeModels(assignees.filterIndexed { index, _ ->
                        listView.isItemChecked(
                            index
@@ -254,7 +250,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
                    }.map { it.copy(isSelected = true) })*/
                 buildAssigneeModels(assignees.filter { it.isSelected })
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 
@@ -263,8 +259,8 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         val checkedItems = assignees.map { it.isSelected }.toBooleanArray()
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Select Watchers")
-            .setPositiveButton(resources.getString(R.string.ok)) { dialog, which ->
+            .setTitle(getString(R.string.select_watchers))
+            .setPositiveButton(resources.getString(R.string.general_ok)) { dialog, which ->
                 println(which)
             }
             .setMultiChoiceItems(multiItems, checkedItems) { dialog, which, checked ->
@@ -314,18 +310,19 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
 
     private fun selectImageOptionDialog() {
         val items = arrayOf<CharSequence>(
-            "Take Photo", "Choose from Library",
-            "Cancel"
+            getString(R.string.take_photo),
+            getString(R.string.choose_from_library),
+            getString(R.string.cancel)
         )
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Add Photo!")
+        builder.setTitle(getString(R.string.add_photo))
         builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
             FileAccess.checkPermission(this)
-            if (items[item] == "Take Photo") {
+            if (items[item] ==  getString(R.string.take_photo)) {
                 cameraLauncher.launch(FileAccess.cameraIntent())
-            } else if (items[item] == "Choose from Library") {
+            } else if (items[item] == getString(R.string.choose_from_library)) {
                 galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] == "Cancel") {
+            } else if (items[item] == getString(R.string.cancel)) {
                 dialog.dismiss()
             }
         })
@@ -372,7 +369,7 @@ fun Fragment.selectDatePro(title: String, onDateSelection: (String) -> Unit) {
     datePicker.show(childFragmentManager, "tag");
 }
 fun convertMillisToDateString(millis: Long? = null): String {
-    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = millis?:Date().time
     return formatter.format(calendar.time)

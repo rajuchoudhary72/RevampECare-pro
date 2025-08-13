@@ -82,11 +82,12 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_welcome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:gravity="center"
-                        android:text="@string/welcome"
+                        android:text="@string/home_welcome"
                         android:textColor="@color/grey_60" />
 
                     <TextView
@@ -106,7 +107,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/rl_user_details"
-                        tools:text="@string/welcome" />
+                        tools:text="@string/home_welcome" />
 
                 </LinearLayout>
 

@@ -3,10 +3,12 @@ package com.app.ecarepro.di
 import com.app.ecarepro.data.FomApiRepositoryImpl
 import com.app.ecarepro.data.MessageRepositoryImpl
 import com.app.ecarepro.data.SchoolRepositoryImpl
+import com.app.ecarepro.data.TranslationRepositoryImpl
 import com.app.ecarepro.data.UserRepositoryImpl
 import com.app.ecarepro.data.repository.FomApiRepository
 import com.app.ecarepro.data.repository.MessageRepository
 import com.app.ecarepro.data.repository.SchoolRepository
+import com.app.ecarepro.data.repository.TranslationRepository
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.Binds
 import dagger.Module
@@ -36,6 +38,11 @@ abstract class DataBinds {
     abstract fun bindFomApiRepository(
         impl: FomApiRepositoryImpl
     ): FomApiRepository
+
+    @Binds
+    abstract fun bindTranslationRepository(
+        impl: TranslationRepositoryImpl
+    ): TranslationRepository
 
 
 }

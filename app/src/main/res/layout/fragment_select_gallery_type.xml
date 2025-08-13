@@ -25,7 +25,7 @@
             android:textSize="21sp"
             android:layout_margin="20dp"
             app:drawableTopCompat="@drawable/ic_subject_attendance"
-            android:text="@string/photo"
+            android:text="@string/general_photo"
             android:layout_gravity="center"
             android:gravity="center"
             app:fontFamily="@font/ubuntu_medium" />
@@ -37,7 +37,7 @@
             android:drawablePadding="10dp"
             android:textSize="21sp"
             android:textColor="@color/grey_80"
-            android:text="@string/video"
+            android:text="@string/general_video"
             android:layout_margin="20dp"
             android:layout_gravity="center"
             android:gravity="center"

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.SessionListItemBinding
 import com.app.ecarepro.model.WebSession
 
@@ -39,7 +40,7 @@ class SessionsWebListAdapter(
             }
             tvLocation.text=sessionData.locationCity
             tvLastActive.text= buildString {
-                append("Last Active: ")
+                append(userSessionListFragment.getString(R.string.last_active))
                 append(sessionData.lastActivityTime)
             }
            // llCurrentSession.isVisible=sessionData.isThisDevice

@@ -138,7 +138,7 @@
                             android:layout_height="wrap_content"
                             android:drawablePadding="@dimen/_10sdp"
                             android:gravity="center"
-                            android:text="@string/download"
+                            android:text="@string/general_download"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_14sdp"
                             app:drawableLeftCompat="@drawable/download_white" />

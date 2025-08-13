@@ -127,7 +127,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                     }
                 }
             }else{
-                Toast.makeText(requireContext(),"Select Subject ",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),getString(R.string.select_subject),Toast.LENGTH_SHORT).show()
             }
 
 
@@ -190,7 +190,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                              } is NetworkResult.Success -> {
                                  (requireActivity() as MainActivity).showLoader(false)
 
-                             Toast.makeText(requireContext(),"Submitted Successfully!!!",Toast.LENGTH_SHORT).show()
+                             Toast.makeText(requireContext(),getString(R.string.submitted_successfully),Toast.LENGTH_SHORT).show()
 
                              findNavController().popBackStack()
 
@@ -317,20 +317,20 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
 
     private fun selectImageOptionDialog() {
         val items = arrayOf<CharSequence>(
-            getString(R.string.take_photo),
-            getString(R.string.choose_library),
-            getString(R.string.cancel)
+            getString(R.string.general_take_photo),
+            getString(R.string.general_choose_library),
+            getString(R.string.general_cancel)
 
         )
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(getString(R.string.add_photo))
+        builder.setTitle(getString(R.string.general_add_photo))
         builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
             FileAccess.checkPermission(this@AddLessonFragment)
-            if (items[item] == getString(R.string.take_photo)) {
+            if (items[item] == getString(R.string.general_take_photo)) {
                 cameraLauncher.launch(FileAccess.cameraIntent())
-            } else if (items[item] == getString(R.string.choose_library)) {
+            } else if (items[item] == getString(R.string.general_choose_library)) {
                 galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] == getString(R.string.cancel)) {
+            } else if (items[item] == getString(R.string.general_cancel)) {
                 dialog.dismiss()
             }
         })
@@ -387,7 +387,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
         val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
         val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        tvHeading.text="Select Subject"
+        tvHeading.text=getString(R.string.select_subject)
         builder.setView(view)
 
         relOk.setOnClickListener {
@@ -592,67 +592,69 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
         if (requiredFiled.isAttachmentRequired){
             if (imageString==""){
                 isValidate=false
-                Toast.makeText(requireContext(),"Please select Attachment",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),
+                    getString(R.string.please_select_attachment),Toast.LENGTH_SHORT).show()
             }
         }
         if (requiredFiled.isAuditoryRequired){
             if (!isAuditorySelected){
                 isValidate=false
-                Toast.makeText(requireContext(),"Please select Auditory",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),
+                    getString(R.string.please_select_auditory),Toast.LENGTH_SHORT).show()
             }
         }
         if (requiredFiled.isClosureRequired){
             if (binding.etClosure.text.isEmpty()){
                 isValidate=false
-                binding.etClosure.error="Mandatory Field"
+                binding.etClosure.error= getString(R.string.mandatory_field)
             }
         }
         if (requiredFiled.isExtensionTopicRequired){
             if (binding.etExtension.text.isEmpty()){
                 isValidate=false
-                binding.etExtension.error="Mandatory Field"
+                binding.etExtension.error=getString(R.string.mandatory_field)
             }
         }
         if (requiredFiled.isIntroductionRequired){
             if (binding.etIntroduction.text.isEmpty()){
                 isValidate=false
-                binding.etIntroduction.error="Mandatory Field"
+                binding.etIntroduction.error=getString(R.string.mandatory_field)
             }
         }
         if (requiredFiled.isLearningOutcomesRequired){
             if (binding.etLearningOutcomes.text.isEmpty()){
                 isValidate=false
-                binding.etLearningOutcomes.error="Mandatory Field"
+                binding.etLearningOutcomes.error=getString(R.string.mandatory_field)
             }
         }
         if (requiredFiled.isObjectiveRequired){
             if (binding.etObjective.text.isEmpty()){
                 isValidate=false
-                binding.etObjective.error="Mandatory Field"
+                binding.etObjective.error=getString(R.string.mandatory_field)
             }
         }
         if (requiredFiled.isOtherResourcesRequired){
             if (binding.etOtherResources.text.isEmpty()){
                 isValidate=false
-                binding.etOtherResources.error="Mandatory Field"
+                binding.etOtherResources.error=getString(R.string.mandatory_field)
             }
         }
         if (requiredFiled.isResourcesRequired){
             if (binding.etResources.text.isEmpty()){
                 isValidate=false
-                binding.etResources.error="Mandatory Field"
+                binding.etResources.error=getString(R.string.mandatory_field)
             }
         }
         if (requiredFiled.isTopicRequired){
             if (binding.etTopic.text.isEmpty()){
                 isValidate=false
-                binding.etTopic.error="Mandatory Field"
+                binding.etTopic.error=getString(R.string.mandatory_field)
             }
         }
         if (requiredFiled.isYoutubeLinksRequired){
             if (binding.etLink.text.isEmpty()){
                 isValidate=false
-                binding.etLink.error="Mandatory Field"
+                binding.etLink.error=getString(R.string.mandatory_field)
             }
         }
 

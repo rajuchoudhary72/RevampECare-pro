@@ -29,7 +29,7 @@
                 app:navigationIcon="@drawable/ic_arrow_back_24px"
                 app:titleCentered="true"
                 android:elevation="8dp"
-                app:title="Guard App"
+                app:title="@string/guard_app"
 
                 app:titleTextAppearance="?attr/titleTextAppearance"
                 app:titleTextColor="@color/white"
@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                         android:hint="Date"
+                         android:hint="@string/date"
 
                         >
 
@@ -135,7 +135,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:fontFamily="@font/ubuntu_bold"
-                            android:text="Check In"
+                            android:text="@string/check_in"
                             android:textSize="18sp"
                             android:textColor="@color/white"
                             android:layout_centerInParent="true" />
@@ -163,7 +163,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:fontFamily="@font/ubuntu_bold"
-                            android:text="Walk In"
+                            android:text="@string/walk_in"
                             android:textSize="18sp"
                             android:textColor="@color/white"
                             android:layout_centerInParent="true" />
@@ -181,7 +181,7 @@
              android:fontFamily="@font/ubuntu_medium"
             android:layout_gravity="center"
             android:gravity="center"
-             android:text="@string/no_data_found"
+             android:text="@string/general_no_data_found"
             android:textSize="16sp"
             android:visibility="gone"
             android:layout_centerInParent="true"

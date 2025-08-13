@@ -33,7 +33,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
-            android:text="@string/no_assinment_available"
+            android:text="@string/assignment_no_assignment_available"
             android:textSize="16sp"
 
             />

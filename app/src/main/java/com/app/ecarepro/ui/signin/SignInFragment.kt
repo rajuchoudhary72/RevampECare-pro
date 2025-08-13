@@ -134,7 +134,7 @@ class SignInFragment : Fragment() {
                             mainActivity().showMessage(" " + it.authenticated)
                         }
                     } else if (it.errorCode == 401) {
-                        mainActivity().showMessage("Invalid password")
+                        mainActivity().showMessage(getString(R.string.invalid_password))
                     } else if (it.errorCode == 429) {
                         mainActivity().showMessage(it.message.toString())
                     } else if (it.errorCode == 404) {
@@ -151,7 +151,7 @@ class SignInFragment : Fragment() {
                         if (runBlocking {
                                 mViewModel.isUserAlreadyLogin(it.userId, it.userType)
                             }) {
-                            mainActivity().showMessage("User already login!")
+                            mainActivity().showMessage(getString(R.string.user_already_login))
                         } else {
                             userNameValid = true
                             binding.textInputLayoutPassword.isVisible = true
@@ -160,7 +160,7 @@ class SignInFragment : Fragment() {
                             binding.textUserName.isClickable = false
                         }
                     } else {
-                        mainActivity().showMessage("Invalid username")
+                        mainActivity().showMessage(getString(R.string.invalid_username))
                     }
                 }
             }

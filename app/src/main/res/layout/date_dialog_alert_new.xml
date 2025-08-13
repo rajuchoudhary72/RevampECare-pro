@@ -19,7 +19,7 @@
             android:layout_height="60dp"
             android:background="@color/brand_color"
             android:gravity="center"
-            android:text="Submitted Offline"
+            android:text="@string/submitted_offline"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:fontFamily="@font/ubuntu_medium" />
@@ -56,7 +56,7 @@
                 android:gravity="center_horizontal"
 
                 android:layout_gravity="center"
-                android:text="Submitted Date : "
+                android:text="@string/submitted_date"
                 app:fontFamily="@font/ubuntu_medium" />
 
 
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/shape_dialog_bottom_main"
             android:minHeight="40dp"
-            android:text="@string/cancel"
+            android:text="@string/general_cancel"
             app:fontFamily="@font/ubuntu_medium"
             style="?android:attr/buttonBarButtonStyle" />
 
@@ -99,7 +99,7 @@
             android:layout_height="wrap_content"
             android:background="@color/brand_color"
             android:minHeight="40dp"
-            android:text="@string/submit"
+            android:text="@string/general_submit"
             android:textColor="@color/white"
              app:fontFamily="@font/ubuntu_medium" />
 

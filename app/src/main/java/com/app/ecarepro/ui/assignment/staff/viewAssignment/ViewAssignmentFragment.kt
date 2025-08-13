@@ -180,13 +180,13 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                             }
 
                             binding.tvDetailsAssi.text= buildString {
-                                append("Submitted (")
+                                append(getString(R.string.general_submitted)+" (")
                                 append(it.data!!.submittedBy)
                                 append("/")
                                 append(it.data.totalStudent)
-                                append("): Offline (")
+                                append("): " +getString(R.string.general_offline)+"(")
                                 append(it.data.offlineSubmitted)
-                                append("): Online (")
+                                append("): "+getString(R.string.general_online)+" (")
                                 append(it.data.submittedBy-it.data.offlineSubmitted )
                                 append(")")
 
@@ -212,7 +212,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                             }
 
                             binding.tvDetailsAssi.text= buildString {
-                                append("Not Submitted (")
+                                append(getString(R.string.general_not_submitted)+" (")
                                 append(it.data!!.totalStudent-it.data.submittedBy)
                                 append("/")
                                 append(it.data.totalStudent)
@@ -249,13 +249,13 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                             }
 
                             binding.tvDetailsAssi.text= buildString {
-                                append("Submitted (")
+                                append(getString(R.string.general_submitted)+" (")
                                 append(it.data!!.submittedBy)
                                 append("/")
                                 append(it.data.totalStudent)
-                                append("): Offline (")
+                                append("): " +getString(R.string.general_offline)+"(")
                                 append(it.data.offlineSubmitted)
-                                append("): Online (")
+                                append("): "+getString(R.string.general_online)+" (")
                                 append(it.data.submittedBy-it.data.offlineSubmitted )
                                 append(")")
 
@@ -315,7 +315,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
         val  rvDetails = view.findViewById<RecyclerView>(R.id.rvDetails)
         val  ivCross = view.findViewById<ImageView>(R.id.ivCross)
         val  tvHeading = view.findViewById<TextView>(R.id.tvHeading)
-        tvHeading.text="View File"
+        tvHeading.text=getString(R.string.general_view_file)
 
         builder.setView(view)
 
@@ -403,7 +403,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
             when (Constant.isPdfUrl(fileSource)) {
                 1 -> {
                     val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
+                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment_title))
                 }
 
                 2 -> {
@@ -413,11 +413,11 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
                 3 -> {
                     val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment_title),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
                 }
                 5 -> {
                     val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment_title),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                 }
 
                 else -> {
@@ -459,7 +459,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
         btn_canel.setOnClickListener { dialog.dismiss() }
         btn_submit.setOnClickListener {
             if (tv_date.text.toString() == "") {
-                mainActivity().showMessage("Please Select Date")
+                mainActivity().showMessage(getString(R.string.general_please_select_date))
             } else {
 
                  offlineSubmited(t, tv_date.text.toString())
@@ -521,7 +521,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        mainActivity().showMessage("Remark saved successfully" )
+                        mainActivity().showMessage(getString(R.string.assignment_remark_saved_successfully) )
                     }
 
                 }

@@ -174,7 +174,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:fontFamily="@font/calibri_light"
-            android:text="@string/roll_no"
+            android:text="@string/general_roll_no_pun"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title_class" />
 
@@ -199,7 +199,7 @@
             android:layout_marginStart="@dimen/horizontal_margin"
             android:fontFamily="@font/calibri_light"
 
-            android:text="@string/admission_no"
+            android:text="@string/general_admission_no_pun"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleRollNo" />
 
@@ -318,7 +318,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:fontFamily="@font/calibri_light"
-            android:text="@string/father_name"
+            android:text="@string/general_father_name_pun"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titlePermanentEducationNumber" />
 
@@ -342,7 +342,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:fontFamily="@font/calibri_light"
-            android:text="@string/mother_name"
+            android:text="@string/general_mother_name_pun"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleFatherName" />
 

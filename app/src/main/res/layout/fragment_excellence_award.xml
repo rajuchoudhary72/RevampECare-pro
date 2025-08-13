@@ -131,7 +131,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Name: " />
+                                android:text="@string/general_name_pun" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -155,7 +155,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Class/Sec: " />
+                                android:text="@string/award_class_sec" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -179,7 +179,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Roll No: " />
+                                android:text="@string/general_roll_no_pun" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -223,7 +223,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="@dimen/_5sdp"
-                        android:text="Sports"
+                        android:text="@string/general_sports"
                         android:textStyle="bold" />
 
                     <View
@@ -241,7 +241,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:padding="@dimen/_5sdp"
-                            android:text="Name of the School activity/Post held"
+                            android:text="@string/award_name_of_the_school_activity_post_held"
                             android:textStyle="bold" />
 
                         <View
@@ -254,7 +254,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:text="Marks"
+                            android:text="@string/general_marks"
                             android:textStyle="bold" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -284,7 +284,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:padding="@dimen/_5sdp"
-                            android:text="Total"
+                            android:text="@string/general_total"
                             android:textStyle="bold" />
 
                         <View
@@ -317,7 +317,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="@dimen/_5sdp"
-                        android:text="Activity"
+                        android:text="@string/general_activity"
                         android:textStyle="bold" />
 
                     <View
@@ -335,7 +335,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:padding="@dimen/_5sdp"
-                            android:text="Name of the School activity/Post held"
+                            android:text="@string/award_name_of_the_school_activity_post_held"
                             android:textStyle="bold" />
 
                         <View
@@ -348,7 +348,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:text="Marks"
+                            android:text="@string/general_marks"
                             android:textStyle="bold" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -378,7 +378,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:padding="@dimen/_5sdp"
-                            android:text="Total"
+                            android:text="@string/general_total"
                             android:textStyle="bold" />
 
                         <View
@@ -408,7 +408,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="@dimen/_5sdp"
-                        android:text="Grant Total"
+                        android:text="@string/general_grant_total"
                         android:textStyle="bold" />
 
                     <View

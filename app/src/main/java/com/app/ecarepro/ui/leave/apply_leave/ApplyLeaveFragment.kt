@@ -210,7 +210,7 @@ class ApplyLeaveFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data?.errorCode ==0){
                             findNavController().popBackStack()
-                             mainActivity().showMessage("Submitted Successfully!!!")
+                             mainActivity().showMessage(getString(R.string.submitted_successfully))
                         }else{
                              mainActivity().showMessage(it.data!!.message.toString())
                         }
@@ -242,7 +242,7 @@ class ApplyLeaveFragment : Fragment() {
 
                         )
                     }else{
-                        mainActivity().showMessage("Please Select Valid Date")
+                        mainActivity().showMessage(getString(R.string.please_select_valid_date))
                     }
 
                 }
@@ -368,24 +368,24 @@ class ApplyLeaveFragment : Fragment() {
         private fun selectImageOptionDialog() {
             try {
                 val items = arrayOf<CharSequence>(
-                    getString(R.string.take_photo),
-                    getString(R.string.choose_library),
-                    getString(R.string.cancel)
+                    getString(R.string.general_take_photo),
+                    getString(R.string.general_choose_library),
+                    getString(R.string.general_cancel)
 
                 )
                 val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle(getString(R.string.add_photo))
+                builder.setTitle(getString(R.string.general_add_photo))
                 builder.setItems(items) { dialog, item ->
                     FileAccess.checkPermission(this@ApplyLeaveFragment)
-                    if (items[item] == getString(R.string.take_photo)) {
+                    if (items[item] == getString(R.string.general_take_photo)) {
                         try {
                             cameraLauncher.launch(FileAccess.cameraIntent())
                         }catch (e:SecurityException){
                             e.printStackTrace()
                         }
-                    } else if (items[item] == getString(R.string.choose_library)) {
+                    } else if (items[item] == getString(R.string.general_choose_library)) {
                         galleryLauncher.launch(FileAccess.galleryIntent())
-                    } else if (items[item] == getString(R.string.cancel)) {
+                    } else if (items[item] == getString(R.string.general_cancel)) {
                         dialog.dismiss()
                     }
                 }
@@ -438,30 +438,30 @@ class ApplyLeaveFragment : Fragment() {
             var validate = true
             if (binding.tvStartDate.text.toString().isEmpty()) {
                 validate = false
-                mainActivity().showMessage("Select From Date")
+                mainActivity().showMessage(getString(R.string.select_from_date))
             }else
             if (binding.tvEndDate.text.toString().isEmpty()) {
                 validate = false
-                mainActivity().showMessage("Select To Date")
+                mainActivity().showMessage(getString(R.string.select_to_date))
 
             }else
             if (selectedLeaveTypeID == -1) {
                 validate = false
-                mainActivity().showMessage("Select Reason")
+                mainActivity().showMessage(getString(R.string.select_reason))
 
             }else if (selectedLeaveTypeID == 0 && binding.textFiledReason.text.toString().isEmpty()) {
                 validate = false
-                mainActivity().showMessage("Enter Reason")
+                mainActivity().showMessage(getString(R.string.enter_reason))
             } else
              if (!binding.cbLeaveTc.isChecked) {
                 validate = false
-                mainActivity().showMessage("Please Check Term and Condition")
+                mainActivity().showMessage(getString(R.string.please_check_term_and_condition))
 
             }else
             if (isAttachamentMandetoy  ) {
                 if (imageString.isEmpty()) {
                     validate = false
-                    mainActivity().showMessage("Please Upload Attachment")
+                    mainActivity().showMessage(getString(R.string.please_upload_attachment))
                 }
 
             }

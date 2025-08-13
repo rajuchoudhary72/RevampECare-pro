@@ -252,7 +252,7 @@
                         android:id="@+id/tv_cancel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/cancel"
+                        android:text="@string/general_cancel"
                         android:textSize="12sp"
                         android:layout_marginHorizontal="@dimen/_5sdp"
                         android:padding="@dimen/_5sdp"

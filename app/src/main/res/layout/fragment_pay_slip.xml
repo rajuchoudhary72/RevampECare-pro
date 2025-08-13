@@ -48,7 +48,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none"
-                        android:text="Select Year"
+                        android:text="@string/select_year"
                         />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -68,7 +68,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none"
-                        android:text="Select Month"
+                        android:text="@string/select_month"
                         />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -99,7 +99,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
 
             />

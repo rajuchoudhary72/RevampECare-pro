@@ -268,40 +268,40 @@ class BirthdayFragment : Fragment() {
         /* val monthMode = MonthModel(0, "Select Month")
          monthModelArrayList.add(monthMode)*/
 
-        val monthModel1 = MonthModel(1, "January")
+        val monthModel1 = MonthModel(1, getString(R.string.general_january))
         monthModelArrayList.add(monthModel1)
 
-        val monthModel2 = MonthModel(2, "February")
+        val monthModel2 = MonthModel(2, getString(R.string.general_february))
         monthModelArrayList.add(monthModel2)
 
-        val monthModel3 = MonthModel(3, "March")
+        val monthModel3 = MonthModel(3, getString(R.string.general_march))
         monthModelArrayList.add(monthModel3)
 
-        val monthModel4 = MonthModel(4, "April")
+        val monthModel4 = MonthModel(4, getString(R.string.general_april))
         monthModelArrayList.add(monthModel4)
 
-        val monthModel5 = MonthModel(5, "May")
+        val monthModel5 = MonthModel(5, getString(R.string.general_may))
         monthModelArrayList.add(monthModel5)
 
-        val monthModel6 = MonthModel(6, "June")
+        val monthModel6 = MonthModel(6, getString(R.string.general_june))
         monthModelArrayList.add(monthModel6)
 
-        val monthModel7 = MonthModel(7, "July")
+        val monthModel7 = MonthModel(7, getString(R.string.general_july))
         monthModelArrayList.add(monthModel7)
 
-        val monthMode8 = MonthModel(8, "August")
+        val monthMode8 = MonthModel(8, getString(R.string.general_august))
         monthModelArrayList.add(monthMode8)
 
-        val monthMode9 = MonthModel(9, "September")
+        val monthMode9 = MonthModel(9, getString(R.string.general_september))
         monthModelArrayList.add(monthMode9)
 
-        val monthMode10 = MonthModel(10, "October")
+        val monthMode10 = MonthModel(10, getString(R.string.general_october))
         monthModelArrayList.add(monthMode10)
 
-        val monthMode11 = MonthModel(11, "November")
+        val monthMode11 = MonthModel(11, getString(R.string.general_november))
         monthModelArrayList.add(monthMode11)
 
-        val monthMode12 = MonthModel(12, "December")
+        val monthMode12 = MonthModel(12, getString(R.string.general_december))
         monthModelArrayList.add(monthMode12)
 
 

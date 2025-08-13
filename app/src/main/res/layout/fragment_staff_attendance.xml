@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:fontFamily="@font/calibri_bold"
-                    android:text="Staff's Attendance"
+                    android:text="@string/staff_s_attendance"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@+id/btn_back"
                     app:layout_constraintStart_toEndOf="@+id/btn_back"
@@ -172,7 +172,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/ubuntu_bold"
-                        android:text="All"
+                        android:text="@string/all"
                         app:rippleColor="@color/white"
                         app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
                         app:strokeColor="@color/white" />
@@ -184,7 +184,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/ubuntu_bold"
-                        android:text="Present"
+                        android:text="@string/present"
                         app:rippleColor="@color/white"
                         app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
                         app:strokeColor="@color/white" />
@@ -196,7 +196,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/ubuntu_bold"
-                        android:text="Absent"
+                        android:text="@string/absent"
                         app:rippleColor="@color/white"
                         app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
                         app:strokeColor="@color/white" />
@@ -225,7 +225,7 @@
                     android:gravity="center"
                     android:paddingHorizontal="@dimen/_15sdp"
                     android:paddingVertical="@dimen/_7sdp"
-                    android:text="1 July 2024"
+                    android:text="@string/_1_july_2024"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
@@ -242,7 +242,7 @@
                     android:paddingHorizontal="@dimen/_15sdp"
                     android:paddingVertical="@dimen/_7sdp"
                     android:drawableStart="@drawable/descending"
-                    android:text="Destination"
+                    android:text="@string/destination"
                     android:textColor="@color/black"
                     android:textSize="13sp" />
 
@@ -258,7 +258,7 @@
                     android:gravity="center"
                     android:paddingHorizontal="@dimen/_15sdp"
                     android:paddingVertical="@dimen/_7sdp"
-                    android:text="Name"
+                    android:text="@string/name"
                     android:textColor="@color/black"
                     android:textSize="13sp" />
 

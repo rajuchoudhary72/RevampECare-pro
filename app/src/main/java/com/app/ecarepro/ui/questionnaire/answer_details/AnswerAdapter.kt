@@ -47,7 +47,7 @@ class AnswerAdapter(private var answerList: List<Answer>,
 
         }
 
-        builder.setNegativeButton( R.string.cancel) { _, _ ->
+        builder.setNegativeButton( R.string.general_cancel) { _, _ ->
 
         }
 

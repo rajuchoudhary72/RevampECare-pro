@@ -41,7 +41,7 @@ class AssignHomeFragment : Fragment(), ItemListener<Dtl> {
     private val assignHomeList = mutableListOf<Student>()
     private val houseList = mutableListOf<House>()
     private val mAdapter by lazy {
-        AssignHomeAdapter(assignHomeList, houseList) { poss, student ->
+        AssignHomeAdapter(assignHomeList, houseList,this@AssignHomeFragment) { poss, student ->
             getHousePopUp(
                 poss,
                 student
@@ -186,8 +186,8 @@ class AssignHomeFragment : Fragment(), ItemListener<Dtl> {
 
 
         // orderAdapter.add(new OrderModel(-1, "select"));
-        selectedAdapter.add(OrderDropDown(0, "Student Name"))
-        selectedAdapter.add(OrderDropDown(1, "Admission Number"))
+        selectedAdapter.add(OrderDropDown(0, getString(R.string.student_name)))
+        selectedAdapter.add(OrderDropDown(1, getString(R.string.admission_number)))
     }
 
 

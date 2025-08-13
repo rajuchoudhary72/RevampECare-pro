@@ -3,6 +3,9 @@ package com.app.ecarepro.ui.message.chat
 import android.Manifest
 import android.app.Activity
 import android.app.Activity.RESULT_OK
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -19,9 +22,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -55,6 +60,7 @@ import com.app.ecarepro.utils.Constant.Companion.strikethroughFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindStartIndexes
 import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.FileClickListener
+import com.app.ecarepro.utils.MessageClickListener
 import com.app.ecarepro.utils.imageUrl
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -473,7 +479,7 @@ class ChatFragment : Fragment() {
                     ChatUiState.EmptyInbox -> {
                         noDataFoundView {
                             id(R.id.empty_view)
-                            binding.toolbar.title = "Message"
+                            binding.toolbar.title = getString(R.string.message)
                         }
                     }
                     is ChatUiState.Success -> {
@@ -483,7 +489,7 @@ class ChatFragment : Fragment() {
                         uiState.senderDTL?.let {
                             setUpToolbar(it)
                         }
-                        binding.toolbar.title = "Message"
+                        binding.toolbar.title = getString(R.string.message)
                         binding.tvSubject.text = "Sub: ${uiState.subject}"
                         setUpFontStyle(binding)
                         binding.sendMessageLayout.isVisible = uiState.canReply ?: false
@@ -510,6 +516,12 @@ class ChatFragment : Fragment() {
                                             openPhoto(file)
                                         }
                                     })
+                                    onClickMessage(object : MessageClickListener {
+                                        override fun onClick(file: String) {
+                                            copyTextToClipboard(file)
+                                            true // Return true to indicate the event was handled
+                                        }
+                                    })
                                     files(message.filePaths ?: emptyList())
                                 }
                             } else {
@@ -523,6 +535,12 @@ class ChatFragment : Fragment() {
                                                 ?: 0) == 1
                                         ) message.filePaths?.firstOrNull() else null
                                     )
+                                    onClickMessage(object : MessageClickListener {
+                                        override fun onClick(file: String) {
+                                            copyTextToClipboard(file)
+                                            true // Return true to indicate the event was handled
+                                        }
+                                    })
                                     onClickPhoto(object : FileClickListener {
                                         override fun onClick(file: String) {
                                             openPhoto(file)
@@ -542,6 +560,13 @@ class ChatFragment : Fragment() {
             }
         }
     }
+    private fun copyTextToClipboard(text: String) {
+        val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("Copied Text", text)
+        clipboardManager.setPrimaryClip(clipData)
+        Toast.makeText(requireContext(), "Copied", Toast.LENGTH_SHORT).show()
+    }
+
     private fun setUpToolbar(sender: Sender) {
         if (chatViewModel.messageType==MessageType.INBOX.value || chatViewModel.messageType==MessageType.CONV.value){
             binding.apply {
@@ -562,7 +587,7 @@ class ChatFragment : Fragment() {
             }
         }else{
             binding.headerView.isVisible =false
-            binding.toolbar.setTitle("Message")
+            binding.toolbar.setTitle( getString(R.string.message))
         }
 
     }

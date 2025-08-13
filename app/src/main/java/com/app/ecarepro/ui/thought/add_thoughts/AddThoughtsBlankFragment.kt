@@ -81,7 +81,7 @@ class AddThoughtsBlankFragment : Fragment() {
                     }
                     is ResponseStateCreateTou.Success->{
                         (requireActivity() as MainActivity).showLoader(false)
-                        mainActivity().showMessage("Successfully!!!")
+                        mainActivity().showMessage(getString(R.string.successfully))
                         findNavController().popBackStack()
                     }
 

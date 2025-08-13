@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
                     android:padding="@dimen/_5sdp"
-                    android:text="@string/cancel"
+                    android:text="@string/general_cancel"
                     android:textColor="@color/module"
                     android:textSize="@dimen/_17sdp" />
             </RelativeLayout>

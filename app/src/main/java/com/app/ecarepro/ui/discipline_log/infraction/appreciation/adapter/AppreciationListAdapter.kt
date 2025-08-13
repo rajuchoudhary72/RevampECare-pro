@@ -67,8 +67,8 @@ import com.app.ecarepro.model.RecentAppreciation
 
             binding.ivDelete.setOnClickListener {
                 val builder = AlertDialog.Builder(infractionListFragment.requireContext())
-                builder.setTitle("Are you sure ?")
-                builder.setMessage("Are you sure, You want to delete it")
+                builder.setTitle(infractionListFragment.getString(R.string.general_are_you_sure))
+                builder.setMessage(infractionListFragment.getString(R.string.general_delete_conformation))
 
                 builder.setPositiveButton(android.R.string.yes) { dialog, which ->
                     infractionListFragment.onItemClick(data,2,false)

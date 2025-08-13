@@ -60,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginHorizontal="5dp"
-                        android:text="Date : "
+                        android:text="@string/general_date_pun"
                         android:textAppearance="?attr/textAppearanceBodyMedium" />
 
                     <TextView
@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginHorizontal="5dp"
-                        android:text="Update On : "
+                        android:text="@string/general_update_on_pun"
                         android:textAppearance="?attr/textAppearanceBodyMedium" />
 
                     <TextView

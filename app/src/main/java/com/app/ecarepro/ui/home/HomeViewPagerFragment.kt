@@ -70,17 +70,19 @@ class HomeViewPagerFragment : Fragment() {
 
         if (showDashboard){
             fragmentList.add(DashboardFragment() )
-            fragmentName.add(" Dashboard")
+            fragmentName.add("Dashboard")
+            //fragmentName.add(getString(R.string.dashboard))
         }
         if (showAttendance){
             fragmentList.add(AttendanceFragment() )
             fragmentName.add("Attendance")
+            //fragmentName.add(getString(R.string.attendance))
         }
         if (showFeeds){
             fragmentList.add(FeedsFragment() )
             fragmentName.add("Feed")
+            //fragmentName.add(getString(R.string.feed_title))
         }
-
 
         val viewPagerAdapter = ViewPagerAdapter(
             fragmentList,

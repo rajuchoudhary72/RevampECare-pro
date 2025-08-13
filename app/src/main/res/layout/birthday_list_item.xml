@@ -78,7 +78,7 @@
                     android:id="@+id/tv_name_holder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/name_s"
+                    android:text="@string/general_name_pun"
 
                     />
 
@@ -108,7 +108,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/designation"
+                    android:text="@string/general_designation_pun"
 
                     />
 
@@ -137,7 +137,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/classes"
+                    android:text="@string/general_classes_pun"
 
                     />
 
@@ -167,7 +167,7 @@
                     android:id="@+id/tv_father_name_holder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/father_name"
+                    android:text="@string/general_father_name_pun"
 
                     />
 
@@ -195,7 +195,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/mother_name"
+                    android:text="@string/general_mother_name_pun"
 
                     />
 

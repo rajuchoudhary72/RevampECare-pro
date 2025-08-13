@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentDefaulterReportBinding
 
@@ -87,7 +88,7 @@ class EstimateReportFragment : Fragment() {
             binding.recyclerDefaulterReport.isVisible=false
             binding.tvNoData.isVisible=false
         }
-        binding.toolbar.setTitle("Estimate Report")
+        binding.toolbar.setTitle(getString(R.string.general_estimate_report))
         binding.ivOrder.setOnClickListener {
             shortDescending = !shortDescending
             binding.recyclerDefaulterReport.clear()
@@ -170,7 +171,7 @@ class EstimateReportFragment : Fragment() {
     }
 
     private fun updateDateFilterText(setAsFilter: Boolean = false) {
-        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
         dateFormat.format(Date(dateFrom.timeInMillis))
         val from = dateFormat.format(Date(dateFrom.timeInMillis))
         val to = dateFormat.format(Date(dateTo.timeInMillis))
@@ -359,33 +360,33 @@ class EstimateReportFragment : Fragment() {
 
 
         var isValidated = true
-        if (binding.dateFrom.text.toString() == "From Date") {
+        if (binding.dateFrom.text.toString() == getString(R.string.from_date)) {
             isValidated = false
-            mainActivity().showMessage("Select From Date")
+            mainActivity().showMessage(getString(R.string.select_from_date))
         }
-        if (binding.dateTo.text.toString() == "To Date") {
+        if (binding.dateTo.text.toString() == getString(R.string.to_date)) {
             isValidated = false
-            mainActivity().showMessage("Select To Date")
+            mainActivity().showMessage(getString(R.string.select_to_date))
         }
         if (sectionid == "") {
             isValidated = false
-            mainActivity().showMessage("Please Select Section")
+            mainActivity().showMessage(getString(R.string.please_select_section))
         }
         if (installid == "") {
             isValidated = false
-            mainActivity().showMessage("Please Select Installment")
+            mainActivity().showMessage(getString(R.string.please_select_installment))
         }
         if (feetypeid == "") {
             isValidated = false
-            mainActivity().showMessage("Please Select Fee Type")
+            mainActivity().showMessage(getString(R.string.please_select_fee_type))
         }
         if (schoolid == "") {
             isValidated = false
-            mainActivity().showMessage("Please Select School")
+            mainActivity().showMessage(getString(R.string.please_select_school))
         }
         if (classid == "") {
             isValidated = false
-            mainActivity().showMessage("Please Select Class")
+            mainActivity().showMessage(getString(R.string.please_select_class))
         }
 
 

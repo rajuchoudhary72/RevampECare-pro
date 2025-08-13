@@ -16,7 +16,7 @@
             android:id="@+id/iv_photo"
             android:layout_width="@dimen/_130sdp"
             android:layout_height="@dimen/_100sdp"
-            android:contentDescription="@string/photo"
+            android:contentDescription="@string/general_photo"
             android:scaleType="centerCrop"
 
             android:layout_centerInParent="true" />

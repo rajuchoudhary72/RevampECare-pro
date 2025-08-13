@@ -84,7 +84,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/ubuntu_bold"
-                                android:text="All"
+                                android:text="@string/all"
 
                                 app:rippleColor="@color/white"
                                   app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
@@ -97,7 +97,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/ubuntu_bold"
-                                android:text="My"
+                                android:text="@string/my"
                                  app:rippleColor="@color/white"
                                 app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
                                 app:strokeColor="@color/white" />

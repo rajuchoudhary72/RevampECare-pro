@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,8 +19,6 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentAddAppreciationBinding
 import com.app.ecarepro.model.AppreciationReward
 import com.app.ecarepro.model.AppreciationType
-import com.app.ecarepro.model.InfractionConsequence
-import com.app.ecarepro.model.Type
 import com.app.ecarepro.model.TypeAppreciation
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.AppreciationCatPopUpListAdapter
@@ -152,11 +149,11 @@ class AddAppreciationFragment : Fragment() {
                             binding.studentData=it.data.studentDTL
 
                             binding.tvAdmissionNo.text= buildString {
-                                append(getString(R.string.admission_no))
+                                append(getString(R.string.general_admission_no_pun))
                                 append(it.data.studentDTL.admissionNo)
                             }
                             binding.tvClassName.text= buildString {
-                                append(getString(R.string.classes))
+                                append(getString(R.string.general_classes_pun))
                                 append(it.data.studentDTL.`class`)
                             }
                             binding.tvFatherName.text= buildString {

@@ -1052,4 +1052,10 @@
         android:id="@+id/feesBlockDialogFragment"
         android:name="com.app.ecarepro.ui.feedefulter_user.FeesBlockDialogFragment"
         android:label="FeesBlockDialogFragment" />
+
+    <fragment
+        android:id="@+id/languageSelect"
+        android:name="com.app.ecarepro.ui.language.LanguageSelect"
+        android:label="LanguageSelect" />
+
 </navigation>
