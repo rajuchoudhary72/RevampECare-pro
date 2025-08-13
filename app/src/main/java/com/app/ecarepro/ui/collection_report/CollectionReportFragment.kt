@@ -91,7 +91,7 @@ class CollectionReportFragment : Fragment() {
     }
 
     private fun updateDateFilterText(setAsFilter: Boolean = false) {
-        binding.llDateRange.isVisible=true
+        binding.llDateRange.isVisible = true
         val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
         dateFormat.format(Date(dateFrom.timeInMillis))
         val from = dateFormat.format(Date(dateFrom.timeInMillis))
@@ -133,9 +133,9 @@ class CollectionReportFragment : Fragment() {
                             binding.recyclerCollectionReport.isVisible = true
                             binding.tvNoData.isVisible = false
                             list.addAll(it.data.collectionReportList)
-                            val totalCost  = list.sumOf {item-> item.amount.toDouble()}
+                            val totalCost = list.sumOf { item -> item.amount.toDouble() }
                             binding.tvTotal.text = getString(R.string.rs, totalCost.toString())
-                            binding.bottomAmount.isVisible=true
+                            binding.bottomAmount.isVisible = true
                             noticeAdapter.notifyDataSetChanged()
                         }
 
@@ -147,13 +147,13 @@ class CollectionReportFragment : Fragment() {
         }
         collectionFeeReportViewModel.feeCollectionReport(
             normalizeDate(binding.tvFrom.text.toString().changeDateFormat()),
-            normalizeDate( binding.tvTo.text.toString().changeDateFormat())
+            normalizeDate(binding.tvTo.text.toString().changeDateFormat())
         )
     }
 
     private fun String.changeDateFormat(): String {
         val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("dd MMM yyyy",Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         val inputDateStr = this
         val date = inputFormat.parse(inputDateStr)
         return date?.let { outputFormat.format(it) } ?: this
@@ -161,25 +161,37 @@ class CollectionReportFragment : Fragment() {
 
     fun normalizeDate(dateStr: String): String {
         val monthMap = mapOf(
-            "जनवरी" to "Jan",
-            "फ़रवरी" to "Feb",
-            "फरवरी" to "Feb", // without nukta
-            "मार्च" to "Mar",
-            "अप्रैल" to "Apr",
+            "जन" to "Jan",
+            "फ़र" to "Feb",
+            "फर" to "Feb",
+            "मार" to "Mar",
+            "अप्र" to "Apr",
             "मई" to "May",
             "जून" to "Jun",
-            "जुलाई" to "Jul",
-            "अगस्त" to "Aug",
-            "अग" to "Aug", // short form
-            "सितम्बर" to "Sep",
-            "सितंबर" to "Sep",
-            "अक्तूबर" to "Oct",
-            "अक्टूबर" to "Oct",
-            "नवम्बर" to "Nov",
-            "नवंबर" to "Nov",
-            "दिसम्बर" to "Dec",
-            "दिसंबर" to "Dec"
+            "जुल" to "Jul",
+            "अग" to "Aug",
+            "सित" to "Sep",
+            "अक्ट" to "Oct",
+            "नव" to "Nov",
+            "दिस" to "Dec",
+
+            // Gujarati short → English short
+            "જાન" to "Jan",
+            "ફેબ" to "Feb",
+            "માર" to "Mar",
+            "એપ્ર" to "Apr",
+            "મે" to "May",
+            "જૂન" to "Jun",
+            "જુલ" to "Jul",
+            "ઑગ" to "Aug",
+            "ઓગ" to "Aug",
+            "સપ્ટ" to "Sep",
+            "ઓક્ટ" to "Oct",
+            "નવ" to "Nov",
+            "ડિસ" to "Dec"
         )
+
+
 
         val parts = dateStr.trim().split("\\s+".toRegex())
         if (parts.size < 3) return dateStr // not a valid date format
