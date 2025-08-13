@@ -115,7 +115,7 @@ class SentMessageFragment : Fragment() {
     }
 
     private fun updateDateFilterText(setAsFilter: Boolean = false) {
-        val dateFormate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        val dateFormate = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
         dateFormate.format(Date(dateFrom.timeInMillis))
         val from = dateFormate.format(Date(dateFrom.timeInMillis))
         val to = dateFormate.format(Date(dateTo.timeInMillis))

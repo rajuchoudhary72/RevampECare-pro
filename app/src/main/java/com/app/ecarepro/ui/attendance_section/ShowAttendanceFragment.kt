@@ -46,7 +46,7 @@ class ShowAttendanceFragment : Fragment() {
         }
     }
     private val dateFrom: Calendar = Calendar.getInstance()
-    val dateFormateForApi = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val dateFormateForApi = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
     private val dateTo: Calendar = Calendar.getInstance()
     private var yId = 0
      private var studentID: String = ""
@@ -99,7 +99,7 @@ class ShowAttendanceFragment : Fragment() {
     }
 
     private fun updateDateFilterText(setAsFilter: Boolean = false) {
-        val dateFormate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        val dateFormate = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
         dateFormate.format(Date(dateFrom.timeInMillis))
           from = dateFormate.format(Date(dateFrom.timeInMillis))
           to = dateFormate.format(Date(dateTo.timeInMillis))

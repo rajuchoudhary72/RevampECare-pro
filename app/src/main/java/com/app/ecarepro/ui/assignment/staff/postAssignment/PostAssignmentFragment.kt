@@ -358,7 +358,7 @@ class PostAssignmentFragment : Fragment() {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.MONTH, Calendar.DECEMBER)
         calendar.set(Calendar.DAY_OF_MONTH, 31)
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         return formatter.format(calendar.time)
     }
 
