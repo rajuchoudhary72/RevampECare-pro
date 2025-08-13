@@ -1448,7 +1448,7 @@
     <string name="closed_on">"બંધ થયું: "</string>
     <string name="collection_report">સંગ્રહ અહેવાલ</string>
     <string name="no_house_assign">કોઈ ઘર ફાળવાયેલું નથી</string>
-
+    <string name="dues_amount">Dues Amount</string>
 
 
 </resources>

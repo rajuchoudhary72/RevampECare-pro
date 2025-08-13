@@ -1431,6 +1431,7 @@
     <string name="no_house_assign">No House Assign</string>
     <string name="no_internet_connection">No Internet Connection</string>
     <string name="please_check_your_internet_connection_and_try_again">Please check your internet connection and try again.</string>
+    <string name="dues_amount">Dues Amount</string>
 
 
 </resources>
