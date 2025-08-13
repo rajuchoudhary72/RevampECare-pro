@@ -96,7 +96,7 @@ class AttendanceFragment : Fragment() {
 
     fun getCurrentDate(): String {
         val now = Date()
-        val formatter = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
+        val formatter = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
         return formatter.format(now)
     }
 

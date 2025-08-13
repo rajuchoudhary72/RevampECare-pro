@@ -369,7 +369,7 @@ fun Fragment.selectDatePro(title: String, onDateSelection: (String) -> Unit) {
     datePicker.show(childFragmentManager, "tag");
 }
 fun convertMillisToDateString(millis: Long? = null): String {
-    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = millis?:Date().time
     return formatter.format(calendar.time)
