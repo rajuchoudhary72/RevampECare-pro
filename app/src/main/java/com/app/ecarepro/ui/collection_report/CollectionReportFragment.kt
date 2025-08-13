@@ -92,7 +92,7 @@ class CollectionReportFragment : Fragment() {
 
     private fun updateDateFilterText(setAsFilter: Boolean = false) {
         binding.llDateRange.isVisible = true
-        val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("MMM dd, yyyy",Locale.ENGLISH)
         dateFormat.format(Date(dateFrom.timeInMillis))
         val from = dateFormat.format(Date(dateFrom.timeInMillis))
         val to = dateFormat.format(Date(dateTo.timeInMillis))
@@ -146,69 +146,18 @@ class CollectionReportFragment : Fragment() {
             }
         }
         collectionFeeReportViewModel.feeCollectionReport(
-            normalizeDate(binding.tvFrom.text.toString().changeDateFormat()),
-            normalizeDate(binding.tvTo.text.toString().changeDateFormat())
+            binding.tvFrom.text.toString().changeDateFormat(),
+           binding.tvTo.text.toString().changeDateFormat()
         )
     }
 
     private fun String.changeDateFormat(): String {
-        val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
+        val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
         val inputDateStr = this
         val date = inputFormat.parse(inputDateStr)
         return date?.let { outputFormat.format(it) } ?: this
     }
-
-    fun normalizeDate(dateStr: String): String {
-        val monthMap = mapOf(
-            "जन" to "Jan",
-            "फ़र" to "Feb",
-            "फर" to "Feb",
-            "मार" to "Mar",
-            "अप्र" to "Apr",
-            "मई" to "May",
-            "जून" to "Jun",
-            "जुल" to "Jul",
-            "अग" to "Aug",
-            "सित" to "Sep",
-            "अक्ट" to "Oct",
-            "नव" to "Nov",
-            "दिस" to "Dec",
-
-            // Gujarati short → English short
-            "જાન" to "Jan",
-            "ફેબ" to "Feb",
-            "માર" to "Mar",
-            "એપ્ર" to "Apr",
-            "મે" to "May",
-            "જૂન" to "Jun",
-            "જુલ" to "Jul",
-            "ઑગ" to "Aug",
-            "ઓગ" to "Aug",
-            "સપ્ટ" to "Sep",
-            "ઓક્ટ" to "Oct",
-            "નવ" to "Nov",
-            "ડિસ" to "Dec"
-        )
-
-
-
-        val parts = dateStr.trim().split("\\s+".toRegex())
-        if (parts.size < 3) return dateStr // not a valid date format
-
-        val monthHindi = parts[1]
-        return if (monthMap.containsKey(monthHindi)) {
-            parts.toMutableList().apply { this[1] = monthMap[monthHindi]!! }.joinToString(" ")
-        } else {
-            dateStr // already English or unsupported month
-        }
-    }
-
-    // Example usage:
-
-
-
-
 
 
 }
