@@ -219,6 +219,6 @@ enum class AttendanceType {
 }
 
 fun getFormatedDate(date: Date = Date()): String {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
     return dateFormat.format(date)
 }

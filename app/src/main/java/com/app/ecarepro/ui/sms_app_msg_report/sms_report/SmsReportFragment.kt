@@ -198,7 +198,7 @@ import java.util.Locale
      }
 
      private fun updateDateFilterText(setAsFilter: Boolean = false) {
-         val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+         val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
          dateFormat.format(Date(dateFrom.timeInMillis))
          val from = dateFormat.format(Date(dateFrom.timeInMillis))
          val to = dateFormat.format(Date(dateTo.timeInMillis))
