@@ -351,7 +351,7 @@ class HomeFragment : Fragment() {
                     lifecycleScope.launch(Dispatchers.IO) {
                         val cityName =
                             if (location != null) {
-                                val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                                val geocoder = Geocoder(requireContext(), Locale.ENGLISH)
                                 val addresses =
                                     geocoder.getFromLocation(
                                         location.latitude,
@@ -361,13 +361,13 @@ class HomeFragment : Fragment() {
                                 if (!addresses.isNullOrEmpty()) {
                                     addresses[0].locality
                                 } else {
-                                    Locale.getDefault().displayName
+                                    Locale.ENGLISH.displayName
                                 }
                             } else {
-                                Locale.getDefault().displayName
+                                Locale.ENGLISH.displayName
                             }
 
-                        mViewModel.setCityName(cityName ?: Locale.getDefault().displayName)
+                        mViewModel.setCityName(cityName ?: Locale.ENGLISH.displayName)
                     }
 
                 }

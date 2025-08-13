@@ -163,10 +163,10 @@ fun TextInputEditText.setDatePicker(isDatePicker: Boolean) {
             .build()
 
     datePicker.addOnPositiveButtonClickListener { selection ->
-        val calendar = Calendar.getInstance(Locale.getDefault())
+        val calendar = Calendar.getInstance(Locale.ENGLISH)
         calendar.timeInMillis = selection
         val formattedDate =
-            SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(calendar.time)
+            SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).format(calendar.time)
         Toast.makeText(context, formattedDate, Toast.LENGTH_LONG).show()
     }
 
