@@ -8,7 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.app.ecarepro.ECateProApp
-import com.app.ecarepro.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -86,9 +85,9 @@ class CustomResponseInterceptor @Inject constructor(
             handler.post {
                 val appContext =  context as ECateProApp
                 val dialog = AlertDialog.Builder(appContext.getCurrentActivity())
-                    .setTitle(context.getString(R.string.request_failed))
-                    .setMessage(context.getString(R.string.an_error_occurred_would_you_like_to_retry))
-                    .setPositiveButton(context.getString(R.string.retry)) { _, _ ->
+                    .setTitle("Request Failed")
+                    .setMessage("An error occurred. Would you like to retry?")
+                    .setPositiveButton("Retry") { _, _ ->
                          dialogShown=false
                         continuation.resume(true) // Retry selected
                     }
@@ -107,9 +106,9 @@ class CustomResponseInterceptor @Inject constructor(
             val appContext =  context as ECateProApp
             handler.post {
                 AlertDialog.Builder(appContext.getCurrentActivity())
-                    .setTitle(context.getString(R.string.request_failed))
-                    .setMessage(context.getString(R.string.something_went_wrong_please_try_again_later))
-                    .setPositiveButton(context.getString(R.string.ok)) { dialog, _ -> dialog.dismiss()
+                    .setTitle("Request Failed")
+                    .setMessage("Something went wrong. Please try again later.")
+                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss()
                     }
                     .setCancelable(true)
                     .show()
@@ -125,9 +124,9 @@ class CustomResponseInterceptor @Inject constructor(
                 val appContext =  context as ECateProApp
                 handler.post {
                     AlertDialog.Builder(appContext.getCurrentActivity())
-                        .setTitle(context.getString(R.string.notice))
+                        .setTitle("Notice")
                         .setMessage(message)
-                        .setPositiveButton(context.getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
+                        .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
                         .setCancelable(false)
                         .show()
                 }
