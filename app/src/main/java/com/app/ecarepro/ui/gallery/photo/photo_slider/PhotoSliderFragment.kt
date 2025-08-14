@@ -115,13 +115,13 @@ class PhotoSliderFragment(
                     binding.llLike.setOnClickListener {
                         isLike = if (isLike ){
                             totalLikes -= 1
-                            binding.tvNumberLike.text="$totalLikes Likes "
+                            binding.tvNumberLike.text="$totalLikes "+getString(R.string.likes)
                             binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_hover, 0, 0, 0);
                             photoSliderViewModel.manageLikes(itemDat!!.id!!,galleryType,false )
                             false
                         }else{
                             totalLikes += 1
-                            binding.tvNumberLike.text="$totalLikes Likes "
+                            binding.tvNumberLike.text="$totalLikes "+getString(R.string.likes)
                             binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like, 0, 0, 0);
                             photoSliderViewModel.manageLikes(itemDat!!.id!!,galleryType,true )
                             true
@@ -184,13 +184,13 @@ class PhotoSliderFragment(
                     binding.llLike.setOnClickListener {
                         isLike = if (isLike ){
                             totalLikes -= 1
-                            binding.tvNumberLike.text="$totalLikes Likes "
+                            binding.tvNumberLike.text="$totalLikes "+getString(R.string.likes)
                             binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_hover, 0, 0, 0);
                             photoSliderViewModel.manageLikes(itemVideo!!.id!!,galleryType,false )
                             false
                         }else{
                             totalLikes += 1
-                            binding.tvNumberLike.text="$totalLikes Likes "
+                            binding.tvNumberLike.text="$totalLikes "+getString(R.string.likes)
                             binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like, 0, 0, 0);
                             photoSliderViewModel.manageLikes(itemVideo!!.id!!,galleryType,true )
                             true
@@ -214,7 +214,7 @@ class PhotoSliderFragment(
 
 
 
-         binding.tvNumberLike.text = "$likes Likes "
+         binding.tvNumberLike.text = "$likes "+getString(R.string.likes)
         totalLikes=likes
 
 

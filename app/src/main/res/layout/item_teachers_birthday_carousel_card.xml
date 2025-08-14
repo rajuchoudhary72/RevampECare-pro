@@ -55,7 +55,7 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center_vertical"
                 android:paddingVertical="5dp"
-                android:text="Birthday"
+                android:text="@string/birthday"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_arrow"

@@ -22,7 +22,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:titleCentered="true"
             android:elevation="8dp"
-            app:title="Questions Paper"
+            app:title="@string/questions_paper_title"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
@@ -81,7 +81,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="none"
-                                android:text="Select Class" />
+                                android:text="@string/select_class" />
 
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -102,7 +102,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="none"
-                                android:text="Select Year" />
+                                android:text="@string/select_year" />
 
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -142,7 +142,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
 
             />

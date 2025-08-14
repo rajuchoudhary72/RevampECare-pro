@@ -93,9 +93,14 @@ import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import com.app.ecarepro.data.AppSessionManager
+import com.app.ecarepro.ui.language.LanguageManager
 import com.app.ecarepro.ui.message.inbox.InboxMessageViewModel
 import com.app.ecarepro.ui.notification.NotificationViewModel
 import com.app.ecarepro.ui.views.PaymentWebViewActivity
+import java.io.ByteArrayInputStream
+import java.security.MessageDigest
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
@@ -185,8 +190,32 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+//    @Inject
+//    lateinit var languageRepository: LanguageRepository
+//
+//    override fun attachBaseContext(newBase: Context) {
+//        val savedLanguageCode = languageRepository.getSavedLanguage() // Fetch saved language
+//        val updatedContext = LanguageManager.applyLanguage(newBase, savedLanguageCode) // Returns Context
+//        super.attachBaseContext(updatedContext) // Pass updated Context
+//    }
+
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LanguageManager.setLocale(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//        val  langCode=LanguageManager.getSavedLanguage(this)
+//            val local = Locale(langCode)
+//            Locale.setDefault(local)
+//            val config = resources.configuration
+//            config.locale = local
+//            resources.updateConfiguration(config, resources.displayMetrics)
+
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -624,7 +653,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun popupSnackbarForCompleteUpdate() {
         Snackbar.make(
-            binding.root, "An app update is ready to install.", Snackbar.LENGTH_INDEFINITE
+            binding.root,
+            getString(R.string.an_app_update_is_ready_to_install), Snackbar.LENGTH_INDEFINITE
         ).apply {
             setAction("INSTAll") { appUpdateManager.completeUpdate() }
             setActionTextColor(resources.getColor(R.color.brand_color))
@@ -2047,6 +2077,49 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
+    fun getSHA1Fingerprint(context: android.content.Context): String? {
+        return try {
+            val packageInfo: PackageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                val packageManager = context.packageManager
+                packageManager.getPackageInfo(
+                    context.packageName,
+                    PackageManager.GET_SIGNING_CERTIFICATES
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                context.packageManager.getPackageInfo(
+                    context.packageName,
+                    PackageManager.GET_SIGNATURES
+                )
+            }
+
+            val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                packageInfo.signingInfo.apkContentsSigners
+            } else {
+                @Suppress("DEPRECATION")
+                packageInfo.signatures
+            }
+
+            val cert = signatures[0].toByteArray()
+            val input = ByteArrayInputStream(cert)
+
+            val cf: CertificateFactory = CertificateFactory.getInstance("X509")
+            val c = cf.generateCertificate(input) as X509Certificate
+
+            val md: MessageDigest = MessageDigest.getInstance("SHA1")
+            val publicKey = md.digest(c.encoded)
+
+            publicKey.joinToString(":") {
+                String.format("%02X", it)
+            }
+        } catch (e: Exception) {
+            Log.e("SHA1", "Error getting SHA1 fingerprint", e)
+            null
+        }
+    }
+
 
     override fun onPause() {
         try {

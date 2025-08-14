@@ -34,7 +34,7 @@
                 android:layout_marginHorizontal="4dp"
                 android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center_vertical"
-                android:text="Activity Calender"
+                android:text="@string/activity_calender"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +47,7 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:fontFamily="@font/ubuntu_bold"
                 android:gravity="center_vertical"
-                android:text="Oct"
+                android:text="@string/oct"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"

@@ -65,13 +65,13 @@ class ForgotPasswordFragment : Fragment() {
             binding.textFiled.setText("")
             mViewModel.rcvOn = when (binding.toggleButtonUsing.checkedButtonId) {
                 R.id.btn_mobile -> {
-                    binding.tilTextFiled.hint = "Mobile Number"
+                    binding.tilTextFiled.hint = getString(R.string.mobile_number)
                     binding.textFiled.inputType = InputType.TYPE_CLASS_PHONE
                     "mob"
                 }
 
                 else -> {
-                    binding.tilTextFiled.hint = "Email Address"
+                    binding.tilTextFiled.hint = getString(R.string.email_address)
                     binding.textFiled.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
                     "email"
                 }
@@ -85,9 +85,9 @@ class ForgotPasswordFragment : Fragment() {
         binding.btnNext.setOnClickListener {
             val value = binding.textFiled.text.toString()
             if (mViewModel.rcvOn == "mob" && value.length != 10) {
-                (requireActivity() as MainActivity).showMessage("Please enter a valid 10 digit mobile number.")
+                (requireActivity() as MainActivity).showMessage(getString(R.string.please_enter_a_valid_10_digit_mobile_number))
             } else if (mViewModel.rcvOn == "email" && !isValidEmail(value)) {
-                (requireActivity() as MainActivity).showMessage("Please enter a valid email address.")
+                (requireActivity() as MainActivity).showMessage(getString(R.string.please_enter_a_valid_email_address))
             } else {
                 (requireActivity() as MainActivity).hideKeyBoard()
                 (requireActivity() as MainActivity).showLoader(true)
@@ -98,7 +98,7 @@ class ForgotPasswordFragment : Fragment() {
                     if (it.errorCode == 0) {
                         findNavController().popBackStack()
                     } else if (it.errorCode == 404) {
-                        mainActivity().showMessage("$value is not found registered with us.")
+                        mainActivity().showMessage("$value"+ getString(R.string.is_not_found_registered_with_us))
                     } else {
                         it.users?.let { users ->
                             list.clear()

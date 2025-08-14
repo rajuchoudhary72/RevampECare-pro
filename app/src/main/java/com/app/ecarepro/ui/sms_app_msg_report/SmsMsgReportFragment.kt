@@ -67,10 +67,10 @@ class SmsMsgReportFragment : Fragment() {
         try {
             toFragment= requireArguments().getString(Constant.TO).toString()
             if (toFragment==Constant.FRA_APP_SMS){
-                binding.toolbar.title="SMS Uses"
+                binding.toolbar.title= getString(R.string.sms_uses)
                 binding.tvType.text= requireContext().getString(R.string.sms_count)
             }else if (toFragment==Constant.FRA_APP_MESSAGE){
-                binding.toolbar.title="App Message Uses"
+                binding.toolbar.title= getString(R.string.app_message_uses)
                 binding.tvType.text= requireContext().getString(R.string.message_count)
             }
         }catch (_:Exception){}
@@ -87,7 +87,8 @@ class SmsMsgReportFragment : Fragment() {
                 if (!wingLSTS.isNullOrEmpty()){
                     popUpSelectWing()
                 }else{
-                    Toast.makeText(requireContext(), "No Wing Data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),
+                        getString(R.string.no_wing_data), Toast.LENGTH_SHORT).show()
                 }
             }
             dateFrom.setOnClickListener { pickDateRange() }
@@ -114,7 +115,7 @@ class SmsMsgReportFragment : Fragment() {
     }
 
     private fun updateDateFilterText(setAsFilter: Boolean = false) {
-        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
         dateFormat.format(Date(dateFrom.timeInMillis))
         val from = dateFormat.format(Date(dateFrom.timeInMillis))
         val to = dateFormat.format(Date(dateTo.timeInMillis))
@@ -311,10 +312,10 @@ class SmsMsgReportFragment : Fragment() {
                 smsMsgReportViewModel.getSMSUses(Constant.toSystemDate(fromDate),Constant.toSystemDate(toDate)  , iD)
             }
         }else{
-            mainActivity().showMessage("Select Staff")
+            mainActivity().showMessage(getString(R.string.select_staff))
         }
         }else{
-            mainActivity().showMessage("Select Date Range")
+            mainActivity().showMessage(getString(R.string.select_date_range))
         }
 
     }

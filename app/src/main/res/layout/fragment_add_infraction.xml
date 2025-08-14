@@ -413,7 +413,7 @@
                                     android:fontFamily="@font/ubuntu_light"
                                     android:gravity="center_vertical"
                                     android:padding="3dp"
-                                    android:text="@string/save"
+                                    android:text="@string/general_save"
                                     android:textColor="@color/white"
                                     android:visibility="visible" />
                             </RelativeLayout>

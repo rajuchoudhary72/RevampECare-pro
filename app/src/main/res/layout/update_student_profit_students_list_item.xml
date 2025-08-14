@@ -27,7 +27,7 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_3sdp"
                     android:fontFamily="@font/ubuntu_light"
-                    android:text="@string/name_s"
+                    android:text="@string/general_name_pun"
                     android:textAppearance="?attr/textAppearanceLabelLarge"
                       />
 
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_3sdp"
                     android:fontFamily="@font/ubuntu_light"
-                    android:text="@string/admission_no"
+                    android:text="@string/general_admission_no_pun"
                     android:textAppearance="?attr/textAppearanceLabelLarge"
                     />
 
@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_3sdp"
                     android:fontFamily="@font/ubuntu_light"
-                    android:text="@string/roll_no"
+                    android:text="@string/general_roll_no_pun"
                     android:textAppearance="?attr/textAppearanceLabelLarge"
                     />
 

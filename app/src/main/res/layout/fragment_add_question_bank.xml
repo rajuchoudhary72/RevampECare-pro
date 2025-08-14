@@ -66,7 +66,7 @@
                 android:fontFamily="@font/ubuntu_light"
                 android:gravity="center_vertical"
                 android:padding="13dp"
-                android:text="@string/select_class"
+                android:text="@string/general_select_class"
                 android:visibility="visible"
                 app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
 
@@ -148,7 +148,7 @@
                         android:fontFamily="@font/ubuntu_medium"
                         android:lines="1"
                         android:padding="7dp"
-                        android:text="@string/attachment"
+                        android:text="@string/general_attachment"
                         android:textColor="#545454" />
 
                      <ImageView
@@ -172,7 +172,7 @@
                     android:layout_marginBottom="12dp"
                     android:drawablePadding="6dp"
                     android:gravity="center_vertical"
-                    android:text="@string/browse_file"
+                    android:text="@string/general_browse_file"
                     app:drawableRightCompat="@drawable/ic_add_green_fil" />
 
             </RelativeLayout>
@@ -182,7 +182,7 @@
                 android:id="@+id/bt_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Question Bank"
+                android:text="@string/add_question_bank"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_15sdp"
                 />

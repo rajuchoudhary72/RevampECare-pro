@@ -16,7 +16,7 @@
         app:navigationIcon="@drawable/ic_arrow_back_24px"
         app:titleCentered="true"
         android:elevation="8dp"
-        app:title="Class Attendance"
+        app:title="@string/class_attendance"
         app:titleTextAppearance="?attr/titleTextAppearance"
         app:titleTextColor="@color/white"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -92,7 +92,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:inputType="none"
-                                    android:text="Select Class"
+                                    android:text="@string/select_class"
                                     />
 
                             </com.google.android.material.textfield.TextInputLayout>

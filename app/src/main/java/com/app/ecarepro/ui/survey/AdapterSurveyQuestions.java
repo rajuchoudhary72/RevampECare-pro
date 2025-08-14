@@ -60,7 +60,7 @@ public class AdapterSurveyQuestions extends RecyclerView.Adapter<AdapterSurveyQu
         else
             surveyItemType = new AdapterSurveyItemType(mContext, RADIO_VIEW, mData.get(position).getOptions(), isResult, mData.get(position).getResponse());
         if (isResult) {
-            viewHolder.tvTotalSurveyCount.setText("Total Response(s) :- " + mData.get(position).getResponse());
+            viewHolder.tvTotalSurveyCount.setText(new StringBuilder().append(mContext.getString(R.string.total_response_s)).append(mData.get(position).getResponse()).toString());
             viewHolder.tvTotalSurveyCount.setVisibility(View.VISIBLE);
         } else
             viewHolder.tvTotalSurveyCount.setVisibility(View.GONE);

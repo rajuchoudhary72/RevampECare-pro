@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 
@@ -39,10 +37,10 @@ class SubmitAssignListAdapter(
          val data = activityLST[position]
 
         if (data.isOfflineSubmitted){
-            bindingm.tvSubmittedBy.text=  viewAssignmentFragment.getString(R.string.offline)
+            bindingm.tvSubmittedBy.text=  viewAssignmentFragment.getString(R.string.general_offline)
             bindingm.tvSubmittedBy.setTextColor(Color.parseColor("#000000"))
         }else{
-            bindingm.tvSubmittedBy.text= viewAssignmentFragment.getString(R.string.online)
+            bindingm.tvSubmittedBy.text= viewAssignmentFragment.getString(R.string.general_online)
             bindingm.tvSubmittedBy.setTextColor(Color.parseColor("#4DAC3C"))
 
         }

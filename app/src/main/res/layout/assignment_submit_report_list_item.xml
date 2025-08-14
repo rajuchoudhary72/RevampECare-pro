@@ -112,7 +112,7 @@
                         android:fontFamily="@font/ubuntu_medium"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="@string/download"
+                        android:text="@string/general_download"
                         android:textColor="@color/brand_color"
                         app:drawableLeftCompat="@drawable/download_24px"
                         app:drawableTint="@color/brand_color" />

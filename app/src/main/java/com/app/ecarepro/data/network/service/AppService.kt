@@ -13,11 +13,14 @@ import retrofit2.http.Query
 import com.app.ecarepro.data.network.model.FavouritesDto
 import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.network.model.SyncDataDto
+import com.app.ecarepro.ui.language.model.SheetResponseDto
+import retrofit2.http.Path
 
 interface AppService {
     @GET("App/Layout")
     suspend fun getAppLayout(
         @Query("Device") device: Int = 1,
+        @Query("language") language: String ,
     ): AppLayoutDto
 
 
@@ -32,6 +35,7 @@ interface AppService {
     @GET("App/FavoriteMenus")
     suspend fun getFavourites(
         @Query("Device") device: Int = 1,
+        @Query("language") language: String ,
     ): FavouritesDto
 
     @POST("App/UpdateFavoriteMenus")
@@ -50,4 +54,13 @@ interface AppService {
 
     @GET("App/Sync")
     suspend fun syncData(): SyncDataDto
+
+
+
+    @GET("https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{range}")
+    suspend fun getSheetValues(
+        @Path("spreadsheetId") spreadsheetId: String,
+        @Path("range") range: String,
+        @Query("key") apiKey: String
+    ): SheetResponseDto
 }

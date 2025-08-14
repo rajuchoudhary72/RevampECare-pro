@@ -32,7 +32,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
             android:visibility="gone"
             android:layout_centerInParent="true" />
@@ -103,7 +103,7 @@
                             android:drawablePadding="@dimen/_10sdp"
                             android:ellipsize="end"
                             android:fontFamily="@font/calibri_regular"
-                            android:hint="Search By Name"
+                            android:hint="@string/search_by_name"
                             android:importantForAutofill="no"
                             android:inputType="text"
                             android:paddingStart="@dimen/_15sdp"

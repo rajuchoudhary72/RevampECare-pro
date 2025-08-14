@@ -222,7 +222,7 @@ class UserRepositoryImpl @Inject constructor(
     }
     fun getCurrentDateTimeAmPm(): String {
         val currentDate = Date()
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.ENGLISH)
         return dateFormat.format(currentDate)
     }
     override suspend fun login(

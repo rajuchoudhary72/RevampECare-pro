@@ -21,7 +21,6 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
@@ -29,8 +28,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.AppUserReportBinding
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
@@ -191,7 +188,7 @@ class UserRepostFragment : Fragment() {
             totalRemaining += deviceUsersArrayList[k].remaining
         }
         tvTotalUser!!.visibility = View.VISIBLE
-        tvTotalUser!!.text = "Total: $totalUser"
+        tvTotalUser!!.text = getString(R.string.general_total)+getString(R.string.general_pun)+"$totalUser"
         tvAndroidCount!!.text = totalAndroid.toString() + ""
         tvIosCount!!.text = totalIos.toString() + ""
         tvBothCount!!.text = totalBoth.toString() + ""
@@ -368,7 +365,7 @@ class UserRepostFragment : Fragment() {
                 R.string.app_name
             )
         )
-        notificationBuilder.setContentText("App User Report")
+        notificationBuilder.setContentText(getString(R.string.appUserReport_title))
         notificationBuilder.setAutoCancel(true)
         notificationBuilder.setPriority(Notification.PRIORITY_MAX)
         notificationBuilder.setContentIntent(pendingIntent)

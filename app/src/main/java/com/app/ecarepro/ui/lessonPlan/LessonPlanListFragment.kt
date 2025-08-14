@@ -273,7 +273,7 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
                                 binding.autoCompleteClass.setAdapter(arrayAdapter)
 
                             } else {
-                                mainActivity().showMessage("No Class Assign")
+                                mainActivity().showMessage(getString(R.string.no_class_assign))
                             }
 
                         }

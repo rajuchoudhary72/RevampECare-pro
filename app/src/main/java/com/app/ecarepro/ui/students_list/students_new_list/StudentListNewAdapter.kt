@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.StudentListItemBinding
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.utils.Constant
@@ -46,19 +47,19 @@ class StudentListNewAdapter(
             }
 
             bindingm.rollno.text= buildString {
-                append("Roll No : ")
+                append(studentListFragment.getString(R.string.general_roll_no_pun))
                 append(data.rollNumber)
             }
 
             bindingm.tvClassName.text= buildString {
-                append("Class : ")
+                append(studentListFragment.getString(R.string.general_classes_pun))
                 append(data.`class`)
             }
             bindingm.tvClassName.isVisible=false
 
 
             bindingm.admission.text= buildString {
-                append("Admission No : ")
+                append(studentListFragment.getString(R.string.general_admission_no_pun))
                 append(data.admissionNumber)
             }
 

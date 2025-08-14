@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentOtpVerificationBinding
 import com.app.ecarepro.ui.mainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +44,15 @@ class OtpVerificationFragment : Fragment() {
         mViewModel.remainingTime.observe(viewLifecycleOwner) { timeRemaining ->
             if (timeRemaining > 0) {
                 // Display the remaining time
-                binding.resendTimer.text = "Please wait $timeRemaining Seconds to Resend OTP..."
+                binding.resendTimer.text = buildString {
+                    append(getString(R.string.please_wait))
+                    append("$timeRemaining ")
+                    append(
+                        getString(
+                            R.string.seconds_to_resend_otp
+                        )
+                    )
+                }
                 binding.btnResendOtp.isEnabled =
                     false // Disable resend button while timer is running
             } else {

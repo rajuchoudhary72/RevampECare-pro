@@ -234,7 +234,7 @@
                     android:gravity="center"
                     android:paddingHorizontal="@dimen/_15sdp"
                     android:paddingVertical="@dimen/_7sdp"
-                    android:text="@string/roll_no"
+                    android:text="@string/general_roll_no_pun"
                     android:textColor="@color/black"
                     android:textSize="13sp"
                     app:drawableStartCompat="@drawable/descending" />
@@ -252,7 +252,7 @@
                     android:gravity="center"
                     android:paddingHorizontal="@dimen/_15sdp"
                     android:paddingVertical="@dimen/_7sdp"
-                    android:text="@string/name"
+                    android:text="@string/general_name"
                     android:textColor="@color/black"
                     android:textSize="13sp"
                     app:drawableStartCompat="@drawable/descending" />

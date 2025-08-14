@@ -121,7 +121,7 @@ class MessageFragment : Fragment() {
 
     private fun setUpViewPager() {
 
-        val tabItem = mutableListOf("Inbox", "Sent")
+        val tabItem = mutableListOf(getString(R.string.inbox), getString(R.string.sent))
 
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount(): Int {

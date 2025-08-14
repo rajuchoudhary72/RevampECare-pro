@@ -27,7 +27,7 @@
                 android:fontFamily="@font/ubuntu_regular"
                 android:lines="1"
                 android:visibility="gone"
-                android:text="@string/no_record_found"
+                android:text="@string/general_no_record_found"
                 android:textSize="25sp"
                 android:textStyle="bold"
                 android:layout_gravity="center"

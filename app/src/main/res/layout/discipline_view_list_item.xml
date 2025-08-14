@@ -237,7 +237,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Compliance active"
+                            android:text="@string/infraction_compliance_active"
                             android:layout_margin="@dimen/_5sdp"
                             android:textColor="@color/white"
                             android:textSize="12sp"
@@ -256,7 +256,7 @@
                             android:id="@+id/tv_resolved_holder"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Not Resolved"
+                            android:text="@string/complince_not_resolved"
                             android:layout_margin="@dimen/_5sdp"
                             android:textColor="@color/white"
                             android:textSize="12sp"
@@ -281,7 +281,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Compliance not activated"
+                        android:text="@string/compliance_not_activated"
                         android:layout_margin="@dimen/_5sdp"
                         android:textColor="@color/white"
                         android:textSize="12sp"

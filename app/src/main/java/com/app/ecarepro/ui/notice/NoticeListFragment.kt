@@ -114,7 +114,7 @@ class NoticeListFragment : Fragment(), ItemListener<Notice> {
                                 binding.recyclerNotice.isVisible = true
                                 binding.tvNoData.isVisible = false
                                 binding.includeToolbar.toolbarTitle.text =
-                                    "All Notices" + "( " + it.data.totalNotice + "/" + it.data.unreadNotice + ")"
+                                    getString(R.string.all_notices) + "( " + it.data.totalNotice + "/" + it.data.unreadNotice + ")"
 
                                 isLoading = true
                                 if (pageIndex == 1) {

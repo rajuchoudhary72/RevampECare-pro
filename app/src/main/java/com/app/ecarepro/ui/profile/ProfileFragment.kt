@@ -287,12 +287,12 @@ class ProfileFragment : Fragment() {
                         }
                         removeAccountListener { _ ->
                             MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Remove Account")
-                                .setMessage("Are you sure to remove ${it.name}")
-                                .setPositiveButton("Yes") { _, _ ->
+                                .setTitle(getString(R.string.remove_account))
+                                .setMessage(getString(R.string.are_you_sure_to_remove)+"${it.name}")
+                                .setPositiveButton(getString(R.string.yes)) { _, _ ->
                                     profileViewModel.removeUser(it)
                                     restartApp()
-                                }.setNegativeButton("No") { _, _ ->
+                                }.setNegativeButton(getString(R.string.no)) { _, _ ->
 
                                 }
                                 .show()
@@ -336,22 +336,22 @@ class ProfileFragment : Fragment() {
 
     private fun selectImageOptionDialog() {
         val items = arrayOf<CharSequence>(
-            "Take Photo", "Choose from Library",
-            "Cancel"
+            getString(R.string.take_photo), getString(R.string.choose_from_library),
+            getString(R.string.cancel)
         )
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Add Photo!")
+        builder.setTitle(getString(R.string.add_photo))
         builder.setItems(items) { dialog, item ->
             FileAccess.checkPermission(this)
-            if (items[item] == "Take Photo") {
+            if (items[item] == getString(R.string.take_photo)) {
                 if (isCameraPermissionGranted(requireContext())) {
                     cameraLauncher.launch(FileAccess.cameraIntent())
                 } else {
-                    mainActivity().showMessage("Please allow camera permission, go to settings and enable.")
+                    mainActivity().showMessage(getString(R.string.please_allow_camera_permission_go_to_settings_and_enable))
                 }
-            } else if (items[item] == "Choose from Library") {
+            } else if (items[item] == getString(R.string.choose_from_library)) {
                 galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] == "Cancel") {
+            } else if (items[item] ==getString(R.string.cancel)) {
                 dialog.dismiss()
             }
         }
@@ -389,13 +389,13 @@ class ProfileFragment : Fragment() {
         }
     }
     private fun showPermissionRationaleDialog() {
-        mainActivity().showMessage("Camera permission is required to take photo, go to setting and enable permission for the app.")
+        mainActivity().showMessage(getString(R.string.camera_permission_is_required_to_take_photo_go_to_setting_and_enable_permission_for_the_app))
     }
     private fun openCamera() {
         cameraLauncher.launch(FileAccess.cameraIntent())
     }
     private fun showPermissionDeniedMessage() {
-        mainActivity().showMessage("Camera permission denied")
+        mainActivity().showMessage(getString(R.string.camera_permission_denied))
     }
     private fun EpoxyController.buildStaffModels(profile: Profile) {
 
@@ -424,7 +424,7 @@ class ProfileFragment : Fragment() {
                 title(getString(R.string.spouse_name))
                 subTitle(profile.fatherHusbandName)
             } else {
-                title("Father Name")
+                title(getString(R.string.father_name))
                 subTitle(profile.fatherHusbandName)
             }
 
@@ -539,7 +539,7 @@ class ProfileFragment : Fragment() {
                 subTitle(profile.fatherHusbandMob)
             } else {
                 iconRes(R.drawable.ic_contact_no_)
-                title("Father Contact No. :")
+                title(getString(R.string.father_contact_no))
                 subTitle(profile.fatherHusbandMob)
             }
 

@@ -169,7 +169,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
                                     }
 
                                 binding.tvDatePhoto.text =
-                                    it.data.eventDate + " | " + it.data.totalPhotos + " Photos"
+                                    it.data.eventDate + " | " + it.data.totalPhotos + " "+getString(R.string.photos)
 
 
                                 if (binding.tvDes.lineCount >= 4) {

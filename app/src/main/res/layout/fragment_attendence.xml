@@ -24,7 +24,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:titleCentered="true"
             android:elevation="8dp"
-            app:title="Attendance"
+            app:title="@string/attendance"
 
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white"
@@ -60,7 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:text="@string/select_year"
+                    android:text="@string/general_select_year"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -80,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:text="@string/select_month"
+                    android:text="@string/general_select_month"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -117,7 +117,7 @@
                     android:gravity="center"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Att Date"
+                    android:text="@string/att_date"
                     android:fontFamily="@font/ubuntu_medium" />
 
                 <View
@@ -132,7 +132,7 @@
                     android:gravity="center"
                     android:layout_weight="0.6"
                     android:paddingVertical="10dp"
-                    android:text="In"
+                    android:text="@string/in"
                     android:fontFamily="@font/ubuntu_medium"
 
                     />
@@ -150,7 +150,7 @@
 
                     android:layout_weight="0.6"
                     android:paddingVertical="10dp"
-                    android:text="Out"
+                    android:text="@string/out"
                     android:fontFamily="@font/ubuntu_medium" />
 
                 <View
@@ -165,7 +165,7 @@
                     android:gravity="center"
                     android:layout_weight="0.6"
                     android:paddingVertical="10dp"
-                    android:text="Late"
+                    android:text="@string/late"
                     android:fontFamily="@font/ubuntu_medium" />
 
 
@@ -181,7 +181,7 @@
                     android:gravity="center"
                     android:layout_weight="0.6"
                     android:paddingVertical="10dp"
-                    android:text="Total"
+                    android:text="@string/total"
                     android:fontFamily="@font/ubuntu_medium" />
 
                 <View
@@ -195,7 +195,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:paddingVertical="10dp"
-                    android:text="Status"
+                    android:text="@string/status"
                     android:fontFamily="@font/ubuntu_medium"
                     android:layout_weight="0.9" />
 
@@ -228,7 +228,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
-            android:text="@string/no_Attendance_available"
+            android:text="@string/attendance_no_attendance_available"
             android:textSize="16sp"
 
             />

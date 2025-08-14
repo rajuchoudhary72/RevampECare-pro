@@ -84,7 +84,7 @@ class SurveyListFragment : Fragment() {
                                 binding.tvNoSurvey.hide()
 
                                 val noticeAdapter =
-                                    SurveyAdapter(it.data.allSurvey) { poss, data ->
+                                    SurveyAdapter(it.data.allSurvey,this@SurveyListFragment ) { poss, data ->
                                         if (data.isOpen && !data.isResponded) {
                                             val bundle = Bundle()
                                             bundle.putString("ID", data.id)
@@ -97,14 +97,14 @@ class SurveyListFragment : Fragment() {
                                         else if (data.resultDeclared){
                                             // mContext.startActivity(Intent(mContext, ActivitySurveyResult::class.java).putExtra("surId", surveyModel.getSurID()) )
 
-                                            mainActivity().showMessage("Survey Result")
+                                            mainActivity().showMessage(getString(R.string.survey_result))
                                         }
 
 
                                         else if (data.isResponded)
-                                            mainActivity().showMessage("Thanks for your response. Your response has already been recorded.")
+                                            mainActivity().showMessage(getString(R.string.thanks_for_your_response_your_response_has_already_been_recorded))
                                         else
-                                            mainActivity().showMessage("Survey Closed")
+                                            mainActivity().showMessage(getString(R.string.survey_closed))
                                     }
 
                                 binding.rvSurveyList.apply {

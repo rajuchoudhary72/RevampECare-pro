@@ -91,7 +91,7 @@
                             android:layout_height="wrap_content"
                             android:drawablePadding="@dimen/_5sdp"
                             android:fontFamily="@font/ubuntu_medium"
-                            android:text="Bus No: "
+                            android:text="@string/bus_location_bus_no"
                             android:textColor="@color/module"
                             android:textSize="@dimen/_10sdp"
                             app:drawableLeftCompat="@drawable/ic_bus"

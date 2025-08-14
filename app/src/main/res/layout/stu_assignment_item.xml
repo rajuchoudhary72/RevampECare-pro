@@ -85,7 +85,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
                             android:gravity="center"
-                            android:text="@string/download"
+                            android:text="@string/general_download"
                             android:textColor="@color/white"
                             android:textSize="16sp"
 
@@ -157,7 +157,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_marginTop="4dp"
                             android:drawablePadding="3dp"
-                            android:text="@string/update_on"
+                            android:text="@string/general_update_on_pun"
                             android:textColor="#C7C7C7"
                             app:fontFamily="@font/ubuntu_light" />
 

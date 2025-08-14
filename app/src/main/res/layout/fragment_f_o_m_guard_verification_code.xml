@@ -24,7 +24,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:titleCentered="true"
             android:elevation="8dp"
-            app:title="Verification Code"
+            app:title="@string/verification_code"
 
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white"
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:fontFamily="@font/ubuntu_medium"
-            android:text="Verification Code"
+            android:text="@string/verification_code"
             android:textSize="18sp"
             android:layout_gravity="center" />
 
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/ubuntu_regular"
-            android:text="We sent a verification code to your mobile number "
+            android:text="@string/we_sent_a_verification_code_to_your_mobile_number"
             android:layout_marginVertical="@dimen/_10sdp"
             android:layout_marginHorizontal="@dimen/_50sdp"
             android:layout_gravity="center"

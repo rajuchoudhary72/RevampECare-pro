@@ -26,7 +26,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:title="Message"
+                app:title="@string/message"
                 app:titleTextColor="@color/white"
                  app:topWindowInsetToPadding="@{true}">
 
@@ -90,12 +90,12 @@
                         <com.google.android.material.tabs.TabItem
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Inbox" />
+                            android:text="@string/inbox" />
 
                         <com.google.android.material.tabs.TabItem
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Sent" />
+                            android:text="@string/sent" />
 
                     </com.google.android.material.tabs.TabLayout>
 
@@ -193,7 +193,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="6dp"
                         android:fontFamily="@font/ubuntu_medium"
-                        android:text="Compose"
+                        android:text="@string/compose"
                         android:textColor="@color/white" />
 
                     <com.google.android.material.divider.MaterialDivider

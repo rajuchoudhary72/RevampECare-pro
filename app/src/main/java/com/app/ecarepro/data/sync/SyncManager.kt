@@ -123,7 +123,7 @@ class SyncManager @Inject constructor(
     private fun isLastSyncMoreThan24HoursFromNow(dateString: String?): Boolean {
         if (dateString.isNullOrEmpty()) return true
 
-        val dateFormat = SimpleDateFormat(SYNC_TIME_FORMAT, Locale.getDefault())
+        val dateFormat = SimpleDateFormat(SYNC_TIME_FORMAT, Locale.ENGLISH)
 
         return try {
             val inputDate = dateFormat.parse(dateString) ?: return false
@@ -138,7 +138,7 @@ class SyncManager @Inject constructor(
 
     private fun getCurrentSyncTime(): String {
         val currentDate = Date()
-        val dateFormat = SimpleDateFormat(SYNC_TIME_FORMAT, Locale.getDefault())
+        val dateFormat = SimpleDateFormat(SYNC_TIME_FORMAT, Locale.ENGLISH)
         return dateFormat.format(currentDate)
     }
 

@@ -11,6 +11,7 @@ import androidx.annotation.ColorRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.app.ecarepro.R
 import com.app.ecarepro.ui.MainActivity
@@ -51,7 +52,7 @@ fun ensureHttps(url: String): String {
 fun currentDate(): String {
     val c = Calendar.getInstance().time
     println("Current time => $c")
-    val df = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
+    val df = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
     return df.format(c)
 }
 fun calenderInstance(){
@@ -121,11 +122,11 @@ const val HH_MM_A = "hh:mm a"
 fun formatDate(dateString: String, fromDateFormat: String, toDateFormat: String): String {
     try {
         // Parse the input date string into a Date object
-        val inputFormat = SimpleDateFormat(fromDateFormat, Locale.getDefault())
+        val inputFormat = SimpleDateFormat(fromDateFormat, Locale.ENGLISH)
         val date = inputFormat.parse(dateString)
 
         // Format the Date object into the desired output format
-        val outputFormat = SimpleDateFormat(toDateFormat, Locale.getDefault())
+        val outputFormat = SimpleDateFormat(toDateFormat, Locale.ENGLISH)
         return outputFormat.format(date)
     } catch (e: Exception) {
         return ""
@@ -148,7 +149,7 @@ fun getDateTimeFormatted(DateTime: String): String {
     val finalDate = SimpleDateFormat("dd MMM, yyyy")
     val finalTime = SimpleDateFormat("hh:mm aa")
     val formattedDate = finalDate.format(dateTime).toString()
-    val formattedTime = finalTime.format(dateTime).toString().uppercase(Locale.getDefault())
+    val formattedTime = finalTime.format(dateTime).toString().uppercase(Locale.ENGLISH)
     return "$formattedDate at $formattedTime"
     }catch (e:Exception){
         return ""
@@ -199,3 +200,5 @@ fun getDateTimeFormatted(DateTime: String): String {
     val shareIntent = Intent.createChooser(sendIntent, null)
     context.startActivity(shareIntent)
 }
+
+val Context.dataStore by preferencesDataStore(name = "settings")

@@ -27,7 +27,7 @@
             android:elevation="8dp"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
 
-            app:title="Submit Assignment"
+            app:title="@string/submit_assignment_title"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:theme="@style/MyThemeOverlay_Toolbar"
             app:titleTextAppearance="?attr/titleTextAppearance"
@@ -58,7 +58,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/ubuntu_medium"
-                        android:text="@string/subject"
+                        android:text="@string/general_subject"
 
                         />
 
@@ -84,7 +84,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/ubuntu_medium"
-                        android:text="@string/title"
+                        android:text="@string/general_title_pun"
 
                         />
 
@@ -230,7 +230,7 @@
                             android:fontFamily="@font/ubuntu_medium"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:text="Submitted Report"
+                            android:text="@string/assignment_submitted_report"
                             android:textColor="@color/brand_color"
                             app:drawableTint="@color/brand_color"
                             app:drawableLeftCompat="@drawable/search" />
@@ -265,7 +265,7 @@
                         android:fontFamily="@font/ubuntu_medium"
                         android:lines="1"
                         android:padding="7dp"
-                        android:text="@string/attachment"
+                        android:text="@string/general_attachment"
                         android:textColor="#545454" />
 
                     <ImageView
@@ -356,7 +356,7 @@
                         android:drawablePadding="3dp"
                         android:fontFamily="@font/ubuntu_medium"
                         android:padding="5dp"
-                        android:text="@string/camera_amp_browse_photo"
+                        android:text="@string/general_camera_amp_browse_photo"
                         app:drawableTopCompat="@drawable/ic_camera"
                         android:gravity="bottom|center" />
 
@@ -374,7 +374,7 @@
                         android:drawablePadding="3dp"
                         android:fontFamily="@font/ubuntu_medium"
                         android:padding="5dp"
-                        android:text="@string/attach_photo_pdf_doc"
+                        android:text="@string/general_attach_photo_pdf_doc"
                         app:drawableTopCompat="@drawable/ic_add_account"
                         android:gravity="bottom|center" />
 

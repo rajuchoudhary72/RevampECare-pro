@@ -28,7 +28,7 @@
                     android:layout_height="wrap_content"
                     app:navigationIcon="@drawable/round_close_24"
                     app:navigationIconTint="@color/white"
-                    app:title="Select Staff Types"
+                    app:title="@string/select_staff_types"
                     app:titleCentered="true"
                     app:titleTextAppearance="?attr/textAppearanceTitleMedium"
                     app:titleTextColor="@color/white"

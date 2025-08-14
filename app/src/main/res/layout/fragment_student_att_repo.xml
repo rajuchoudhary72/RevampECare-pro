@@ -23,7 +23,7 @@
             app:layout_collapseMode="pin"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Attendance Report"
+            app:title="@string/attendance_report"
             app:titleCentered="true"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white" />
@@ -66,7 +66,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/from_"
+                            android:text="@string/general_from_pun"
                             android:fontFamily="@font/ubuntu_regular"
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_9sdp" />
@@ -78,7 +78,7 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:gravity="center"
-                            android:text="@string/from_date"
+                            android:text="@string/general_from_date"
                             android:textSize="@dimen/_11sdp"
                             android:fontFamily="@font/ubuntu_bold"
                             android:textColor="@color/grey_60"/>
@@ -105,7 +105,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/to_"
+                            android:text="@string/general_to_pun"
                             android:fontFamily="@font/ubuntu_regular"
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_9sdp" />
@@ -117,7 +117,7 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:gravity="center"
-                            android:text="@string/to_date"
+                            android:text="@string/general_to_date"
                             android:textSize="@dimen/_11sdp"
                             android:fontFamily="@font/ubuntu_bold"
                             android:textColor="@color/grey_60" />
@@ -247,7 +247,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/ubuntu_regular"
-                            android:text="@string/absent"
+                            android:text="@string/general_absent"
                             android:textSize="@dimen/_12sdp"
                             android:textColor="@color/red" />
 
@@ -676,7 +676,7 @@
                                 android:layout_gravity="center"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:gravity="center"
-                                android:text="@string/absent"
+                                android:text="@string/general_absent"
                                 android:fontFamily="@font/ubuntu_regular"
                                 android:textColor="@color/red"
                                 android:textSize="@dimen/_11sdp" />

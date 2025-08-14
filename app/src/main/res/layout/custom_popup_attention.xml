@@ -151,7 +151,7 @@
         android:fontFamily="@font/ubuntu_medium"
         android:gravity="center"
         android:orientation="horizontal"
-        android:text="@string/ok"
+        android:text="@string/general_ok"
         android:textColor="@color/module"
         android:textSize="@dimen/_17sdp"
         android:visibility="gone" />

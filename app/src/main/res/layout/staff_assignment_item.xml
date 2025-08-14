@@ -84,7 +84,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
                             android:gravity="center"
-                            android:text="@string/download"
+                            android:text="@string/general_download"
                             android:textColor="@color/white"
                             android:textSize="16sp"
 
@@ -127,7 +127,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:drawablePadding="4dp"
-                            android:text="@string/status_s"
+                            android:text="@string/general_status_pun"
                              />
 
                         <TextView
@@ -187,7 +187,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_marginTop="4dp"
                             android:drawablePadding="3dp"
-                            android:text="@string/update_on"
+                            android:text="@string/general_update_on_pun"
                             android:textColor="@color/grey_40"
                             app:fontFamily="@font/ubuntu_light" />
 
@@ -221,7 +221,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_marginTop="3dp"
                             android:drawablePadding="3dp"
-                            android:text="@string/classes"
+                            android:text="@string/general_classes_pun"
                             />
 
                         <TextView

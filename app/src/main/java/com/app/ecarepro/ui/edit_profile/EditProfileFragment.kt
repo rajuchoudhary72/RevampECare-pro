@@ -173,12 +173,12 @@ class EditProfileFragment : Fragment() {
 
 
             textAnniversaryDate.setOnClickListener {
-                selectDatePro("Select Anniversary date") {
+                selectDatePro(getString(R.string.select_anniversary_date)) {
                     textAnniversaryDate.setText(it)
                 }
             }
             textAdmissionDate.setOnClickListener {
-                selectDatePro("Select Admission date") {
+                selectDatePro(getString(R.string.select_admission_date)) {
                     textAdmissionDate.setText(it)
                 }
             }
@@ -339,7 +339,7 @@ class EditProfileFragment : Fragment() {
     }
 
     fun getFormatedDate(date: Date = Date()): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         return dateFormat.format(date)
     }
 

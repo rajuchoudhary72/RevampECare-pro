@@ -47,7 +47,7 @@ class VideoAlbumFragment : Fragment() , ItemListener<AlbumVideo> {
     ): View? {
         binding=FragmentPhotoAlbumBinding.inflate(inflater,container,false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.toolbar.title= "Video Album"
+        binding.toolbar.title= getString(R.string.video_album_title)
         binding.toolbar.isVisible=true
         videoAlbumAdapter =    VideoAlbumAdapter(this@VideoAlbumFragment)
 

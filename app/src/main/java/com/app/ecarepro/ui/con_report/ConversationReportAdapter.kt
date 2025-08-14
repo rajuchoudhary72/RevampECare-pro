@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.ConversationReportItemBinding
 import com.app.ecarepro.model.Conversation
-import com.app.ecarepro.model.Notice
 import com.app.ecarepro.utils.Constant
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
@@ -81,7 +80,7 @@ class ConversationReportAdapter(
                     }
 
                     2 -> {
-                        ((", Parent of " + conversation.senderDTL
+                        ((conversationReportFragment.getString(R.string.parent_of) + conversation.senderDTL
                             .childName) + "(" + conversation.senderDTL
                             .className) + ")"
                     }
@@ -92,7 +91,7 @@ class ConversationReportAdapter(
                 }
 
                 tvMessage.text = buildString {
-                    append(("From : " + conversation.senderDTL.name))
+                    append((conversationReportFragment.getString(R.string.general_from)+" : " + conversation.senderDTL.name))
                     append(s)
                 }
 
@@ -104,13 +103,13 @@ class ConversationReportAdapter(
                         tvSubAbbre2.text = conversation.abbreviation
                     }
                     2 -> {
-                        tvSubAbbre2.text = "Photo"
+                        tvSubAbbre2.text = conversationReportFragment.getString(R.string.general_photo)
                         tvSubAbbre2.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_photo, 0, 0, 0
                         )
                         tvSubAbbre2.compoundDrawablePadding = 5
                     }
                     3 -> {
-                        tvSubAbbre2.text = "Audio"
+                        tvSubAbbre2.text = conversationReportFragment.getString(R.string.general_audio)
                         tvSubAbbre2.setCompoundDrawablesWithIntrinsicBounds(  R.drawable.ic_audio, 0, 0, 0 )
                         tvSubAbbre2.compoundDrawablePadding = 5
                     }
@@ -121,7 +120,7 @@ class ConversationReportAdapter(
                             conversationReportFragment.resources.getColor(R.color.light_gray_gallerytext)
                         )
                         val spannableString =
-                            SpannableString("SMS  " + conversation.abbreviation)
+                            SpannableString(conversationReportFragment.getString(R.string.general_sms) + conversation.abbreviation)
                         spannableString.setSpan(
                             ForegroundColorSpan(
                                 conversationReportFragment.resources.getColor(R.color.module)
@@ -135,10 +134,12 @@ class ConversationReportAdapter(
                 if (null != conversation.recipients) {
                     if (null != conversation.recipients[0].name) {
                         if (conversation.recipients .size > 1 )
-                            tvSubAbbre.text = (("To : " + conversation.recipients[0] .name) + " and " + (conversation.recipients .size - 1)) + " more"
+                            tvSubAbbre.text = ((conversationReportFragment.getString(R.string.general_to_pun) + conversation.recipients[0] .name) + conversationReportFragment.getString(
+                                R.string.general_and
+                            ) + (conversation.recipients .size - 1)) + " "+conversationReportFragment.getString(R.string.general_from_small)
                         else tvSubAbbre.text =
                             buildString {
-                                append("To : ")
+                                append(conversationReportFragment.getString(R.string.general_to_pun))
                                 append(conversation.recipients[0].name)
                             }
                     }
@@ -150,13 +151,13 @@ class ConversationReportAdapter(
                             0,
                             0
                         )
-                        ctvReadBy.text = ("Read by " + conversation.readCount) + " (" + setCalculatedPercentage(
+                        ctvReadBy.text = (conversationReportFragment.getString(R.string.general_read_by)+" " + conversation.readCount) + " (" + setCalculatedPercentage(
                             conversation.readCount,
                             conversation.recipients.size
-                        ) + ") recipient(s)"
+                        ) + ")"+conversationReportFragment.getString(R.string.message_recipients)
                     } else {
                         ctvReadBy.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-                        ctvReadBy.text = "Read by 0 recipient"
+                        ctvReadBy.text = conversationReportFragment.getString(R.string.read_by_0_recipient)
                         ctvReadBy.setTextColor(
                             conversationReportFragment.resources.getColor(R.color.grey_40)
                         )
@@ -174,11 +175,11 @@ class ConversationReportAdapter(
 
 
 
-                val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+                val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
                 val dt: String = conversation.sentOn
                 try {
                     val date = sdf.parse(conversation.sentOn)
-                    val destDate = SimpleDateFormat("dd MMM",Locale.getDefault())
+                    val destDate = SimpleDateFormat("dd MMM",Locale.ENGLISH)
                     tvTimeAgo.text = Constant.dateToShowConn(dt)
                 } catch (e: ParseException) {
                     e.printStackTrace()

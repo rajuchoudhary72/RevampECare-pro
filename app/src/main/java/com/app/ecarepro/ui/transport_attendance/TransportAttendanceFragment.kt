@@ -110,7 +110,8 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                 if (routeLSTList.isNotEmpty()) {
                     popUpRouter()
                 } else {
-                    Toast.makeText(requireContext(), "No Route Data", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(),
+                        getString(R.string.no_route_data), Toast.LENGTH_LONG).show()
                 }
 
             }
@@ -118,7 +119,8 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                 if (stopLSTList.isNotEmpty()) {
                     popUpStoppers()
                 } else {
-                    Toast.makeText(requireContext(), "No Stoppers Data", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(),
+                        getString(R.string.no_stoppers_data), Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -296,15 +298,18 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
         }
         var isValidate = true
         if (!routeSelected) {
-            Toast.makeText(requireContext(), "Please Select Route", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),
+                getString(R.string.please_select_route), Toast.LENGTH_SHORT).show()
             isValidate = false
         }
         if (!stoppersSelected) {
-            Toast.makeText(requireContext(), "Please Select Stoppers", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),
+                getString(R.string.please_select_stoppers), Toast.LENGTH_SHORT).show()
             isValidate = false
         }
         if (tripType == 0) {
-            Toast.makeText(requireContext(), "Please Select Trip Type", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),
+                getString(R.string.please_select_trip_type), Toast.LENGTH_SHORT).show()
             isValidate = false
         }
         if (isValidate) {
@@ -468,7 +473,7 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                 Constant.toSystemDate(Constant.currentDate()),
                 true
             ).invokeOnCompletion {
-                Toast.makeText(requireContext(), "Updated Successfully!!!", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), getString(R.string.updated_successfully), Toast.LENGTH_SHORT)
                     .show()
             }
         } else {
@@ -623,7 +628,8 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
             requestList,
             tripType
         ).invokeOnCompletion {
-            Toast.makeText(requireContext(), "Attendance Marked Successfully", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(),
+                getString(R.string.attendance_marked_successfully), Toast.LENGTH_SHORT)
                 .show()
         }
 

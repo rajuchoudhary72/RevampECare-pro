@@ -18,13 +18,13 @@ import com.app.ecarepro.model.NextSessionClasse
 
 import com.app.ecarepro.model.Section
 
-import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentPro
 import com.squareup.picasso.Picasso
 
 
 class ClassPromotionsAdapter(
-    private var studentMutableList: MutableList<StudentPro>
+    private var studentMutableList: MutableList<StudentPro>,
+    private var  classPromotionFragment: ClassPromotionFragment
 ) :
     RecyclerView.Adapter<ClassPromotionsAdapter.ClassPromotionsHolder>() {
 
@@ -43,22 +43,22 @@ class ClassPromotionsAdapter(
         val nextSessionClasses = getSelectedClass(student.nextSessionClasses!!)
 
         with(mBinding!!) {
-            tvStuName.text = "Name: ${student.name}"
-            tvKeyValue1.text = "Class: ${student.`class`}"
-            tvKeyValue2.text = "Roll No.:${student.rollNumber}"
-            tvKeyValue3.text = "Admission No.:${student.admissionNumber}"
-            tvKeyValue4.text = "Father Name:${student.fatherName}"
+            tvStuName.text = classPromotionFragment.getString(R.string.general_name_pun)+"${student.name}"
+            tvKeyValue1.text = classPromotionFragment.getString(R.string.general_classes_pun)+"Class: ${student.`class`}"
+            tvKeyValue2.text = classPromotionFragment.getString(R.string.general_roll_no_pun)+"${student.rollNumber}"
+            tvKeyValue3.text = classPromotionFragment.getString(R.string.general_admission_no_pun)+"${student.admissionNumber}"
+            tvKeyValue4.text = classPromotionFragment.getString(R.string.general_father_name_pun)+"${student.fatherName}"
             Picasso.get().load(student.photo).into(civStuImg)
             if (nextSessionClasses != -1) {
                 edtRoll.text = student.nextSessionClasses[nextSessionClasses]?.className
             } else {
-                edtRoll.text = "N/A"
+                edtRoll.text = classPromotionFragment.getString(R.string.general_n_a)
             }
 
             if (student.selected != null) {
                 edtSection.text = student.selected!!.secName
             } else {
-                edtSection.text = "New Section"
+                edtSection.text = classPromotionFragment.getString(R.string.general_new_section)
             }
             edtSection.setOnClickListener {
                 showSection(
@@ -99,7 +99,7 @@ class ClassPromotionsAdapter(
         )
         dialog.window!!.attributes.windowAnimations = R.style.Animations
         dialog.setContentView(dialogBinding.root)
-        dialogBinding.tvHeading.text = "Select Class"
+        dialogBinding.tvHeading.text = classPromotionFragment.getString(R.string.general_select_class)
 
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         dialogBinding.rvYear.layoutManager = linearLayoutManager
@@ -116,7 +116,8 @@ class ClassPromotionsAdapter(
                 notifyItemChanged(poss)
                 dialog.dismiss()
             } else {
-                Toast.makeText(context, "Select Any  New Class First", Toast.LENGTH_LONG).show()
+                Toast.makeText(context,
+                    classPromotionFragment.getString(R.string.select_any_new_class_first), Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -138,7 +139,7 @@ class ClassPromotionsAdapter(
         )
         dialog.window!!.attributes.windowAnimations = R.style.Animations
         dialog.setContentView(dialogBinding.root)
-        dialogBinding.tvHeading.text = "Select Section"
+        dialogBinding.tvHeading.text = classPromotionFragment.getString(R.string.general_select_section)
 
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         dialogBinding.rvYear.layoutManager = linearLayoutManager
@@ -155,7 +156,7 @@ class ClassPromotionsAdapter(
                 notifyItemChanged(poss)
                 dialog.dismiss()
             } else {
-                Toast.makeText(context, "Select Any  Section First", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, classPromotionFragment.getString(R.string.select_any_new_class_first), Toast.LENGTH_LONG).show()
             }
         }
     }

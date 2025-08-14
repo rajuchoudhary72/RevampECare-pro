@@ -55,7 +55,7 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center_vertical"
                 android:paddingVertical="5dp"
-                android:text="Online vs Offline Admission"
+                android:text="@string/online_vs_offline_admission"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_arrow"
@@ -73,7 +73,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title"
                 app:lv_sub_text="₹ 1,26,37,980"
-                app:lv_text="Online" />
+                app:lv_text="@string/online" />
 
             <com.app.ecarepro.ui.views.LegendView
                 android:id="@+id/lv_offline"
@@ -85,7 +85,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/lv_online"
                 app:lv_sub_text="₹ 1,26,37,980"
-                app:lv_text="Offline" />
+                app:lv_text="@string/offline" />
 
             <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                 android:id="@+id/chartView"

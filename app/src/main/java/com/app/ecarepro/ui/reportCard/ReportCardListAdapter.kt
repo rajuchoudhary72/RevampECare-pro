@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.ReportCardListItemBinding
 import com.app.ecarepro.model.ReportCard
 
@@ -34,12 +35,12 @@ class ReportCardListAdapter(
 
              tvExam.text=data.examName
              tvSession.text=session
-             tvUpdateOn.text= "Updated On : ${data.updatedOn}"
+             tvUpdateOn.text= reportCardDetailsFragment.getString(R.string.general_updated_on_pun)+"${data.updatedOn}"
 
              llBack.isVisible = data.viewMode != 1
             if(data.viewMode == 1){
-                tvView.text = "View"
-                tvDownload.text="Download "
+                tvView.text = reportCardDetailsFragment.getString(R.string.view)
+                tvDownload.text=reportCardDetailsFragment.getString(R.string.download)
             }
 
              llView.setOnClickListener {

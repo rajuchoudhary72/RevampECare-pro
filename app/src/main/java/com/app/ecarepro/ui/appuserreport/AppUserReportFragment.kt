@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -44,13 +43,13 @@ class AppUserReportFragment : Fragment() {
     }
 
     private fun header() {
-        val model = TabHeaderModel(0, "Overall")
+        val model = TabHeaderModel(0, getString(R.string.general_overall))
         tabHeaderArrayList.add(model)
-        val model2 = TabHeaderModel(1, "Parent")
+        val model2 = TabHeaderModel(1, getString(R.string.general_parent))
         tabHeaderArrayList.add(model2)
-        val model3 = TabHeaderModel(2, "Staff")
+        val model3 = TabHeaderModel(2, getString(R.string.general_staff))
         tabHeaderArrayList.add(model3)
-        val model4 = TabHeaderModel(3, "Student")
+        val model4 = TabHeaderModel(3, getString(R.string.general_student))
         tabHeaderArrayList.add(model4)
     }
 

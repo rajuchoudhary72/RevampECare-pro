@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_regular"
                     android:textColor="@color/grey_60"
-                    android:text="@string/name"
+                    android:text="@string/general_name"
 
                     />
 
@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_regular"
-                    android:text="@string/submitted_on_date"
+                    android:text="@string/general_submitted_on"
                     android:textColor="@color/grey_60"
                      />
 
@@ -181,7 +181,7 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="@string/download"
+                    android:text="@string/general_download"
                     android:textColor="@color/brand_color"
                      app:drawableTint="@color/brand_color"
                     />

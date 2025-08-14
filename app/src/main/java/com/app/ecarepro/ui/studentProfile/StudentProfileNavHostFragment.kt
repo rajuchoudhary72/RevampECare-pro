@@ -114,12 +114,14 @@ class StudentProfileNavHostFragment : Fragment() {
                                                 if (i.isShow){
                                                     fragmentList.add(StudentProfileDetailsFragment())
                                                     fragmentName.add("Personal Details")
+                                                    //fragmentName.add(getString(R.string.personal_details))
                                                 }
                                             }
                                             "Attendance" -> {
                                                 if (i.isShow){
                                                     fragmentList.add(StudentProfileAttendanceFragment.newInstance(studentID))
                                                     fragmentName.add("Attendance")
+                                                        //fragmentName.add(getString(R.string.attendance))
                                                 }
                                             }
                                             "AcademicPerformance" -> {
@@ -127,12 +129,14 @@ class StudentProfileNavHostFragment : Fragment() {
                                                     fragmentList.add(
                                                         AcademicPerformanceNavHostFragment.newInstance(studentID))
                                                     fragmentName.add("Academic Performance")
+                                                   // fragmentName.add(getString(R.string.academic_performance))
                                                 }
                                             }
                                             "ReportCard" -> {
                                                 if (i.isShow){
                                                     fragmentList.add(StudentProfileReportCardFragment())
                                                     fragmentName.add("Report Card")
+                                                    //fragmentName.add(getString(R.string.report_card))
                                                 }
                                             }
 
@@ -140,24 +144,28 @@ class StudentProfileNavHostFragment : Fragment() {
                                                 if (i.isShow){
                                                     fragmentList.add(StudentProfileFeeSummaryFragment.newInstance(studentID))
                                                     fragmentName.add("Fee Details")
+                                                   // fragmentName.add(getString(R.string.fee_details))
                                                 }
                                             }
                                             "Infirmary" -> {
                                                 if (i.isShow){
                                                     fragmentList.add(StudentProfileMedicineIssuedFragment())
                                                     fragmentName.add("Infirmary")
+                                                   // fragmentName.add(getString(R.string.infirmary))
                                                 }
                                             }
                                             "Library" -> {
                                                 if (i.isShow){
                                                     fragmentList.add(StudentProfileLibraryTransFragment())
                                                     fragmentName.add("Library")
+                                                    //fragmentName.add(getString(R.string.library))
                                                 }
                                             }
                                             "Transport" -> {
                                                 if (i.isShow){
                                                     fragmentList.add(StudentProfileTransportDetailsFragment())
                                                     fragmentName.add("Transport Details")
+                                                   // fragmentName.add(getString(R.string.transport_details))
                                                 }
                                             }
                                             "Infraction" -> {
@@ -165,6 +173,7 @@ class StudentProfileNavHostFragment : Fragment() {
 
                                                     fragmentList.add(StudentProfileInfractionFragment())
                                                     fragmentName.add("Infraction Details")
+                                                   // fragmentName.add(getString(R.string.infraction_details))
 
                                                 }
                                             }
@@ -173,6 +182,7 @@ class StudentProfileNavHostFragment : Fragment() {
 
                                                     fragmentList.add(StudentProfileAppreciationFragment())
                                                     fragmentName.add("Appreciation Details")
+                                                   // fragmentName.add(getString(R.string.appreciation_details))
 
 
                                                 }
@@ -181,6 +191,7 @@ class StudentProfileNavHostFragment : Fragment() {
                                                 if (i.isShow){
                                                     fragmentList.add(MedicalCardFragment())
                                                     fragmentName.add("Medical Card")
+                                                   // fragmentName.add(getString(R.string.medical_card))
                                                 }
                                             }
                                         }

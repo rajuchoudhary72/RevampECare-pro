@@ -26,7 +26,7 @@
                 android:id="@+id/tv_collapes_expand_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Collapes All"
+                android:text="@string/collapes_all"
                 />
 
             <ImageView
@@ -60,7 +60,7 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/ubuntu_medium"
             android:visibility="gone"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
 
             />

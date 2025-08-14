@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_regular"
-                    android:text="@string/name"
+                    android:text="@string/general_name"
                     android:textColor="@color/grey_60"
 
                     />
@@ -59,7 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_regular"
-                    android:text="@string/roll_no"
+                    android:text="@string/general_roll_no_pun"
                     android:textColor="@color/grey_60"
                     />
 

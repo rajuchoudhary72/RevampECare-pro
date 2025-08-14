@@ -68,7 +68,7 @@
                 android:gravity="center_vertical"
                 android:onClick="@{toggleCardVisibility}"
                 android:paddingVertical="5dp"
-                android:text="Daily Mode Wise Collection"
+                android:text="@string/daily_mode_wise_collection"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_arrow"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/ubuntu_light"
-                android:text="Total"
+                android:text="@string/total"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 

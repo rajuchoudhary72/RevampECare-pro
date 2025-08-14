@@ -78,7 +78,8 @@ class HelpFragment : Fragment() {
                 data = Uri.parse("mailto:")
                 putExtra(Intent.EXTRA_EMAIL, email)
             }
-           startActivity(Intent.createChooser(intent, "Send Email"))
+            requireContext().startActivity(Intent.createChooser(intent,
+                getString(R.string.send_email)))
         }
 
     }

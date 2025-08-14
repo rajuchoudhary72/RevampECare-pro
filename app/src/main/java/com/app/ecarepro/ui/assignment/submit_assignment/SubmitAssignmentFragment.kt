@@ -14,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -23,7 +22,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.app.ecarepro.AddMoreFavouritesBindingModelBuilder
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentSubmitAssignmentBinding
@@ -38,7 +36,6 @@ import com.app.ecarepro.utils.FileAccess
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.Serializable
 import android.content.pm.PackageManager
 import android.util.Base64
 import android.util.Log
@@ -95,8 +92,8 @@ class SubmitAssignmentFragment : Fragment() {
             } else {
                 if (assignmentDetails.lateSubmission) {
                     val builder = AlertDialog.Builder(requireContext())
-                    builder.setTitle("Are you sure ?")
-                    builder.setMessage("The submission deadline for this assignment has passed. You may still submit your assignment, but it will be marked as a late submission")
+                    builder.setTitle(getString(R.string.general_are_you_sure))
+                    builder.setMessage(getString(R.string.assignment_submission_deadline_for_this_assignment_has_passed_still_want_to_apply))
 
                     builder.setPositiveButton(android.R.string.yes) { dialog, which ->
                         submitAssignment()
@@ -107,8 +104,8 @@ class SubmitAssignmentFragment : Fragment() {
                     }
 
                     builder.show()
-                } else {
-                    mainActivity().showMessage("The submission deadline for this assignment has passed. ")
+                }else{
+                    mainActivity().showMessage(getString(R.string.assignment_submission_deadline_has_passed))
 
                 }
             }
@@ -201,7 +198,7 @@ class SubmitAssignmentFragment : Fragment() {
                     fileExt = imageExt
 
                 ).invokeOnCompletion {
-                    mainActivity().showMessage("Submitted Successfully!!!  ")
+                    mainActivity().showMessage(getString(R.string.general_submitted_successfully) )
                     findNavController().popBackStack()
                 }
             }
@@ -211,21 +208,21 @@ class SubmitAssignmentFragment : Fragment() {
     private fun selectImageOptionDialog() {
         try {
             val items = arrayOf<CharSequence>(
-                getString(R.string.take_photo),
-                getString(R.string.choose_library),
-                getString(R.string.cancel)
+                getString(R.string.general_take_photo),
+                getString(R.string.general_choose_library),
+                getString(R.string.general_cancel)
 
             )
             val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(getString(R.string.add_photo))
+            builder.setTitle(getString(R.string.general_add_photo))
             builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
                 FileAccess.checkPermission(this@SubmitAssignmentFragment)
                 try {
-                    if (items[item] == getString(R.string.take_photo)) {
+                    if (items[item] == getString(R.string.general_take_photo)) {
                         cameraLauncher.launch(FileAccess.cameraIntent())
-                    } else if (items[item] == getString(R.string.choose_library)) {
+                    } else if (items[item] == getString(R.string.general_choose_library)) {
                         galleryLauncher.launch(FileAccess.galleryIntent())
-                    } else if (items[item] == getString(R.string.cancel)) {
+                    } else if (items[item] == getString(R.string.general_cancel)) {
                         dialog.dismiss()
                     }
                 } catch (e: SecurityException) {
@@ -294,12 +291,12 @@ class SubmitAssignmentFragment : Fragment() {
 
     private fun popUpFileList(filelist: List<String>) {
 
-        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
-        val view = layoutInflater.inflate(R.layout.popup_file_list, null)
-        val rvDetails = view.findViewById<RecyclerView>(R.id.rvDetails)
-        val ivCross = view.findViewById<ImageView>(R.id.ivCross)
-        val tvHeading = view.findViewById<TextView>(R.id.tvHeading)
-        tvHeading.text = "View File"
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog) .create()
+        val view = layoutInflater.inflate(R.layout.popup_file_list,null)
+        val  rvDetails = view.findViewById<RecyclerView>(R.id.rvDetails)
+        val  ivCross = view.findViewById<ImageView>(R.id.ivCross)
+        val  tvHeading = view.findViewById<TextView>(R.id.tvHeading)
+        tvHeading.text=getString(R.string.general_view_file)
 
         builder.setView(view)
 
@@ -333,17 +330,17 @@ class SubmitAssignmentFragment : Fragment() {
 
     private fun popUpSubmitList() {
 
-        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
-        val view = layoutInflater.inflate(R.layout.popup_file_list, null)
-        val rvDetails = view.findViewById<RecyclerView>(R.id.rvDetails)
-        val ivCross = view.findViewById<ImageView>(R.id.ivCross)
-        val tvHeading = view.findViewById<TextView>(R.id.tvHeading)
-        tvHeading.text = " Submitted Report"
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog) .create()
+        val view = layoutInflater.inflate(R.layout.popup_file_list,null)
+        val  rvDetails = view.findViewById<RecyclerView>(R.id.rvDetails)
+        val  ivCross = view.findViewById<ImageView>(R.id.ivCross)
+        val  tvHeading = view.findViewById<TextView>(R.id.tvHeading)
+        tvHeading.text= getString(R.string.assignment_submitted_report)
 
         builder.setView(view)
 
 
-        val submitReportAdapter = SubmitReportAdapter(studentSubmission) { t, pos ->
+        val submitReportAdapter= SubmitReportAdapter(studentSubmission,this@SubmitAssignmentFragment ){ t, pos ->
             builder.dismiss()
             when (pos) {
                 1 -> {
@@ -452,7 +449,7 @@ class SubmitAssignmentFragment : Fragment() {
             when (Constant.isPdfUrl(fileSource)) {
                 1 -> {
                     val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
+                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment_title))
                 }
 
                 2 -> {
@@ -463,11 +460,7 @@ class SubmitAssignmentFragment : Fragment() {
                 3 -> {
 
                     val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(
-                        fileSource,
-                        getString(R.string.assessment),
-                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                    )
+                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment_title),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
 
 //                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
 //                    putString(Constant.URL_ARGUMENT, fileSource)
@@ -478,7 +471,7 @@ class SubmitAssignmentFragment : Fragment() {
                     val androidDownloader = AndroidDownloader(requireContext())
                     androidDownloader.downloadFile(
                         fileSource,
-                        getString(R.string.assessment),
+                        getString(R.string.assessment_title),
                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )
                 }
