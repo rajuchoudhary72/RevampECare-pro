@@ -111,7 +111,6 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
                     binding.tvDatePhoto.text = it.eventDate + " | " + it.totalPhotos + " Photos"
 
-
                     if (isTextExpanded) {
                         binding.tvMore.isVisible = false
                     } else {
