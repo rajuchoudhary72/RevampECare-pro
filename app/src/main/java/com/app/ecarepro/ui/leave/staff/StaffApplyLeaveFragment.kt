@@ -72,8 +72,6 @@ class StaffApplyLeaveFragment : Fragment() {
     private   var imageExt: String =""
     private   var imageString: String =""
     private   var halfdayDTL = mutableListOf<HalfdayDTL>()
-    private val sessionList = listOf<String> (getString(R.string.first_half),
-        getString(R.string.second_half))
     var timestampBack: Long = System.currentTimeMillis()
     var timestampforward: Long = 0
 
@@ -101,6 +99,9 @@ class StaffApplyLeaveFragment : Fragment() {
         binding.tvLeaveType.text = leaveType
         binding.tvStartDate.text = Constant.currentDate()
         binding.tvEndDate.text = Constant.currentDate()
+
+         val sessionList = listOf<String> (getString(R.string.first_half),
+            getString(R.string.second_half))
 
         val arrayAdapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, sessionList)
