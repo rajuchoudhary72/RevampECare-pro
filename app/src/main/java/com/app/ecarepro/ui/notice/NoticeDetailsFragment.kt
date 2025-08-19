@@ -104,15 +104,6 @@ class NoticeDetailsFragment : Fragment() {
                                 fileSource= it.data.notice.filePath.toString()
                             }
                             try {
-
-//                            val htmlWithLineWithNBreaks = it.data.circuler.message.replace("\n", "<br>")
-//                            val htmlWithLineWithNRBreaks = htmlWithLineWithNBreaks.replace("\r", "<br>")
-//                            val spanned = HtmlCompat.fromHtml(htmlWithLineWithNRBreaks, HtmlCompat.FROM_HTML_MODE_LEGACY)
-//                            binding.tvNoticeDetails.text = spanned
-//
-//                            binding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
-
-
                                 val formattedHtml = """
     <html>
     <head>
@@ -135,42 +126,57 @@ class NoticeDetailsFragment : Fragment() {
 """.trimIndent()
 
 
-                                noticeDetailsBinding.wvDetails.webViewClient = object : WebViewClient() {
-                                    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                                        val url = request?.url.toString()
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                        startActivity(intent) // Opens in an external browser
-                                        return true
-                                    }
-                                }
+                                noticeDetailsBinding.wvDetails.apply {
+                                    settings.javaScriptEnabled = true
+                                    settings.domStorageEnabled = true
 
-                                noticeDetailsBinding.wvDetails.settings.javaScriptEnabled = true
-                                noticeDetailsBinding.wvDetails.settings.domStorageEnabled = true
-                                noticeDetailsBinding.wvDetails.webViewClient = WebViewClient()
-                                // Enable long click context menu for links
-                                noticeDetailsBinding.wvDetails.setOnLongClickListener { v ->
-                                    val result = (v as WebView).hitTestResult
-                                    when (result.type) {
-                                        WebView.HitTestResult.SRC_ANCHOR_TYPE,
-                                        WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
-                                            val url = result.extra
-                                            if (!url.isNullOrEmpty()) {
-                                                showLinkOptionsDialog(url)
-                                            }
-                                            true
+                                    webViewClient = object : WebViewClient() {
+                                        override fun shouldOverrideUrlLoading(
+                                            view: WebView?,
+                                            request: WebResourceRequest?
+                                        ): Boolean {
+                                            val url = request?.url.toString()
+                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                            startActivity(intent) // opens in external browser
+                                            return true
                                         }
+                                    }
+                                    // ✅ This allows OS-level context menu (like Chrome)
+                                    setOnCreateContextMenuListener { menu, v, menuInfo ->
+                                        val result = (v as WebView).hitTestResult
+                                        val url = result.extra
+                                        if (result.type == WebView.HitTestResult.SRC_ANCHOR_TYPE ||
+                                            result.type == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE
+                                        ) {
 
-                                        else -> false
+                                            menu.setHeaderTitle(url)
+                                            menu.add("Open in Browser").setOnMenuItemClickListener {
+                                                startActivity(
+                                                    Intent(
+                                                        Intent.ACTION_VIEW,
+                                                        Uri.parse(url)
+                                                    )
+                                                )
+                                                true
+                                            }
+                                            menu.add("Copy Link").setOnMenuItemClickListener {
+                                                copyTextToClipboard(url ?: "")
+                                                true
+                                            }
+                                            menu.add("Share Link").setOnMenuItemClickListener {
+                                                shareLink(url ?: "")
+                                                true
+                                            }
+                                        }
                                     }
-                                }
-                                noticeDetailsBinding.wvDetails.loadDataWithBaseURL(null, formattedHtml, "text/html", "UTF-8", null)
-                                noticeDetailsBinding.wvDetails.webViewClient = object : WebViewClient() {
-                                    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                                        val url = request?.url.toString()
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                        startActivity(intent) // Opens the link in the default browser
-                                        return true // Return true to prevent WebView from loading the URL
-                                    }
+
+                                    noticeDetailsBinding.wvDetails.loadDataWithBaseURL(
+                                        null,
+                                        formattedHtml,
+                                        "text/html",
+                                        "UTF-8",
+                                        null
+                                    )
                                 }
 
                             }catch (e:NullPointerException){
