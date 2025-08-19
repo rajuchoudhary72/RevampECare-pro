@@ -190,15 +190,14 @@ class NoticeDetailsFragment : Fragment() {
 
     }
     private fun showLinkOptionsDialog(url: String) {
-        val options = arrayOf("Copy", "Open in Browser", "Share Link")
+        val options = arrayOf("Copy",  "Share")
 
         AlertDialog.Builder(requireContext())
             .setTitle("Options")
             .setItems(options) { _, which ->
                 when (which) {
                     0 -> copyTextToClipboard(url)
-                    1 -> openInBrowser(url)
-                    2 -> shareLink(url)
+                    1 -> shareLink(url)
                 }
             }
             .show()
@@ -208,7 +207,7 @@ class NoticeDetailsFragment : Fragment() {
         val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText("Copied Text", text)
         clipboardManager.setPrimaryClip(clipData)
-        Toast.makeText(requireContext(), "Link Copied", Toast.LENGTH_SHORT).show()
+       // Toast.makeText(requireContext(), "Link Copied", Toast.LENGTH_SHORT).show()
     }
 
     private fun openInBrowser(url: String) {
@@ -226,7 +225,7 @@ class NoticeDetailsFragment : Fragment() {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, url)
         }
-        startActivity(Intent.createChooser(shareIntent, "Share Link"))
+        startActivity(Intent.createChooser(shareIntent, "Share"))
     }
     fun formatTextWithLinks(input: String): String {
         val urlPattern = "(https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=]+)"
