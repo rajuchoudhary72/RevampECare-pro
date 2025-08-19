@@ -1,6 +1,9 @@
 package com.app.ecarepro.ui.notice
 
+import android.app.AlertDialog
 import android.app.DownloadManager
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -15,6 +18,7 @@ import android.view.ViewGroup
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
@@ -143,6 +147,22 @@ class NoticeDetailsFragment : Fragment() {
                                 noticeDetailsBinding.wvDetails.settings.javaScriptEnabled = true
                                 noticeDetailsBinding.wvDetails.settings.domStorageEnabled = true
                                 noticeDetailsBinding.wvDetails.webViewClient = WebViewClient()
+                                // Enable long click context menu for links
+                                noticeDetailsBinding.wvDetails.setOnLongClickListener { v ->
+                                    val result = (v as WebView).hitTestResult
+                                    when (result.type) {
+                                        WebView.HitTestResult.SRC_ANCHOR_TYPE,
+                                        WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
+                                            val url = result.extra
+                                            if (!url.isNullOrEmpty()) {
+                                                showLinkOptionsDialog(url)
+                                            }
+                                            true
+                                        }
+
+                                        else -> false
+                                    }
+                                }
                                 noticeDetailsBinding.wvDetails.loadDataWithBaseURL(null, formattedHtml, "text/html", "UTF-8", null)
                                 noticeDetailsBinding.wvDetails.webViewClient = object : WebViewClient() {
                                     override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
@@ -169,8 +189,44 @@ class NoticeDetailsFragment : Fragment() {
         _noticeDetailsViewModel.getNoticeDTL(noticeID.orEmpty())
 
     }
+    private fun showLinkOptionsDialog(url: String) {
+        val options = arrayOf("Copy",  "Share")
 
+        AlertDialog.Builder(requireContext())
+            .setTitle("Options")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> copyTextToClipboard(url)
+                    1 -> shareLink(url)
+                }
+            }
+            .show()
+    }
+    // Your existing copy function
+    private fun copyTextToClipboard(text: String) {
+        val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("Copied Text", text)
+        clipboardManager.setPrimaryClip(clipData)
+       // Toast.makeText(requireContext(), "Link Copied", Toast.LENGTH_SHORT).show()
+    }
 
+    private fun openInBrowser(url: String) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Cannot open link", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun shareLink(url: String) {
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, url)
+        }
+        startActivity(Intent.createChooser(shareIntent, "Share"))
+    }
     fun formatTextWithLinks(input: String): String {
         val urlPattern = "(https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=]+)"
         return input.replace(Regex(urlPattern)) {

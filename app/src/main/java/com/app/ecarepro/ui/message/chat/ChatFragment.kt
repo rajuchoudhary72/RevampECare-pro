@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.message.chat
 import android.Manifest
 import android.app.Activity
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -561,12 +562,49 @@ class ChatFragment : Fragment() {
         }
     }
     private fun copyTextToClipboard(text: String) {
+       // showLinkOptionsDialog(text)
         val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText("Copied Text", text)
         clipboardManager.setPrimaryClip(clipData)
         Toast.makeText(requireContext(), "Copied", Toast.LENGTH_SHORT).show()
     }
+    private fun showLinkOptionsDialog(url: String) {
+        val options = arrayOf("Copy", "Open in Browser", "Share Link")
 
+        AlertDialog.Builder(requireContext())
+            .setTitle("Link Options")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> copyTextToClipboard1(url)
+                    1 -> openInBrowser(url)
+                    2 -> shareLink(url)
+                }
+            }
+            .show()
+    }
+    // Your existing copy function
+    private fun copyTextToClipboard1(text: String) {
+        val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("Copied Text", text)
+        clipboardManager.setPrimaryClip(clipData)
+        Toast.makeText(requireContext(), "Link Copied", Toast.LENGTH_SHORT).show()
+    }
+    private fun shareLink(url: String) {
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, url)
+        }
+        startActivity(Intent.createChooser(shareIntent, "Share Link"))
+    }
+    private fun openInBrowser(url: String) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Cannot open link", Toast.LENGTH_SHORT).show()
+        }
+    }
     private fun setUpToolbar(sender: Sender) {
         if (chatViewModel.messageType==MessageType.INBOX.value || chatViewModel.messageType==MessageType.CONV.value){
             binding.apply {
