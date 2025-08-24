@@ -1,12 +1,15 @@
 package com.app.ecarepro.ui.survey;
 
 import android.content.Context;
+import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,6 +62,37 @@ public class AdapterSurveyQuestions extends RecyclerView.Adapter<AdapterSurveyQu
             surveyItemType = new AdapterSurveyItemType(mContext, CHECK_VIEW, mData.get(position).getOptions(), isResult, mData.get(position).getResponse());
         else
             surveyItemType = new AdapterSurveyItemType(mContext, RADIO_VIEW, mData.get(position).getOptions(), isResult, mData.get(position).getResponse());
+       if (mData.get(position).getTextBoxOnly()){
+           viewHolder.etSurveyResponse.setVisibility(View.VISIBLE);
+           viewHolder.rvSurveyItemType.setVisibility(View.GONE);
+           // Set existing answer if any
+           viewHolder.etSurveyResponse.setText(mData.get(position).getAnswer());
+
+           // Add TextWatcher to capture user input
+           viewHolder.etSurveyResponse.addTextChangedListener(new TextWatcher() {
+               @Override
+               public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                   // no-op
+               }
+
+               @Override
+               public void onTextChanged(CharSequence s, int start, int before, int count) {
+                   // no-op
+               }
+
+               @Override
+               public void afterTextChanged(Editable s) {
+                   String answer = (s != null) ? s.toString() : "";
+                   // Update the answer in the data class
+                   mData.get(position).setAnswer(answer);
+               }
+           });
+
+
+       }else{
+           viewHolder.etSurveyResponse.setVisibility(View.GONE);
+           viewHolder.rvSurveyItemType.setVisibility(View.VISIBLE);
+       }
         if (isResult) {
             viewHolder.tvTotalSurveyCount.setText(new StringBuilder().append(mContext.getString(R.string.total_response_s)).append(mData.get(position).getResponse()).toString());
             viewHolder.tvTotalSurveyCount.setVisibility(View.VISIBLE);
@@ -76,12 +110,13 @@ public class AdapterSurveyQuestions extends RecyclerView.Adapter<AdapterSurveyQu
     public class SurveyQuestionsViewHolder extends RecyclerView.ViewHolder {
         private TextView tvSurvey, tvTotalSurveyCount;
         private RecyclerView rvSurveyItemType;
-
+        private EditText etSurveyResponse;
         public SurveyQuestionsViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSurvey = itemView.findViewById(R.id.tv_survey);
             rvSurveyItemType = itemView.findViewById(R.id.rv_survey_item_type);
             tvTotalSurveyCount = itemView.findViewById(R.id.tv_total_survey_count);
+            etSurveyResponse = itemView.findViewById(R.id.et_survey_response);
 
         }
     }
