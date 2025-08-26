@@ -265,11 +265,11 @@ class StudentProfileAttendanceFragment(
                     append(setCalculatedPercentageToInt(attendanceDTL.wh, attendanceDTL.working))
                     append("%)")
                 }
-                tvpresentWhDay.text = buildString {
-                    append("(")
-                    append(setCalculatedPercentageToInt(attendanceDTL.totalPresent, attendanceDTL.working))
-                    append("%)")
-                }
+//                tvpresentWhDay.text = buildString {
+//                    append("(")
+//                    append(setCalculatedPercentageToInt(attendanceDTL.totalPresent, attendanceDTL.working))
+//                    append("%)")
+//                }
 
                 binding.llLate.isVisible = attendanceDTL.isLateEnabled
 
@@ -280,7 +280,7 @@ class StudentProfileAttendanceFragment(
                     attendanceDTL.leave,
                     attendanceDTL.late,
                     attendanceDTL.wh,
-                    attendanceDTL.totalPresent
+
                 )
 
 
@@ -377,7 +377,6 @@ class StudentProfileAttendanceFragment(
         totalLeave: Int,
         totalLate: Int,
         workingHoliday: Int,
-        workingPresentHoliday: Int
     ) {
         binding.pieChart.setUsePercentValues(true)
         binding.pieChart.setUsePercentValues(false)
@@ -389,14 +388,12 @@ class StudentProfileAttendanceFragment(
             yvalues.add(PieEntry(totalAbsent.toFloat(), 1))
             yvalues.add(PieEntry(totalLeave.toFloat(), 2))
             yvalues.add(PieEntry(workingHoliday.toFloat(), 4))
-            yvalues.add(PieEntry(workingPresentHoliday.toFloat(), 5))
         } else {
             yvalues.add(PieEntry((totalPresent - totalLate).toFloat(), 0))
             yvalues.add(PieEntry(totalAbsent.toFloat(), 1))
             yvalues.add(PieEntry(totalLeave.toFloat(), 2))
             yvalues.add(PieEntry(totalLate.toFloat(), 3))
             yvalues.add(PieEntry(workingHoliday.toFloat(), 4))
-            yvalues.add(PieEntry(workingPresentHoliday.toFloat(), 5))
         }
 
         val dataSet = PieDataSet(yvalues, "")
@@ -412,7 +409,6 @@ class StudentProfileAttendanceFragment(
             resources.getColor(R.color.absent_red),
             resources.getColor(R.color.att_leave_color),
             resources.getColor(R.color.category7),
-            resources.getColor(R.color.present_wh),
         )
         else dataSet.setColors(
             resources.getColor(R.color.disabled),
@@ -420,7 +416,6 @@ class StudentProfileAttendanceFragment(
             resources.getColor(R.color.att_leave_color),
             resources.getColor(R.color.att_late_color),
             resources.getColor(R.color.category7),
-            resources.getColor(R.color.present_wh),
         )
 
         data.setValueTextSize(13f)
