@@ -417,7 +417,6 @@ class StudentProfileAttendanceFragment(
             resources.getColor(R.color.att_late_color),
             resources.getColor(R.color.category7),
         )
-
         data.setValueTextSize(13f)
         data.setDrawValues(false)
         binding.pieChart.getLegend().setEnabled(false)
