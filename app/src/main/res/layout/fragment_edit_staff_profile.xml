@@ -580,7 +580,6 @@
                         android:fontFamily="@font/ubuntu_medium"
                         android:text="Profile updation record" />
 
-
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
