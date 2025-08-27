@@ -175,6 +175,8 @@ import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProfileModel
+import com.app.ecarepro.ui.edit_profile.staff.model.StaffProfileModel
+import com.app.ecarepro.ui.edit_profile.staff.model.payload.StaffUpdateModel
 import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import okhttp3.MultipartBody
@@ -1132,7 +1134,7 @@ class UserRepositoryImpl @Inject constructor(
             try {
                 val response = userService.getUserProfile()
                 if (response.errorCode == 0) {
-                    emit(Result.success(response.profile.copy(canEditProfile = response.canEditProfile)))
+                    emit(Result.success(response.profile))
                 }
                 else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
@@ -1168,8 +1170,16 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getUserProfileEdit(edit)
     }
 
+    override suspend fun getUserProfileEditStaff(edit: Boolean): StaffProfileModel {
+        return userService.getUserProfileEditStaff(edit)
+    }
+
     override suspend fun updateParentProfile(request: UpdateProfileModel): CommonResponse {
         return userService.updateParentProfile(request)
+    }
+
+    override suspend fun sendStaffProfileRequest(request: StaffUpdateModel): CommonResponse {
+        return userService.sendStaffProfileRequest(request)
     }
 
     override suspend fun updateTransportProfile(request: UpdateTransportProfileModel): CommonResponse {

@@ -188,7 +188,7 @@ class ProfileFragment : Fragment() {
         }
 
         if (uiState is ProfileUiState.Success) {
-            binding.tvEditProfile.isVisible = uiState.canEditProfile
+           // binding.tvEditProfile.isVisible = uiState.canEditProfile
             binding.recyclerView.withModels {
                 profileHeader {
                     id(uiState.profile.username)
@@ -744,7 +744,11 @@ class ProfileFragment : Fragment() {
         }
 
         _binding?.tvEditProfile?.setOnClickListener {
-            findNavController().navigate(R.id.editProfileFragment)
+            if (UserTypeApp == 1) {
+                findNavController().navigate(R.id.editProfileFragment)
+            }else{
+                findNavController().navigate(R.id.staffEditProfileFragment)
+            }
         }
     }
 

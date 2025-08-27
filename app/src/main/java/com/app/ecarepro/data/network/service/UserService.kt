@@ -154,6 +154,8 @@ import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProfileModel
+import com.app.ecarepro.ui.edit_profile.staff.model.StaffProfileModel
+import com.app.ecarepro.ui.edit_profile.staff.model.payload.StaffUpdateModel
 import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import okhttp3.RequestBody
 
@@ -702,7 +704,6 @@ interface UserService {
 
     @GET("User/MyProfile")
     suspend fun getUserProfile(
-        @Query("Edit") edit: Boolean = false
     ): UserProfileDto
 
     @GET("User/MyProfile")
@@ -710,9 +711,19 @@ interface UserService {
         @Query("Edit") edit: Boolean = true
     ): NetworkEditProfile
 
+    @GET("User/MyProfile")
+    suspend fun getUserProfileEditStaff(
+        @Query("Edit") edit: Boolean = true
+    ): StaffProfileModel
+
     @POST("User/UpdateParentProfile")
     suspend fun updateParentProfile(
         @Body request: UpdateProfileModel
+    ): CommonResponse
+
+    @POST("User/SendStaffProfileRequest")
+    suspend fun sendStaffProfileRequest(
+        @Body request: StaffUpdateModel
     ): CommonResponse
 
     @POST("Student/UpdateTransportDetails")
