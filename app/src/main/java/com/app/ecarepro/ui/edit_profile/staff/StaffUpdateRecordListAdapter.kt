@@ -9,7 +9,7 @@ import com.app.ecarepro.databinding.ProfileUpdateRecordItemBinding
 import com.app.ecarepro.databinding.StaffProfileUpdateRecordItemBinding
 
 class StaffUpdateRecordListAdapter(
-    private var syllabusLST: List<com.app.ecarepro.ui.edit_profile.staff.model.ProfileUpdationRecord>,
+    private var syllabusLST: List<com.app.ecarepro.ui.edit_profile.staff.model.ProfileUpdationRecord>?,
 
     ) :
     RecyclerView.Adapter<StaffUpdateRecordListAdapter.NoticeViewHolder>() {
@@ -22,13 +22,15 @@ class StaffUpdateRecordListAdapter(
         return NoticeViewHolder(bindingm.root)
     }
 
-    override fun getItemCount(): Int = syllabusLST.size
+    override fun getItemCount(): Int = syllabusLST?.size ?: 0
 
     override fun onBindViewHolder(holder: NoticeViewHolder, position: Int) {
         val binding = DataBindingUtil.getBinding<StaffProfileUpdateRecordItemBinding>(holder.itemView)
         if (binding != null) {
             binding.tvSrNo.text=(position+1).toString()
-            binding.records = syllabusLST[position ]
+            if (syllabusLST != null) {
+                binding.records = syllabusLST!![position]
+            }
         }
 
 

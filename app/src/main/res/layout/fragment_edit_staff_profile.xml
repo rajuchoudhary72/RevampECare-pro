@@ -78,7 +78,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Role Name">
+                                android:hint="@string/role_name">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textRoleName"
@@ -93,7 +93,7 @@
                                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Title">
+                                android:hint="@string/title">
 
                                 <AutoCompleteTextView
                                     android:id="@+id/title"
@@ -111,7 +111,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="First Name">
+                                android:hint="@string/first_name">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textFirstName"
@@ -125,7 +125,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Middle Name">
+                                android:hint="@string/middle_name">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textMiddleName"
@@ -139,7 +139,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Last Name">
+                                android:hint="@string/last_name">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textLastName"
@@ -153,7 +153,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Date of Birth">
+                                android:hint="@string/date_of_birth">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textDateofBirth"
@@ -170,7 +170,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Date of Joining">
+                                android:hint="@string/date_of_joining">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textDateOfJoining"
@@ -205,7 +205,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Date of Anniversary">
+                                android:hint="@string/date_of_anniversary">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textDateOfAnniversary"
@@ -223,7 +223,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Designation">
+                                android:hint="@string/designation">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textDesignation"
@@ -238,7 +238,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Qualification">
+                                android:hint="@string/qualification">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textUserQualification"
@@ -252,7 +252,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Aadhar number">
+                                android:hint="@string/aadhar_number">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textAadharNumber"
@@ -267,7 +267,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="UAN">
+                                android:hint="@string/uan">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textUserUAN"
@@ -281,7 +281,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="National Teacher ID">
+                                android:hint="@string/national_teacher_id">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textNationalTeacherID"
@@ -295,7 +295,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Sate Teacher ID">
+                                android:hint="@string/sate_teacher_id">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textSateTeacherID"
@@ -309,7 +309,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="PAN">
+                                android:hint="@string/pan">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textPAN"
@@ -323,7 +323,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="CBSE ID">
+                                android:hint="@string/cbse_id">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textCBSEID"
@@ -338,7 +338,7 @@
                                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Marital Status">
+                                android:hint="@string/marital_status">
 
                                 <AutoCompleteTextView
                                     android:id="@+id/maritalStatus"
@@ -355,7 +355,7 @@
                                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Father/Spouse Relation">
+                                android:hint="@string/father_spouse_relation">
 
                                 <AutoCompleteTextView
                                     android:id="@+id/fatherSpouseRelation"
@@ -396,7 +396,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Father/Spouse Name">
+                                android:hint="@string/father_spouse_name">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textFatherSpouseName"
@@ -410,7 +410,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Father/Spouse Mobile No">
+                                android:hint="@string/father_spouse_mobile_no">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textFatherSpouseMobile"
@@ -425,7 +425,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Mobile">
+                                android:hint="@string/mobile">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textMobile"
@@ -439,7 +439,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Alternate Mobile">
+                                android:hint="@string/alternate_mobile">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textAlternateMobile"
@@ -453,7 +453,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Email ID">
+                                android:hint="@string/email_id">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textEmailAddress"
@@ -467,7 +467,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Alternate Email ID">
+                                android:hint="@string/alternate_email_id">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textAlternateEmailAddress"
@@ -481,7 +481,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Emergency Contact No">
+                                android:hint="@string/emergency_contact_no">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textEmergencyContactNo"
@@ -495,7 +495,7 @@
                                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Nationality">
+                                android:hint="@string/nationality">
 
                                 <AutoCompleteTextView
                                     android:id="@+id/nationality"
@@ -512,7 +512,7 @@
                                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Religion">
+                                android:hint="@string/religion">
 
                                 <AutoCompleteTextView
                                     android:id="@+id/religion"
@@ -530,7 +530,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Address">
+                                android:hint="@string/address">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textAddress"
@@ -544,7 +544,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Permanent Address">
+                                android:hint="@string/permanent_address">
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:id="@+id/textPermanentAddress"
@@ -578,7 +578,7 @@
                         android:layout_marginTop="@dimen/_15sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
                         android:fontFamily="@font/ubuntu_medium"
-                        android:text="Profile updation record" />
+                        android:text="@string/profile_updation_record" />
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"

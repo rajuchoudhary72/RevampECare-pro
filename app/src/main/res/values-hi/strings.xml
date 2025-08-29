@@ -1449,6 +1449,26 @@
     <string name="no_house_assign">कोई घर आवंटित नहीं</string>
     <string name="dues_amount">Dues Amount</string>
 
+    <string name="no_internet_connection">कोई इंटरनेट कनेक्शन नहीं</string>
+    <string name="please_check_your_internet_connection_and_try_again">कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।</string>
+    <string name="married">विवाहित</string>
+    <string name="unmarried">अविवाहित</string>
+    <string name="other">अन्य</string>
+    <string name="spouse">पति/पत्नी</string>
+    <string name="role_name">भूमिका का नाम</string>
+    <string name="first_name">पहला नाम</string>
+    <string name="middle_name">मध्य नाम</string>
+    <string name="last_name">अंतिम नाम</string>
+    <string name="designation">पदनाम</string>
+    <string name="uan">यूएएन</string>
+    <string name="sate_teacher_id">राज्य शिक्षक आईडी</string>
+    <string name="pan">पैन</string>
+    <string name="cbse_id">सीबीएसई आईडी</string>
+    <string name="father_spouse_relation">पिता/पति-पत्नी संबंध</string>
+    <string name="alternate_email_id">वैकल्पिक ईमेल आईडी</string>
+    <string name="emergency_contact_no">आपातकालीन संपर्क नंबर</string>
+
+
 
 </resources>
 

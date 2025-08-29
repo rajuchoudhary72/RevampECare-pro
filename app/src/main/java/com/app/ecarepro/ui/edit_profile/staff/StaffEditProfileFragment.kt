@@ -46,9 +46,9 @@ class StaffEditProfileFragment : Fragment() {
     private var nationalityID = 0
     private var stuBloodGroupID = 0
     private var stuReligionID = 0
+    var martialStatus = listOf<MaritialStatus>()
+    var relationshipStatus = listOf<MaritialStatus>()
 
-    private var martialStatus = listOf(MaritialStatus("Married", 0), MaritialStatus("Unmarried", 1),MaritialStatus("Other", 2))
-    private var relationshipStatus = listOf(MaritialStatus("Father", 0), MaritialStatus("Spouse", 1))
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +67,16 @@ class StaffEditProfileFragment : Fragment() {
             updateProfile()
         }
 
+          martialStatus = listOf(MaritialStatus(getString(R.string.married), 0), MaritialStatus(
+            getString(
+                R.string.unmarried
+            ), 1),MaritialStatus(getString(R.string.other), 2))
+
+          relationshipStatus = listOf(MaritialStatus(getString(R.string.father), 0), MaritialStatus(
+            getString(
+                R.string.spouse
+            ), 1))
+
         lifecycleScope.launch {
             viewModel.editProfileStateFlow.collectLatest {
                 when (it) {
@@ -83,7 +93,7 @@ class StaffEditProfileFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
-                            setupView(it.data.profile)
+                            it.data.profile?.let { it1 -> setupView(it1) }
                         }
                     }
 
@@ -101,12 +111,12 @@ class StaffEditProfileFragment : Fragment() {
     private fun setupView(profile: com.app.ecarepro.ui.edit_profile.staff.model.Profile) {
 
         binding.apply {
-            relationshipStatusID = profile.relationshipWithMemberId
-            nationalityID = profile.nationalityID
-            titleID = profile.titleID
-            maritalStatusID= profile.maritialStatusID
-            stuBloodGroupID = profile.bloodGroupID
-            stuReligionID = profile.relegionID
+            relationshipStatusID = profile.relationshipWithMemberId ?: 0
+            nationalityID = profile.nationalityID ?: 0
+            titleID = profile.titleID ?: 0
+            maritalStatusID= profile.maritialStatusID ?: 0
+            stuBloodGroupID = profile.bloodGroupID ?: 0
+            stuReligionID = profile.relegionID ?: 0
 
             textUserName.isEnabled = false
             textRoleName.isEnabled = false
@@ -130,30 +140,37 @@ class StaffEditProfileFragment : Fragment() {
                 }
             }
 
-            val adapterparentsStatus = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_list_item_1,
-                profile.titles.map { it.text})
-            binding.title.setAdapter(adapterparentsStatus)
-            binding.title.setOnItemClickListener { _, _, position, _ ->
-                titleID = profile.titles[position].value
+            profile.titles?.let {
+                val adapterparentsStatus = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_list_item_1,
+                        profile.titles.map { it.text})
+
+                binding.title.setAdapter(adapterparentsStatus)
+                binding.title.setOnItemClickListener { _, _, position, _ ->
+                    titleID = profile.titles[position].value ?: 0
+                }
             }
 
-            val adapterReligion = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_list_item_1,
-                profile.relegionLST.map { it.relegion })
-            binding.religion.setAdapter(adapterReligion)
-            binding.religion.setOnItemClickListener { _, _, position, _ ->
-                stuReligionID = profile.relegionLST[position].id
+            profile.relegionLST?.let {
+                val adapterReligion = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_list_item_1,
+                    profile.relegionLST.map { it.relegion })
+                binding.religion.setAdapter(adapterReligion)
+                binding.religion.setOnItemClickListener { _, _, position, _ ->
+                    stuReligionID = profile.relegionLST[position].id?:0
+                }
             }
+
+
 
             val adapterFatherProfession =
                 ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
                     martialStatus.map{ it.name })
             binding.maritalStatus.setAdapter(adapterFatherProfession)
             binding.maritalStatus.setOnItemClickListener { _, _, position, _ ->
-                maritalStatusID = martialStatus[position].value
+                maritalStatusID = martialStatus[position].value ?:0
             }
 
             val adapterrelationshipStatus =
@@ -161,26 +178,32 @@ class StaffEditProfileFragment : Fragment() {
                     relationshipStatus.map{ it.name })
             binding.fatherSpouseRelation.setAdapter(adapterrelationshipStatus)
             binding.fatherSpouseRelation.setOnItemClickListener { _, _, position, _ ->
-                relationshipStatusID = relationshipStatus[position].value
+                relationshipStatusID = relationshipStatus[position].value ?:0
             }
 
 
-            val adapterNationality =
-                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
-                    profile.nationalityLST.map { it.nationality })
-            binding.nationality.setAdapter(adapterNationality)
-            binding.nationality.setOnItemClickListener { a, e, position, c ->
-                nationalityID = profile.nationalityLST[position].id
+            profile.nationalityLST?.let {
+                val adapterNationality =
+                    ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
+                        profile.nationalityLST.map { it.nationality })
+                binding.nationality.setAdapter(adapterNationality)
+                binding.nationality.setOnItemClickListener { a, e, position, c ->
+                    nationalityID = profile.nationalityLST[position].id ?: 0
+                }
+            }
+
+            profile.bloodGroupLST?.let {
+                val adapterBloodGroup =
+                    ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
+                        profile.bloodGroupLST.map { it.groupName })
+                binding.bloodGroup.setAdapter(adapterBloodGroup)
+                binding.bloodGroup.setOnItemClickListener { _, _, position, _ ->
+                    stuBloodGroupID = profile.bloodGroupLST[position].id ?: 0
+                }
             }
 
 
-            val adapterBloodGroup =
-                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
-                    profile.bloodGroupLST.map { it.groupName })
-            binding.bloodGroup.setAdapter(adapterBloodGroup)
-            binding.bloodGroup.setOnItemClickListener { _, _, position, _ ->
-                stuBloodGroupID = profile.bloodGroupLST[position].id
-            }
+
 
 
             textUserName.setText(profile.username)
@@ -202,7 +225,7 @@ class StaffEditProfileFragment : Fragment() {
             textPAN.setText(profile.paN_Number)
             textCBSEID.setText(profile.cbseid)
             maritalStatus.setText(profile.maritalStatus,false)
-            fatherSpouseRelation.setText(if (relationshipStatusID == 0) "Father" else "Spouse", false)
+            fatherSpouseRelation.setText(if (relationshipStatusID == 0) getString(R.string.father) else getString(R.string.spouse), false)
             textFatherSpouseName.setText(profile.fatherHusbandName)
             textFatherSpouseMobile.setText(profile.fatherHusbandMob)
             textMobile.setText(profile.mobile)
