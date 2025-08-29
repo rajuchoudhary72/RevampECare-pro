@@ -359,6 +359,13 @@ class StudentProfileAttendanceFragment(
         bundle.putString("studentID", id)
         bundle.putString("formDate", t.startDate)
         bundle.putString("tillDate", t.endDate)
+        bundle.putString("yearName", binding.ctvSelectYear.getText().toString())
+        if (::selectedYearData.isInitialized) {
+            bundle.putInt("Year", selectedYearData.yrID)
+
+        } else {
+            bundle.putInt("Year", 0)
+        }
         intent.putExtras(bundle)
         startActivity(intent)
         studentProfileAttendanceViewModel.sendScreenEvent()
