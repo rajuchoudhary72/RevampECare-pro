@@ -33,11 +33,20 @@ import java.util.Locale
 import com.app.ecarepro.databinding.FragmentEditStaffProfileBinding
 import com.app.ecarepro.ui.edit_profile.UpdateRecordListAdapter
 import com.app.ecarepro.ui.edit_profile.staff.model.MaritialStatus
+import com.app.ecarepro.ui.edit_profile.staff.model.Profile
 import com.app.ecarepro.ui.edit_profile.staff.model.payload.StaffUpdateModel
 
 @AndroidEntryPoint
 class StaffEditProfileFragment : Fragment() {
 
+    private var isMaritialStatusIDUpdated: Boolean = false
+    private var isNationalityIDUpdated: Boolean = false
+    private var isRelationshipWithMemberIdUpdated: Boolean = false
+    private var isRelegionIDUpdated: Boolean = false
+    private var isTitleIDUpdated: Boolean = false
+    private var isBloodGroupUpdated: Boolean = false
+
+    private var profileData: Profile? = null
     private lateinit var binding: FragmentEditStaffProfileBinding
     private val viewModel: StaffEditProfileViewModel by viewModels()
     private var titleID = 0
@@ -67,12 +76,12 @@ class StaffEditProfileFragment : Fragment() {
             updateProfile()
         }
 
-          martialStatus = listOf(MaritialStatus(getString(R.string.married), 0), MaritialStatus(
+        martialStatus = listOf(MaritialStatus(getString(R.string.married), 0), MaritialStatus(
             getString(
                 R.string.unmarried
             ), 1),MaritialStatus(getString(R.string.other), 2))
 
-          relationshipStatus = listOf(MaritialStatus(getString(R.string.father), 0), MaritialStatus(
+        relationshipStatus = listOf(MaritialStatus(getString(R.string.father), 0), MaritialStatus(
             getString(
                 R.string.spouse
             ), 1))
@@ -93,6 +102,7 @@ class StaffEditProfileFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
+                            profileData= it.data.profile
                             it.data.profile?.let { it1 -> setupView(it1) }
                         }
                     }
@@ -142,13 +152,14 @@ class StaffEditProfileFragment : Fragment() {
 
             profile.titles?.let {
                 val adapterparentsStatus = ArrayAdapter(
-                        requireContext(),
-                        android.R.layout.simple_list_item_1,
-                        profile.titles.map { it.text})
+                    requireContext(),
+                    android.R.layout.simple_list_item_1,
+                    profile.titles.map { it.text})
 
                 binding.title.setAdapter(adapterparentsStatus)
                 binding.title.setOnItemClickListener { _, _, position, _ ->
                     titleID = profile.titles[position].value ?: 0
+                    isTitleIDUpdated=true
                 }
             }
 
@@ -160,6 +171,7 @@ class StaffEditProfileFragment : Fragment() {
                 binding.religion.setAdapter(adapterReligion)
                 binding.religion.setOnItemClickListener { _, _, position, _ ->
                     stuReligionID = profile.relegionLST[position].id?:0
+                    isRelegionIDUpdated=true
                 }
             }
 
@@ -171,6 +183,7 @@ class StaffEditProfileFragment : Fragment() {
             binding.maritalStatus.setAdapter(adapterFatherProfession)
             binding.maritalStatus.setOnItemClickListener { _, _, position, _ ->
                 maritalStatusID = martialStatus[position].value ?:0
+                isMaritialStatusIDUpdated=true
             }
 
             val adapterrelationshipStatus =
@@ -179,6 +192,7 @@ class StaffEditProfileFragment : Fragment() {
             binding.fatherSpouseRelation.setAdapter(adapterrelationshipStatus)
             binding.fatherSpouseRelation.setOnItemClickListener { _, _, position, _ ->
                 relationshipStatusID = relationshipStatus[position].value ?:0
+                isRelegionIDUpdated=true
             }
 
 
@@ -189,6 +203,7 @@ class StaffEditProfileFragment : Fragment() {
                 binding.nationality.setAdapter(adapterNationality)
                 binding.nationality.setOnItemClickListener { a, e, position, c ->
                     nationalityID = profile.nationalityLST[position].id ?: 0
+                    isNationalityIDUpdated=true
                 }
             }
 
@@ -199,6 +214,7 @@ class StaffEditProfileFragment : Fragment() {
                 binding.bloodGroup.setAdapter(adapterBloodGroup)
                 binding.bloodGroup.setOnItemClickListener { _, _, position, _ ->
                     stuBloodGroupID = profile.bloodGroupLST[position].id ?: 0
+                    isBloodGroupUpdated=true
                 }
             }
 
@@ -211,6 +227,8 @@ class StaffEditProfileFragment : Fragment() {
             title.setText(profile.title,false)
             textFirstName.setText(profile.fName)
             textMiddleName.setText(profile.mName)
+            textAlternateEmailAddress.setText(profile.alternateEmailID)
+            textEmailAddress.setText(profile.emailID)
             textLastName.setText(profile.lName)
             textDateofBirth.setText(profile.dob)
             textDateOfJoining.setText(profile.doj)
@@ -252,41 +270,41 @@ class StaffEditProfileFragment : Fragment() {
 
 
     fun updateProfile() {
+        if (profileData != null) {
             binding.apply {
                 val modelEditProfile = StaffUpdateModel(
-                    address = textAddress.text.toString(),
-                    alternateEmailID = textAlternateEmailAddress.text.toString(),
-                    alternateMobile = textAlternateMobile.text.toString(),
-                    bloodGroupID = stuBloodGroupID,
-                    cbseid = textCBSEID.text.toString(),
-                    doAnniversary = textDateOfAnniversary.text.toString(),
-                    dob = textDateofBirth.text.toString(),
-                    doj = textDateOfJoining.text.toString(),
-                    emailID = textEmailAddress.text.toString(),
-                    emergencyContactNo = textEmergencyContactNo.text.toString(),
-                    fName = textFirstName.text.toString(),
-                    fatherHusbandMob = textFatherSpouseMobile.text.toString(),
-                    fatherHusbandName = textFatherSpouseName.text.toString(),
-                    isMaritialStatusID = true,
-                    isNationalityID = true,
-                    isRelationshipWithMemberId = true,
-                    isRelegionID = true,
-                    isTitleID = true,
-                    lName = textLastName.text.toString(),
-                    mName = textMiddleName.text.toString(),
-                    maritialStatusID = maritalStatusID,
-                    nationalCode = textNationalTeacherID.text.toString(),
-                    nationalityID = nationalityID,
-                    p_Address = textPermanentAddress.text.toString(),
-                    paN_Number = textPAN.text.toString(),
-                    qualification = textUserQualification.text.toString(),
-                    relationshipWithMemberId = relationshipStatusID,
-                    relegionID = stuReligionID,
-                    stateCode = textSateTeacherID.text.toString(),
-                    titleID = titleID,
-                    uaN_Number = textUserUAN.text.toString()
-
-
+                    address = if (profileData!!.address == textAddress.text.toString()) null else "${textAddress.text}",
+                    alternateEmailID = if (profileData!!.alternateEmailID == textAlternateEmailAddress.text.toString()) null else "${textAlternateEmailAddress.text}",
+                    alternateMobile = if (profileData!!.alternateMobile == textAlternateMobile.text.toString()) null else "${textAlternateMobile.text}",
+                    bloodGroupID = if(isBloodGroupUpdated)  stuBloodGroupID else null,
+                    cbseid = if (profileData!!.cbseid == textCBSEID.text.toString()) null else "${textCBSEID.text}",
+                    doAnniversary = if (profileData!!.doAnniversary == textDateOfAnniversary.text.toString()) null else "${textDateOfAnniversary.text}",
+                    dob = if (profileData!!.dob == textDateofBirth.text.toString()) null else "${textDateofBirth.text}",
+                    doj = if (profileData!!.doj == textDateOfJoining.text.toString()) null else "${textDateOfJoining.text}",
+                    emailID = if (profileData!!.emailID == textEmailAddress.text.toString()) null else "${textEmailAddress.text}",
+                    emergencyContactNo = if (profileData!!.emergencyContactNo == textEmergencyContactNo.text.toString()) null else "${textEmergencyContactNo.text}",
+                    fName = if (profileData!!.fName == textFirstName.text.toString()) null else "${textFirstName.text}",
+                    fatherHusbandMob = if (profileData!!.fatherHusbandMob == textFatherSpouseMobile.text.toString()) null else "${textFatherSpouseMobile.text}",
+                    fatherHusbandName = if (profileData!!.fatherHusbandName == textFatherSpouseName.text.toString()) null else "${textFatherSpouseName.text}",
+                    isMaritialStatusID =  isMaritialStatusIDUpdated,
+                    isNationalityID = isNationalityIDUpdated,
+                    isRelationshipWithMemberId = isRelationshipWithMemberIdUpdated,
+                    isRelegionID = isRelegionIDUpdated,
+                    isTitleID = isTitleIDUpdated,
+                    lName = if (profileData!!.lName == textLastName.text.toString()) null else "${textLastName.text}",
+                    mName = if (profileData!!.mName == textMiddleName.text.toString()) null else "${textMiddleName.text}",
+                    maritialStatusID = if (isMaritialStatusIDUpdated) maritalStatusID else null,
+                    nationalCode = if (profileData!!.nationalCode == textNationalTeacherID.text.toString()) null else "${textNationalTeacherID.text}",
+                    nationalityID = if (isNationalityIDUpdated) nationalityID else null ,
+                    p_Address = if (profileData!!.p_Address == textPermanentAddress.text.toString()) null else "${textPermanentAddress.text}",
+                    paN_Number = if (profileData!!.paN_Number == textPAN.text.toString()) null else "${textPAN.text} ",
+                    qualification = if (profileData!!.qualification == textUserQualification.text.toString()) null else "${textUserQualification.text} ",
+                    relationshipWithMemberId = if (isRelationshipWithMemberIdUpdated) relationshipStatusID else null ,
+                    relegionID = if (isRelegionIDUpdated) stuReligionID else null,
+                    stateCode = if (profileData!!.stateCode == textSateTeacherID.text.toString()) null else "${textSateTeacherID.text} ",
+                    titleID = if (isTitleIDUpdated) titleID else null ,
+                    uaN_Number = if (profileData!!.uaN_Number == textUserUAN.text.toString()) null else "${textUserUAN.text} " ,
+                    isBloodGroupID= isBloodGroupUpdated
                 )
                 viewModel.updateStaffProfile(modelEditProfile)
             }
@@ -307,14 +325,15 @@ class StaffEditProfileFragment : Fragment() {
                             (requireActivity() as MainActivity).showLoader(false)
                             if (it.data != null) {
                                 it.data.message?.let { it1 -> mainActivity().showMessage(it1) }
-                               // viewModel.getUserProfileEdit(true)
+                                // viewModel.getUserProfileEdit(true)
                                 viewModel.getUserProfileEdit(true)
-                                binding.btnSummit.isEnabled=false
+                                binding.btnSummit.isEnabled = false
                             }
                         }
                     }
                 }
             }
+        }
 
     }
 

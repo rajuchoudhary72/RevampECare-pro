@@ -31,5 +31,6 @@ data class StaffUpdateModel(
     val relegionID: Int?,
     val stateCode: String?,
     val titleID: Int?,
-    val uaN_Number: String?
+    val uaN_Number: String?,
+    val isBloodGroupID: Boolean?
 )
