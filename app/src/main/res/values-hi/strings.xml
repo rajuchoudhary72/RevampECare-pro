@@ -461,6 +461,7 @@
     <string name="resend_otp"><u>ओटीपी पुनः भेजें</u></string>
     <string name="uan_number">यूएएन</string>
     <string name="nationalnumber">राष्ट्रीय शिक्षक आईडी:</string>
+    <string name="state_number">राज्य शिक्षक आईडी:</string>
     <string name="bank_account_number">बैंक खाता नंबर</string>
     <string name="uan_account_number">यूएएन</string>
     <string name="contact_number">संपर्क नंबर</string>

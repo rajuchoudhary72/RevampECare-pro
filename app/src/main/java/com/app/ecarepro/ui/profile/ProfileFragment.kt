@@ -513,6 +513,12 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.nationalnumber))
             subTitle(profile.nationalCode)
         }
+        profileItem {
+            id(R.string.state_number)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.state_number))
+            subTitle(profile.stateCode)
+        }
         /*  profileItem {
               id(R.string.bank_account_number)
               iconRes(R.drawable.ic_bank_account)

@@ -467,6 +467,7 @@
     <string name="resend_otp"><u>Resend OTP</u></string>
     <string name="uan_number">UAN</string>
     <string name="nationalnumber">National Teacher ID:</string>
+    <string name="state_number">State Teacher ID:</string>
     <string name="bank_account_number">Bank Account Number</string>
     <string name="uan_account_number">UAN</string>
     <string name="contact_number">Contact Number</string>

@@ -456,6 +456,7 @@
     <string name="resend_otp"><u>OTP ફરી મોકલો</u></string>
     <string name="uan_number">UAN નંબર</string>
     <string name="nationalnumber">રાષ્ટ્રીય શિક્ષક ઓળખ નંબર:</string>
+    <string name="state_number">રાજ્ય શિક્ષક નંબર:</string>
     <string name="bank_account_number">બેંક ખાતા નંબર</string>
     <string name="uan_account_number">UAN</string>
     <string name="contact_number">સંપર્ક નંબર</string>
