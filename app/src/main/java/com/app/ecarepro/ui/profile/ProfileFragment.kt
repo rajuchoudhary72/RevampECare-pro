@@ -750,10 +750,10 @@ class ProfileFragment : Fragment() {
         }
 
         _binding?.tvEditProfile?.setOnClickListener {
-            if (UserTypeApp == 1) {
-                findNavController().navigate(R.id.editProfileFragment)
-            }else{
+            if (UserTypeApp == 3) {
                 findNavController().navigate(R.id.staffEditProfileFragment)
+            }else{
+                findNavController().navigate(R.id.editProfileFragment)
             }
         }
     }
