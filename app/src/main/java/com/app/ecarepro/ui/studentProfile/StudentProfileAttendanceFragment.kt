@@ -26,6 +26,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.TryAttendanceTest2
 import com.app.ecarepro.ui.circuler.PopUpListAdapter
 import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
@@ -162,6 +163,8 @@ class StudentProfileAttendanceFragment(
         relOk.setOnClickListener {
             if (isYearSelected) {
                 binding.ctvSelectYear.text = selectedYearData.session
+                Constant.SESSION_VALUE = selectedYearData.session
+                Constant.year_id = selectedYearData.yrID.toString()
                 getAtt()
                 builder.dismiss()
             }
@@ -359,6 +362,11 @@ class StudentProfileAttendanceFragment(
         bundle.putString("studentID", id)
         bundle.putString("formDate", t.startDate)
         bundle.putString("tillDate", t.endDate)
+        if (Constant.SESSION_VALUE.isNotEmpty()){
+            bundle.putString("YearID",  Constant.year_id)
+        }else{
+            Constant.SESSION_VALUE="2025-2026"
+        }
         intent.putExtras(bundle)
         startActivity(intent)
         studentProfileAttendanceViewModel.sendScreenEvent()
