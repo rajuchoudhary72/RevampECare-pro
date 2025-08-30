@@ -39,6 +39,7 @@ class StudentProfileReportCardFragment : Fragment() {
 
         (requireActivity() as MainActivity).showLoader(false)
         sharedViewModel.getNetworkStudentProfile().observe(this.viewLifecycleOwner){
+            // os 15  issue happened here
             val reportCardDTLs=it.reportCardDTLs
             if (!reportCardDTLs.isNullOrEmpty()) {
 

@@ -26,6 +26,7 @@ import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import androidx.activity.enableEdgeToEdge
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -215,8 +216,8 @@ class MainActivity : AppCompatActivity() {
 //            config.locale = local
 //            resources.updateConfiguration(config, resources.displayMetrics)
 
-
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge()
+      //  WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -543,7 +544,7 @@ class MainActivity : AppCompatActivity() {
                             try {
                                 val pInfo: PackageInfo = packageManager
                                     .getPackageInfo(packageName, 0)
-                                versionName = pInfo.versionName
+                                versionName = pInfo.versionName!!
                                 versionCode = pInfo.versionCode
                             } catch (e: PackageManager.NameNotFoundException) {
                                 e.printStackTrace()
@@ -2096,13 +2097,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                packageInfo.signingInfo.apkContentsSigners
+                packageInfo.signingInfo?.apkContentsSigners
             } else {
                 @Suppress("DEPRECATION")
                 packageInfo.signatures
             }
 
-            val cert = signatures[0].toByteArray()
+            val cert = signatures?.get(0)?.toByteArray()
             val input = ByteArrayInputStream(cert)
 
             val cf: CertificateFactory = CertificateFactory.getInstance("X509")
