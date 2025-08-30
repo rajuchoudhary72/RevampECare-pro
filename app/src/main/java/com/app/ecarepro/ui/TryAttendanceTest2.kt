@@ -42,6 +42,8 @@ class TryAttendanceTest2 : AppCompatActivity() {
     private var studentID: String = ""
     private var toStartDate: String = ""
     private var toEndDate: String = ""
+    private var yearName: String = ""
+
 
     /*end var from student profile */
     private var adapter: TryViewPagerAdapter? = null
@@ -173,7 +175,10 @@ class TryAttendanceTest2 : AppCompatActivity() {
             11 -> month_name = "November"
             12 -> month_name = "December"
         }
-        if (session != null) {
+        if (yearName.isNotEmpty()) {
+            binding.toolbarSerch.year.text = yearName;
+            binding.toolbarSerch.year.visibility = VISIBLE;
+        } else if (session != null) {
             binding.toolbarSerch.year.text = session;
             binding.toolbarSerch.year.visibility = VISIBLE;
         }
@@ -189,10 +194,13 @@ class TryAttendanceTest2 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.try_activity_test_scroll)
+        val bundle = intent.extras
+        bundle?.let {
+            yearName = it.getString("yearName", "")
+        }
         addMonthAndYear()
         isFromStaff = intent.getBooleanExtra("isFromStaff", false)
         calenderInstance()
-        val bundle = intent.extras
         bundle?.let {
             studentID = it.getString("studentID", "0")
             toStartDate = it.getString("formDate", "")
@@ -268,7 +276,7 @@ class TryAttendanceTest2 : AppCompatActivity() {
         val ccMonthIndex =
             session_month_list.indexOfFirst { it == (CalenderInstance.currentMonth() + 1) }
         binding.viewpager.setCurrentItem(ccMonthIndex)
-        callApi(ccMonthIndex)
+      //  callApi(ccMonthIndex)
     }
 
     private fun clickListener() {
@@ -438,7 +446,7 @@ class TryAttendanceTest2 : AppCompatActivity() {
         session_year_list.clear()
         session_month_list.clear()
         var start_month: Int = 4
-        var start_year: Int = 2025
+        var start_year: Int = if (yearName.isEmpty()) 2025 else yearName.split("-")[0].toInt()
 
         for (month in 0..11) {
             if (start_month > 11) {

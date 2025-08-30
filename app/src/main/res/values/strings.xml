@@ -467,6 +467,7 @@
     <string name="resend_otp"><u>Resend OTP</u></string>
     <string name="uan_number">UAN</string>
     <string name="nationalnumber">National Teacher ID:</string>
+    <string name="state_number">State Teacher ID:</string>
     <string name="bank_account_number">Bank Account Number</string>
     <string name="uan_account_number">UAN</string>
     <string name="contact_number">Contact Number</string>
@@ -1432,7 +1433,22 @@
     <string name="no_internet_connection">No Internet Connection</string>
     <string name="please_check_your_internet_connection_and_try_again">Please check your internet connection and try again.</string>
     <string name="dues_amount">Dues Amount</string>
-
+    <string name="married">Married</string>
+    <string name="unmarried">Unmarried</string>
+    <string name="other">Other</string>
+    <string name="spouse">Spouse</string>
+    <string name="role_name">Role Name</string>
+    <string name="first_name">First Name</string>
+    <string name="middle_name">Middle Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="designation">Designation</string>
+    <string name="uan">UAN</string>
+    <string name="sate_teacher_id">Sate Teacher ID</string>
+    <string name="pan">PAN</string>
+    <string name="cbse_id">CBSE ID</string>
+    <string name="father_spouse_relation">Father/Spouse Relation</string>
+    <string name="alternate_email_id">Alternate Email ID</string>
+    <string name="emergency_contact_no">Emergency Contact No</string>
 
 </resources>
 

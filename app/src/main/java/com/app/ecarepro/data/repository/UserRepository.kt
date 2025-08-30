@@ -136,6 +136,8 @@ import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProfileModel
+import com.app.ecarepro.ui.edit_profile.staff.model.StaffProfileModel
+import com.app.ecarepro.ui.edit_profile.staff.model.payload.StaffUpdateModel
 import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
@@ -277,8 +279,16 @@ interface UserRepository {
         edit: Boolean
     ): NetworkEditProfile
 
+    suspend fun getUserProfileEditStaff(
+        edit: Boolean = true
+    ): StaffProfileModel
+
     suspend fun updateParentProfile(
          request: UpdateProfileModel
+    ): CommonResponse
+
+    suspend fun sendStaffProfileRequest(
+         request: StaffUpdateModel
     ): CommonResponse
 
     suspend fun updateTransportProfile(

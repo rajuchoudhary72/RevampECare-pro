@@ -55,7 +55,7 @@ class ProfileViewModel @Inject constructor(
                         profile = profile.getOrNull()!!,
                         users = users,
                         currentUserId = userId!!,
-                        canEditProfile = profile.getOrNull()?.canEditProfile ?: false && users.find { it.id == userId }?.userType == Constant.PARENT_TYPE
+                        canEditProfile = profile.getOrNull()?.canEditProfile ?: false
                     )
                 } else {
                     ProfileUiState.Error(

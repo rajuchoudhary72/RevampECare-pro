@@ -41,6 +41,8 @@ data class Profile(
     val uaN_Number: String?,
     @SerializedName("nationalCode")
     val nationalCode : String?,
+    @SerializedName("stateCode")
+    val stateCode : String?,
     @SerializedName("dob")
     val dob: String?,
     @SerializedName("doj")

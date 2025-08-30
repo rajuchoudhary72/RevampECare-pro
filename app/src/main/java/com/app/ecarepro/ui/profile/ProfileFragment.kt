@@ -171,7 +171,9 @@ class ProfileFragment : Fragment() {
                 viewLifecycleOwner.lifecycle,
                 Lifecycle.State.CREATED
             ).collectLatest { uiState ->
-                handleUiState(uiState)
+                if (uiState != null) {
+                    handleUiState(uiState)
+                }
             }
         }
 
@@ -513,6 +515,12 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.nationalnumber))
             subTitle(profile.nationalCode)
         }
+        profileItem {
+            id(R.string.state_number)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.state_number))
+            subTitle(profile.stateCode)
+        }
         /*  profileItem {
               id(R.string.bank_account_number)
               iconRes(R.drawable.ic_bank_account)
@@ -744,7 +752,11 @@ class ProfileFragment : Fragment() {
         }
 
         _binding?.tvEditProfile?.setOnClickListener {
-            findNavController().navigate(R.id.editProfileFragment)
+            if (UserTypeApp == 3) {
+                findNavController().navigate(R.id.staffEditProfileFragment)
+            }else{
+                findNavController().navigate(R.id.editProfileFragment)
+            }
         }
     }
 
