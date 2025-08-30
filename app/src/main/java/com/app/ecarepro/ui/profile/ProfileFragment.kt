@@ -171,7 +171,9 @@ class ProfileFragment : Fragment() {
                 viewLifecycleOwner.lifecycle,
                 Lifecycle.State.CREATED
             ).collectLatest { uiState ->
-                handleUiState(uiState)
+                if (uiState != null) {
+                    handleUiState(uiState)
+                }
             }
         }
 
@@ -188,7 +190,7 @@ class ProfileFragment : Fragment() {
         }
 
         if (uiState is ProfileUiState.Success) {
-           // binding.tvEditProfile.isVisible = uiState.canEditProfile
+            binding.tvEditProfile.isVisible = uiState.canEditProfile
             binding.recyclerView.withModels {
                 profileHeader {
                     id(uiState.profile.username)
