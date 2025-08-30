@@ -16,7 +16,30 @@
             android:paddingBottom="@dimen/_5sdp"
             android:textColor="@color/brand_color"
             android:textSize="@dimen/_14sdp"
+            tools:text=" 1. The teacher supports my child when they face difficulties"
             tools:ignore="RtlSymmetry" />
+
+        <!-- EditText for user response -->
+        <EditText
+            android:id="@+id/et_survey_response"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:background="@drawable/edittext_background"
+            android:hint="Enter your response"
+            android:padding="@dimen/_12sdp"
+            android:textSize="@dimen/_12sdp"
+            android:visibility="gone"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey"
+            android:minHeight="@dimen/_40sdp"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:scrollbars="vertical" />
 
         <TextView
             android:id="@+id/tv_total_survey_count"
@@ -39,6 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/_10sdp"
+                tools:listitem="@layout/row_survey_item_check"
                 android:paddingEnd="@dimen/_10sdp" />
 
             <Button
@@ -56,7 +80,6 @@
                 android:textColor="@color/white"
                 android:visibility="gone" />
         </RelativeLayout>
-
 
         <View
             android:layout_width="match_parent"

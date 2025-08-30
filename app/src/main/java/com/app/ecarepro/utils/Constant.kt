@@ -38,6 +38,8 @@ class Constant {
         const val APPROVE_APPOINTMENT_URL = "approveappointment/"
         const val REJECT_APPOINTMENT_URL = "rejectappointment/"
         const val BOOK_ID_ARGUMENT = "bookID"
+        var SESSION_VALUE = ""
+        var year_id = ""
         const val URL_ARGUMENT = "url"
         const val FULL_URL_ARGUMENT = "full_url"
         const val NOTICE_ID_ARGUMENT = "NoticeID"

@@ -1,6 +1,9 @@
 package com.app.ecarepro.ui.notice
 
+import android.app.AlertDialog
 import android.app.DownloadManager
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -15,6 +18,7 @@ import android.view.ViewGroup
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
@@ -100,15 +104,6 @@ class NoticeDetailsFragment : Fragment() {
                                 fileSource= it.data.notice.filePath.toString()
                             }
                             try {
-
-//                            val htmlWithLineWithNBreaks = it.data.circuler.message.replace("\n", "<br>")
-//                            val htmlWithLineWithNRBreaks = htmlWithLineWithNBreaks.replace("\r", "<br>")
-//                            val spanned = HtmlCompat.fromHtml(htmlWithLineWithNRBreaks, HtmlCompat.FROM_HTML_MODE_LEGACY)
-//                            binding.tvNoticeDetails.text = spanned
-//
-//                            binding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
-
-
                                 val formattedHtml = """
     <html>
     <head>
@@ -131,26 +126,57 @@ class NoticeDetailsFragment : Fragment() {
 """.trimIndent()
 
 
-                                noticeDetailsBinding.wvDetails.webViewClient = object : WebViewClient() {
-                                    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                                        val url = request?.url.toString()
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                        startActivity(intent) // Opens in an external browser
-                                        return true
-                                    }
-                                }
+                                noticeDetailsBinding.wvDetails.apply {
+                                    settings.javaScriptEnabled = true
+                                    settings.domStorageEnabled = true
 
-                                noticeDetailsBinding.wvDetails.settings.javaScriptEnabled = true
-                                noticeDetailsBinding.wvDetails.settings.domStorageEnabled = true
-                                noticeDetailsBinding.wvDetails.webViewClient = WebViewClient()
-                                noticeDetailsBinding.wvDetails.loadDataWithBaseURL(null, formattedHtml, "text/html", "UTF-8", null)
-                                noticeDetailsBinding.wvDetails.webViewClient = object : WebViewClient() {
-                                    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                                        val url = request?.url.toString()
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                        startActivity(intent) // Opens the link in the default browser
-                                        return true // Return true to prevent WebView from loading the URL
+                                    webViewClient = object : WebViewClient() {
+                                        override fun shouldOverrideUrlLoading(
+                                            view: WebView?,
+                                            request: WebResourceRequest?
+                                        ): Boolean {
+                                            val url = request?.url.toString()
+                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                            startActivity(intent) // opens in external browser
+                                            return true
+                                        }
                                     }
+                                    // ✅ This allows OS-level context menu (like Chrome)
+                                    setOnCreateContextMenuListener { menu, v, menuInfo ->
+                                        val result = (v as WebView).hitTestResult
+                                        val url = result.extra
+                                        if (result.type == WebView.HitTestResult.SRC_ANCHOR_TYPE ||
+                                            result.type == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE
+                                        ) {
+
+                                            menu.setHeaderTitle(url)
+                                            menu.add("Open in Browser").setOnMenuItemClickListener {
+                                                startActivity(
+                                                    Intent(
+                                                        Intent.ACTION_VIEW,
+                                                        Uri.parse(url)
+                                                    )
+                                                )
+                                                true
+                                            }
+                                            menu.add("Copy Link").setOnMenuItemClickListener {
+                                                copyTextToClipboard(url ?: "")
+                                                true
+                                            }
+                                            menu.add("Share Link").setOnMenuItemClickListener {
+                                                shareLink(url ?: "")
+                                                true
+                                            }
+                                        }
+                                    }
+
+                                    noticeDetailsBinding.wvDetails.loadDataWithBaseURL(
+                                        null,
+                                        formattedHtml,
+                                        "text/html",
+                                        "UTF-8",
+                                        null
+                                    )
                                 }
 
                             }catch (e:NullPointerException){
@@ -169,8 +195,44 @@ class NoticeDetailsFragment : Fragment() {
         _noticeDetailsViewModel.getNoticeDTL(noticeID.orEmpty())
 
     }
+    private fun showLinkOptionsDialog(url: String) {
+        val options = arrayOf("Copy",  "Share")
 
+        AlertDialog.Builder(requireContext())
+            .setTitle("Options")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> copyTextToClipboard(url)
+                    1 -> shareLink(url)
+                }
+            }
+            .show()
+    }
+    // Your existing copy function
+    private fun copyTextToClipboard(text: String) {
+        val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("Copied Text", text)
+        clipboardManager.setPrimaryClip(clipData)
+       // Toast.makeText(requireContext(), "Link Copied", Toast.LENGTH_SHORT).show()
+    }
 
+    private fun openInBrowser(url: String) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Cannot open link", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun shareLink(url: String) {
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, url)
+        }
+        startActivity(Intent.createChooser(shareIntent, "Share"))
+    }
     fun formatTextWithLinks(input: String): String {
         val urlPattern = "(https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=]+)"
         return input.replace(Regex(urlPattern)) {
