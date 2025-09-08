@@ -1469,6 +1469,9 @@
     <string name="alternate_email_id">વૈકલ્પિક ઇમેઇલ આઈડી</string>
     <string name="emergency_contact_no">આકસ્મિક સંપર્ક નંબર</string>
 
+    <string name="designation_details">હોદ્દાની વિગતો</string>
+    <string name="profession_details">વ્યવસાયની વિગતો</string>
+
 
 
 </resources>

@@ -1449,6 +1449,8 @@
     <string name="father_spouse_relation">Father/Spouse Relation</string>
     <string name="alternate_email_id">Alternate Email ID</string>
     <string name="emergency_contact_no">Emergency Contact No</string>
+    <string name="designation_details">Designation Details</string>
+    <string name="profession_details">Profession Details</string>
 
 </resources>
 
