@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentClassSyllabusBinding
 import com.app.ecarepro.model.SyllabusLST
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
@@ -110,14 +112,9 @@ class ClassSyllabus : Fragment(), ItemListener<SyllabusLST> {
         try {
             try {
                 if (pos == 1) {
-                    findNavController().navigate(R.id.action_classSyllabus_to_openPdfFragment,
-                        Bundle().apply {
-                            putString(Constant.URL_ARGUMENT, t.filePath)
-                        })
+                    openFile(t.filePath)
                 } else if (pos == 2) {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(t.filePath, getString(R.string.syallabus))
-
+                    downloadFile(t.filePath)
                 }
             } catch (e: SecurityException) {
 
@@ -127,5 +124,74 @@ class ClassSyllabus : Fragment(), ItemListener<SyllabusLST> {
         }
 
 
+    }
+
+
+    private fun openFile(fileSource: String) {
+        when (Constant.isPdfUrl(fileSource)){
+            1 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+            2 -> {
+                findNavController().navigate(
+                    R.id.photoViewFragmentFragment,
+                    bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+                )
+            }
+            3 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+            5 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }else -> {
+            findNavController().navigate(
+                R.id.photoViewFragmentFragment,
+                bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+            )
+        }
+        }
+
+
+
+    }
+
+
+    private fun downloadFile(fileSource: String) {
+        try {
+            when (Constant.isPdfUrl(fileSource)) {
+                1 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, getString(R.string.syllabus
+                    ))
+                }
+
+                2 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+                }
+
+                3 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, getString(R.string.syllabus),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                }
+                5 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, getString(R.string.syllabus),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                }
+
+                else -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+                }
+            }
+        }catch (e:SecurityException){
+            e.printStackTrace()
+        }
     }
 }
