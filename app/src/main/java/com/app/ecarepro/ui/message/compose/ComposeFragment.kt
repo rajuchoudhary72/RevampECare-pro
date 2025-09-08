@@ -181,6 +181,7 @@ class ComposeFragment : Fragment() {
         }
 
         setUpFontStyle()
+
     }
 
     private fun setUpFontStyle() {

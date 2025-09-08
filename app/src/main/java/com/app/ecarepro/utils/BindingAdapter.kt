@@ -592,7 +592,7 @@ fun formatText(input: String): SpannableStringBuilder {
         val regex = Regex(pattern)
         val matches = regex.findAll(spannableBuilder.toString())
 
-        matches.toList().reversed().forEach { matchResult ->
+        matches.toList().asReversed().forEach { matchResult ->
             val start = matchResult.range.first
             val end = matchResult.range.last + 1
 
