@@ -43,7 +43,7 @@ class StudentProfileReportCardFragment : Fragment() {
             val reportCardDTLs=it.reportCardDTLs
             if (!reportCardDTLs.isNullOrEmpty()) {
 
-                val revReportCardList=reportCardDTLs.reversed()
+                val revReportCardList=reportCardDTLs.asReversed()
 
                 val fragmentList : ArrayList<Fragment> = ArrayList()
 

@@ -340,42 +340,39 @@ class ChatFragment : Fragment() {
         }).show(childFragmentManager, "VOICE")
     }
 
-    private val pickImagesLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val selectedImages = mutableListOf<Uri>()
-                result.data?.let { data ->
-                    val clipData = data.clipData
-                    if (clipData != null) {
-                        for (i in 0 until clipData.itemCount) {
-                            if (selectedImages.size < 7) {
-                                val imageUri = clipData.getItemAt(i).uri
-                                selectedImages.add(imageUri)
-                            }
-                        }
-                    } else {
-                        data.data?.let { imageUri ->
-                            if (selectedImages.size < 7) {
-                                selectedImages.add(imageUri)
-                            }
-                        }
-                    }
-                    chatViewModel.setAttachments(selectedImages.map {
-                        MiMedia(
-                            path = it.toString(),
-                            name = lastClickAttachmentType?.name
-                        )
-                    })
+
+    private val pickImagesLauncher = registerForActivityResult(
+        ActivityResultContracts.GetMultipleContents()
+    ) { uris ->
+        if (uris.isNotEmpty()) {
+            val selectedImages = uris.take(50) // Limit to 7 images
+
+            // Request persistent permissions for all URIs
+            selectedImages.forEach { uri ->
+                try {
+                    requireActivity().contentResolver.takePersistableUriPermission(
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
+
+            chatViewModel.setAttachments(selectedImages.map {
+                MiMedia(
+                    path = it.toString(),
+                    name = lastClickAttachmentType?.name
+                )
+            })
         }
-    private fun openGallery() {
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        intent.action = Intent.ACTION_GET_CONTENT
-        pickImagesLauncher.launch(Intent.createChooser(intent, "Select Image(s)"))
     }
+
+    private fun openGallery() {
+        pickImagesLauncher.launch("image/*")
+    }
+
+    
 
     private fun launchPicker() {
         when (lastClickAttachmentType) {

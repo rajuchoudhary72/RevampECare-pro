@@ -1471,7 +1471,10 @@
 
     <string name="designation_details">હોદ્દાની વિગતો</string>
     <string name="profession_details">વ્યવસાયની વિગતો</string>
-
+    <string name="father_s_designation_details">Father\'s Designation Details:</string>
+    <string name="father_s_profession_details">Father\'s Profession Details:</string>
+    <string name="mother_s_designation_details">Mother\'s Designation Details:</string>
+    <string name="mother_s_profession_details">Mother\'s Profession Details:</string>
 
 
 </resources>

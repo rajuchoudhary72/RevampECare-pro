@@ -712,92 +712,73 @@ class ComposeFragment : Fragment() {
         }
 
 
-    /*with  process base */
-    private val pickImagesLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val selectedImages = mutableListOf<Uri>()
-                result.data?.let { data ->
-                    val clipData = data.clipData
-                    if (clipData != null) {
-                        for (i in 0 until clipData.itemCount) {
-                            /*if (selectedImages.size < 7) {
-                                val imageUri = clipData.getItemAt(i).uri
-                                selectedImages.add(imageUri)
-                            }*/
-                            val imageUri = clipData.getItemAt(i).uri
-                            selectedImages.add(imageUri)
-                        }
 
-                        // Check if total size exceeds the limit
-                        if (imageCompressionHelper.exceedsPayloadLimit(selectedImages)) {
-                            // Show compression dialog
-                            imageCompressionHelper.showCompressionDialog(
-                                parentFragmentManager,
-                                selectedImages
-                            ) { compressionOption ->
-                                // Show progress dialog
-                                val progressDialog = ProgressDialog(requireContext()).apply {
-                                    setMessage("Compressing images... 0/${selectedImages.size}")
-                                    setCancelable(false)
-                                    show()
-                                }
 
-                                // Process images with selected compression
-                                viewLifecycleOwner.lifecycleScope.launch {
-                                    val compressedUris = mutableListOf<Uri>()
+    /*with process base */
+    private val pickImagesLauncher = registerForActivityResult(
+        ActivityResultContracts.GetMultipleContents()
+    ) { uris ->
+        if (uris.isNotEmpty()) {
+            val selectedImages = mutableListOf<Uri>()
 
-                                    // Process each image individually to track progress
-                                    for (i in selectedImages.indices) {
-                                        val uri = selectedImages[i]
+            // Request persistent permissions for all URIs
+            uris.forEach { uri ->
+                try {
+                    requireActivity().contentResolver.takePersistableUriPermission(
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
 
-                                        // Update progress message
-                                        withContext(Dispatchers.Main) {
-                                            progressDialog.setMessage("Compressing images... ${i+1}/${selectedImages.size}")
-                                        }
+            // Add all selected URIs
+            selectedImages.addAll(uris)
 
-                                        // Compress image in background
-                                        val compressedUri = withContext(Dispatchers.IO) {
-                                            imageCompressionHelper.compressImage(
-                                                uri,
-                                                compressionOption
-                                            )
-                                        }
+            // Check if total size exceeds the limit
+            if (imageCompressionHelper.exceedsPayloadLimit(selectedImages)) {
+                // Show compression dialog
+                imageCompressionHelper.showCompressionDialog(
+                    parentFragmentManager,
+                    selectedImages
+                ) { compressionOption ->
+                    // Show progress dialog
+                    val progressDialog = ProgressDialog(requireContext()).apply {
+                        setMessage("Compressing images... 0/${selectedImages.size}")
+                        setCancelable(false)
+                        show()
+                    }
 
-                                        compressedUris.add(compressedUri)
-                                    }
+                    // Process images with selected compression
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        val compressedUris = mutableListOf<Uri>()
 
-                                    // Dismiss progress dialog
-                                    progressDialog.dismiss()
+                        // Process each image individually to track progress
+                        for (i in selectedImages.indices) {
+                            val uri = selectedImages[i]
 
-                                    // Now we have compressed images, upload them
-                                    composeViewModel.setAttachments(compressedUris.map {
-                                        MiMedia(
-                                            path = it.toString(),
-                                            name = lastClickAttachmentType?.name
-                                        )
-                                    })
-                                }
+                            // Update progress message
+                            withContext(Dispatchers.Main) {
+                                progressDialog.setMessage("Compressing images... ${i+1}/${selectedImages.size}")
                             }
-                        }
-                        else {
-                            /*  // Process images normally (still might want to compress slightly)
-                               composeViewModel.setAttachments(files)*/
-                            composeViewModel.setAttachments(selectedImages.map {
-                                MiMedia(
-                                    path = it.toString(),
-                                    name = lastClickAttachmentType?.name
+
+                            // Compress image in background
+                            val compressedUri = withContext(Dispatchers.IO) {
+                                imageCompressionHelper.compressImage(
+                                    uri,
+                                    compressionOption
                                 )
-                            })
+                            }
+
+                            compressedUris.add(compressedUri)
                         }
-                    } else {
-                        data.data?.let { imageUri ->
-                            /*if (selectedImages.size < 7) {
-                                selectedImages.add(imageUri)
-                            }*/
-                            selectedImages.add(imageUri)
-                        }
-                        composeViewModel.setAttachments(selectedImages.map {
+
+                        // Dismiss progress dialog
+                        progressDialog.dismiss()
+
+                        // Now we have compressed images, upload them
+                        composeViewModel.setAttachments(compressedUris.map {
                             MiMedia(
                                 path = it.toString(),
                                 name = lastClickAttachmentType?.name
@@ -805,16 +786,22 @@ class ComposeFragment : Fragment() {
                         })
                     }
                 }
+            } else {
+                // Process images normally without compression
+                composeViewModel.setAttachments(selectedImages.map {
+                    MiMedia(
+                        path = it.toString(),
+                        name = lastClickAttachmentType?.name
+                    )
+                })
             }
         }
+    }
 
     private fun openGallery() {
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        intent.action = Intent.ACTION_GET_CONTENT
-        pickImagesLauncher.launch(Intent.createChooser(intent, "Select Image(s)"))
+        pickImagesLauncher.launch("image/*")
     }
+
 
 
     private fun launchPicker() {
@@ -855,7 +842,8 @@ class ComposeFragment : Fragment() {
     private fun launchPdfPicker() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "*/*" // Allow any file type
+           // type = "*/*" // Allow any file type
+            type = "application/pdf" // More specific
             putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(
                 "application/pdf",
                 "application/msword",// .doc
