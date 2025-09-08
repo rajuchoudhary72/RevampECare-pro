@@ -1469,6 +1469,8 @@
     <string name="alternate_email_id">वैकल्पिक ईमेल आईडी</string>
     <string name="emergency_contact_no">आपातकालीन संपर्क नंबर</string>
 
+    <string name="designation_details">पद विवरण</string>
+    <string name="profession_details">व्यवसाय विवरण</string>
 
 
 </resources>
