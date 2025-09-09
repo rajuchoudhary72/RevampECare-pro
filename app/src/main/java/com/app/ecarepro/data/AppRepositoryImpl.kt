@@ -180,6 +180,21 @@ class AppRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateLastUpdateSession(): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = appService.updateLastSession(userDataStore.getUserSessionId().orEmpty())
+                if (response.errorCode == 0 ) {
+                    emit(Result.success(response.message?:"Success"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
     private fun parseTranslations(values: List<List<String>>): List<TranslationItem> {
         // Skip header row if present
         val dataRows = if (values.firstOrNull()?.firstOrNull() == "key") {

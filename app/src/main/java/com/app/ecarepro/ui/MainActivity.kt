@@ -2138,6 +2138,7 @@ class MainActivity : AppCompatActivity() {
 
         if (isActivityPaused) {
             syncData(false)
+            systemViewModel.updateLastActiveSession()
             isActivityPaused = false
         } else {
             lifecycleScope.launch {
