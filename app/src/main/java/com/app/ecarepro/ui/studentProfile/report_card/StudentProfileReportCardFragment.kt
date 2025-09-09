@@ -39,10 +39,11 @@ class StudentProfileReportCardFragment : Fragment() {
 
         (requireActivity() as MainActivity).showLoader(false)
         sharedViewModel.getNetworkStudentProfile().observe(this.viewLifecycleOwner){
+            // os 15  issue happened here
             val reportCardDTLs=it.reportCardDTLs
             if (!reportCardDTLs.isNullOrEmpty()) {
 
-                val revReportCardList=reportCardDTLs.reversed()
+                val revReportCardList=reportCardDTLs.asReversed()
 
                 val fragmentList : ArrayList<Fragment> = ArrayList()
 

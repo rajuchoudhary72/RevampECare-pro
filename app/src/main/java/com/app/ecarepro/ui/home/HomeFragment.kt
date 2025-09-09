@@ -366,7 +366,10 @@ class HomeFragment : Fragment() {
                             } else {
                                 Locale.ENGLISH.displayName
                             }
-
+                        Log.e("MSG", "startLocationFetch: " + cityName)
+                        Log.e("MSG",
+                            ("startLocationFetch2: " + cityName) ?: Locale.ENGLISH.displayName
+                        )
                         mViewModel.setCityName(cityName ?: Locale.ENGLISH.displayName)
                     }
 
@@ -638,7 +641,7 @@ class HomeFragment : Fragment() {
         super.onResume()
         systemViewModel.refreshAppLayout()
         systemViewModel.fetchSettings()
-        // startLocationFetch()
+         startLocationFetch()
 
     }
 
@@ -649,7 +652,7 @@ class HomeFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 120) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //  startLocationFetch()
+                 startLocationFetch()
             } else {
                 mainActivity().showMessage(getString(R.string.gps_permission_denied))
             }

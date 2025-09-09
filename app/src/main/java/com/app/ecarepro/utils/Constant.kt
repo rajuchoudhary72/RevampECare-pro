@@ -21,9 +21,9 @@ class Constant {
         const val DEVICE_TYPE: Int = 1
 
         /*new  base Url*/
-         //const val BASE_URL = "https://androidapi.franciscanecare.net/"
+         const val BASE_URL = "https://androidapi.franciscanecare.net/"
 
-         const val BASE_URL = "https://api.franciscanecare.net/"
+        // const val BASE_URL = "https://api.franciscanecare.net/"
          const val REPORT_BASE_URL = "https://pay.franciscanwebsolutions.com/"
         const val BASE_DEV_URL = "https://apiuat.franciscanecare.net/"
         const val BASE_URL_COM = "https://app.franciscanecare.com"

@@ -710,6 +710,30 @@ class ProfileFragment : Fragment() {
             subTitle(profile.studentProfile?.fatherAadhaarNumber)
         }
         profileItem {
+            id(R.string.father_s_designation_details)
+            iconRes(R.drawable.ic_baseline_menu_book_24)
+            title(getString(R.string.father_s_designation_details))
+            subTitle(profile.studentProfile?.fatherDesignationDetail)
+        }
+        profileItem {
+            id(R.string.father_s_profession_details)
+            iconRes(R.drawable.ic_baseline_menu_book_24)
+            title(getString(R.string.father_s_profession_details))
+            subTitle(profile.studentProfile?.fatherProfessionDetail)
+        }
+        profileItem {
+            id(R.string.mother_s_designation_details)
+            iconRes(R.drawable.ic_baseline_menu_book_24)
+            title(getString(R.string.mother_s_designation_details))
+            subTitle(profile.studentProfile?.motherDesignationDetail)
+        }
+        profileItem {
+            id(R.string.mother_s_profession_details)
+            iconRes(R.drawable.ic_baseline_menu_book_24)
+            title(getString(R.string.mother_s_profession_details))
+            subTitle(profile.studentProfile?.motherProfessionDetail)
+        }
+        profileItem {
             id(R.string.father_pan)
             iconRes(R.drawable.pan_card_icon)
             title(getString(R.string.father_pan))
