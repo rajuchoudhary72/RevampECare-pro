@@ -302,6 +302,21 @@ class SystemViewModel @Inject constructor(
             }
         }
     }
+    fun updateLastActiveSession() {
+        viewModelScope.launch {
+            if (userDataStore.isUserAuthenticated()) {
+                appRepository.updateLastUpdateSession()
+                    .collectLatest {
+                        it.onSuccess {
+                            println(it)
+                        }
+                            .onFailure {
+                                println(it.message)
+                            }
+                    }
+            }
+        }
+    }
 }
 
 sealed interface MainActivityUiState {

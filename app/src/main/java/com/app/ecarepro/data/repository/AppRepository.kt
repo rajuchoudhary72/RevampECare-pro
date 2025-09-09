@@ -23,4 +23,7 @@ interface AppRepository {
     fun syncData(): Flow<Result<SyncData>>
     suspend fun getNotificationCount(): BadgeCountResponse
     suspend fun getTranslations(spreadsheetId: String, range: String): Flow<Result<List<TranslationItem>>>
+    suspend fun updateLastUpdateSession(): Flow<Result<String>>
+
+
 }
