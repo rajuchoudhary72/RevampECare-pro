@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.gallery.photo.photoAlbum.photoAlbumDTL
 
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.text.Html
 import android.text.Html.fromHtml
 import android.util.Log
@@ -25,6 +26,7 @@ import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.xml.sax.XMLReader
 
 
 @AndroidEntryPoint
@@ -111,7 +113,6 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
                     binding.tvDatePhoto.text = it.eventDate + " | " + it.totalPhotos + " Photos"
 
-
                     if (isTextExpanded) {
                         binding.tvMore.isVisible = false
                     } else {
@@ -163,9 +164,9 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
                                 binding.tvDes.text =
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                        fromHtml(it.data.description, Html.FROM_HTML_MODE_COMPACT)
+                                        fromHtml(it.data.description, null, ParagraphTagHandler())
                                     } else {
-                                        fromHtml(it.data.description)
+                                        fromHtml(it.data.description,null, ParagraphTagHandler())
                                     }
 
                                 binding.tvDatePhoto.text =
@@ -261,4 +262,14 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
         }
     }
 
+
+    class ParagraphTagHandler : Html.TagHandler {
+        override fun handleTag(opening: Boolean, tag: String?, output: Editable?, xmlReader: XMLReader?) {
+            if (tag.equals("p", ignoreCase = true) && !opening) {
+                output?.append("\n\n") // double new line after </p>
+            }
+        }
+    }
+
 }
+

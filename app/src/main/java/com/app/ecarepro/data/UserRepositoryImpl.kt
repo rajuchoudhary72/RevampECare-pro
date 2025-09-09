@@ -175,6 +175,8 @@ import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProfileModel
+import com.app.ecarepro.ui.edit_profile.staff.model.StaffProfileModel
+import com.app.ecarepro.ui.edit_profile.staff.model.payload.StaffUpdateModel
 import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import okhttp3.MultipartBody
@@ -222,7 +224,7 @@ class UserRepositoryImpl @Inject constructor(
     }
     fun getCurrentDateTimeAmPm(): String {
         val currentDate = Date()
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.ENGLISH)
         return dateFormat.format(currentDate)
     }
     override suspend fun login(
@@ -274,6 +276,13 @@ class UserRepositoryImpl @Inject constructor(
                 }
             }
         }
+    }
+    override suspend fun activeSessions(): NetworkUserSessionsResponse {
+        return userService.activeSessions()
+    }
+
+    override suspend fun removeSession(sessionID: String?): CommonResponse {
+        return userService.removeSession(sessionID)
     }
 
     override fun createSession(regenerate: Boolean): Flow<Result<UserSessionResponseDto>> {
@@ -1131,11 +1140,10 @@ class UserRepositoryImpl @Inject constructor(
         return flow {
             try {
                 val response = userService.getUserProfile()
-                if (response.errorCode == 0) {
+                if (response?.errorCode == 0) {
                     emit(Result.success(response.profile.copy(canEditProfile = response.canEditProfile)))
-                }
-                else {
-                    emit(Result.failure(IllegalArgumentException(response.message)))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response?.message)))
                 }
             } catch (error: Throwable) {
                 emit(Result.failure(error))
@@ -1168,8 +1176,16 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getUserProfileEdit(edit)
     }
 
+    override suspend fun getUserProfileEditStaff(edit: Boolean): StaffProfileModel {
+        return userService.getUserProfileEditStaff(edit)
+    }
+
     override suspend fun updateParentProfile(request: UpdateProfileModel): CommonResponse {
         return userService.updateParentProfile(request)
+    }
+
+    override suspend fun sendStaffProfileRequest(request: StaffUpdateModel): CommonResponse {
+        return userService.sendStaffProfileRequest(request)
     }
 
     override suspend fun updateTransportProfile(request: UpdateTransportProfileModel): CommonResponse {
@@ -1458,13 +1474,7 @@ class UserRepositoryImpl @Inject constructor(
         return userService.wingsList()
     }
 
-    override suspend fun activeSessions(): NetworkUserSessionsResponse {
-        return userService.activeSessions()
-    }
 
-    override suspend fun removeSession(sessionID: String?): CommonResponse {
-        return userService.removeSession(sessionID)
-    }
 
     override suspend fun getFeeDefaulters(feeTypeId: Int?, installIds: String?): NetworkFeeDefaulter {
         return userService.getFeeDefaulters(feeTypeId, installIds)

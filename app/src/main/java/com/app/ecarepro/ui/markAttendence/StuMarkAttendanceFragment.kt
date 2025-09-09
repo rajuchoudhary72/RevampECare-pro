@@ -205,7 +205,7 @@ class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
                     .sortedWith(compareBy {
                         it.otherDTL.getOrNull(1)?.value?.toIntOrNull() ?: Int.MAX_VALUE
                     })
-                    .let { if (rollNoFilterAsc) it else it.reversed() }
+                    .let { if (rollNoFilterAsc) it else it.asReversed() }
                     .toMutableList()
                 setupRecyclerView(studentListArrayList)
             } catch (e: Exception) {
@@ -221,7 +221,7 @@ class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
                     .sortedWith(compareBy {
                         it.otherDTL.getOrNull(0)?.value?.toIntOrNull() ?: Int.MAX_VALUE
                     })
-                    .let { if (admissionFilterAsc) it else it.reversed() }
+                    .let { if (admissionFilterAsc) it else it.asReversed() }
                     .toMutableList()
                 setupRecyclerView(studentListArrayList)
             } catch (e: Exception) {

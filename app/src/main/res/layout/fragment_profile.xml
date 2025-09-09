@@ -32,7 +32,6 @@
                 android:layout_marginEnd="@dimen/_15sdp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/ubuntu_medium"
-                android:visibility="gone"
                 android:textAllCaps="true"
                 />
 

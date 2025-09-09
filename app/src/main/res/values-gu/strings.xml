@@ -456,6 +456,7 @@
     <string name="resend_otp"><u>OTP ફરી મોકલો</u></string>
     <string name="uan_number">UAN નંબર</string>
     <string name="nationalnumber">રાષ્ટ્રીય શિક્ષક ઓળખ નંબર:</string>
+    <string name="state_number">રાજ્ય શિક્ષક નંબર:</string>
     <string name="bank_account_number">બેંક ખાતા નંબર</string>
     <string name="uan_account_number">UAN</string>
     <string name="contact_number">સંપર્ક નંબર</string>
@@ -1448,7 +1449,32 @@
     <string name="closed_on">"બંધ થયું: "</string>
     <string name="collection_report">સંગ્રહ અહેવાલ</string>
     <string name="no_house_assign">કોઈ ઘર ફાળવાયેલું નથી</string>
+    <string name="no_internet_connection">ઇન્ટરનેટ કનેક્શન નથી</string>
+    <string name="please_check_your_internet_connection_and_try_again">કૃપા કરીને તમારું ઇન્ટરનેટ કનેક્શન તપાસો અને ફરી પ્રયાસ કરો.</string>
+    <string name="dues_amount">બાકી રકમ</string>
+    <string name="married">વિવાહિત</string>
+    <string name="unmarried">અવિવાહિત</string>
+    <string name="other">અન્ય</string>
+    <string name="spouse">પત્ની/પતિ</string>
+    <string name="role_name">ભૂમિકા નામ</string>
+    <string name="first_name">પ્રથમ નામ</string>
+    <string name="middle_name">મધ્ય નામ</string>
+    <string name="last_name">અટક</string>
+    <string name="designation">હોદ્દો</string>
+    <string name="uan">યુએએન</string>
+    <string name="sate_teacher_id">રાજ્ય શિક્ષક આઈડી</string>
+    <string name="pan">પેન</string>
+    <string name="cbse_id">સિબીએસઇ આઈડી</string>
+    <string name="father_spouse_relation">પિતા/પત્ની સંબંધ</string>
+    <string name="alternate_email_id">વૈકલ્પિક ઇમેઇલ આઈડી</string>
+    <string name="emergency_contact_no">આકસ્મિક સંપર્ક નંબર</string>
 
+    <string name="designation_details">હોદ્દાની વિગતો</string>
+    <string name="profession_details">વ્યવસાયની વિગતો</string>
+    <string name="father_s_designation_details">Father\'s Designation Details:</string>
+    <string name="father_s_profession_details">Father\'s Profession Details:</string>
+    <string name="mother_s_designation_details">Mother\'s Designation Details:</string>
+    <string name="mother_s_profession_details">Mother\'s Profession Details:</string>
 
 
 </resources>

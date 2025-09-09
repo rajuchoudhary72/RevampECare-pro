@@ -135,10 +135,19 @@ class SurveyQuestionFragment : Fragment() {
                             .isSelected
                     ) check = true
                 }
-                if (!check) {
-                    binding.rvSurveyList.smoothScrollToPosition(i)
-                    mainActivity().showMessage(getString(R.string.please_attempt_all_the_mandatory_questions))
-                    return
+                if (list[i].textBoxOnly){
+                    if (list[i].answer.isNullOrEmpty()){
+                        binding.rvSurveyList.smoothScrollToPosition(i)
+                        mainActivity().showMessage(getString(R.string.please_attempt_all_the_mandatory_questions))
+                        return
+                    }
+
+                }else{
+                    if (!check) {
+                        binding.rvSurveyList.smoothScrollToPosition(i)
+                        mainActivity().showMessage(getString(R.string.please_attempt_all_the_mandatory_questions))
+                        return
+                    }
                 }
             }
         }

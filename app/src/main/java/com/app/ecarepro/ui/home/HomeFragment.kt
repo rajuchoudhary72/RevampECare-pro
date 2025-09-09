@@ -351,7 +351,7 @@ class HomeFragment : Fragment() {
                     lifecycleScope.launch(Dispatchers.IO) {
                         val cityName =
                             if (location != null) {
-                                val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                                val geocoder = Geocoder(requireContext(), Locale.ENGLISH)
                                 val addresses =
                                     geocoder.getFromLocation(
                                         location.latitude,
@@ -361,13 +361,13 @@ class HomeFragment : Fragment() {
                                 if (!addresses.isNullOrEmpty()) {
                                     addresses[0].locality
                                 } else {
-                                    Locale.getDefault().displayName
+                                    Locale.ENGLISH.displayName
                                 }
                             } else {
-                                Locale.getDefault().displayName
+                                Locale.ENGLISH.displayName
                             }
 
-                        mViewModel.setCityName(cityName ?: Locale.getDefault().displayName)
+                        mViewModel.setCityName(cityName ?: Locale.ENGLISH.displayName)
                     }
 
                 }
@@ -638,7 +638,7 @@ class HomeFragment : Fragment() {
         super.onResume()
         systemViewModel.refreshAppLayout()
         systemViewModel.fetchSettings()
-        // startLocationFetch()
+         startLocationFetch()
 
     }
 
@@ -649,7 +649,7 @@ class HomeFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 120) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //  startLocationFetch()
+                 startLocationFetch()
             } else {
                 mainActivity().showMessage(getString(R.string.gps_permission_denied))
             }

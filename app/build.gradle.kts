@@ -39,13 +39,13 @@ android {
         }
     }
     namespace = "com.app.ecarepro"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
-        targetSdk = 34
-        versionCode = 363
-        versionName = "3.5.2"
+        targetSdk = 35
+        versionCode = 373
+        versionName = "3.6.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {

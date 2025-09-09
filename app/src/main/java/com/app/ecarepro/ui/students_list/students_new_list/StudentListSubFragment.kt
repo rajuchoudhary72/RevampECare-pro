@@ -124,9 +124,11 @@ class StudentListSubFragment() : Fragment(),
                                    rollNoFilterAsc = !rollNoFilterAsc
                                    studentList = studentList
                                        .sortedWith(compareBy { it.rollNumber?.toIntOrNull() ?: Int.MAX_VALUE })
-                                       .let { if (rollNoFilterAsc) it else it.reversed() }
+                                       .let { if (rollNoFilterAsc) it else it.asReversed() }
+
                                        .toMutableList()
                                    setupRecycleViewStudentList(studentList)
+
                                } catch (e: Exception) {
                                    e.printStackTrace()
                                }
@@ -138,7 +140,7 @@ class StudentListSubFragment() : Fragment(),
                                    admissionFilterAsc = !admissionFilterAsc
                                    studentList = studentList
                                        .sortedWith(compareBy { it.admissionNumber?.toIntOrNull() ?: Int.MAX_VALUE })
-                                       .let { if (admissionFilterAsc) it else it.reversed() }
+                                       .let { if (admissionFilterAsc) it else it.asReversed() }
                                        .toMutableList()
                                    setupRecycleViewStudentList(studentList)
                                } catch (e: Exception) {

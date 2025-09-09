@@ -1057,5 +1057,9 @@
         android:id="@+id/languageSelect"
         android:name="com.app.ecarepro.ui.language.LanguageSelect"
         android:label="LanguageSelect" />
+    <fragment
+        android:id="@+id/staffEditProfileFragment"
+        android:name="com.app.ecarepro.ui.edit_profile.staff.StaffEditProfileFragment"
+        android:label="StaffEditProfileFragment" />
 
 </navigation>

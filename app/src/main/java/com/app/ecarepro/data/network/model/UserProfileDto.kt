@@ -41,6 +41,8 @@ data class Profile(
     val uaN_Number: String?,
     @SerializedName("nationalCode")
     val nationalCode : String?,
+    @SerializedName("stateCode")
+    val stateCode : String?,
     @SerializedName("dob")
     val dob: String?,
     @SerializedName("doj")
@@ -268,6 +270,15 @@ data class StudentProfile(
     val dob: String?,
     @SerializedName("fatherAadhaarNumber")
     val fatherAadhaarNumber: String?,
+    @SerializedName("fatherDesignationDetail")
+    val fatherDesignationDetail: String?,
+    @SerializedName("fatherProfessionDetail")
+    val fatherProfessionDetail: String?,
+
+    @SerializedName("motherProfessionDetail")
+    val motherProfessionDetail: String?,
+    @SerializedName("motherDesignationDetail")
+    val motherDesignationDetail: String?,
     @SerializedName("fatherPAN")
     val fatherPAN: String?,
     @SerializedName("fatherAnnualIncome")

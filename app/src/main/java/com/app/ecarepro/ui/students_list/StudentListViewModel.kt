@@ -78,7 +78,7 @@ class StudentListViewModel @Inject constructor(
 
     fun validateSchoolCode( schoolCode:String,  onResponse: (NetworkSchool?) -> Unit) {
         viewModelScope.launch {
-            schoolRepository.validateSchoolCode(schoolCode.uppercase(Locale.getDefault())).collectLatest {
+            schoolRepository.validateSchoolCode(schoolCode.uppercase(Locale.ENGLISH)).collectLatest {
                 onResponse(it)
             }
         }

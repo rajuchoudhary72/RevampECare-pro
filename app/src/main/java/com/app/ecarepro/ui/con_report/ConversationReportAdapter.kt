@@ -175,11 +175,11 @@ class ConversationReportAdapter(
 
 
 
-                val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+                val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
                 val dt: String = conversation.sentOn
                 try {
                     val date = sdf.parse(conversation.sentOn)
-                    val destDate = SimpleDateFormat("dd MMM",Locale.getDefault())
+                    val destDate = SimpleDateFormat("dd MMM",Locale.ENGLISH)
                     tvTimeAgo.text = Constant.dateToShowConn(dt)
                 } catch (e: ParseException) {
                     e.printStackTrace()

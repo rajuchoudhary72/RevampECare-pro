@@ -91,8 +91,8 @@ class CollectionReportFragment : Fragment() {
     }
 
     private fun updateDateFilterText(setAsFilter: Boolean = false) {
-        binding.llDateRange.isVisible=true
-        val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+        binding.llDateRange.isVisible = true
+        val dateFormat = SimpleDateFormat("MMM dd, yyyy",Locale.ENGLISH)
         dateFormat.format(Date(dateFrom.timeInMillis))
         val from = dateFormat.format(Date(dateFrom.timeInMillis))
         val to = dateFormat.format(Date(dateTo.timeInMillis))
@@ -102,7 +102,6 @@ class CollectionReportFragment : Fragment() {
             tvTo.text = to
         }
         getFeeCollection()
-
 
     }
 
@@ -133,9 +132,9 @@ class CollectionReportFragment : Fragment() {
                             binding.recyclerCollectionReport.isVisible = true
                             binding.tvNoData.isVisible = false
                             list.addAll(it.data.collectionReportList)
-                            val totalCost  = list.sumOf {item-> item.amount.toDouble()}
+                            val totalCost = list.sumOf { item -> item.amount.toDouble() }
                             binding.tvTotal.text = getString(R.string.rs, totalCost.toString())
-                            binding.bottomAmount.isVisible=true
+                            binding.bottomAmount.isVisible = true
                             noticeAdapter.notifyDataSetChanged()
                         }
 
@@ -147,15 +146,18 @@ class CollectionReportFragment : Fragment() {
         }
         collectionFeeReportViewModel.feeCollectionReport(
             binding.tvFrom.text.toString().changeDateFormat(),
-            binding.tvTo.text.toString().changeDateFormat()
+           binding.tvTo.text.toString().changeDateFormat()
         )
     }
 
     private fun String.changeDateFormat(): String {
-        val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("dd MMM yyyy",Locale.getDefault())
+        val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
+        val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
         val inputDateStr = this
         val date = inputFormat.parse(inputDateStr)
         return date?.let { outputFormat.format(it) } ?: this
     }
+
+
 }
+

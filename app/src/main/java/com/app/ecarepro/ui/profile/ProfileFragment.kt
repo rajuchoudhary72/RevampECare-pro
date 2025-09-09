@@ -171,7 +171,9 @@ class ProfileFragment : Fragment() {
                 viewLifecycleOwner.lifecycle,
                 Lifecycle.State.CREATED
             ).collectLatest { uiState ->
-                handleUiState(uiState)
+                if (uiState != null) {
+                    handleUiState(uiState)
+                }
             }
         }
 
@@ -309,12 +311,12 @@ class ProfileFragment : Fragment() {
                         )
                     }
                 }
-               /* profileSessionList {
+                profileSessionList {
                     id(139)
                     clickListener { _ ->
                         findNavController().navigate(R.id.userSessionListFragment)
                     }
-                }*/
+                }
                 profileLogout {
                     id(131)
                     version("v ${BuildConfig.VERSION_NAME}")
@@ -513,6 +515,12 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.nationalnumber))
             subTitle(profile.nationalCode)
         }
+        profileItem {
+            id(R.string.state_number)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.state_number))
+            subTitle(profile.stateCode)
+        }
         /*  profileItem {
               id(R.string.bank_account_number)
               iconRes(R.drawable.ic_bank_account)
@@ -702,6 +710,30 @@ class ProfileFragment : Fragment() {
             subTitle(profile.studentProfile?.fatherAadhaarNumber)
         }
         profileItem {
+            id(R.string.father_s_designation_details)
+            iconRes(R.drawable.ic_baseline_menu_book_24)
+            title(getString(R.string.father_s_designation_details))
+            subTitle(profile.studentProfile?.fatherDesignationDetail)
+        }
+        profileItem {
+            id(R.string.father_s_profession_details)
+            iconRes(R.drawable.ic_baseline_menu_book_24)
+            title(getString(R.string.father_s_profession_details))
+            subTitle(profile.studentProfile?.fatherProfessionDetail)
+        }
+        profileItem {
+            id(R.string.mother_s_designation_details)
+            iconRes(R.drawable.ic_baseline_menu_book_24)
+            title(getString(R.string.mother_s_designation_details))
+            subTitle(profile.studentProfile?.motherDesignationDetail)
+        }
+        profileItem {
+            id(R.string.mother_s_profession_details)
+            iconRes(R.drawable.ic_baseline_menu_book_24)
+            title(getString(R.string.mother_s_profession_details))
+            subTitle(profile.studentProfile?.motherProfessionDetail)
+        }
+        profileItem {
             id(R.string.father_pan)
             iconRes(R.drawable.pan_card_icon)
             title(getString(R.string.father_pan))
@@ -744,7 +776,11 @@ class ProfileFragment : Fragment() {
         }
 
         _binding?.tvEditProfile?.setOnClickListener {
-            findNavController().navigate(R.id.editProfileFragment)
+            if (UserTypeApp == 3) {
+                findNavController().navigate(R.id.staffEditProfileFragment)
+            }else{
+                findNavController().navigate(R.id.editProfileFragment)
+            }
         }
     }
 

@@ -13,13 +13,13 @@ class InvalidSessionInterceptor @Inject constructor() : Interceptor {
         val request = chain.request()
         val response = chain.proceed(request)
 
-     /*   if (response.code == 403) {
-            Log.e("InvalidSessionInterceptor", "API URL ("+response.request.url.toString()+") \n AUTH TOKEN ("+response.request.header(AUTH_TOKEN)+") \n SESSION ID ("+response.request.header(
-                SESSION_ID)+") \n CODE ("+response.code+")")
+        if (response.code == 403) {
+            Log.e("InvalidSessionInterceptor", "API URL ("+response.request.url.toString()+") \n AUTH TOKEN ("+response.request.header(AUTH_TOKEN)+") \n CODE ("+response.code+")")
             AppSessionManager.logoutAndRestartApp()
 
-        }*/
+        }
 
         return response
     }
 }
+

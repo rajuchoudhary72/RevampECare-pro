@@ -21,6 +21,7 @@ data class Details(
     val fatherHusbandName: String,
     val gender: String,
     val nationalCode: String,
+    val stateCode: String,
     val isSpouseName: Boolean,
     val lName: String,
     val mName: String,
