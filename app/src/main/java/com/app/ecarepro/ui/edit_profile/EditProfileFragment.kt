@@ -398,7 +398,7 @@ class EditProfileFragment : Fragment() {
                 }
 
                 if (transDetails?.vehicleUsingFrom != null) {
-                    dateVechileFrom = transDetails?.vehicleUsingFrom
+                    dateVechileFrom = transDetails?.vehicleUsingFrom.toString()
                     binding.btnSelectDate.setText(dateVechileFrom) // ✅ Correct way to set text
                 } else {
                     dateVechileFrom = getFormatedDate()

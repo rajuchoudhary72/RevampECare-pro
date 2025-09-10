@@ -31,7 +31,7 @@ class HelpViewModel @Inject constructor(
     private fun getSchoolDetails() {
         viewModelScope.launch {
             schoolRepository
-                .validateSchoolCode(schoolCode.toUpperCase())
+                .validateSchoolCode(schoolCode.uppercase())
                 .collectLatest {
                 }
         }

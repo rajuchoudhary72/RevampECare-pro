@@ -44,7 +44,7 @@ class InstitutionCodeViewModel @Inject constructor(
 
     fun validateSchoolCode(schoolCode: String, onResponse: (NetworkSchool?) -> Unit) {
         viewModelScope.launch {
-            schoolRepository.validateSchoolCode(schoolCode.toUpperCase()).collectLatest {
+            schoolRepository.validateSchoolCode(schoolCode.uppercase()).collectLatest {
                 sentSchoolCodeValidateEvent(schoolCode)
                 onResponse(it)
             }

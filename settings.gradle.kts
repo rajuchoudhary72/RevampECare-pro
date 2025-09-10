@@ -1,6 +1,7 @@
 import java.net.URI
 
 pluginManagement {
+    includeBuild("build-logic") // Add this line
     repositories {
         google()
         mavenCentral()
@@ -18,4 +19,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "ECareProNewUI"
 include(":app")
- 
+
+include(":core:designsystem")
+

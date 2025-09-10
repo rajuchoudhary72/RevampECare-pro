@@ -638,7 +638,7 @@ class HomeFragment : Fragment() {
         super.onResume()
         systemViewModel.refreshAppLayout()
         systemViewModel.fetchSettings()
-         startLocationFetch()
+        // startLocationFetch()
 
     }
 

@@ -355,7 +355,7 @@ class SelectRecipientPagerFragment : Fragment() {
                         .contacts
                         .filter { contact ->
                             contact.name.contains(
-                                searchQuery?.toLowerCase() ?: "",
+                                searchQuery?.lowercase() ?: "",
                                 true
                             )
                         }
@@ -393,7 +393,7 @@ class SelectRecipientPagerFragment : Fragment() {
             contacts
                 .filter { contact ->
                     contact.className?.contains(
-                        searchQuery?.toLowerCase() ?: "",
+                        searchQuery?.lowercase() ?: "",
                         true
                     ) ?: true
                 }
@@ -438,10 +438,10 @@ class SelectRecipientPagerFragment : Fragment() {
                 ?.contacts
                 ?.filter { contact ->
                     contact.name.contains(
-                        searchQuery?.toLowerCase() ?: "",
+                        searchQuery?.lowercase() ?: "",
                         true
                     ) || contact.childName?.contains(
-                        searchQuery?.toLowerCase() ?: "",
+                        searchQuery?.lowercase() ?: "",
                         true
                     )?:false
                 }
