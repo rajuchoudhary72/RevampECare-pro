@@ -1928,7 +1928,8 @@ class MainActivity : AppCompatActivity() {
 
     fun showLoader(show: Boolean) {
         loader?.apply {
-            dismiss()
+            if (this.isShowing && !isFinishing && !isDestroyed)
+                dismiss()
             loader = null
         }
         if (show)

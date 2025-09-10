@@ -63,11 +63,7 @@
             android:animateLayoutChanges="true"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@id/send_message_layout"
-                app:layout_constraintTop_toTopOf="parent" />
+
 
             <com.airbnb.epoxy.Carousel
                 android:id="@+id/recipientsRecyclerView"
@@ -79,7 +75,7 @@
                 android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintTop_toTopOf="parent"
-                app:spanCount="3"
+                app:spanCount="2"
                 tools:layout_editor_absoluteX="16dp" />
 
             <TextView
@@ -275,14 +271,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:constraint_referenced_ids="recipientsRecyclerView,txtSubject, subject"
-                tools:visibility="gone" />
+                tools:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/send_message_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintBottom_toTopOf="@+id/attachments">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -344,19 +340,19 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.airbnb.epoxy.Carousel
-                    android:id="@+id/attachments"
-                    isVisible="@{viewModel.composeMessageType == ComposeMessageType.ONLY_APP_MESSAGE}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#0D5FA150"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+
 
             </LinearLayout>
-
+            <com.airbnb.epoxy.Carousel
+                android:id="@+id/attachments"
+                isVisible="@{viewModel.composeMessageType == ComposeMessageType.ONLY_APP_MESSAGE}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#0D5FA150"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
