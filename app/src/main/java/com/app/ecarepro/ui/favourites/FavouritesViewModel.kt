@@ -33,7 +33,7 @@ class FavouritesViewModel @Inject constructor(
                 .collectLatest { result ->
                     if (result.isSuccess) {
                         uiState.value = FavouritesUiState.Success(
-                            result.getOrNull()?.sortedBy { it.isSelected == false } ?: emptyList())
+                            result.getOrNull()?.map { if(it.isSelected == null ) it.copy(isSelected = false) else it }?.sortedBy { it.isSelected == false } ?: emptyList())
                     } else {
                         uiState.value = FavouritesUiState.Error(result.exceptionOrNull()!!)
                     }
