@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.app.ecarepro.designsystem"
+    namespace = "com.app.ecarepro.core.designsystem"
     testOptions.unitTests.isIncludeAndroidResources = true
 }
 dependencies {
@@ -16,4 +16,10 @@ dependencies {
     api(libs.androidx.compose.material3.navigationSuite)
     api(libs.androidx.compose.runtime)
     api(libs.androidx.compose.ui.util)
+
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.gif)    // For GIF support
+
+
 }

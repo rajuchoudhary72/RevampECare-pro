@@ -54,5 +54,10 @@ gradlePlugin {
             id = libs.plugins.ecarepro.android.library.compose.get().pluginId
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
+
+        register("hilt") {
+            id = libs.plugins.ecarepro.hilt.get().pluginId
+            implementationClass = "HiltConventionPlugin"
+        }
     }
 }
