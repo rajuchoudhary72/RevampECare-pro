@@ -5,7 +5,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.app.ecarepro.designsystem.R
+import com.app.ecarepro.core.designsystem.R
 import com.app.ecarepro.designsystem.core.model.AppTypography
 
 val InterFontFamily = FontFamily(

@@ -2,6 +2,8 @@ package com.app.ecarepro.designsystem.core.theme
 
 import androidx.compose.ui.graphics.Color
 
+val White = Color(0xFFFFFFFF)
+
 // Light Color Theme
 val EmeraldGreen = Color(0xFF4CAF50)
 val SoftGreen = Color(0xFFA5D6A7)
