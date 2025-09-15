@@ -66,6 +66,6 @@ interface AppService {
     
     @GET("User/UpdateLastActiveSession")
     suspend fun updateLastSession(
-        @Path("SessionID") sessionID: String
+        @Query("SessionID") sessionID: String
     ): CommonResponse
 }

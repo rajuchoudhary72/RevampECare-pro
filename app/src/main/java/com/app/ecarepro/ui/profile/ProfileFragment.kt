@@ -311,12 +311,12 @@ class ProfileFragment : Fragment() {
                         )
                     }
                 }
-                profileSessionList {
+               /* profileSessionList {
                     id(139)
                     clickListener { _ ->
                         findNavController().navigate(R.id.userSessionListFragment)
                     }
-                }
+                }*/
                 profileLogout {
                     id(131)
                     version("v ${BuildConfig.VERSION_NAME}")

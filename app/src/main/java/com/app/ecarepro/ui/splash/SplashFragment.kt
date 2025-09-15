@@ -54,16 +54,16 @@ class SplashFragment : Fragment() {
                 }
             }
         }
-
-         viewLifecycleOwner.lifecycleScope.launch {
+        /*we comment this code due to we recent  stop user session  */
+        /* viewLifecycleOwner.lifecycleScope.launch {
              try {
                  if (splashViewModel.isUserAuthenticated()) {
                      if (splashViewModel.isUserSessionAvailable()) {
                          moveToHomeScreen()
                      } else {
                          mainActivity().showLoader(true)
-                        /* if  existing  user logged  and  first time run App after implementation  of user session then
-                        need to pass session ID in header  so  call create session api  */
+                         *//*if  existing  user logged  and  first time run App after implementation  of user session then
+                        need to pass session ID in header  so  call create session api  *//*
                         systemViewModel.createUserSession { success, message ->
                             viewLifecycleOwner.lifecycleScope.launch {
                                 mainActivity().showLoader(false)
@@ -84,10 +84,10 @@ class SplashFragment : Fragment() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }
+        }*/
 
 
-       /* viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
                 if (splashViewModel.isUserAuthenticated()) {
                     moveToHomeScreen()
@@ -98,7 +98,7 @@ class SplashFragment : Fragment() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }*/
+        }
     }
 
     private suspend fun moveToHomeScreen() {
