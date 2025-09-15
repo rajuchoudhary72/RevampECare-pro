@@ -54,7 +54,9 @@ object NetworkModule {
         authInterceptor: AuthInterceptor,
         connectivityInterceptor: ConnectivityInterceptor,
         customResponseInterceptor: CustomResponseInterceptor,
-        performanceMonitorInterceptor: PerformanceMonitorInterceptor
+        performanceMonitorInterceptor: PerformanceMonitorInterceptor,
+        invalidSessionInterceptor: InvalidSessionInterceptor,
+        sessionAuthenticator: SessionAuthenticator
 
 
     ): OkHttpClient {
@@ -65,6 +67,8 @@ object NetworkModule {
             .addInterceptor(connectivityInterceptor)
             .addInterceptor(customResponseInterceptor)
             .addInterceptor(performanceMonitorInterceptor)
+            .addInterceptor(invalidSessionInterceptor)
+            .authenticator(sessionAuthenticator)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)

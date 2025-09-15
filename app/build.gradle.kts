@@ -44,8 +44,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 35
-        versionCode = 376
-        versionName = "3.6.5"
+        versionCode = 373
+        versionName = "3.6.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -100,7 +100,7 @@ android {
     flavorDimensions += listOf("apps")
 
     productFlavors {
-        create("Franciscan e-Care") {
+        create("Franciscane-Care") {
             dimension = "apps"
             resValue("string", "app_name", "Franciscan e-Care")
             signingConfig = signingConfigs.getByName("Franciscan e-Care")
@@ -113,7 +113,7 @@ android {
             versionName = "2.0.15"
             signingConfig = signingConfigs.getByName("MYSFHS")
         }
-        create("MYSFPS Play") {
+        create("MYSFPSPlay") {
             dimension = "apps"
             resValue("string", "app_name", "MYSFPS")
             applicationId = "com.franciscan.strawberry_play"

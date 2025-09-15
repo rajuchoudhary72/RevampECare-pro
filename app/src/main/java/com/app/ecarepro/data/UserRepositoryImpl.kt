@@ -277,6 +277,13 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
     }
+    override suspend fun activeSessions(): NetworkUserSessionsResponse {
+        return userService.activeSessions()
+    }
+
+    override suspend fun removeSession(sessionID: String?): CommonResponse {
+        return userService.removeSession(sessionID)
+    }
 
     override fun createSession(regenerate: Boolean): Flow<Result<UserSessionResponseDto>> {
         return flow {
@@ -1467,13 +1474,7 @@ class UserRepositoryImpl @Inject constructor(
         return userService.wingsList()
     }
 
-    override suspend fun activeSessions(): NetworkUserSessionsResponse {
-        return userService.activeSessions()
-    }
 
-    override suspend fun removeSession(sessionID: String?): CommonResponse {
-        return userService.removeSession(sessionID)
-    }
 
     override suspend fun getFeeDefaulters(feeTypeId: Int?, installIds: String?): NetworkFeeDefaulter {
         return userService.getFeeDefaulters(feeTypeId, installIds)

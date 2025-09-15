@@ -15,7 +15,6 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
@@ -63,8 +62,6 @@
             android:animateLayoutChanges="true"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-
-
             <com.airbnb.epoxy.Carousel
                 android:id="@+id/recipientsRecyclerView"
                 android:layout_width="match_parent"
@@ -75,7 +72,7 @@
                 android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintTop_toTopOf="parent"
-                app:spanCount="2"
+                app:spanCount="1"
                 tools:layout_editor_absoluteX="16dp" />
 
             <TextView
@@ -140,7 +137,6 @@
                     android:minHeight="45dp" />
 
             </RelativeLayout>
-
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardAttachmentOptions"
@@ -340,9 +336,8 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
             </LinearLayout>
+
             <com.airbnb.epoxy.Carousel
                 android:id="@+id/attachments"
                 isVisible="@{viewModel.composeMessageType == ComposeMessageType.ONLY_APP_MESSAGE}"
@@ -353,6 +348,7 @@
                 android:visibility="gone"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
