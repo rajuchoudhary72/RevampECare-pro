@@ -40,15 +40,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <RelativeLayout
-             android:id="@+id/rl_user_details"
+            android:id="@+id/rl_user_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginHorizontal="@dimen/_15sdp"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/img_user_avatar"
@@ -95,15 +94,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
-                        android:fontFamily="@font/calibri_bold"
-                        android:textColor="@color/brand_color"
-                        android:textSize="14sp"
-                        android:padding="@dimen/_5sdp"
+                        android:clickable="true"
+                        android:contentDescription=""
                         android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:clickable="true"
+                        android:fontFamily="@font/calibri_bold"
                         android:importantForAccessibility="yes"
-                        android:contentDescription=""
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/brand_color"
+                        android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/rl_user_details"
@@ -117,8 +116,19 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:padding="@dimen/_4sdp"
-                    android:visibility="gone"
-                    android:src="@drawable/download" />
+                    android:src="@drawable/download"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/testingMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_4sdp"
+                    android:fontFamily="@font/calibri_bold"
+                    android:textColor="@color/brand_color"
+                    android:text="Testing Menu"
+                    android:src="@drawable/download"
+                    />
 
 
             </LinearLayout>
@@ -131,28 +141,28 @@
             android:id="@+id/background_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-             app:cardElevation="0dp"
             android:padding="0dp"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rl_user_details">
 
             <com.google.android.material.card.MaterialCardView
-                 android:layout_width="match_parent"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
-                app:cardElevation="0dp"
                 android:padding="0dp"
+                app:cardBackgroundColor="@color/background_dashboard"
+                app:cardElevation="0dp"
+                app:cardPreventCornerOverlap="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rl_user_details"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.TopRoundedCorner2"
-                app:strokeWidth="@dimen/_1sdp"
                 app:strokeColor="@color/brand_color"
-                app:cardBackgroundColor="@color/background_dashboard"
-                app:cardPreventCornerOverlap="false"/>
+                app:strokeWidth="@dimen/_1sdp" />
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/swipe_refresh"
@@ -174,10 +184,6 @@
 
 
         </FrameLayout>
-
-
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

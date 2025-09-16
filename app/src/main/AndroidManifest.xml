@@ -118,8 +118,14 @@
             android:name="com.lassi.presentation.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"
             tools:replace="android:theme" />
+
         <activity
             android:name="com.github.dhaval2404.imagepicker.ImagePickerActivity"
+            android:theme="@style/Base.Theme.AppCompat"
+            tools:replace="android:theme"/>
+
+        <activity
+            android:name=".testing.TestActivity"
             android:theme="@style/Base.Theme.AppCompat"
             tools:replace="android:theme"/>
 

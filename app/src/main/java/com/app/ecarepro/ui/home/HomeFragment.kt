@@ -22,6 +22,7 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -31,6 +32,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.Carousel
+import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
 import com.app.ecarepro.addMoreFavourites
 import com.app.ecarepro.cardOption
@@ -43,6 +45,7 @@ import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.databinding.LayoutUndertakingBinding
 import com.app.ecarepro.emptyFav
 import com.app.ecarepro.labelCenter
+import com.app.ecarepro.testing.TestActivity
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.MainActivityUiState
 import com.app.ecarepro.ui.SystemViewModel
@@ -70,6 +73,7 @@ import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import kotlinx.coroutines.Dispatchers
 import org.json.JSONArray
 import java.util.Locale
+import kotlin.jvm.java
 
 
 @AndroidEntryPoint
@@ -86,8 +90,14 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
+        _binding?.testingMenu?.apply {
+            isVisible = BuildConfig.DEBUG
+            setOnClickListener {
+                startActivity(Intent(requireContext(), TestActivity::class.java))
+            }
+        }
 
+        return binding.root
     }
 
     private fun announce(message: String) {

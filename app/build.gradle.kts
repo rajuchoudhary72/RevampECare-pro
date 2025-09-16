@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.kotlinParcelize)
     id("com.google.devtools.ksp")
     id("com.google.firebase.firebase-perf")
-
+    alias(libs.plugins.compose)
 }
 
 kapt {
@@ -96,6 +96,7 @@ android {
         viewBinding = true
         dataBinding = true
         buildConfig = true
+        compose = true
     }
     flavorDimensions += listOf("apps")
 
@@ -132,6 +133,10 @@ android {
 }
 
 dependencies {
+
+    implementation(projects.feature.onboarding)
+
+
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -233,5 +238,13 @@ dependencies {
 
     // For Kotlin users also import the Kotlin extensions library for Play In-App Update:
     implementation("com.google.android.play:app-update-ktx:2.1.0")
+
+
+    // Re-vamp
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.androidx.compose.material3.adaptive.layout)
+    implementation(libs.androidx.compose.material3.adaptive.navigation)
 
 }
