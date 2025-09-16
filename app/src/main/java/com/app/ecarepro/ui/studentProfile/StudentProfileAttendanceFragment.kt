@@ -265,11 +265,11 @@ class StudentProfileAttendanceFragment(
                     append(setCalculatedPercentageToInt(attendanceDTL.wh, attendanceDTL.working))
                     append("%)")
                 }
-//                tvpresentWhDay.text = buildString {
-//                    append("(")
-//                    append(setCalculatedPercentageToInt(attendanceDTL.totalPresent, attendanceDTL.working))
-//                    append("%)")
-//                }
+                tvpresentWhDay.text = buildString {
+                    append("(")
+                    append(setCalculatedPercentageToInt(attendanceDTL.totalPresent, attendanceDTL.working))
+                    append("%)")
+                }
 
                 binding.llLate.isVisible = attendanceDTL.isLateEnabled
 
