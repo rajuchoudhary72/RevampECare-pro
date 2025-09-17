@@ -1,11 +1,19 @@
 package com.app.ecarepro.ui.signin
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -28,12 +36,17 @@ import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.otpverification.OtpVerificationFragment
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
+import java.util.Locale
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 
@@ -67,7 +80,98 @@ class SignInFragment : Fragment() {
         return binding.root
 
     }
+    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireContext())
+    }
 
+    private fun isGPSEnabled(): Boolean {
+        val locationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
+    private fun startLocationFetch() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(), arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ), 120
+            )
+            return
+        }
+        if (isGPSEnabled().not()) {
+            MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.turn_on_gps))
+                .setCancelable(false)
+                .setMessage(getString(R.string.gps_is_disabled_in_your_device_would_you_like_to_enable_it))
+                .setPositiveButton(getString(R.string.no)) { d, _ ->
+                    d.dismiss()
+                    findNavController().popBackStack()
+                }.setPositiveButton(getString(R.string.goto_settings_to_enable_gps)) { d, _ ->
+                    d.dismiss()
+                    val callGPSSettingIntent = Intent(
+                        Settings.ACTION_LOCATION_SOURCE_SETTINGS
+                    )
+                    startActivity(callGPSSettingIntent)
+                }.show()
+        } else {
+            fusedLocationClient
+                .lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    mViewModel.currentLocation =
+                        Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
+
+
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val cityName =
+                            if (location != null) {
+                                val geocoder = Geocoder(requireContext(), Locale.ENGLISH)
+                                val addresses =
+                                    geocoder.getFromLocation(
+                                        location.latitude,
+                                        location.longitude,
+                                        1
+                                    )
+                                if (!addresses.isNullOrEmpty()) {
+                                    addresses[0].locality
+                                } else {
+                                    "India"
+                                }
+                            } else {
+                                "India"
+                            }
+                        Log.e("MSG", "startLocationFetch: " + cityName)
+                        Log.e("MSG",
+                            ("startLocationFetch2: " + cityName) ?: Locale.ENGLISH.displayName
+                        )
+                        Log.d("startLocationFetch", "startLocationFetch1: $cityName")
+                        mViewModel.setCityName(cityName ?: "India")
+
+                    }
+
+                }
+                .addOnFailureListener {
+                    Log.e("MSG", "startLocationFetch: " + it.message)
+                }
+        }
+    }
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 120) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startLocationFetch()
+            } else {
+                mainActivity().showMessage(getString(R.string.gps_permission_denied))
+            }
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -191,6 +295,7 @@ class SignInFragment : Fragment() {
                 findNavController().popBackStack()
             }
         }
+        startLocationFetch()
 
     }
 

@@ -38,14 +38,18 @@ class SignInViewModel @Inject constructor(
             schoolDatabase.getSchoolFlow(it)
         }
     }.asLiveData()
-
+    var currentLocation: Pair<Double, Double>? = null
     init {
         viewModelScope.launch {
             isUserAuthenticated.value = userDataStore.isUserAuthenticated()
         }
     }
 
-
+    fun setCityName(city:String){
+        viewModelScope.launch {
+            userDataStore.setCityName(city)
+        }
+    }
     fun verifyUser(username: String, onResponse: (NetworkUserDetailsDto) -> Unit) {
         viewModelScope.launch {
             onResponse(
