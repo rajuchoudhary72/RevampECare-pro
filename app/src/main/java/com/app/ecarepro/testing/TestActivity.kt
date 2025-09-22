@@ -65,7 +65,6 @@ fun TestHostScreen() {
                 }
             }
         } else {
-            // Show selected module screen
             Box(
                 modifier = Modifier
                     .fillMaxSize()
