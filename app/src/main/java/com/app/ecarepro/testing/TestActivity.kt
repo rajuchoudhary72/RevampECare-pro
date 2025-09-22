@@ -11,11 +11,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.app.ecarepro.designsystem.core.theme.EcareProTheme
+import com.app.ecarepro.onboarding.feature.OnboardingScreen
 
 // Registry of available module screens
 object ModuleRegistry {
     val screens: Map<String, @Composable () -> Unit> = mapOf(
-        "OnBoarding" to {  },
+        "OnBoarding" to {
+            OnboardingScreen {  }
+         },
     )
 }
 
@@ -23,7 +27,7 @@ class TestActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
+            EcareProTheme {
                 TestHostScreen()
             }
         }
@@ -35,15 +39,8 @@ class TestActivity : ComponentActivity() {
 fun TestHostScreen() {
     var selected by remember { mutableStateOf<String?>(null) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(selected ?: "Select a Module") }
-            )
-        }
-    ) { padding ->
+    Scaffold() { padding ->
         if (selected == null) {
-            // Show list of available modules
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -73,7 +70,6 @@ fun TestHostScreen() {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(8.dp)
             ) {
                 ModuleRegistry.screens[selected]?.invoke()
             }

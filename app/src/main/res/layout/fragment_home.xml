@@ -39,6 +39,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/testingMenu"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/brand_color"
+            android:fontFamily="@font/calibri_bold"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:src="@drawable/download"
+            android:text="Testing Menu"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <RelativeLayout
             android:id="@+id/rl_user_details"
             android:layout_width="match_parent"
@@ -47,7 +61,7 @@
             android:layout_marginTop="@dimen/_5sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/testingMenu">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/img_user_avatar"
@@ -118,17 +132,6 @@
                     android:padding="@dimen/_4sdp"
                     android:src="@drawable/download"
                     android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/testingMenu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_4sdp"
-                    android:fontFamily="@font/calibri_bold"
-                    android:textColor="@color/brand_color"
-                    android:text="Testing Menu"
-                    android:src="@drawable/download"
-                    />
 
 
             </LinearLayout>

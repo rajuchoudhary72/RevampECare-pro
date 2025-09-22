@@ -1,10 +1,5 @@
 package com.app.ecarepro.onboarding.feature
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -28,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
@@ -79,13 +73,7 @@ fun OnboardingScreen(
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-
-
-                AnimatedVisibility(
-                    visible = pagerState.currentPage != 0,
-                    enter = fadeIn() + slideInHorizontally(),
-                    exit = fadeOut() + slideOutHorizontally()
-                ) {
+                if (pagerState.currentPage != 0) {
                     IconButton(
                         onClick = {
                             scope.launch {
@@ -103,10 +91,7 @@ fun OnboardingScreen(
                             tint = White
                         )
                     }
-                }
 
-
-                if (pagerState.currentPage != 0) {
                     Spacer(Modifier.weight(1f))
                 }
 
@@ -140,7 +125,10 @@ fun OnboardingScreen(
                 state = pagerState,
                 modifier = Modifier.weight(1f)
             ) { pageIndex ->
-                OnboardingPagerItem(page = pages[pageIndex])
+                OnboardingPagerItem(
+                    page = pages[pageIndex],
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
 
 
@@ -164,7 +152,7 @@ fun OnboardingScreen(
 }
 
 
-@Preview()
+@Preview
 @Composable
 fun OnboardingScreenPreview() {
     EcareProTheme {
