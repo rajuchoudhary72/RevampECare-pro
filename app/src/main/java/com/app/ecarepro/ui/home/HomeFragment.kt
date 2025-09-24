@@ -69,6 +69,7 @@ import java.util.regex.Pattern
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import kotlinx.coroutines.Dispatchers
 import org.json.JSONArray
+import java.io.IOException
 import java.util.Locale
 
 
@@ -143,6 +144,104 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
         setUpObservers()
+        startLocationFetch()
+
+    }
+    private fun startLocationFetch() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(), arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ), 120
+            )
+            return
+        }
+        if (isGPSEnabled().not()) {
+            MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.turn_on_gps))
+                .setCancelable(false)
+                .setMessage(getString(R.string.gps_is_disabled_in_your_device_would_you_like_to_enable_it))
+                .setPositiveButton(getString(R.string.no)) { d, _ ->
+                    d.dismiss()
+                    findNavController().popBackStack()
+                }.setPositiveButton(getString(R.string.goto_settings_to_enable_gps)) { d, _ ->
+                    d.dismiss()
+                    val callGPSSettingIntent = Intent(
+                        Settings.ACTION_LOCATION_SOURCE_SETTINGS
+                    )
+                    startActivity(callGPSSettingIntent)
+                }.show()
+        } else {
+            fusedLocationClient
+                .lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    mViewModel.currentLocation =
+                        Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
+
+
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val cityName = if (location != null) {
+                            getCityNameSafely(location.latitude, location.longitude)
+                        } else {
+                            "India"
+                        }
+                        Log.e("MSG", "startLocationFetch: " + cityName)
+                        Log.e("MSG",
+                            ("startLocationFetch2: " + cityName) ?: Locale.ENGLISH.displayName
+                        )
+                        Log.d("startLocationFetch", "startLocationFetch1: $cityName")
+                        mViewModel.setCityName(cityName ?: "India ")
+                    }
+
+                }
+                .addOnFailureListener {
+                    Log.e("MSG", "startLocationFetch: " + it.message)
+                }
+        }
+    }
+
+
+    private suspend fun getCityNameSafely(latitude: Double, longitude: Double): String {
+        return try {
+            // Check if Geocoder is available
+            if (!Geocoder.isPresent()) {
+                Log.w("Geocoder", "Geocoder service is not available")
+                return "India" // fallback
+            }
+
+            val geocoder = Geocoder(requireContext(), Locale.ENGLISH)
+            val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+
+            if (!addresses.isNullOrEmpty()) {
+                addresses[0].locality ?: addresses[0].adminArea ?: "India"
+            } else {
+                "India"
+            }
+        } catch (e: IOException) {
+            Log.e("Geocoder", "Geocoder service unavailable: ${e.message}")
+            "India" // fallback to default
+        } catch (e: Exception) {
+            Log.e("Geocoder", "Unexpected error: ${e.message}")
+            "India"
+        }
+    }
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 120) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                  startLocationFetch()
+            } else {
+                mainActivity().showMessage(getString(R.string.gps_permission_denied))
+            }
+        }
     }
 
     private fun setUpViews() {
@@ -310,72 +409,6 @@ class HomeFragment : Fragment() {
 
 
 
-
-    private fun startLocationFetch() {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ), 120
-            )
-            return
-        }
-        if (isGPSEnabled().not()) {
-            MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.turn_on_gps))
-                .setCancelable(false)
-                .setMessage(getString(R.string.gps_is_disabled_in_your_device_would_you_like_to_enable_it))
-                .setPositiveButton(getString(R.string.no)) { d, _ ->
-                    d.dismiss()
-                    findNavController().popBackStack()
-                }.setPositiveButton(getString(R.string.goto_settings_to_enable_gps)) { d, _ ->
-                    d.dismiss()
-                    val callGPSSettingIntent = Intent(
-                        Settings.ACTION_LOCATION_SOURCE_SETTINGS
-                    )
-                    startActivity(callGPSSettingIntent)
-                }.show()
-        } else {
-            fusedLocationClient
-                .lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    mViewModel.currentLocation =
-                        Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
-
-
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val cityName =
-                            if (location != null) {
-                                val geocoder = Geocoder(requireContext(), Locale.ENGLISH)
-                                val addresses =
-                                    geocoder.getFromLocation(
-                                        location.latitude,
-                                        location.longitude,
-                                        1
-                                    )
-                                if (!addresses.isNullOrEmpty()) {
-                                    addresses[0].locality
-                                } else {
-                                    Locale.ENGLISH.displayName
-                                }
-                            } else {
-                                Locale.ENGLISH.displayName
-                            }
-
-                        mViewModel.setCityName(cityName ?: Locale.ENGLISH.displayName)
-                    }
-
-                }
-                .addOnFailureListener {
-                    Log.e("MSG", "startLocationFetch: " + it.message)
-                }
-        }
-    }
 
     private val fusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireContext())
@@ -638,23 +671,9 @@ class HomeFragment : Fragment() {
         super.onResume()
         systemViewModel.refreshAppLayout()
         systemViewModel.fetchSettings()
-        startLocationFetch()
 
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 120) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                 startLocationFetch()
-            } else {
-                mainActivity().showMessage(getString(R.string.gps_permission_denied))
-            }
-        }
-    }
 
     private fun dashboardPrompt() {
         MaterialTapTargetPrompt.Builder(requireActivity())

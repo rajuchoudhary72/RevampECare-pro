@@ -28,11 +28,13 @@ class PopUpListAdapterLibTrans(private var paidHistories: List<LibraryTransactio
 
     override fun onBindViewHolder(holder: PopUpListViewHolder, pos: Int) {
 
-        holder.tvFine.text=paidHistories[holder.bindingAdapterPosition].fineAmount.toString()
-        holder.tvStatus.text=paidHistories[holder.bindingAdapterPosition].status
-        holder.tvBookName.text=paidHistories[holder.bindingAdapterPosition].bookName
-
-
+        try {
+            holder.tvFine.text=paidHistories[holder.bindingAdapterPosition].fineAmount.toString()
+            holder.tvStatus.text=paidHistories[holder.bindingAdapterPosition].status
+            holder.tvBookName.text=paidHistories[holder.bindingAdapterPosition].bookName
+        }catch (e: NumberFormatException){
+            e.printStackTrace()
+        }
     }
 
     class PopUpListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
