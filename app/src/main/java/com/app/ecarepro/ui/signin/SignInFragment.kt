@@ -127,36 +127,49 @@ class SignInFragment : Fragment() {
 
 
                     lifecycleScope.launch(Dispatchers.IO) {
-                        val cityName =
-                            if (location != null) {
-                                val geocoder = Geocoder(requireContext(), Locale.ENGLISH)
-                                val addresses =
-                                    geocoder.getFromLocation(
-                                        location.latitude,
-                                        location.longitude,
-                                        1
-                                    )
-                                if (!addresses.isNullOrEmpty()) {
-                                    addresses[0].locality
-                                } else {
-                                    "India"
-                                }
-                            } else {
-                                "India"
-                            }
+                        val cityName = if (location != null) {
+                            getCityNameSafely(location.latitude, location.longitude)
+                        } else {
+                            "India"
+                        }
                         Log.e("MSG", "startLocationFetch: " + cityName)
                         Log.e("MSG",
                             ("startLocationFetch2: " + cityName) ?: Locale.ENGLISH.displayName
                         )
                         Log.d("startLocationFetch", "startLocationFetch1: $cityName")
-                        mViewModel.setCityName(cityName ?: "India")
-
+                        mViewModel.setCityName(cityName ?: "India ")
                     }
 
                 }
                 .addOnFailureListener {
                     Log.e("MSG", "startLocationFetch: " + it.message)
                 }
+        }
+    }
+
+
+    private suspend fun getCityNameSafely(latitude: Double, longitude: Double): String {
+        return try {
+            // Check if Geocoder is available
+            if (!Geocoder.isPresent()) {
+                Log.w("Geocoder", "Geocoder service is not available")
+                return "India" // fallback
+            }
+
+            val geocoder = Geocoder(requireContext(), Locale.ENGLISH)
+            val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+
+            if (!addresses.isNullOrEmpty()) {
+                addresses[0].locality ?: addresses[0].adminArea ?: "India"
+            } else {
+                "India"
+            }
+        } catch (e: IOException) {
+            Log.e("Geocoder", "Geocoder service unavailable: ${e.message}")
+            "India" // fallback to default
+        } catch (e: Exception) {
+            Log.e("Geocoder", "Unexpected error: ${e.message}")
+            "India"
         }
     }
     @Deprecated("Deprecated in Java")

@@ -2,6 +2,6 @@ package com.app.ecarepro.model
 
 data class LibraryTransactionX(
     val bookName: String,
-    val fineAmount: Int,
+    val fineAmount: Double,
     val status: String
 )
