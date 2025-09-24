@@ -24,7 +24,12 @@ import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Month
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import kotlin.text.format
 
 
 @AndroidEntryPoint
@@ -36,6 +41,7 @@ class AttendanceFragment : Fragment() {
     private var yearModelArrayList = ArrayList<YearModel>()
     private val attendanceViewModel: AttendanceViewModel by viewModels()
     private lateinit var binding: FragmentAttendenceBinding
+    private var isFirstTime= true
 
 
     override fun onCreateView(
@@ -172,8 +178,31 @@ class AttendanceFragment : Fragment() {
             }
         }
 
-        attendanceViewModel.staffAttendance(monthSelected, yearSelected)
+        attendanceViewModel.staffAttendance(getCurrentMonthAsNumberJavaTime(), getCurrentYearAsString().toInt())
+        binding.autoCompleteYear.setText(getCurrentYearAsString(), false)
+        yearSelected=getCurrentYearAsString().toInt();
+        monthSelected=getCurrentMonthAsNumberJavaTime();
 
+
+
+    }
+
+
+
+
+
+
+
+
+    fun getCurrentYearAsString(): String {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy")
+        return currentDate.format(formatter)
+    }
+
+    fun getCurrentMonthAsNumberJavaTime(): Int {
+        val currentDate = LocalDate.now()
+        return currentDate.monthValue // monthValue is already 1-indexed
     }
 
     private fun bindMonthArray() {
@@ -218,6 +247,15 @@ class AttendanceFragment : Fragment() {
         val monthMode12 = MonthModel(12, "December")
         monthModelArrayList.add(monthMode12)
 
+
+       if (isFirstTime){
+           monthModelArrayList.forEach {
+               if (it.monthID==getCurrentMonthAsNumberJavaTime()){
+                   binding.autoCompleteMonth.setText(it.month, false)
+               }
+           }
+           isFirstTime=false
+       }
 
     }
 
