@@ -3,7 +3,6 @@ package com.app.ecarepro.data.repository
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.AppointmentSavedData
-import com.app.ecarepro.data.network.model.Attachment
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.LoginResponseDto
@@ -101,8 +100,6 @@ import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.NetworkWingReport
 import com.app.ecarepro.data.network.model.Profile
-import com.app.ecarepro.data.network.model.SendMessageRequest
-import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
@@ -147,9 +144,6 @@ import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Query
 
 interface UserRepository {
 
@@ -910,13 +904,15 @@ interface UserRepository {
 
     suspend fun getFeeDefaultersDas(
         feeTypeId: Int?,
-        installIds: String?
+        installIds: String?,
+        isIncludeFineChecked: Boolean
     ): Flow<Result<NetworkFeeDefaulter>>
 
 
     suspend fun getFeeDefaulters(
-         feeTypeId: Int?,
-        installIds: String?
+        feeTypeId: Int?,
+        installIds: String?,
+        isIncludeFineChecked: Boolean
     ): NetworkFeeDefaulter
 
     suspend fun postCompliance(

@@ -26,6 +26,8 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FeeDefaulterUI : Fragment() {
+    // Public boolean variable that tracks checkbox state
+    var isIncludeFineChecked: Boolean = false
 
     private lateinit var binding: FragmentFeeDefaulterUIBinding
     private val feeDefaulterViewModel: FeeDefaulterViewModel by viewModels()
@@ -46,12 +48,39 @@ class FeeDefaulterUI : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getFeeDefaulters(feeTypeId, installIds)
+        getFeeDefaulters(feeTypeId, installIds,isIncludeFineChecked)
+
+        setupCheckboxListener()
+    }
+    private fun setupCheckboxListener() {
+        // Set initial state of public variable based on checkbox
+        isIncludeFineChecked = binding.checkboxIncludeFine.isChecked
+        binding.checkboxIncludeFine.setOnCheckedChangeListener { _, isChecked ->
+            // Update public variable when checkbox state changes
+            isIncludeFineChecked = isChecked
+
+            onIncludeFineChanged(isChecked)
+
+        }
     }
 
+    private fun onIncludeFineChanged(isChecked: Boolean) {
+        if (isChecked) {
+            isIncludeFineChecked=true
+            Log.d("Fragment", "Include Fine is CHECKED")
+            // Your logic when checked
+            getFeeDefaulters(feeTypeId, installIds,isIncludeFineChecked)
+        } else {
+            Log.d("Fragment", "Include Fine is UNCHECKED")
+            isIncludeFineChecked=false
+            // Your logic when unchecked
+            getFeeDefaulters(feeTypeId, installIds,isIncludeFineChecked)
+        }
+    }
     private fun getFeeDefaulters(
         feeTypeId: Int?,
-        installIds: String?
+        installIds: String?,
+        isIncludeFineChecked1: Boolean
     ) {
 
         lifecycleScope.launch {
@@ -118,7 +147,7 @@ class FeeDefaulterUI : Fragment() {
             }
         }
 
-        feeDefaulterViewModel.getFeeDefaulters(feeTypeId, installIds)
+        feeDefaulterViewModel.getFeeDefaulters(feeTypeId, installIds,isIncludeFineChecked)
 
     }
 
@@ -132,7 +161,7 @@ class FeeDefaulterUI : Fragment() {
 
         binding.feeType.setOnItemClickListener { _, _, position, _ ->
             feeTypeId = feeType[position].feeTypeID
-            getFeeDefaulters(feeTypeId, installIds)
+            getFeeDefaulters(feeTypeId, installIds,isIncludeFineChecked)
         }
     }
 
@@ -165,7 +194,8 @@ class FeeDefaulterUI : Fragment() {
                     selectedInstallmentIds.joinToString(",") // Convert list to "34,23,65" format
                 getFeeDefaulters(
                     feeTypeId,
-                    installIds.trim()
+                    installIds.trim(),
+                    isIncludeFineChecked
                 ) // Fetch defaulters based on selection
             }
 

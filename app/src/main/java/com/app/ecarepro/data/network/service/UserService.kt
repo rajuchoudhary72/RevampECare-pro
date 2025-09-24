@@ -1135,7 +1135,8 @@ interface UserService {
     @GET("Report/FeeDefaulters")
     suspend fun getFeeDefaulters(
         @Query("FeeTypeId") feeTypeId: Int?,
-        @Query("InstallIds") installIds: String?
+        @Query("InstallIds") installIds: String?,
+        @Query("withFine") withFine: Boolean
     ): NetworkFeeDefaulter
 
     @POST("DisciplineLog/PostCompliance")

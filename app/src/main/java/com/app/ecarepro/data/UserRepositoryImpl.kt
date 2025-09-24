@@ -76,7 +76,6 @@ import com.app.ecarepro.data.network.model.post_save_appreaction.PostSaveAppreci
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
 import com.app.ecarepro.data.network.service.UserService
-import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.StudentTeacherResponse
@@ -156,14 +155,11 @@ import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
 import com.app.ecarepro.data.network.model.NetworkTransportEditProfile
 import com.app.ecarepro.data.network.model.NetworkWingReport
-import com.app.ecarepro.data.network.model.SendMessageRequest
-import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
-import com.app.ecarepro.data.network.model.UserProfileDto
 import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetails
@@ -178,7 +174,6 @@ import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProf
 import com.app.ecarepro.ui.edit_profile.staff.model.StaffProfileModel
 import com.app.ecarepro.ui.edit_profile.staff.model.payload.StaffUpdateModel
 import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
-import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -1475,8 +1470,12 @@ class UserRepositoryImpl @Inject constructor(
         return userService.removeSession(sessionID)
     }
 
-    override suspend fun getFeeDefaulters(feeTypeId: Int?, installIds: String?): NetworkFeeDefaulter {
-        return userService.getFeeDefaulters(feeTypeId, installIds)
+    override suspend fun getFeeDefaulters(
+        feeTypeId: Int?,
+        installIds: String?,
+        isIncludeFineChecked: Boolean
+    ): NetworkFeeDefaulter {
+        return userService.getFeeDefaulters(feeTypeId, installIds,isIncludeFineChecked)
     }
 
 
@@ -1489,11 +1488,15 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getFeeDefaultersDas(
-        feeTypeId: Int?, installIds: String?
+        feeTypeId: Int?, installIds: String?, isIncludeFineChecked: Boolean
     ): Flow<Result<NetworkFeeDefaulter>> {
         return flow {
             try {
-                val response = userService.getFeeDefaulters(feeTypeId, installIds)
+                val response = userService.getFeeDefaulters(
+                    feeTypeId,
+                    installIds,
+                    isIncludeFineChecked
+                )
                 emit(Result.success(response))
             } catch (error: Throwable) {
                 emit(Result.failure(error))
