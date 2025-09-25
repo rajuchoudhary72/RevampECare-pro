@@ -23,7 +23,7 @@ navigation-ui-ktx = "2.5.3"
 okhttp = "5.0.0-alpha.9"
 otpview = "3.1.0"
 recyclerview = "1.3.2"
-retrofit = "2.9.0"
+retrofit = "3.0.0"
 room = "2.7.2"
 firebase-crashlytics = "3.0.2"
 google-services = "4.4.0"
@@ -47,7 +47,7 @@ androidxComposeRuntimeTracing = "1.9.0"
 androidxHiltNavigationCompose = "1.2.0"
 androidxActivity = "1.9.3"
 androidxNavigation = "2.8.5"
-androidxLifecycle = "2.8.7"
+androidxLifecycle = "2.9.4"
 androidDesugarJdkLibs = "2.1.4"
 kotlinxSerializationJson = "1.8.0"
 
@@ -130,7 +130,8 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-android" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-
+retrofit-kotlin-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
+androidx-lifecycle-viewModelKtx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
 
 
 # Dependencies of the included build-logic

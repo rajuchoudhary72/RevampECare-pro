@@ -13,16 +13,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.onboarding.feature.OnboardingScreen
+import dagger.hilt.android.AndroidEntryPoint
 
 // Registry of available module screens
 object ModuleRegistry {
     val screens: Map<String, @Composable () -> Unit> = mapOf(
         "OnBoarding" to {
-            OnboardingScreen {  }
+            OnboardingScreen(
+                onOnboardingFinished = { }
+            )
          },
     )
 }
 
+@AndroidEntryPoint
 class TestActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
