@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
@@ -55,7 +56,6 @@ internal object NetworkModule {
     fun provideSchoolService(
         @InjectInCoreModule retrofit: Retrofit
     ): SchoolService = retrofit.create(SchoolService::class.java)
-
 
 }
 

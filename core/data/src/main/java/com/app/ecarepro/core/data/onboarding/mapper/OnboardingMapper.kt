@@ -5,6 +5,5 @@ import com.app.ecarepro.core.network.model.NetworkOnboardingItem
 
 fun NetworkOnboardingItem.toDomainModel(): OnboardingItem = OnboardingItem(
     headline = this.heading,
-    description = this.text,
-    image = this.imageURL
+    description = this.text
 )

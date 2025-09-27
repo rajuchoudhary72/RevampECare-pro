@@ -40,6 +40,10 @@ tasks {
 
 gradlePlugin {
     plugins {
+        register("androidApplicationCompose") {
+            id = libs.plugins.ecarepro.android.application.compose.get().pluginId
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
         register("androidFeature") {
             id = libs.plugins.ecarepro.android.feature.get().pluginId
             implementationClass = "AndroidFeatureConventionPlugin"

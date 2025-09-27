@@ -1,13 +1,16 @@
-package com.app.ecarepro.core.network.model
+ package com.app.ecarepro.core.network.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class NetworkSchoolOnboarding(
-    val errorCode: Int,
-    val message: String,
-    val slides: List<NetworkOnboardingItem>,
-    val status: String
-)
+     override val errorCode: Int,
+     override val message: String,
+     override val status: String,
+     val slides: List<NetworkOnboardingItem>,
+ ):NetworkResponse
 
-
+@Serializable
 data class NetworkOnboardingItem(
     val heading: String,
     val imageURL: String,

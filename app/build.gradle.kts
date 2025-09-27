@@ -11,6 +11,8 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.firebase.firebase-perf")
     alias(libs.plugins.compose)
+    alias(libs.plugins.ecarepro.android.application.compose)
+
 }
 
 kapt {
@@ -39,11 +41,11 @@ android {
         }
     }
     namespace = "com.app.ecarepro"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 373
         versionName = "3.6.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -245,6 +247,9 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.compose.material3.adaptive.layout)
-    implementation(libs.androidx.compose.material3.adaptive.navigation)
+ //   implementation(libs.androidx.compose.material3.adaptive.navigation)
+
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
 
 }
