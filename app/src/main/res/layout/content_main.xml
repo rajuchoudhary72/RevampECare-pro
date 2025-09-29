@@ -25,8 +25,7 @@
             app:layout_constraintBottom_toTopOf="@+id/rl_bottom_navigation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/nav_graph" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <FrameLayout
