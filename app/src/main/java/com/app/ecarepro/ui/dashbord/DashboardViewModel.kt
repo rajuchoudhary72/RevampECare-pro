@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.app.ecarepro.data.network.model.CollectionModeWise
 import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
+import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
@@ -78,7 +79,7 @@ class DashboardViewModel @Inject constructor(
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         getTodayModeWiseCollection(sdf.format(Date())) { _, _ ->
         }
-        getFeeDefaulters(0, 0.toString(),false)
+        getFeeDefaulters(0, 0.toString())
     }
 
 
@@ -86,11 +87,10 @@ class DashboardViewModel @Inject constructor(
     fun getFeeDefaulters(
         feeTypeId: Int?,
         installIds: String?,
-        isIncludeFineChecked: Boolean,
         onResponse: ((Boolean, String?) -> Unit)? = null
-        ) {
+    ) {
         viewModelScope.launch {
-            userRepository.getFeeDefaultersDas(feeTypeId, installIds,isIncludeFineChecked).collectLatest { result ->
+            userRepository.getFeeDefaultersDas(feeTypeId, installIds).collectLatest { result ->
                 if (result.isSuccess) {
                     feeDefaulter.update {
                         result.getOrNull()

@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.kotlinParcelize)
     id("com.google.devtools.ksp")
     id("com.google.firebase.firebase-perf")
+    alias(libs.plugins.compose)
+    alias(libs.plugins.ecarepro.android.application.compose)
 
 }
 
@@ -39,13 +41,13 @@ android {
         }
     }
     namespace = "com.app.ecarepro"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
-        targetSdk = 35
-        versionCode = 379
-        versionName = "3.6.8"
+        targetSdk = 36
+        versionCode = 373
+        versionName = "3.6.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -96,6 +98,7 @@ android {
         viewBinding = true
         dataBinding = true
         buildConfig = true
+        compose = true
     }
     flavorDimensions += listOf("apps")
 
@@ -132,6 +135,10 @@ android {
 }
 
 dependencies {
+
+    implementation(projects.feature.onboarding)
+    implementation(projects.core.data)
+
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -221,7 +228,7 @@ dependencies {
     implementation  ( "com.google.firebase:firebase-messaging-ktx")
 
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.2")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     implementation("com.kizitonwose.calendar:view:2.5.4")
 
     implementation ("com.github.bumptech.glide:glide:4.4.0")
@@ -233,5 +240,16 @@ dependencies {
 
     // For Kotlin users also import the Kotlin extensions library for Play In-App Update:
     implementation("com.google.android.play:app-update-ktx:2.1.0")
+
+
+    // Re-vamp
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.androidx.compose.material3.adaptive.layout)
+ //   implementation(libs.androidx.compose.material3.adaptive.navigation)
+
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
 
 }

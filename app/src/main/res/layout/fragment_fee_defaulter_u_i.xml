@@ -56,7 +56,7 @@
                             android:baselineAligned="false"
                             android:orientation="horizontal"
                             android:gravity="center"
-                            android:weightSum="3">
+                            android:weightSum="2">
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/til_class"
@@ -75,9 +75,12 @@
                                     android:layout_height="wrap_content"
                                     android:inputType="none"
                                     tools:ignore="LabelFor"
-                                    android:textSize="14sp" />
+                                    android:textSize="14sp"
+
+                                    />
 
                             </com.google.android.material.textfield.TextInputLayout>
+
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/til_month"
@@ -88,8 +91,7 @@
                                 android:hint="@string/all_installments"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                android:layout_marginStart="@dimen/_3sdp"
-                                android:layout_marginEnd="@dimen/_3sdp">
+                                android:layout_marginStart="@dimen/_3sdp">
 
                                 <AutoCompleteTextView
                                     android:id="@+id/installments"
@@ -98,26 +100,11 @@
                                     android:inputType="none"
                                     android:focusable="false"
                                     android:clickable="true"
-                                    android:textSize="14sp" />
+                                    android:textSize="14sp"
+                                    />
 
                             </com.google.android.material.textfield.TextInputLayout>
 
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:gravity="center"
-                                android:layout_marginStart="@dimen/_3sdp">
-
-                                <com.google.android.material.checkbox.MaterialCheckBox
-                                    android:id="@+id/checkbox_include_fine"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/include_fine"
-                                    android:textSize="12sp" />
-
-                            </LinearLayout>
 
                         </LinearLayout>
                     </LinearLayout>

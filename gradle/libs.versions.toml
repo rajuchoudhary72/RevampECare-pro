@@ -1,6 +1,6 @@
 [versions]
 activity-ktx = "1.8.0"
-agp = "8.6.1"
+agp = "8.13.0"
 coilCompose = "2.7.0"
 kotlin_version = "1.8.20"
 datastore-preferences = "1.0.0"
@@ -23,7 +23,7 @@ navigation-ui-ktx = "2.5.3"
 okhttp = "5.0.0-alpha.9"
 otpview = "3.1.0"
 recyclerview = "1.3.2"
-retrofit = "2.9.0"
+retrofit = "3.0.0"
 room = "2.7.2"
 firebase-crashlytics = "3.0.2"
 google-services = "4.4.0"
@@ -31,7 +31,7 @@ firebase-bom = "33.7.0"
 scrollingpagerindicator = "1.2.4"
 picasso="2.8"
 swiperefreshlayout = "1.2.0-alpha01"
-play-services-location = "21.3.0"
+play-services-location = "21.2.0"
 kotlinPlugin = "1.8.10"
 playServicesMaps = "19.0.0"
 firebase-messaging = "24.0.0"
@@ -40,16 +40,21 @@ androidTools = "31.12.2"
 ksp = "2.1.10-1.0.31"
 truth = "1.4.4"
 androidxLintGradle = "1.0.0-alpha03"
-androidxComposeBom = "2025.08.01"
-androidxComposeFoundation = "1.9.0"
+androidxComposeBom = "2025.09.01"
+androidxComposeFoundation = "1.9.2"
 androidxComposeMaterial3Adaptive = "1.1.0"
 androidxComposeRuntimeTracing = "1.9.0"
 androidxHiltNavigationCompose = "1.2.0"
 androidxActivity = "1.9.3"
 androidxNavigation = "2.8.5"
-androidxLifecycle = "2.8.7"
+androidxLifecycle = "2.9.4"
 androidDesugarJdkLibs = "2.1.4"
 kotlinxSerializationJson = "1.8.0"
+nav3Core = "1.0.0-alpha10"
+lifecycleViewmodelNav3 = "2.10.0-alpha04"
+kotlinSerialization = "2.1.21"
+kotlinxSerializationCore = "1.8.1"
+material3AdaptiveNav3 = "1.0.0-alpha03"
 
 
 
@@ -130,8 +135,17 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-android" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+retrofit-kotlin-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
+androidx-lifecycle-viewModelKtx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
 
+# Core Navigation 3 libraries
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
 
+# Optional add-on libraries
+androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
+androidx-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "material3AdaptiveNav3" }
 
 # Dependencies of the included build-logic
 android-gradleApiPlugin = { group = "com.android.tools.build", name = "gradle-api", version.ref = "agp" }
@@ -156,7 +170,7 @@ android-lint = { id = "com.android.lint", version.ref = "agp" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
-
+ecarepro-android-application-compose = { id = "ecarepro.android.application.compose" }
 ecarepro-android-feature = { id = "ecarepro.android.feature" }
 ecarepro-android-androidLibrary = { id = "ecarepro.android.library" }
 ecarepro-android-library-compose = { id = "ecarepro.android.library.compose" }

@@ -24,6 +24,9 @@ include(":app")
 
 include(":core:designsystem")
 include(":core:ui")
+include(":core:network")
+include(":core:domain")
+include(":core:data")
 
 include(":feature:onboarding")
 

@@ -19,14 +19,24 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-               // "implementation"(project(":core:ui"))
-                "implementation"(project(":core:designsystem"))
+                "implementation"(project(":core:ui"))
+                "api"(project(":core:designsystem"))
 
                 "implementation"(libs.findLibrary("androidx.hilt.navigation.compose").get())
                 "implementation"(libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
                 "implementation"(libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
-                "implementation"(libs.findLibrary("androidx.navigation.compose").get())
+               // "implementation"(libs.findLibrary("androidx.navigation.compose").get())
                 "implementation"(libs.findLibrary("kotlinx.serialization.json").get())
+                "implementation"(libs.findLibrary("core.ktx").get())
+                "implementation"(libs.findLibrary("androidx.lifecycle.viewModelKtx").get())
+
+                "implementation"(libs.findLibrary("androidx.navigation3.ui").get())
+                "implementation"(libs.findLibrary("androidx.navigation3.runtime").get())
+              /*  "implementation"(libs.findLibrary("androidx.lifecycle.viewmodel.navigation3").get())
+                "implementation"(libs.findLibrary("androidx.material3.adaptive.navigation3").get())
+                "implementation"(libs.findLibrary("kotlinx.serialization.core").get())*/
+
+
             }
         }
     }

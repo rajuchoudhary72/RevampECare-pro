@@ -43,6 +43,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -94,6 +95,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
+import v2.navigation.EXTRA_DESTINATION_ID
+import v2.navigation.EXTRA_EXTRAS
+import v2.navigation.EXTRA_LEGACY_FLOW
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.security.MessageDigest
@@ -111,9 +115,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var userData: NetworkUserDetailsDto
     private val systemViewModel: SystemViewModel by viewModels()
-    private val navController: NavController by lazy {
-        findNavController(R.id.nav_host_fragment_content_main)
-    }
+    private lateinit var navController: NavController
     private var loader: AlertDialog? = null
 
     private var expandedMenuId: Int = -1
@@ -220,6 +222,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+
         /*open profile page after click on  profile */
         binding.itemDrawerHeader.imgUserAvatar.setOnClickListener {
             navController.navigate(R.id.profileFragment)
@@ -227,6 +231,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         setSupportActionBar(binding.appBarMain.toolbar)
+
+        setUpNavigation()
 
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -246,6 +252,7 @@ class MainActivity : AppCompatActivity() {
         setUpBottomNavigationView()
 
         setUpMoreOptions()
+
         try {
             Picasso.setSingletonInstance(Picasso.Builder(this).build())
         } catch (e: RuntimeException) {
@@ -348,6 +355,42 @@ class MainActivity : AppCompatActivity() {
         observeBadgeMessageCount()
     }
 
+    private fun setUpNavigation() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+        navController = navHostFragment.navController
+
+
+        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
+
+        if (intent.extras?.getBoolean(EXTRA_LEGACY_FLOW, false) == true) {
+            val destinationId = intent.extras?.getInt(EXTRA_DESTINATION_ID)
+            val extras = intent.extras?.getBundle(EXTRA_EXTRAS)
+
+            if (destinationId != null && destinationId != 0 && navGraph.findNode(destinationId) != null) {
+
+                navGraph.setStartDestination(destinationId)
+                navController.setGraph(navGraph, extras)
+            } else {
+                Log.w(
+                    "MainActivity",
+                    "EXTRA_LEGACY_FLOW true, but destinationId invalid or not in graph. Using default start."
+                )
+                navController.setGraph(navGraph, intent.extras)
+            }
+        } else {
+            navController.setGraph(navGraph, intent.extras)
+        }
+    }
+
+    private fun handleLegacyFlow() {
+        if (intent.extras?.getBoolean(EXTRA_LEGACY_FLOW, false) == true) {
+            val destinationId = intent.extras?.getInt(EXTRA_DESTINATION_ID)
+            val extras = intent.extras?.getBundle(EXTRA_EXTRAS)
+            navController.navigate(destinationId!!, extras)
+        }
+    }
+
     private fun observeBadgeCount() {
         lifecycleScope.launchWhenStarted {
             viewModel.badgeCountFlow.collect { count: Int ->
@@ -444,7 +487,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
         intent?.extras?.let { data ->
