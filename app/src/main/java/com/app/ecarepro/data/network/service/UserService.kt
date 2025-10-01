@@ -1124,6 +1124,7 @@ interface UserService {
     @GET("School/Wings")
     suspend fun wingsList(): NetworkWingReport
 
+
     @GET("User/ActiveSessions")
     suspend fun activeSessions(): NetworkUserSessionsResponse
 
