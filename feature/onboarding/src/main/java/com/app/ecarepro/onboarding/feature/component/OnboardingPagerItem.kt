@@ -21,7 +21,6 @@ import com.app.ecarepro.core.domain.model.OnboardingItem
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appTypography
 import com.app.ecarepro.feature.onboarding.R
-import com.app.ecarepro.onboarding.feature.model.OnboardingPage
 
 @Composable
 fun OnboardingPagerItem(
