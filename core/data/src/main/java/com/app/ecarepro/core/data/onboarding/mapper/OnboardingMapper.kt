@@ -1,9 +1,9 @@
 package com.app.ecarepro.core.data.onboarding.mapper
 
 import com.app.ecarepro.core.domain.model.OnboardingItem
-import com.app.ecarepro.core.network.model.NetworkOnboardingItem
+import com.app.ecarepro.core.network.model.OnboardingSlide
 
-fun NetworkOnboardingItem.toDomainModel(): OnboardingItem = OnboardingItem(
+fun OnboardingSlide.toDomainModel(): OnboardingItem = OnboardingItem(
     headline = this.heading,
     description = this.text
 )

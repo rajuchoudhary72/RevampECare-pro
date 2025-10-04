@@ -3,15 +3,15 @@
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NetworkSchoolOnboarding(
+data class OnboardingResponseModel(
      override val errorCode: Int,
      override val message: String,
      override val status: String,
-     val slides: List<NetworkOnboardingItem>,
+     val slides: List<OnboardingSlide>,
  ):NetworkResponse
 
 @Serializable
-data class NetworkOnboardingItem(
+data class OnboardingSlide(
     val heading: String,
     val imageURL: String,
     val text: String

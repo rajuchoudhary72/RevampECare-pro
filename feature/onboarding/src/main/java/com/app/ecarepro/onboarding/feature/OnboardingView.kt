@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun OnboardingScreen(
+fun OnboardingView(
     navigateToAddSchool: () -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
@@ -154,6 +154,6 @@ fun OnboardingScreenContent(
 @Composable
 fun OnboardingScreenPreview() {
     EcareProTheme {
-        OnboardingScreen(navigateToAddSchool = {})
+        OnboardingView(navigateToAddSchool = {})
     }
 }
