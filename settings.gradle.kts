@@ -29,5 +29,7 @@ include(":core:domain")
 include(":core:data")
 
 include(":feature:onboarding")
+include(":feature:schoolcode")
+
 
 
