@@ -27,6 +27,8 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
+import com.app.ecarepro.feature.schoolcode.navigation.SchoolCode
+import com.app.ecarepro.feature.schoolcode.navigation.SchoolCodeNavigationGraph
 import com.app.ecarepro.onboarding.feature.navigation.Onboarding
 import com.app.ecarepro.onboarding.feature.navigation.OnboardingNavigationGraph
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +38,7 @@ import kotlinx.serialization.Serializable
 object ModuleRegistry {
     val screens: Map<String, NavKey> = mapOf(
         "OnBoarding" to OnboardingNavigationGraph.Onboarding,
+        "School Code" to SchoolCodeNavigationGraph.SchoolCode,
     )
 }
 
@@ -69,6 +72,11 @@ fun TestNav() {
             Onboarding(navigateToAddSchool = {
                 backStack.removeLastOrNull()
             })
+
+            SchoolCode(
+                backStack = backStack,
+                navigateToLogin = { backStack.removeLastOrNull() }
+            )
         }
     )
 }
@@ -83,7 +91,7 @@ sealed interface TestNavigationGraph : NavKey {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TestHostScreen(
-    navigateToModule: (NavKey) -> Unit
+    navigateToModule: (NavKey) -> Unit,
 ) {
     Scaffold(
         topBar = {

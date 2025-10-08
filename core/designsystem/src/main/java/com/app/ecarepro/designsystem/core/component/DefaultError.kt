@@ -1,4 +1,4 @@
-package com.app.ecarepro.core.ui.component
+package com.app.ecarepro.designsystem.core.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

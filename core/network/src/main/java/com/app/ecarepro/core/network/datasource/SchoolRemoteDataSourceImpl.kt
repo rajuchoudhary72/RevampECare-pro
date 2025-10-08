@@ -2,8 +2,13 @@ package com.app.ecarepro.core.network.datasource
 
 import com.app.ecarepro.core.network.SchoolRemoteDataSource
 import com.app.ecarepro.core.network.model.NetworkOnboardingItem
+import com.app.ecarepro.core.network.model.NetworkSchool
+import com.app.ecarepro.core.network.model.NetworkSchoolDetails
+import com.app.ecarepro.core.network.model.NetworkSchoolList
+import com.app.ecarepro.core.network.model.NetworkSchoolOnboarding
 import com.app.ecarepro.core.network.model.unwrapPayload
 import com.app.ecarepro.core.network.retrofit.service.SchoolService
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class SchoolRemoteDataSourceImpl @Inject constructor(
@@ -13,5 +18,17 @@ class SchoolRemoteDataSourceImpl @Inject constructor(
         return schoolService
             .getSchoolOnboarding()
             .unwrapPayload { slides }
+    }
+
+    override suspend fun getSchoolDetails(schoolCode: String):NetworkSchoolDetails {
+        return schoolService
+            .getSchoolDetails(schoolCode)
+            .unwrapPayload { this }
+    }
+
+    override suspend fun getSchools(): List<NetworkSchool> {
+        return schoolService
+            .getSchools()
+            .unwrapPayload { list?:emptyList() }
     }
 }

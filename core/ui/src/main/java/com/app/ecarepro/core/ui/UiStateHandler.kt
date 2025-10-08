@@ -3,14 +3,14 @@ package com.app.ecarepro.core.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
 import androidx.compose.ui.tooling.preview.Preview
-import com.app.ecarepro.core.ui.component.DefaultError
-import com.app.ecarepro.core.ui.component.DefaultLoading
+import com.app.ecarepro.designsystem.core.component.DefaultError
+import com.app.ecarepro.designsystem.core.component.Loader
 
 @Composable
-fun <T> StateHandler(
+fun <T> UiStateHandler(
     state: UiState<T>,
     onRetry: (() -> Unit)? = null,
-    loadingContent: @Composable () -> Unit = { DefaultLoading() },
+    loadingContent: @Composable () -> Unit = { Loader() },
     errorContent: @Composable (String, () -> Unit) -> Unit = { msg, retry ->
         DefaultError(msg, retry)
     },
@@ -26,7 +26,7 @@ fun <T> StateHandler(
 @Preview
 @Composable
 fun StateHandlerLoadingPreview() {
-    StateHandler(
+    UiStateHandler(
         state = UiState.Loading,
         successContent = { data: String -> Text(text = data) }
     )
@@ -35,7 +35,7 @@ fun StateHandlerLoadingPreview() {
 @Preview
 @Composable
 fun StateHandlerErrorPreview() {
-    StateHandler(
+    UiStateHandler(
         state = UiState.Error("Something went wrong"),
         onRetry = {},
         successContent = { data: String -> Text(text = data) }
@@ -45,7 +45,7 @@ fun StateHandlerErrorPreview() {
 @Preview
 @Composable
 fun StateHandlerSuccessPreview() {
-    StateHandler(
+    UiStateHandler(
         state = UiState.Success("Sample Data"),
         successContent = { data: String ->
             Text(text = data)

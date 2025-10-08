@@ -24,7 +24,8 @@ fun Button(
         onClick = onClick,
         shape = MaterialTheme.shapes.small.copy(CornerSize(12.dp)),
         enabled = enabled,
-        colors = ButtonDefaults.buttonColors().copy(contentColor = White)
+        colors = ButtonDefaults.buttonColors().copy(contentColor = White),
+        elevation = ButtonDefaults.buttonElevation(0.5.dp)
     ) {
         Text(
             title,

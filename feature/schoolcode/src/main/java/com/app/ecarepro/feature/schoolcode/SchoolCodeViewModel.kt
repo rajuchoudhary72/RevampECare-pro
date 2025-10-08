@@ -1,85 +1,99 @@
 package com.app.ecarepro.feature.schoolcode
 
-import androidx.lifecycle.ViewModel
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.core.domain.exception.InvalidSchoolCodeException
+import com.app.ecarepro.core.domain.repository.SchoolRepository
+import com.app.ecarepro.core.ui.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay // For simulating network call
+import javax.inject.Inject
 
-class SchoolCodeViewModel : ViewModel() {
-
+@HiltViewModel
+class SchoolCodeViewModel @Inject constructor(
+    private val schoolRepository: SchoolRepository,
+) : BaseViewModel<SchoolCodeIntent, SchoolCodeEvent>() {
     private val _uiState = MutableStateFlow(SchoolCodeUiState())
     val uiState: StateFlow<SchoolCodeUiState> = _uiState.asStateFlow()
 
-    fun onIntent(intent: SchoolCodeIntent) {
+    override fun handleIntent(intent: SchoolCodeIntent) {
         when (intent) {
-            is SchoolCodeIntent.OnDigitChanged -> handleDigitChanged(intent.index, intent.digit)
-            SchoolCodeIntent.OnNextClicked -> submitCode()
-            SchoolCodeIntent.OnFindCodeClicked -> { /* Handle navigation in UI layer */
+            is SchoolCodeIntent.OnCodeChanged -> {
+                updateCode(intent.code)
             }
 
-            SchoolCodeIntent.ClearError -> clearErrorMessage()
+            SchoolCodeIntent.OnNextClicked -> {
+                verifySchoolCode()
+            }
+
+            SchoolCodeIntent.OnFindCodeClicked -> {
+                sendEvent(SchoolCodeEvent.NavigateToSearchSchoolScreen)
+            }
+
+            SchoolCodeIntent.OnErrorShown -> {
+                _uiState.update { it.copy(errorMessage = null) }
+            }
         }
     }
 
-    private fun handleDigitChanged(index: Int, digit: String) {
-        if (index < 0 || index >= _uiState.value.codeDigits.size) return
-        // Allow only single digit, alphanumeric for flexibility, or enforce numeric if needed
-        val newDigit = digit.take(1)
-
-        _uiState.update { currentState ->
-            val newDigits = currentState.codeDigits.toMutableList()
-            newDigits[index] = newDigit
-            currentState.copy(
-                codeDigits = newDigits.toList(), // Ensure new list for recomposition
-                errorMessage = null // Clear error when user starts typing
-            )
-        }
+    private fun updateCode(code: String) {
+        _uiState.update { it.copy(schoolCode = code) }
     }
 
-    private fun submitCode() {
-        if (!_uiState.value.isCodeComplete || _uiState.value.isLoading) return
-
-        _uiState.update { it.copy(isLoading = true, errorMessage = null) }
-
+    private fun verifySchoolCode() {
         viewModelScope.launch {
-            delay(1500) // Simulate network verification
-            val currentCode = _uiState.value.codeDigits.joinToString("")
-            // --- Replace with actual validation logic ---
-            if (currentCode == "123456") { // Example success code
-                _uiState.update { it.copy(isLoading = false) }
-                // Navigation to next screen will be triggered by the Composable observing this state
-                // or via a separate event/sharedFlow if complex navigation logic is needed.
-                // For this example, we'll assume the Composable handles it based on a null error
-                // and successful submission.
-            } else if (currentCode == "000000") { // Example known invalid code for testing error
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = "We couldn't match that code. Enter a different one."
-                    )
+            val schoolCode = uiState.value.schoolCode ?: return@launch
+            schoolRepository
+                .getSchoolDetails(schoolCode)
+                .onStart {
+                    _uiState.update { it.copy(isLoading = true) }
                 }
-            } else {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = "Invalid school code. Please try again."
-                    )
+                .collect { result ->
+                    _uiState.update { it.copy(isLoading = false) }
+                    if (result.isSuccess) {
+                        sendEvent(SchoolCodeEvent.NavigateToNextScreen)
+                    } else {
+                        val exception = result.exceptionOrNull()
+                        val message = if (exception is InvalidSchoolCodeException) {
+                            SnackbarMessage(
+                                text = exception.message ?: "An unknown error occurred",
+                                type = MessageType.WARNING,
+                            )
+                        } else {
+                            val errorMessage =
+                                result.exceptionOrNull()?.message ?: "An unknown error occurred"
+                            SnackbarMessage(errorMessage, type = MessageType.ERROR)
+                        }
+                        _uiState.update { it.copy(errorMessage = message) }
+                    }
                 }
-            }
         }
     }
+}
 
-    private fun clearErrorMessage() {
-        _uiState.update { it.copy(errorMessage = null) }
-    }
+sealed interface SchoolCodeIntent {
+    data class OnCodeChanged(val code: String) : SchoolCodeIntent
+    data object OnNextClicked : SchoolCodeIntent
+    data object OnFindCodeClicked : SchoolCodeIntent
+    data object OnErrorShown : SchoolCodeIntent
+}
 
-    // This function can be called by the Composable when navigation to next screen should happen.
-    // However, it's often better to react to state changes (e.g., successful validation and null error)
-    // directly in the Composable for navigation.
-    // For this example, we assume navigation is handled based on state in the UI.
-    fun getEnteredCode(): String = _uiState.value.codeDigits.joinToString("")
+// One-time navigation events from ViewModel to UI
+sealed interface SchoolCodeEvent {
+    data object NavigateToNextScreen : SchoolCodeEvent
+    data object NavigateToSearchSchoolScreen : SchoolCodeEvent
+}
+
+@Immutable
+data class SchoolCodeUiState(
+    val schoolCode: String? = null,
+    val isLoading: Boolean = false,
+    val errorMessage: SnackbarMessage? = null,
+) {
+    val isCodeEntered = schoolCode.isNullOrEmpty().not()
 }

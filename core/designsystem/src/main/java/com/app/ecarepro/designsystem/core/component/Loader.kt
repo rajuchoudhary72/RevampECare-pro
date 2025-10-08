@@ -1,7 +1,8 @@
 package com.app.ecarepro.designsystem.core.component
 
-import android.os.Build.VERSION.SDK_INT
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,15 +13,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.ImageLoader
-import coil.compose.rememberAsyncImagePainter
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.app.ecarepro.core.designsystem.R
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
@@ -29,33 +32,29 @@ import com.app.ecarepro.designsystem.core.theme.appTypography
 @Composable
 fun Loader(
     modifier: Modifier = Modifier,
-    loaderGifRes:Int = R.drawable.pencil_loader,
-    showText: Boolean = true,
-    loadingText: String = "Loading..."
+    lottieRawId: Int = R.raw.loader,
+    showText: Boolean = false,
+    loadingText: String = "Loading...",
 ) {
-    val context = LocalContext.current
-    val imageLoader = ImageLoader.Builder(context)
-        .components {
-            if (SDK_INT >= 28) {
-                add(ImageDecoderDecoder.Factory())
-            } else {
-                add(GifDecoder.Factory())
-            }
-        }
-        .build()
 
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.1f))
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = {}
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = rememberAsyncImagePainter(
-                loaderGifRes,
-                imageLoader = imageLoader
-            ),
-            contentDescription = "Loading animation",
-            modifier = Modifier.Companion.size(200.dp)
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(lottieRawId))
+        val progress by animateLottieCompositionAsState(composition)
+        LottieAnimation(
+            modifier = Modifier.size(150.dp),
+            composition = composition,
+            progress = { progress },
         )
         if (showText) {
             Spacer(modifier = Modifier.Companion.height(16.dp))
@@ -68,7 +67,7 @@ fun Loader(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true)
 @Composable
 private fun LoaderPreview() {
     EcareProTheme {
