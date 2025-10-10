@@ -25,13 +25,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.app.ecarepro.designsystem.core.component.Button
 import com.app.ecarepro.designsystem.core.component.CodeInput
 import com.app.ecarepro.designsystem.core.component.Loader
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appTypography
-import com.app.ecarepro.feature.schoolcode.component.Background
+import com.app.ecarepro.designsystem.core.component.EcareProBackground
+import com.app.ecarepro.designsystem.core.component.EcareProSnackbar
+import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.feature.schoolcode.component.FindCodeLink
 import com.app.ecarepro.feature.schoolcode.component.Footer
 import com.app.ecarepro.feature.schoolcode.component.HeaderSection
@@ -39,8 +41,8 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SchoolCodeScreen(
-    viewModel: SchoolCodeViewModel = viewModel(),
-    navigateToNextScreen: () -> Unit,
+    viewModel: SchoolCodeViewModel = hiltViewModel(),
+    navigateToNextScreen: (String) -> Unit,
     navigateToFindCodeScreen: () -> Unit,
 ) {
 
@@ -59,8 +61,8 @@ fun SchoolCodeScreen(
     LaunchedEffect(Unit) {
         viewModel.screenEvent.collectLatest { event ->
             when (event) {
-                SchoolCodeEvent.NavigateToNextScreen -> navigateToNextScreen()
                 SchoolCodeEvent.NavigateToSearchSchoolScreen -> navigateToFindCodeScreen()
+                is SchoolCodeEvent.NavigateToNextScreen -> navigateToNextScreen(event.schoolCode)
             }
         }
     }
@@ -68,14 +70,16 @@ fun SchoolCodeScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        Background {
+        EcareProBackground {
             Scaffold(
                 containerColor = Color.Transparent,
-                snackbarHost = { SnackbarHost(hostState = snackbarHostState){
-                    uiState.errorMessage?.let {
-                        AppSnackbar(it)
+                snackbarHost = {
+                    SnackbarHost(hostState = snackbarHostState) {
+                        uiState.errorMessage?.let {
+                            EcareProSnackbar(it)
+                        }
                     }
-                } }
+                }
             ) { paddingValues ->
                 Column(
                     modifier = Modifier
@@ -117,7 +121,8 @@ fun SchoolCodeScreen(
                         modifier = Modifier
                             .fillMaxWidth(),
                         title = "Next",
-                        enabled = uiState.isCodeEntered
+                        enabled = uiState.isCodeEntered,
+                        backgroundColor = MaterialTheme.appColors.accent
                     )
 
                     Spacer(modifier = Modifier.weight(1f))

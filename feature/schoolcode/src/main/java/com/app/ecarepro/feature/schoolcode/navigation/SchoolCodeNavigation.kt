@@ -21,7 +21,7 @@ sealed interface SchoolCodeNavigationGraph : NavKey {
 @Composable
 fun EntryProviderBuilder<NavKey>.SchoolCode(
     backStack: SnapshotStateList<NavKey>,
-    navigateToLogin: () -> Unit,
+    navigateToLogin: (schoolCode: String) -> Unit,
 ) {
     entry<SchoolCodeNavigationGraph.SchoolCode> {
         SchoolCodeScreen(

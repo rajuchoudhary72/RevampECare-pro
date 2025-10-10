@@ -1,4 +1,4 @@
-package com.app.ecarepro.feature.schoolcode.component
+package com.app.ecarepro.designsystem.core.component
 
 
 import androidx.compose.foundation.Image
@@ -15,22 +15,21 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.app.ecarepro.core.designsystem.R
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
-import com.app.ecarepro.feature.schoolcode.R
 
 @Composable
-fun Background(
+fun EcareProBackground(
     modifier: Modifier = Modifier,
-    imagePainter: Painter = painterResource(id = R.drawable.background_image_2),
+    imagePainter: Painter = painterResource(id = R.drawable.background_transparent_image),
     overlayColor: Color = MaterialTheme.appColors.primary,
-    overlayAlpha: Float = 0.9f,
     content: @Composable () -> Unit,
 ) {
 
 
     Surface(
-        color = Color.Transparent,
+        color = overlayColor,
         modifier = modifier.fillMaxSize(),
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -40,15 +39,6 @@ fun Background(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.None
             )
-
-
-            if (overlayColor != Color.Unspecified) {
-                Surface(
-                    color = overlayColor.copy(alpha = overlayAlpha),
-                    modifier = Modifier.fillMaxSize()
-                ) {}
-            }
-
             content()
         }
     }
@@ -58,7 +48,7 @@ fun Background(
 @Composable
 fun BackgroundPreview() {
     EcareProTheme {
-        Background {
+        EcareProBackground {
             Box(
                 modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
             ) {

@@ -140,6 +140,7 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 retrofit-kotlin-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 androidx-lifecycle-viewModelKtx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
 
+
 # Core Navigation 3 libraries
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
@@ -171,6 +172,7 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 android-lint = { id = "com.android.lint", version.ref = "agp" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+room = { id = "androidx.room", version.ref = "room" }
 
 ecarepro-android-application-compose = { id = "ecarepro.android.application.compose" }
 ecarepro-android-feature = { id = "ecarepro.android.feature" }
@@ -178,6 +180,7 @@ ecarepro-android-androidLibrary = { id = "ecarepro.android.library" }
 ecarepro-android-library-compose = { id = "ecarepro.android.library.compose" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 ecarepro-hilt = { id = "ecarepro.hilt" }
+ecarepro-android-room = { id = "ecarepro.android.room" }
 
 
 [bundles]

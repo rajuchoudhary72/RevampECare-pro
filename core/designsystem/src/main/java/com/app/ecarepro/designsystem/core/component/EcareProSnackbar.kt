@@ -1,7 +1,4 @@
-package com.app.ecarepro.feature.schoolcode
-
-// In a new file, e.g., core/designsystem/src/main/java/com/app/ecarepro/designsystem/core/component/snackbar/AppSnackbar.kt
-
+package com.app.ecarepro.designsystem.core.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,13 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.type
-import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.text.color
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
@@ -38,7 +32,7 @@ data class SnackbarMessage(
 )
 
 @Composable
-fun AppSnackbar(
+fun EcareProSnackbar(
     snackbarMessage: SnackbarMessage,
     modifier: Modifier = Modifier,
 ) {
@@ -66,9 +60,9 @@ fun AppSnackbar(
 
 @Preview
 @Composable
-private fun AppSnackbarWarningPreview() {
+private fun EcareProSnackbarWarningPreview() {
     EcareProTheme {
-        AppSnackbar(
+        EcareProSnackbar(
             snackbarMessage = SnackbarMessage(
                 text = "We couldn't match that code. Enter a different one.",
                 type = MessageType.WARNING
@@ -79,9 +73,9 @@ private fun AppSnackbarWarningPreview() {
 
 @Preview
 @Composable
-private fun AppSnackbarSuccessPreview() {
+private fun EcareProSnackbarSuccessPreview() {
     EcareProTheme {
-        AppSnackbar(
+        EcareProSnackbar(
             snackbarMessage = SnackbarMessage(
                 text = "Success! You will be redirected.",
                 type = MessageType.SUCCESS
@@ -91,9 +85,9 @@ private fun AppSnackbarSuccessPreview() {
 }
 @Preview
 @Composable
-private fun AppSnackbarInfoPreview() {
+private fun EcareProSnackbarInfoPreview() {
     EcareProTheme {
-        AppSnackbar(
+        EcareProSnackbar(
             snackbarMessage = SnackbarMessage(
                 text = "Success! You will be redirected.",
                 type = MessageType.INFO
@@ -103,9 +97,9 @@ private fun AppSnackbarInfoPreview() {
 }
 @Preview
 @Composable
-private fun AppSnackbarErrorPreview() {
+private fun EcareProSnackbarErrorPreview() {
     EcareProTheme {
-        AppSnackbar(
+        EcareProSnackbar(
             snackbarMessage = SnackbarMessage(
                 text = "Success! You will be redirected.",
                 type = MessageType.ERROR

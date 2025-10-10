@@ -8,5 +8,5 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.kotlinx.serialization.core)
 }

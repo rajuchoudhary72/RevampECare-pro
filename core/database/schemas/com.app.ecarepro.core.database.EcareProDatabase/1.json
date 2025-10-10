@@ -1,0 +1,151 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "791fdfdb9b0819e6adb1f41e3c93db38",
+    "entities": [
+      {
+        "tableName": "schools",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`school_code` TEXT NOT NULL, `active` INTEGER, `assessment_marks_url` TEXT, `city` TEXT, `contact_email` TEXT, `ecare_pro_sch` INTEGER, `fee_payment_url` TEXT, `fee_report_url` TEXT, `is_boarding_school` INTEGER, `is_student_login_blocked` INTEGER, `logo` TEXT, `logo_nsc_Name` TEXT, `logo_sc_name` TEXT, `marks_entry_url` TEXT, `sch_add_1` TEXT, `sch_add_2` TEXT, `sch_updated_on` TEXT, `schoolName` TEXT, `state` TEXT, `support_days` TEXT, `support_email` TEXT, `support_hours` TEXT, `support_phone` TEXT, `them_color` TEXT, `web_site` TEXT, PRIMARY KEY(`school_code`))",
+        "fields": [
+          {
+            "fieldPath": "schoolCode",
+            "columnName": "school_code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active",
+            "columnName": "active",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "assessmentMarksURL",
+            "columnName": "assessment_marks_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "city",
+            "columnName": "city",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "contactEmail",
+            "columnName": "contact_email",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "eCareProSch",
+            "columnName": "ecare_pro_sch",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "feePaymentURL",
+            "columnName": "fee_payment_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "feeReportURL",
+            "columnName": "fee_report_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "isBoardingSchool",
+            "columnName": "is_boarding_school",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "isStudentLoginBlocked",
+            "columnName": "is_student_login_blocked",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "logo",
+            "columnName": "logo",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "logoNScName",
+            "columnName": "logo_nsc_Name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "logoScName",
+            "columnName": "logo_sc_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "marksEntryURL",
+            "columnName": "marks_entry_url",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "schAdd1",
+            "columnName": "sch_add_1",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "schAdd2",
+            "columnName": "sch_add_2",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "schUpdatedOn",
+            "columnName": "sch_updated_on",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "schoolName",
+            "columnName": "schoolName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "supportDays",
+            "columnName": "support_days",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "supportEmail",
+            "columnName": "support_email",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "supportHours",
+            "columnName": "support_hours",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "supportPhone",
+            "columnName": "support_phone",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "themColor",
+            "columnName": "them_color",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "webSite",
+            "columnName": "web_site",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "school_code"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '791fdfdb9b0819e6adb1f41e3c93db38')"
+    ]
+  }
+}

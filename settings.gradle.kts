@@ -27,7 +27,9 @@ include(":core:ui")
 include(":core:network")
 include(":core:domain")
 include(":core:data")
+include(":core:database")
 
 include(":feature:onboarding")
 include(":feature:schoolcode")
+include(":feature:login")
 

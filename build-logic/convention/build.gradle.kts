@@ -63,5 +63,10 @@ gradlePlugin {
             id = libs.plugins.ecarepro.hilt.get().pluginId
             implementationClass = "HiltConventionPlugin"
         }
+
+        register("androidRoom") {
+            id = libs.plugins.ecarepro.android.room.get().pluginId
+            implementationClass = "AndroidRoomConventionPlugin"
+        }
     }
 }
