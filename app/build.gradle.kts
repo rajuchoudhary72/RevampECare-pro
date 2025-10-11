@@ -138,6 +138,8 @@ dependencies {
 
     implementation(projects.feature.onboarding)
     implementation(projects.feature.schoolcode)
+    implementation(projects.feature.login)
+
 
     implementation(projects.core.data)
 
@@ -156,6 +158,8 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
     implementation(libs.com.google.firebase.firebase.crashlytics)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+
     kapt(libs.hilt.android.compiler)
 
     /*    *//* Database *//*
