@@ -2,7 +2,6 @@ package com.app.ecarepro.feature.schoolcode.component
 
 
 import android.annotation.SuppressLint
-import android.view.inputmethod.EditorInfo
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
@@ -11,85 +10,56 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.LocalTextInputService
-import androidx.compose.ui.platform.TextToolbar
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.input.pointer.pointerInput
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
-import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 
-/**
- * OtpTextField - per-char OTP input composed of single-character BasicTextField boxes.
- *
- * Key features implemented:
- *  - configurable length (default 6)
- *  - per-character input boxes
- *  - auto move forward/backward
- *  - paste handling (when pasted string length > 1 in a box we distribute)
- *  - configurable style: boxSize, spacing, radius, border width & colors, textStyle
- *  - mask input option to display a dot (●) instead of actual char
- *  - error state support
- *  - auto-submit when all boxes filled
- *  - onOtpChange / onOtpComplete callbacks
- *  - auto focus first box on launch
- *  - keyboardType support (number, text, etc.)
- *  - disable copy/paste (best-effort via consuming long press)
- *  - dark-mode compatible (uses MaterialTheme defaults)
- *  - RTL support (moves focus respecting layout direction)
- *  - accessibility: contentDescription provided for each box
- *
- * Note: This implementation uses BasicTextField per cell and monitors pasted multi-char
- * input via onValueChange. It also uses pointerInput to consume long-press to reduce
- * copy/paste context menu (best-effort; platform behavior may still vary).
- */
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalComposeUiApi::class)
@@ -115,7 +85,7 @@ fun OtpTextField(
     autoFocusFirst: Boolean = true,
     onOtpChange: (String) -> Unit = {},
     onOtpComplete: (String) -> Unit = {},
-    onOtpSubmitDone: (() -> Unit)? = null // optional when you want to hide keyboard etc.
+    onOtpSubmitDone: (() -> Unit)? = null, // optional when you want to hide keyboard etc.
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val rtl = layoutDirection == LayoutDirection.Rtl
@@ -193,7 +163,13 @@ fun OtpTextField(
                 contentAlignment = Alignment.Center
             ) {
                 // We'll use BasicTextField to fully control behavior
-                var internalText by remember { mutableStateOf(TextFieldValue(text = char?.toString() ?: "")) }
+                var internalText by remember {
+                    mutableStateOf(
+                        TextFieldValue(
+                            text = char?.toString() ?: ""
+                        )
+                    )
+                }
 
                 BasicTextField(
                     value = internalText,
@@ -210,7 +186,8 @@ fun OtpTextField(
                                 putIndex++
                             }
                             // move focus to next empty or last
-                            val nextFocusIndex = (index + pasteChars.size).coerceAtMost(otpLength - 1)
+                            val nextFocusIndex =
+                                (index + pasteChars.size).coerceAtMost(otpLength - 1)
                             // update internal for current
                             internalText = TextFieldValue(
                                 text = otpState[index]?.toString() ?: ""
@@ -345,12 +322,4 @@ fun OtpTextField(
             }
         }
     }
-}@Preview
-@Composable
-fun CodeScreenPreview() {
-    EcareProTheme {
-        OtpTextField()
-    }
-
 }
-

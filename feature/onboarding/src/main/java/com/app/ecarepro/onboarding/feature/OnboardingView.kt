@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.app.ecarepro.core.domain.model.OnboardingItem
-import com.app.ecarepro.core.ui.StateHandler
+import com.app.ecarepro.core.ui.UiStateHandler
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
@@ -38,6 +38,7 @@ import com.app.ecarepro.onboarding.feature.component.OnboardingButtons
 import com.app.ecarepro.onboarding.feature.component.OnboardingPagerItem
 import com.app.ecarepro.onboarding.feature.component.PagerIndicator
 import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +49,7 @@ fun OnboardingView(
 
     val uiState: UiState<List<OnboardingItem>> by viewModel.uiState.collectAsState()
 
-    StateHandler(
+    UiStateHandler(
         state = uiState,
         onRetry = { viewModel.fetchOnboardingItems() }
     ) {

@@ -9,4 +9,7 @@ android {
 
 dependencies {
     api(projects.core.designsystem)
+    implementation(libs.androidx.lifecycle.viewModelKtx)
+
+
 }

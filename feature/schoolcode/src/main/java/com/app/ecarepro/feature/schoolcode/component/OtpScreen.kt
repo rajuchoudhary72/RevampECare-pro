@@ -117,5 +117,6 @@ fun OtpScreenPreview() {
     EcareProTheme {
         OtpScreen()
     }
+
 }
 

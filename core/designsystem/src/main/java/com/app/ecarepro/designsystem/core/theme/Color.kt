@@ -32,6 +32,8 @@ val BrightFreshGreen = Color(0xFF81C784)
 val SkyCyan = Color(0xFF29B6F6)
 val AmberOrangeDark = Color(0xFFFFB74D)
 val LightRed = Color(0xFFE57373)
+val Blue = Color(0xFF35C2C1)
+
 
 
 

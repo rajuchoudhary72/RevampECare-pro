@@ -7,11 +7,11 @@ data class OnboardingResponseModel(
      override val errorCode: Int,
      override val message: String,
      override val status: String,
-     val slides: List<OnboardingSlide>,
+     val slides: List<NetworkOnboardingItem>,
  ):NetworkResponse
 
 @Serializable
-data class OnboardingSlide(
+data class NetworkOnboardingItem(
     val heading: String,
     val imageURL: String,
     val text: String

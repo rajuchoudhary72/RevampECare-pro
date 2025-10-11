@@ -22,9 +22,9 @@ import com.app.ecarepro.feature.schoolcode.R
 @Composable
 fun Background(
     modifier: Modifier = Modifier,
-    imagePainter: Painter = painterResource(id = R.drawable.ecare_pro_white_logo),
+    imagePainter: Painter = painterResource(id = R.drawable.background_image_2),
     overlayColor: Color = MaterialTheme.appColors.primary,
-    overlayAlpha: Float = 0.7f,
+    overlayAlpha: Float = 0.9f,
     content: @Composable () -> Unit,
 ) {
 
@@ -38,7 +38,7 @@ fun Background(
                 painter = imagePainter,
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.None
             )
 
 
