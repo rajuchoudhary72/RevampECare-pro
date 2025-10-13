@@ -23,10 +23,15 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
+import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
+import com.app.ecarepro.feature.login.navigation.Login
+import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
 import com.app.ecarepro.feature.schoolcode.navigation.SchoolCode
 import com.app.ecarepro.feature.schoolcode.navigation.SchoolCodeNavigationGraph
 import com.app.ecarepro.onboarding.feature.navigation.Onboarding
@@ -39,6 +44,7 @@ object ModuleRegistry {
     val screens: Map<String, NavKey> = mapOf(
         "OnBoarding" to OnboardingNavigationGraph.Onboarding,
         "School Code" to SchoolCodeNavigationGraph.SchoolCode,
+        "Login" to LoginNavigationGraph.Login(schoolCode = "DEMOIN"),
     )
 }
 
@@ -61,6 +67,13 @@ fun TestNav() {
     val backStack = remember { mutableStateListOf<NavKey>(TestNavigationGraph.Modules) }
 
     NavDisplay(
+        entryDecorators = listOf(
+            // Add the default decorators for managing scenes and saving state
+            rememberSceneSetupNavEntryDecorator(),
+            rememberSavedStateNavEntryDecorator(),
+            // Then add the view model store decorator
+            rememberViewModelStoreNavEntryDecorator()
+        ),
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
@@ -75,8 +88,17 @@ fun TestNav() {
 
             SchoolCode(
                 backStack = backStack,
-                navigateToLogin = { backStack.removeLastOrNull() }
+                navigateToLogin = { schoolCode ->
+                    backStack.add(LoginNavigationGraph.Login(schoolCode = schoolCode))
+                },
             )
+
+            Login(
+                backToSchoolCode = {
+                    backStack.removeLastOrNull()
+                }
+            )
+
         }
     )
 }

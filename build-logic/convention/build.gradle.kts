@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     `kotlin-dsl`
-     alias(libs.plugins.android.lint)
+    alias(libs.plugins.android.lint)
 }
 
 group = "com.app.ecarepro.buildlogic"
@@ -62,6 +62,11 @@ gradlePlugin {
         register("hilt") {
             id = libs.plugins.ecarepro.hilt.get().pluginId
             implementationClass = "HiltConventionPlugin"
+        }
+
+        register("androidRoom") {
+            id = libs.plugins.ecarepro.android.room.get().pluginId
+            implementationClass = "AndroidRoomConventionPlugin"
         }
     }
 }

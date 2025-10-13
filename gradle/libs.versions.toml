@@ -172,13 +172,14 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 android-lint = { id = "com.android.lint", version.ref = "agp" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-
+room = { id = "androidx.room", version.ref = "room" }
 ecarepro-android-application-compose = { id = "ecarepro.android.application.compose" }
 ecarepro-android-feature = { id = "ecarepro.android.feature" }
 ecarepro-android-androidLibrary = { id = "ecarepro.android.library" }
 ecarepro-android-library-compose = { id = "ecarepro.android.library.compose" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 ecarepro-hilt = { id = "ecarepro.hilt" }
+ecarepro-android-room = { id = "ecarepro.android.room" }
 
 
 [bundles]
