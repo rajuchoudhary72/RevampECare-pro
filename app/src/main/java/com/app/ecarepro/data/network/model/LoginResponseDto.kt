@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 
 data class LoginResponseDto(
+
     @SerializedName("authToken")
     val authToken: String?,
     @SerializedName("sessionID")
