@@ -822,6 +822,7 @@
     <string name="assignRollNumber_already_assigned">પહેલેથી જ ફાળવાયેલ</string>
 
     <string name="upload_student_photo">વિદ્યાર્થીનો ફોટો અપલોડ કરો</string>
+    <string name="upload_parent_photo">માતાપિતાનો ફોટો અપલોડ કરો</string>
     <string name="assignment_title">સોંપણી</string>
     <string name="syllabus">અભ્યાસક્રમ</string>
     <string name="my_leave_title">મારી રજા</string>
