@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "791fdfdb9b0819e6adb1f41e3c93db38",
+    "identityHash": "a61dc2be0a8ffebe4f26595ab50e5da2",
     "entities": [
       {
         "tableName": "schools",
@@ -141,11 +141,111 @@
             "school_code"
           ]
         }
+      },
+      {
+        "tableName": "users",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `auth_token` TEXT, `authenticated` INTEGER, `class_id` TEXT, `class` TEXT, `error_code` INTEGER, `is_defaulter` INTEGER, `mobile_number` TEXT, `name` TEXT, `photo_path` TEXT, `role_name` TEXT, `session_id` TEXT, `st_name` TEXT, `user_id` INTEGER, `user_type` INTEGER, `school_code` TEXT NOT NULL, `updated_on` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "authToken",
+            "columnName": "auth_token",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "authenticated",
+            "columnName": "authenticated",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "classID",
+            "columnName": "class_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "className",
+            "columnName": "class",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "errorCode",
+            "columnName": "error_code",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "isDefaulter",
+            "columnName": "is_defaulter",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "mobileNumber",
+            "columnName": "mobile_number",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "photoPath",
+            "columnName": "photo_path",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "roleName",
+            "columnName": "role_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "sessionID",
+            "columnName": "session_id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "stName",
+            "columnName": "st_name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "userID",
+            "columnName": "user_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "userType",
+            "columnName": "user_type",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "schoolCode",
+            "columnName": "school_code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedOn",
+            "columnName": "updated_on",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '791fdfdb9b0819e6adb1f41e3c93db38')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a61dc2be0a8ffebe4f26595ab50e5da2')"
     ]
   }
 }

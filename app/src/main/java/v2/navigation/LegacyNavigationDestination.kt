@@ -1,7 +1,9 @@
 package v2.navigation
 
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import com.app.ecarepro.R
+import com.app.ecarepro.core.domain.model.User
 
 
 const val EXTRA_LEGACY_FLOW = "legacyFlow"
@@ -17,12 +19,21 @@ sealed class LegacyNavigationDestination {
         override val destinationId: Int = R.id.schoolCodeFragment
     }
 
-   /* data class UserProfile(val userId: String) : ExistingNavigationDestination() {
-        override val destinationId: Int = R.id.userProfileFragment // Replace with your actual ID
+    data class Main(val user: User) : LegacyNavigationDestination() {
+        override val destinationId: Int = R.id.homeFragment
         override val extras: Bundle
-            get() = Bundle().apply {
-                putString("USER_ID_KEY", userId)
-            }
-    }*/
+            get() = bundleOf(
+                "user" to user
+            )
+
+    }
+
+    /* data class UserProfile(val userId: String) : ExistingNavigationDestination() {
+         override val destinationId: Int = R.id.userProfileFragment // Replace with your actual ID
+         override val extras: Bundle
+             get() = Bundle().apply {
+                 putString("USER_ID_KEY", userId)
+             }
+     }*/
 
 }

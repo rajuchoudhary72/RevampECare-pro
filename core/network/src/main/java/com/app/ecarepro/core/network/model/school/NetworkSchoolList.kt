@@ -1,8 +1,11 @@
-package com.app.ecarepro.core.network.model
+package com.app.ecarepro.core.network.model.school
 
+import com.app.ecarepro.core.network.model.NetworkResponse
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@InternalSerializationApi
 @Serializable
 data class NetworkSchoolList(
     @SerialName("errorCode")
@@ -15,6 +18,7 @@ data class NetworkSchoolList(
     override val status: String,
 ): NetworkResponse
 
+@InternalSerializationApi
 @Serializable
 data class NetworkSchool(
     @SerialName("address")

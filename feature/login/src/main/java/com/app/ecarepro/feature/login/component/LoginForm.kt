@@ -21,16 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.app.ecarepro.designsystem.core.component.Button
-import com.app.ecarepro.designsystem.core.component.ButtonComponent
-import com.app.ecarepro.designsystem.core.component.ButtonComponentStyle
 import com.app.ecarepro.designsystem.core.component.EcareProOutlinedTextField
 import com.app.ecarepro.designsystem.core.component.TextButton
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
@@ -47,6 +45,9 @@ fun LoginForm(
     onLoginClicked: () -> Unit = {},
     onForgotPasswordClicked: () -> Unit = {},
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+
 
     var isPasswordVisible by remember { mutableStateOf(false) }
 
@@ -97,22 +98,18 @@ fun LoginForm(
             title = "Forgot Password?",
             contentPadding = PaddingValues(horizontal = 4.dp, vertical = 6.dp)
         )
-        ButtonComponent(
-            text = "Login",
-            style = ButtonComponentStyle.primary(
-                fontWeight = FontWeight.Black,
-                backgroundColor = MaterialTheme.appColors.primary,
-            )
-        ) {}
-        /*ButtonComponent(
-            text =  "Login",
-            onClick = onLoginClicked
-        )*/
-     /*   Button(
+
+
+
+        Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = onLoginClicked,
+            onClick = {
+                keyboardController?.hide()
+                focusManager.clearFocus()
+                onLoginClicked()
+            },
             title = "Login"
-        )*/
+        )
 
     }
 }

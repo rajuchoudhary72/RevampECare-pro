@@ -1,9 +1,8 @@
 package com.app.ecarepro.core.network
 
-import com.app.ecarepro.core.network.model.NetworkOnboardingItem
-
-import com.app.ecarepro.core.network.model.NetworkSchool
-import com.app.ecarepro.core.network.model.NetworkSchoolDetails
+import com.app.ecarepro.core.network.model.onboarding.NetworkOnboardingItem
+import com.app.ecarepro.core.network.model.school.NetworkSchool
+import com.app.ecarepro.core.network.model.school.NetworkSchoolDetails
 
 interface SchoolRemoteDataSource {
     suspend fun getOnboardingData(): List<NetworkOnboardingItem>

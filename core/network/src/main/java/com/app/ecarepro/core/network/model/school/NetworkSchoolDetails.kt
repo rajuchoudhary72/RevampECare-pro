@@ -1,10 +1,12 @@
-package com.app.ecarepro.core.network.model
+package com.app.ecarepro.core.network.model.school
 
+import com.app.ecarepro.core.network.model.NetworkResponse
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@InternalSerializationApi
 data class NetworkSchoolDetails(
     @SerialName("active")
     val active: Int?,
@@ -66,6 +68,7 @@ data class NetworkSchoolDetails(
     val webSite: String?,
 ) : NetworkResponse
 
+@InternalSerializationApi
 @Serializable
 data class SchoolSlider(
     @SerialName("description")

@@ -16,6 +16,8 @@ import javax.inject.Inject
 import com.app.ecarepro.data.network.model.Favourites
 import com.app.ecarepro.data.network.model.NotificationsDto
 import retrofit2.HttpException
+import kotlinx.coroutines.flow.catch
+
 
 import com.app.ecarepro.data.network.model.SyncData
 import com.app.ecarepro.ui.language.LanguageRepository
@@ -141,6 +143,10 @@ class AppRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
+            .catch { e ->
+                emit(Result.failure(e))
+            }
+
     }
 
 

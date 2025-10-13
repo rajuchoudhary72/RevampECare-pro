@@ -106,6 +106,10 @@ import java.security.cert.X509Certificate
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
+import com.app.ecarepro.core.domain.model.User
+import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
+import com.app.ecarepro.data.getCurrentDateTimeAmPm
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -367,6 +371,10 @@ class MainActivity : AppCompatActivity() {
             val destinationId = intent.extras?.getInt(EXTRA_DESTINATION_ID)
             val extras = intent.extras?.getBundle(EXTRA_EXTRAS)
 
+            extras?.let {
+                handleData(it)
+            }
+
             if (destinationId != null && destinationId != 0 && navGraph.findNode(destinationId) != null) {
 
                 navGraph.setStartDestination(destinationId)
@@ -382,7 +390,38 @@ class MainActivity : AppCompatActivity() {
             navController.setGraph(navGraph, intent.extras)
         }
     }
+    private fun handleData(bundle: Bundle) {
+        if (bundle.containsKey("user")) {
+            lifecycleScope.launch {
+                val userDtl: User = bundle.getSerializable("user") as User
+                userDataStore.saveUserDetails(
+                    UserDTL(
+                        sessionID = userDtl.sessionID,
+                        authToken = userDtl.authToken,
+                        authenticated = userDtl.authenticated,
+                        classID = userDtl.classID?.toInt(),
+                        classX = userDtl.className,
+                        errorCode = 0,
+                        message = userDtl.message,
+                        mobileNumer = userDtl.mobileNumber,
+                        name = userDtl.name,
+                        photoPath = userDtl.photoPath,
+                        roleName = userDtl.roleName,
+                        stName = userDtl.stName,
+                        status = userDtl.status,
+                        userID = userDtl.userID,
+                        userType = userDtl.userType
+                    ),
+                    userDtl.schoolCode, getCurrentDateTimeAmPm()
+                )
+                userDataStore.saveAuthToken(userDtl.authToken ?: "")
+                userDataStore.setAsUserAuthenticated(userDtl.authenticated ?: false)
+                userDataStore.saveUserType(userDtl.userType ?: 0)
+                userDataStore.saveRoleName(userDtl.roleName ?: "")
+            }
 
+        }
+    }
     private fun handleLegacyFlow() {
         if (intent.extras?.getBoolean(EXTRA_LEGACY_FLOW, false) == true) {
             val destinationId = intent.extras?.getInt(EXTRA_DESTINATION_ID)

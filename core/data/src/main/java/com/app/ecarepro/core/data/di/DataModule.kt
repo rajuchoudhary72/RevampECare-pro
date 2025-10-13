@@ -1,7 +1,9 @@
 package com.app.ecarepro.core.data.di
 
 import com.app.ecarepro.core.data.repository.SchoolRepositoryImpl
+import com.app.ecarepro.core.data.repository.UserRepositoryImpl
 import com.app.ecarepro.core.domain.repository.SchoolRepository
+import com.app.ecarepro.core.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,5 +17,10 @@ abstract class DataModule {
     abstract fun bindsSchoolRepository(
         topicsRepository: SchoolRepositoryImpl,
     ): SchoolRepository
+
+    @Binds
+    abstract fun bindsUserRepository(
+        topicsRepository: UserRepositoryImpl,
+    ): UserRepository
 
 }

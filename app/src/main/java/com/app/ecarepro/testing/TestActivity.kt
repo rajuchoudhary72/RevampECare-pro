@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -30,11 +32,11 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
-import com.app.ecarepro.feature.login.navigation.Login
+import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
-import com.app.ecarepro.feature.schoolcode.navigation.SchoolCode
+import com.app.ecarepro.feature.schoolcode.navigation.EntrySchoolCodeNavigation
 import com.app.ecarepro.feature.schoolcode.navigation.SchoolCodeNavigationGraph
-import com.app.ecarepro.onboarding.feature.navigation.Onboarding
+import com.app.ecarepro.onboarding.feature.navigation.EntryOnboardingNavigation
 import com.app.ecarepro.onboarding.feature.navigation.OnboardingNavigationGraph
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.Serializable
@@ -72,7 +74,7 @@ fun TestNav() {
             rememberSceneSetupNavEntryDecorator(),
             rememberSavedStateNavEntryDecorator(),
             // Then add the view model store decorator
-            rememberViewModelStoreNavEntryDecorator()
+            rememberViewModelStoreNavEntryDecorator(),
         ),
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
@@ -82,20 +84,23 @@ fun TestNav() {
                     backStack.add(it)
                 }
             }
-            Onboarding(navigateToAddSchool = {
+            EntryOnboardingNavigation(navigateToAddSchool = {
                 backStack.removeLastOrNull()
             })
 
-            SchoolCode(
+            EntrySchoolCodeNavigation(
                 backStack = backStack,
                 navigateToLogin = { schoolCode ->
                     backStack.add(LoginNavigationGraph.Login(schoolCode = schoolCode))
                 },
             )
 
-            Login(
+            EntryLoginNavigation(
                 backToSchoolCode = {
                     backStack.removeLastOrNull()
+                },
+                navigateToMain = {
+
                 }
             )
 

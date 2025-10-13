@@ -10,6 +10,5 @@ android {
 dependencies {
     api(projects.core.designsystem)
     implementation(libs.androidx.lifecycle.viewModelKtx)
-
-
+    implementation(libs.androidx.hilt.navigation.compose)
 }

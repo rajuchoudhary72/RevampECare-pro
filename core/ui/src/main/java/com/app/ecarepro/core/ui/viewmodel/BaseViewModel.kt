@@ -1,4 +1,4 @@
-package com.app.ecarepro.core.ui
+package com.app.ecarepro.core.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
