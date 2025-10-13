@@ -50,12 +50,15 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
+import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.getCurrentDateTimeAmPm
 import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
 import com.app.ecarepro.data.sync.SyncManager
 import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerChildChildItem
@@ -223,7 +226,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-
         /*open profile page after click on  profile */
         binding.itemDrawerHeader.imgUserAvatar.setOnClickListener {
             navController.navigate(R.id.profileFragment)
@@ -367,8 +369,12 @@ class MainActivity : AppCompatActivity() {
             val destinationId = intent.extras?.getInt(EXTRA_DESTINATION_ID)
             val extras = intent.extras?.getBundle(EXTRA_EXTRAS)
 
-            if (destinationId != null && destinationId != 0 && navGraph.findNode(destinationId) != null) {
 
+            extras?.let {
+                handleData(it)
+            }
+
+            if (destinationId != null && destinationId != 0 && navGraph.findNode(destinationId) != null) {
                 navGraph.setStartDestination(destinationId)
                 navController.setGraph(navGraph, extras)
             } else {
@@ -380,6 +386,39 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             navController.setGraph(navGraph, intent.extras)
+        }
+    }
+
+    private fun handleData(bundle: Bundle) {
+        if (bundle.containsKey("user")) {
+            lifecycleScope.launch {
+                val userDtl: User = bundle.getSerializable("user") as User
+                userDataStore.saveUserDetails(
+                    UserDTL(
+                        sessionID = userDtl.sessionID,
+                        authToken = userDtl.authToken,
+                        authenticated = userDtl.authenticated,
+                        classID = userDtl.classID?.toInt(),
+                        classX = userDtl.className,
+                        errorCode = 0,
+                        message = userDtl.message,
+                        mobileNumer = userDtl.mobileNumber,
+                        name = userDtl.name,
+                        photoPath = userDtl.photoPath,
+                        roleName = userDtl.roleName,
+                        stName = userDtl.stName,
+                        status = userDtl.status,
+                        userID = userDtl.userID,
+                        userType = userDtl.userType
+                    ),
+                    userDtl.schoolCode, getCurrentDateTimeAmPm()
+                )
+                userDataStore.saveAuthToken(userDtl.authToken ?: "")
+                userDataStore.setAsUserAuthenticated(userDtl.authenticated ?: false)
+                userDataStore.saveUserType(userDtl.userType ?: 0)
+                userDataStore.saveRoleName(userDtl.roleName ?: "")
+            }
+
         }
     }
 
@@ -1286,7 +1325,7 @@ class MainActivity : AppCompatActivity() {
         menuID: Int,
         childMenuId: Int,
         refId: String? = null,
-        from: String = "other"
+        from: String = "other",
     ) {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
@@ -1581,7 +1620,7 @@ class MainActivity : AppCompatActivity() {
         childChildMenuId: Int,
         refId: String? = null,
         userID: String? = null,
-        from: String = "other"
+        from: String = "other",
     ) {
         systemViewModel.sendAnalyticEvent(
             AnalyticsConstants.Events.MODULE_OPEN, mapOf(

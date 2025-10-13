@@ -14,7 +14,7 @@ sealed interface OnboardingNavigationGraph : NavKey {
 
 
 @Composable
-fun EntryProviderBuilder<NavKey>.Onboarding(
+fun EntryProviderBuilder<NavKey>.EntryOnboardingNavigation(
     navigateToAddSchool: () -> Unit
 ) {
     entry<OnboardingNavigationGraph.Onboarding> {

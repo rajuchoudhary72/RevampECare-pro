@@ -3,8 +3,8 @@ package com.app.ecarepro.core.data.mapper
 import com.app.ecarepro.core.database.model.SchoolEntity
 import com.app.ecarepro.core.domain.model.School
 import com.app.ecarepro.core.domain.model.SchoolDetail
-import com.app.ecarepro.core.network.model.NetworkSchool
-import com.app.ecarepro.core.network.model.NetworkSchoolDetails
+import com.app.ecarepro.core.network.model.school.NetworkSchool
+import com.app.ecarepro.core.network.model.school.NetworkSchoolDetails
 
 fun NetworkSchool.toDomainModel() = School(
     schoolCode = schoolCode,

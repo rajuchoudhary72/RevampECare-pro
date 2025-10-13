@@ -27,7 +27,7 @@ enum class MessageType {
 }
 
 data class SnackbarMessage(
-    val text: String,
+    val text: String = "Unknown error occurred",
     val type: MessageType = MessageType.ERROR,
 )
 

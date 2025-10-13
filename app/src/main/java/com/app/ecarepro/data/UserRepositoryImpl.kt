@@ -222,11 +222,7 @@ class UserRepositoryImpl @Inject constructor(
     ): NetworkUserDetailsDto {
         return userService.forgotPassword(SchCode,UserID,UserType,RcvOn)
     }
-    fun getCurrentDateTimeAmPm(): String {
-        val currentDate = Date()
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.ENGLISH)
-        return dateFormat.format(currentDate)
-    }
+
     override suspend fun login(
         schoolCode: String,
         userName: String,
@@ -1666,4 +1662,10 @@ class UserRepositoryImpl @Inject constructor(
         private const val USER_DASHBOARD_KEY = "user_dashboard"
         private const val USER_UNDERTAKING_KEY = "user_undertaking"
     }
+}
+
+fun getCurrentDateTimeAmPm(): String {
+    val currentDate = Date()
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.ENGLISH)
+    return dateFormat.format(currentDate)
 }

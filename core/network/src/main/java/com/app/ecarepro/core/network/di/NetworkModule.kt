@@ -1,7 +1,9 @@
 package com.app.ecarepro.core.network.di
 
+import com.app.ecarepro.core.domain.model.AppConfig
 import com.app.ecarepro.core.network.retrofit.interceptor.AuthTokenInterceptor
 import com.app.ecarepro.core.network.retrofit.service.SchoolService
+import com.app.ecarepro.core.network.retrofit.service.UserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,6 +34,7 @@ internal object NetworkModule {
     fun provideRetrofit(
         networkJson: Json,
         tokenInterceptor: AuthTokenInterceptor,
+        appConfig: AppConfig
     ): Retrofit {
         val okHttpClient = OkHttpClient
             .Builder()
@@ -43,7 +46,7 @@ internal object NetworkModule {
                     })
             .build()
         return Retrofit.Builder()
-            .baseUrl("https://apiuat.franciscanecare.net/")
+            .baseUrl(appConfig.baseUrl)
             .addConverterFactory(
                 networkJson.asConverterFactory("application/json".toMediaType()),
             )
@@ -56,6 +59,11 @@ internal object NetworkModule {
     fun provideSchoolService(
         @InjectInCoreModule retrofit: Retrofit
     ): SchoolService = retrofit.create(SchoolService::class.java)
+
+    @Provides
+    fun provideUserService(
+        @InjectInCoreModule retrofit: Retrofit
+    ): UserService = retrofit.create(UserService::class.java)
 
 }
 

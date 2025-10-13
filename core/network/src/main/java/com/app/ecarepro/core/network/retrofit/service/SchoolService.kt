@@ -1,8 +1,8 @@
 package com.app.ecarepro.core.network.retrofit.service
 
-import com.app.ecarepro.core.network.model.NetworkSchoolDetails
-import com.app.ecarepro.core.network.model.NetworkSchoolList
-import com.app.ecarepro.core.network.model.NetworkSchoolOnboarding
+import com.app.ecarepro.core.network.model.school.NetworkSchoolDetails
+import com.app.ecarepro.core.network.model.school.NetworkSchoolList
+import com.app.ecarepro.core.network.model.onboarding.NetworkSchoolOnboarding
 import retrofit2.http.GET
 import retrofit2.http.Query
 

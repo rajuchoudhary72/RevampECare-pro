@@ -160,7 +160,7 @@ fun SchoolListItem(school: School) {
                         .clip(RoundedCornerShape(12.dp))
                         .background(MaterialTheme.appColors.background)
                         .padding(6.dp),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Inside
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))

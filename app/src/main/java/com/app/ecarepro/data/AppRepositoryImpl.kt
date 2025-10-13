@@ -20,6 +20,7 @@ import retrofit2.HttpException
 import com.app.ecarepro.data.network.model.SyncData
 import com.app.ecarepro.ui.language.LanguageRepository
 import com.app.ecarepro.ui.language.model.TranslationItem
+import kotlinx.coroutines.flow.catch
 
 class AppRepositoryImpl @Inject constructor(
     private val appService: AppService,
@@ -141,6 +142,9 @@ class AppRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
+            .catch { e ->
+                emit(Result.failure(e))
+            }
     }
 
 

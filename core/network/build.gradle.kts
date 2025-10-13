@@ -13,6 +13,7 @@ android {
 }
 
 dependencies {
+    api(projects.core.domain)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.logging.interceptor)
     api(libs.retrofit)

@@ -21,6 +21,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -43,6 +45,9 @@ fun LoginForm(
     onLoginClicked: () -> Unit = {},
     onForgotPasswordClicked: () -> Unit = {},
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+
 
     var isPasswordVisible by remember { mutableStateOf(false) }
 
@@ -98,7 +103,11 @@ fun LoginForm(
 
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = onLoginClicked,
+            onClick = {
+                keyboardController?.hide()
+                focusManager.clearFocus()
+                onLoginClicked()
+            },
             title = "Login"
         )
 

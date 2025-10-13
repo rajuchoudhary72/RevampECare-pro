@@ -1,5 +1,6 @@
 package v2.navigation
 
+import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -9,7 +10,11 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.app.ecarepro.onboarding.feature.navigation.Onboarding
+import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
+import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
+import com.app.ecarepro.feature.schoolcode.navigation.EntrySchoolCodeNavigation
+import com.app.ecarepro.feature.schoolcode.navigation.SchoolCodeNavigationGraph
+import com.app.ecarepro.onboarding.feature.navigation.EntryOnboardingNavigation
 import com.app.ecarepro.onboarding.feature.navigation.OnboardingNavigationGraph
 
 @Composable
@@ -29,8 +34,22 @@ fun EcareProNavDisplay(
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
-            Onboarding(navigateToAddSchool = {
-                navigateToLegacyFlow(LegacyNavigationDestination.AddSchool)
+            EntryOnboardingNavigation(navigateToAddSchool = {
+               backStack.add(SchoolCodeNavigationGraph.SchoolCode)
             })
+            EntrySchoolCodeNavigation(
+                backStack = backStack,
+                navigateToLogin = { schoolCode ->
+                   backStack.add(LoginNavigationGraph.Login(schoolCode = schoolCode))
+                }
+            )
+            EntryLoginNavigation(
+                backToSchoolCode = {
+                    backStack.removeLastOrNull()
+                },
+                navigateToMain = { user ->
+                    navigateToLegacyFlow(LegacyNavigationDestination.Main(user))
+                }
+            )
         })
 }
