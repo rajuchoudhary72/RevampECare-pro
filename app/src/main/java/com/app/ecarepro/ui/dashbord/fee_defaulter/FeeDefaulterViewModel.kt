@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.NetworkWingReport
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,12 +24,11 @@ class FeeDefaulterViewModel @Inject constructor(
 
     fun  getFeeDefaulters(
         feeTypeId: Int?,
-        installIds: String?,
-        isIncludeFineChecked: Boolean
+        installIds: String?
     )=viewModelScope.launch {
         runCatching {
             feeDefaulterMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.getFeeDefaulters( feeTypeId, installIds,isIncludeFineChecked)
+            userRepository.getFeeDefaulters( feeTypeId, installIds)
         }.onSuccess {
             feeDefaulterMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

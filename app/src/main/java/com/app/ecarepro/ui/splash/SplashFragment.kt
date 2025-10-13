@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.splash
 
+import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import com.app.ecarepro.utils.imageUrl
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import v2.MainActivity
 
 
 @AndroidEntryPoint
@@ -92,8 +94,11 @@ class SplashFragment : Fragment() {
                 if (splashViewModel.isUserAuthenticated()) {
                     moveToHomeScreen()
                 } else {
-                    splashViewModel.getSliders()
-                    findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
+                   /* splashViewModel.getSliders()
+                    findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)*/
+
+                    requireActivity().finish()
+                    startActivity(Intent(requireContext(), MainActivity::class.java))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

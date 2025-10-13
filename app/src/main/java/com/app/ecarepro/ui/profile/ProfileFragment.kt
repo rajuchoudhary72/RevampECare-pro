@@ -710,22 +710,10 @@ class ProfileFragment : Fragment() {
             subTitle(profile.studentProfile?.fatherAadhaarNumber)
         }
         profileItem {
-            id(R.string.father_s_designation)
-            iconRes(R.drawable.ic_baseline_menu_book_24)
-            title(getString(R.string.father_s_designation))
-            subTitle(profile.studentProfile?.fatherDesignation)
-        }
-        profileItem {
             id(R.string.father_s_designation_details)
             iconRes(R.drawable.ic_baseline_menu_book_24)
             title(getString(R.string.father_s_designation_details))
             subTitle(profile.studentProfile?.fatherDesignationDetail)
-        }
-        profileItem {
-            id(R.string.father_s_profession)
-            iconRes(R.drawable.ic_baseline_menu_book_24)
-            title(getString(R.string.father_s_profession))
-            subTitle(profile.studentProfile?.fatherProfession)
         }
         profileItem {
             id(R.string.father_s_profession_details)
@@ -734,22 +722,10 @@ class ProfileFragment : Fragment() {
             subTitle(profile.studentProfile?.fatherProfessionDetail)
         }
         profileItem {
-            id(R.string.mother_s_designation)
-            iconRes(R.drawable.ic_baseline_menu_book_24)
-            title(getString(R.string.mother_s_designation))
-            subTitle(profile.studentProfile?.motherDesignation)
-        }
-        profileItem {
             id(R.string.mother_s_designation_details)
             iconRes(R.drawable.ic_baseline_menu_book_24)
             title(getString(R.string.mother_s_designation_details))
             subTitle(profile.studentProfile?.motherDesignationDetail)
-        }
-        profileItem {
-            id(R.string.mother_s_profession)
-            iconRes(R.drawable.ic_baseline_menu_book_24)
-            title(getString(R.string.mother_s_profession))
-            subTitle(profile.studentProfile?.motherProfession)
         }
         profileItem {
             id(R.string.mother_s_profession_details)

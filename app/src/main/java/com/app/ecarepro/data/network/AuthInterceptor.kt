@@ -24,7 +24,7 @@ class AuthInterceptor @Inject constructor(
         "User/GetUsernameByUID",
         "User/TwoFactorLogin",
         "User/ResendOTP",
-        "User/ValidateOTP",
+
     )
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -53,6 +53,8 @@ class AuthInterceptor @Inject constructor(
 
     companion object {
         const val AUTH_TOKEN = "AuthToken"
+       // const val SESSION_ID = "SessionID"
+
     }
 
 

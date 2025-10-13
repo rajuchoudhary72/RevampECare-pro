@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="unlock_your_franciscan_experience_title" tools:ignore="ResourceName">Unlock Your Franciscan Experience</string>
+    <string name="unlock_your_franciscan_experience_subtitle" tools:ignore="ResourceName">Type in your school code to access the right modules, announcements, and resources meant for you.</string>
+</resources>
