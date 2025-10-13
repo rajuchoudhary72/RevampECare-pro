@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.core.domain.exception.InvalidSchoolCodeException
 import com.app.ecarepro.core.domain.repository.SchoolRepository
-import com.app.ecarepro.core.ui.BaseViewModel
+import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
 import com.app.ecarepro.designsystem.core.component.MessageType
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +27,7 @@ class SchoolCodeViewModel @Inject constructor(
         when (intent) {
             is SchoolCodeIntent.OnCodeChanged -> {
                 updateCode(intent.code)
+                verifySchoolCode()
             }
 
             SchoolCodeIntent.OnNextClicked -> {

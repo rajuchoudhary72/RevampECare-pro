@@ -27,7 +27,6 @@ import com.app.ecarepro.feature.login.component.LoginForm
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
-    schoolCode: String,
     backToSchoolCode: () -> Unit = {},
     navigateToForgotPassword: () -> Unit = {},
     navigateToHelp: () -> Unit = {},
@@ -37,7 +36,6 @@ fun LoginScreen(
     val uiState: LoginUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.setSchoolCode(schoolCode)
         viewModel.screenEvent.collect { event ->
             when (event) {
                 LoginEvent.NavigateBackToSchoolCode -> backToSchoolCode()
@@ -105,6 +103,6 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     EcareProTheme {
-        LoginScreen(schoolCode = "Demin")
+        LoginScreen()
     }
 }

@@ -5,8 +5,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.core.domain.model.SchoolDetail
 import com.app.ecarepro.core.domain.repository.SchoolRepository
-import com.app.ecarepro.core.ui.BaseViewModel
+import com.app.ecarepro.core.ui.viewmodel.AssistedViewModelFactory
+import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
+import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,13 +21,18 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class LoginViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = LoginViewModel.Factory::class)
+class LoginViewModel @AssistedInject constructor(
+    @Assisted val navKey: LoginNavigationGraph.Login,
     private val schoolRepository: SchoolRepository,
 ) : BaseViewModel<LoginIntent, LoginEvent>() {
-    private val schoolCode = MutableStateFlow("")
+    private val schoolCode = navKey.schoolCode
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
+
+    init {
+        fetchSchool(schoolCode)
+    }
 
     override fun handleIntent(intent: LoginIntent) {
         when (intent) {
@@ -57,11 +67,15 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun setSchoolCode(code: String) {
-        schoolCode.value = code
+    private fun fetchSchool(schoolCode: String) {
         viewModelScope.launch {
-            _uiState.update { it.copy(schoolDetails = schoolRepository.getSchoolDetail(code).first()) }
+            _uiState.update { it.copy(schoolDetails = schoolRepository.getSchoolDetail(schoolCode).first()) }
         }
+    }
+
+    @AssistedFactory
+    interface Factory : AssistedViewModelFactory<LoginNavigationGraph.Login, LoginViewModel> {
+        override fun create(param: LoginNavigationGraph.Login): LoginViewModel
     }
 }
 

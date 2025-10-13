@@ -3,7 +3,7 @@ package com.app.ecarepro.feature.schoolcode.search
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.core.domain.model.School
 import com.app.ecarepro.core.domain.repository.SchoolRepository
-import com.app.ecarepro.core.ui.BaseViewModel
+import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
 import com.app.ecarepro.core.ui.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

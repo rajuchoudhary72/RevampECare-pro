@@ -30,7 +30,7 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
-import com.app.ecarepro.feature.login.navigation.Login
+import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
 import com.app.ecarepro.feature.schoolcode.navigation.SchoolCode
 import com.app.ecarepro.feature.schoolcode.navigation.SchoolCodeNavigationGraph
@@ -72,7 +72,7 @@ fun TestNav() {
             rememberSceneSetupNavEntryDecorator(),
             rememberSavedStateNavEntryDecorator(),
             // Then add the view model store decorator
-            rememberViewModelStoreNavEntryDecorator()
+            rememberViewModelStoreNavEntryDecorator(),
         ),
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
@@ -93,7 +93,7 @@ fun TestNav() {
                 },
             )
 
-            Login(
+            EntryLoginNavigation(
                 backToSchoolCode = {
                     backStack.removeLastOrNull()
                 }
