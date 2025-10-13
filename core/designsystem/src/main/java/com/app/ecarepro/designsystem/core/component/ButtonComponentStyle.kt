@@ -27,8 +27,10 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 /**
@@ -38,16 +40,16 @@ data class ButtonComponentStyle(
     val height: Dp = 48.dp,
     val fontFamily: FontFamily = FontFamily.Default,
     val fontWeight: FontWeight = FontWeight.Medium,
-    val fontSize: androidx.compose.ui.unit.TextUnit = 16.sp,
+    val fontSize: TextUnit = 16.sp,
     val foregroundColor: Color = Color.White,
     val imageWidth: Dp = 22.dp,
     val imageHeight: Dp = 22.dp,
     val imagePadding: Dp = 10.dp,
-    val backgroundColor: Color = Color.Blue,
+    val backgroundColor: Color = Color(0xFF00C853),
     val linearGradient: Brush? = null,
     val cornerRadius: Dp = 12.dp,
     val borderWidth: Dp = 0.dp,
-    val borderColor: Color = Color.Blue,
+    val borderColor: Color = Color(0xFF00C853),
     val useOnTapGesture: Boolean = false
 ) {
     companion object {
@@ -55,9 +57,9 @@ data class ButtonComponentStyle(
             height: Dp = 48.dp,
             fontFamily: FontFamily = FontFamily.Default,
             fontWeight: FontWeight = FontWeight.Medium,
-            fontSize: androidx.compose.ui.unit.TextUnit = 16.sp,
+            fontSize: TextUnit = 16.sp,
             foregroundColor: Color = Color.White,
-            backgroundColor: Color = Color.Blue,
+            backgroundColor: Color = Color(0xFF00C853),
             cornerRadius: Dp = 12.dp,
             useOnTapGesture: Boolean = false
         ) = ButtonComponentStyle(
@@ -75,7 +77,7 @@ data class ButtonComponentStyle(
             height: Dp = 48.dp,
             fontFamily: FontFamily = FontFamily.Default,
             fontWeight: FontWeight = FontWeight.Medium,
-            fontSize: androidx.compose.ui.unit.TextUnit = 16.sp,
+            fontSize: TextUnit = 16.sp,
             foregroundColor: Color = Color.Blue,
             backgroundColor: Color = Color.Transparent,
             borderWidth: Dp = 2.dp,
@@ -158,23 +160,31 @@ fun ButtonComponent(
                     tint = style.foregroundColor,
                     modifier = Modifier.size(style.imageWidth, style.imageHeight)
                 )
-                imageVector != null -> Icon(
-                    imageVector = imageVector,
-                    contentDescription = null,
-                    tint = style.foregroundColor,
-                    modifier = Modifier.size(style.imageWidth, style.imageHeight)
+                imageVector != null -> Box  {
+                    Icon(
+                        imageVector = imageVector,
+                        contentDescription = null,
+                        tint = style.foregroundColor,
+                        modifier = Modifier.size(style.imageWidth, style.imageHeight)
+                    )
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center // centers content in Box
+            )
+            {
+                Text(
+                    text = text,
+                    style = TextStyle(
+                        color = style.foregroundColor,
+                        fontSize = style.fontSize,
+                        fontFamily = style.fontFamily,
+                        fontWeight = style.fontWeight,
+                    ),
                 )
             }
-
-            Text(
-                text = text,
-                style = TextStyle(
-                    color = style.foregroundColor,
-                    fontSize = style.fontSize,
-                    fontFamily = style.fontFamily,
-                    fontWeight = style.fontWeight
-                )
-            )
         }
     }
 }
