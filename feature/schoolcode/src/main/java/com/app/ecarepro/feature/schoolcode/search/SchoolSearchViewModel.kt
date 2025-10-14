@@ -32,7 +32,7 @@ class SchoolSearchViewModel @Inject constructor(
     override fun handleIntent(intent: SearchSchoolCodeIntent) {
         when (intent) {
             is SearchSchoolCodeIntent.CopySchoolCode -> {
-                sendEvent(SearchSchoolCodeEvent.NavigateToBack(intent.school.schoolCode))
+                sendEvent(SearchSchoolCodeEvent.NavigateToBack(intent.schoolCode))
             }
 
             SearchSchoolCodeIntent.RefetchSchools -> {
@@ -90,7 +90,8 @@ class SchoolSearchViewModel @Inject constructor(
 sealed interface SearchSchoolCodeIntent {
     data object ClearQueryChanged : SearchSchoolCodeIntent
     data class SearchQueryChanged(val query: String) : SearchSchoolCodeIntent
-    data class CopySchoolCode(val school: School) : SearchSchoolCodeIntent
+    data class CopySchoolCode(val schoolCode: String) : SearchSchoolCodeIntent
+
     data object RefetchSchools : SearchSchoolCodeIntent
 }
 

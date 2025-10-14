@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
@@ -38,6 +39,7 @@ import com.app.ecarepro.designsystem.core.theme.appTypography
 @Composable
 fun LoginForm(
     modifier: Modifier = Modifier,
+    isError: Boolean = false,
     username: String,
     password: String,
     onUsernameChanged: (String) -> Unit = {},
@@ -57,14 +59,23 @@ fun LoginForm(
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
 
+        var isUsernameFocused by remember { mutableStateOf(false) }
+        var isPasswordFocused by remember { mutableStateOf(false) }
+
+
         EcareProOutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusChanged {
+                    isUsernameFocused = it.isFocused
+                },
             value = username,
+            isError = isError,
             onValueChange = onUsernameChanged,
             label = {
                 Text(
-                    text = "Enter your username",
-                    style = MaterialTheme.appTypography.interRegular14px.copy(color = MaterialTheme.appColors.textSecondary)
+                    text = if (isUsernameFocused || username.isNotEmpty()) "Username *" else "Enter your username",
+                    style = MaterialTheme.appTypography.interRegular14px.copy(color = if(isError) MaterialTheme.appColors.error else  MaterialTheme.appColors.textSecondary)
                 )
             },
         )
@@ -72,13 +83,18 @@ fun LoginForm(
         EcareProOutlinedTextField(
             value = password,
             onValueChange = onPasswordChanged,
+            isError = isError,
             label = {
                 Text(
-                    text = "Enter your password",
-                    style = MaterialTheme.appTypography.interRegular14px.copy(color = MaterialTheme.appColors.textSecondary)
+                    text = if (isPasswordFocused || username.isNotEmpty()) "Password *" else "Enter your password",
+                    style = MaterialTheme.appTypography.interRegular14px.copy(color = if(isError) MaterialTheme.appColors.error else MaterialTheme.appColors.textSecondary)
                 )
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusChanged {
+                    isPasswordFocused = it.isFocused
+                },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {

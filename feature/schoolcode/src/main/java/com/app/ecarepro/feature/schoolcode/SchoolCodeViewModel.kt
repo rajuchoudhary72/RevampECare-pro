@@ -26,7 +26,7 @@ class SchoolCodeViewModel @Inject constructor(
     override fun handleIntent(intent: SchoolCodeIntent) {
         when (intent) {
             is SchoolCodeIntent.OnCodeChanged -> {
-                updateCode(intent.code)
+                updateSchoolCode(intent.code)
                 verifySchoolCode()
             }
 
@@ -44,7 +44,7 @@ class SchoolCodeViewModel @Inject constructor(
         }
     }
 
-    private fun updateCode(code: String) {
+    private fun updateSchoolCode(code: String) {
         _uiState.update { it.copy(schoolCode = code) }
     }
 

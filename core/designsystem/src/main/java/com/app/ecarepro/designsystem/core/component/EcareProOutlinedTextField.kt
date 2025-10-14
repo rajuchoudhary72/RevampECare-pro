@@ -45,7 +45,7 @@ fun EcareProOutlinedTextField(
     focusedBorderColor: Color = MaterialTheme.appColors.textSecondary,
     unfocusedBorderColor: Color = MaterialTheme.appColors.border,
     errorBorderColor: Color = MaterialTheme.appColors.error,
-    containerColor: Color = MaterialTheme.appColors.background,
+    containerColor: Color = Color(0xFFF5F5F5),
     focusedContainerColor: Color = White,
     visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {

@@ -30,6 +30,7 @@ import com.app.ecarepro.designsystem.core.theme.appColors
 @Composable
 fun CodeInput(
     modifier: Modifier = Modifier,
+    code: String? = null,
     otpLength: Int = 6,
     strokeWidth: Dp = 1.dp,
     isError: Boolean = false,
@@ -45,7 +46,7 @@ fun CodeInput(
     onOtpEntered: (String) -> Unit,
 ) {
     var codeState by remember {
-        mutableStateOf(CodeState(code = List(otpLength) { null }))
+        mutableStateOf(CodeState(code = code?.map { it.toString() }?:List(otpLength) { null }))
     }
     val focusRequesters = remember {
         List(otpLength) { FocusRequester() }

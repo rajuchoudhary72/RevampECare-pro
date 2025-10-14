@@ -19,8 +19,8 @@ import com.app.ecarepro.onboarding.feature.navigation.OnboardingNavigationGraph
 
 @Composable
 fun EcareProNavDisplay(
-    navigateToLegacyFlow: (LegacyNavigationDestination) -> Unit
-) {
+    navigateToLegacyFlow: (LegacyNavigationDestination) -> Unit,
+    ) {
     val backStack = remember { mutableStateListOf<NavKey>(OnboardingNavigationGraph.Onboarding) }
 
     NavDisplay(
@@ -35,6 +35,7 @@ fun EcareProNavDisplay(
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
             EntryOnboardingNavigation(navigateToAddSchool = {
+                backStack.removeLastOrNull()
                 backStack.add(SchoolCodeNavigationGraph.SchoolCode)
             })
             EntrySchoolCodeNavigation(

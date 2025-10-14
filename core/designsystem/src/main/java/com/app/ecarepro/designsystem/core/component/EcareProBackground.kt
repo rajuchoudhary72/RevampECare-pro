@@ -23,7 +23,7 @@ import com.app.ecarepro.designsystem.core.theme.appColors
 fun EcareProBackground(
     modifier: Modifier = Modifier,
     imagePainter: Painter = painterResource(id = R.drawable.background_transparent_image),
-    overlayColor: Color = MaterialTheme.appColors.primary,
+    overlayColor: Color = Color(0xFF66BB6A),
     content: @Composable () -> Unit,
 ) {
 

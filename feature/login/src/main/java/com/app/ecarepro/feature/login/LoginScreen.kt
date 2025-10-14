@@ -26,6 +26,7 @@ import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.designsystem.core.component.EcareProBackground
 import com.app.ecarepro.designsystem.core.component.EcareProSnackbar
 import com.app.ecarepro.designsystem.core.component.Loader
+import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.feature.login.component.FooterSection
@@ -63,6 +64,21 @@ fun LoginScreen(
 
 
 
+    LoginScreenContent(
+        snackbarHostState = snackbarHostState,
+        uiState = uiState,
+        handleIntent = { intent -> viewModel.handleIntent(intent)}
+    )
+
+
+}
+
+@Composable
+private fun LoginScreenContent(
+    snackbarHostState: SnackbarHostState,
+    uiState: LoginUiState,
+    handleIntent:(LoginIntent) -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -104,29 +120,30 @@ fun LoginScreen(
                     LoginForm(
                         username = uiState.username,
                         password = uiState.password,
+                        isError = uiState.errorMessage != null,
                         onUsernameChanged = { userName ->
-                            viewModel.handleIntent(
+                            handleIntent(
                                 LoginIntent.OnUsernameChanged(
                                     userName
                                 )
                             )
                         },
                         onPasswordChanged = { password ->
-                            viewModel.handleIntent(
+                            handleIntent(
                                 LoginIntent.OnPasswordChanged(
                                     password
                                 )
                             )
                         },
-                        onLoginClicked = { viewModel.handleIntent(LoginIntent.OnLoginClicked) },
-                        onForgotPasswordClicked = { viewModel.handleIntent(LoginIntent.OnForgotPasswordClicked) },
+                        onLoginClicked = { handleIntent(LoginIntent.OnLoginClicked) },
+                        onForgotPasswordClicked = { handleIntent(LoginIntent.OnForgotPasswordClicked) },
                     )
                     FooterSection(
                         onChangeSchoolClicked = {
-                            viewModel.handleIntent(LoginIntent.OnChangeSchoolClicked)
+                            handleIntent(LoginIntent.OnChangeSchoolClicked)
                         },
                         onHelpClicked = {
-                            viewModel.handleIntent(LoginIntent.OnHelpClicked)
+                            handleIntent(LoginIntent.OnHelpClicked)
                         })
                 }
 
@@ -140,14 +157,16 @@ fun LoginScreen(
         }
 
     }
-
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
     EcareProTheme {
-        LoginScreen()
+        LoginScreenContent(
+            snackbarHostState = remember { SnackbarHostState() },
+            uiState = LoginUiState(errorMessage = SnackbarMessage("Error message")),
+            handleIntent = {}
+        )
     }
 }
