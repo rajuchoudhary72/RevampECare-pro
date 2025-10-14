@@ -7,6 +7,7 @@ import com.app.ecarepro.core.domain.repository.SchoolRepository
 import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
 import com.app.ecarepro.designsystem.core.component.MessageType
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +27,7 @@ class SchoolCodeViewModel @Inject constructor(
     override fun handleIntent(intent: SchoolCodeIntent) {
         when (intent) {
             is SchoolCodeIntent.OnCodeChanged -> {
-                updateCode(intent.code)
+                updateSchoolCode(intent.code)
                 verifySchoolCode()
             }
 
@@ -44,7 +45,7 @@ class SchoolCodeViewModel @Inject constructor(
         }
     }
 
-    private fun updateCode(code: String) {
+    fun updateSchoolCode(code: String) {
         _uiState.update { it.copy(schoolCode = code) }
     }
 

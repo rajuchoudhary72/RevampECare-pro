@@ -98,6 +98,7 @@ fun SchoolCodeScreen(
 
                     CodeInput(
                         modifier = Modifier.fillMaxWidth(),
+                        code = uiState.schoolCode,
                         textStyle = MaterialTheme.appTypography.interSemiBold14px.copy(
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp

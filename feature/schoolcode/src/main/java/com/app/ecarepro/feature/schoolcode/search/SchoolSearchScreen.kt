@@ -1,6 +1,7 @@
 package com.app.ecarepro.feature.schoolcode.search
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -124,7 +125,10 @@ fun SchoolSearchScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 items(schools, key = {it.schoolCode}) { school ->
-                    SchoolListItem(school = school)
+                    SchoolListItem(
+                        school = school,
+                        onCopySchoolCode = { schoolCode -> viewModel.handleIntent(SearchSchoolCodeIntent.CopySchoolCode(schoolCode))}
+                    )
                 }
 
 
@@ -136,7 +140,10 @@ fun SchoolSearchScreen(
 }
 
 @Composable
-fun SchoolListItem(school: School) {
+fun SchoolListItem(
+    school: School,
+    onCopySchoolCode:(String) -> Unit
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -189,7 +196,11 @@ fun SchoolListItem(school: School) {
                         .size(width = 64.dp, height = 25.dp)
                         .clip(RoundedCornerShape(6.dp))
                         .background(MaterialTheme.appColors.background)
-                        .padding(6.dp),
+                        .padding(6.dp)
+                        .clickable{
+                            onCopySchoolCode(school.schoolCode)
+                        }
+                    ,
                     text = school.schoolCode,
                     style = MaterialTheme.appTypography.interSemiBold14px.copy(fontSize = 12.sp),
                     color = MaterialTheme.appColors.textPrimary
