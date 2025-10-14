@@ -40,11 +40,11 @@ class LoginViewModel @AssistedInject constructor(
     override fun handleIntent(intent: LoginIntent) {
         when (intent) {
             is LoginIntent.OnUsernameChanged -> {
-                _uiState.update { it.copy(username = intent.username) }
+                _uiState.update { it.copy(username = intent.username, errorMessage = null) }
             }
 
             is LoginIntent.OnPasswordChanged -> {
-                _uiState.update { it.copy(password = intent.password) }
+                _uiState.update { it.copy(password = intent.password, errorMessage = null) }
             }
 
             LoginIntent.OnLoginClicked -> {

@@ -1,6 +1,5 @@
 package v2.navigation
 
-import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -19,7 +18,7 @@ import com.app.ecarepro.onboarding.feature.navigation.OnboardingNavigationGraph
 
 @Composable
 fun EcareProNavDisplay(
-    navigateToLegacyFlow: (LegacyNavigationDestination) -> Unit
+    navigateToLegacyFlow: (LegacyNavigationDestination) -> Unit,
 ) {
     val backStack = remember { mutableStateListOf<NavKey>(OnboardingNavigationGraph.Onboarding) }
 
@@ -35,12 +34,13 @@ fun EcareProNavDisplay(
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
             EntryOnboardingNavigation(navigateToAddSchool = {
-               backStack.add(SchoolCodeNavigationGraph.SchoolCode)
+                backStack.removeLastOrNull()
+                backStack.add(SchoolCodeNavigationGraph.SchoolCode)
             })
             EntrySchoolCodeNavigation(
                 backStack = backStack,
                 navigateToLogin = { schoolCode ->
-                   backStack.add(LoginNavigationGraph.Login(schoolCode = schoolCode))
+                    backStack.add(LoginNavigationGraph.Login(schoolCode = schoolCode))
                 }
             )
             EntryLoginNavigation(

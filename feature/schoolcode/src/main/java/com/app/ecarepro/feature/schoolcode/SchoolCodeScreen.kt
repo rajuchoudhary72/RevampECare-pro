@@ -28,12 +28,12 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.app.ecarepro.designsystem.core.component.Button
 import com.app.ecarepro.designsystem.core.component.CodeInput
-import com.app.ecarepro.designsystem.core.component.Loader
-import com.app.ecarepro.designsystem.core.theme.EcareProTheme
-import com.app.ecarepro.designsystem.core.theme.appTypography
 import com.app.ecarepro.designsystem.core.component.EcareProBackground
 import com.app.ecarepro.designsystem.core.component.EcareProSnackbar
+import com.app.ecarepro.designsystem.core.component.Loader
+import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
+import com.app.ecarepro.designsystem.core.theme.appTypography
 import com.app.ecarepro.feature.schoolcode.component.FindCodeLink
 import com.app.ecarepro.feature.schoolcode.component.Footer
 import com.app.ecarepro.feature.schoolcode.component.HeaderSection
@@ -67,6 +67,22 @@ fun SchoolCodeScreen(
         }
     }
 
+    SchoolCodeScreenContent(
+        snackbarHostState = snackbarHostState,
+        uiState = uiState,
+        handleIntent = { intent ->
+            viewModel.handleIntent(intent)
+        }
+    )
+
+}
+
+@Composable
+private fun SchoolCodeScreenContent(
+    snackbarHostState: SnackbarHostState,
+    uiState: SchoolCodeUiState,
+    handleIntent: (SchoolCodeIntent) -> Unit,
+) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -104,20 +120,20 @@ fun SchoolCodeScreen(
                             fontSize = 18.sp
                         ),
                         onOtpEntered = { code: String ->
-                            viewModel.handleIntent(SchoolCodeIntent.OnCodeChanged(code))
+                            handleIntent(SchoolCodeIntent.OnCodeChanged(code))
                         }
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     FindCodeLink(onFindCodeClicked = {
-                        viewModel.handleIntent(SchoolCodeIntent.OnFindCodeClicked)
+                        handleIntent(SchoolCodeIntent.OnFindCodeClicked)
                     })
                     Spacer(modifier = Modifier.height(32.dp))
 
                     Button(
                         onClick = {
-                            viewModel.handleIntent(SchoolCodeIntent.OnNextClicked)
+                            handleIntent(SchoolCodeIntent.OnNextClicked)
                         },
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -135,18 +151,19 @@ fun SchoolCodeScreen(
         if (uiState.isLoading) {
             Loader()
         }
-
     }
-
-
 }
 
 
 @Preview
 @Composable
-fun SchoolCodeScreenPreview_Default() {
+fun SchoolCodeScreenContentPreview() {
     // Wrap in your theme for previews
     EcareProTheme {
-        SchoolCodeScreen(navigateToNextScreen = {}, navigateToFindCodeScreen = {})
+        SchoolCodeScreenContent(
+            snackbarHostState = remember { SnackbarHostState() },
+            uiState = SchoolCodeUiState(),
+            handleIntent = {}
+        )
     }
 }
