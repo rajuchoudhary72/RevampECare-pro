@@ -39,7 +39,7 @@ fun LoginScreen(
     backToSchoolCode: () -> Unit = {},
     navigateToForgotPassword: () -> Unit = {},
     navigateToHelp: () -> Unit = {},
-    navigateToMain: (User) -> Unit = {},
+    selectHomeScreenType: (User) -> Unit = {},
 ) {
 
     val uiState: LoginUiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -56,7 +56,7 @@ fun LoginScreen(
                     snackbarHostState.showSnackbar(event.message.text)
                 }
 
-                is LoginEvent.NavigateToMainScreen -> navigateToMain(event.user)
+                is LoginEvent.NavigateToMainScreen -> selectHomeScreenType(event.user)
             }
         }
 

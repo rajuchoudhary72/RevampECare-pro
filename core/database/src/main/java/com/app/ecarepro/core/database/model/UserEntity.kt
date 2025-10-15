@@ -3,6 +3,7 @@ package com.app.ecarepro.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.app.ecarepro.core.domain.model.HomeScreenType
 
 
 @Entity(tableName = "users")
@@ -39,5 +40,9 @@ data class UserEntity(
     val schoolCode: String,
     @ColumnInfo("updated_on")
     val updatedOn: String,
+    @ColumnInfo("home_screen_type")
+    val homeScreenType: Int = HomeScreenType.DASHBOARD.id,
+    @ColumnInfo("is_active")
+    val isActive: Boolean = false,
 )
 

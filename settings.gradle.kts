@@ -1,5 +1,8 @@
 import java.net.URI
 
+include(":core:location")
+
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -32,4 +35,6 @@ include(":core:database")
 include(":feature:onboarding")
 include(":feature:schoolcode")
 include(":feature:login")
+include(":feature:homeselection")
+
 

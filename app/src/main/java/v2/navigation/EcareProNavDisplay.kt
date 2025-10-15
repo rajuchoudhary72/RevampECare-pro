@@ -33,17 +33,21 @@ fun EcareProNavDisplay(
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
+
             EntryOnboardingNavigation(navigateToAddSchool = {
                 backStack.removeLastOrNull()
                 backStack.add(SchoolCodeNavigationGraph.SchoolCode)
             })
+
             EntrySchoolCodeNavigation(
                 backStack = backStack,
                 navigateToLogin = { schoolCode ->
                     backStack.add(LoginNavigationGraph.Login(schoolCode = schoolCode))
                 }
             )
+
             EntryLoginNavigation(
+                backStack = backStack,
                 backToSchoolCode = {
                     backStack.removeLastOrNull()
                 },
@@ -51,5 +55,6 @@ fun EcareProNavDisplay(
                     navigateToLegacyFlow(LegacyNavigationDestination.Main(user))
                 }
             )
-        })
+        }
+    )
 }
