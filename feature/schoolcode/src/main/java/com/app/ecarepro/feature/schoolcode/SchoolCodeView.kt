@@ -26,13 +26,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.app.ecarepro.designsystem.core.component.Button
 import com.app.ecarepro.designsystem.core.component.CodeInput
 import com.app.ecarepro.designsystem.core.component.EcareProBackground
 import com.app.ecarepro.designsystem.core.component.EcareProSnackbar
 import com.app.ecarepro.designsystem.core.component.Loader
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
-import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
 import com.app.ecarepro.feature.schoolcode.component.FindCodeLink
 import com.app.ecarepro.feature.schoolcode.component.Footer
@@ -40,7 +38,7 @@ import com.app.ecarepro.feature.schoolcode.component.HeaderSection
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun SchoolCodeScreen(
+fun SchoolCodeView(
     viewModel: SchoolCodeViewModel = hiltViewModel(),
     navigateToNextScreen: (String) -> Unit,
     navigateToFindCodeScreen: () -> Unit,
@@ -130,8 +128,8 @@ private fun SchoolCodeScreenContent(
                         handleIntent(SchoolCodeIntent.OnFindCodeClicked)
                     })
                     Spacer(modifier = Modifier.height(32.dp))
-
-                    Button(
+                    // button commited code after discussion with @Salauddin  , means @rajdeep told to  comment  now
+                  /*  Button(
                         onClick = {
                             handleIntent(SchoolCodeIntent.OnNextClicked)
                         },
@@ -140,7 +138,7 @@ private fun SchoolCodeScreenContent(
                         title = "Next",
                         enabled = uiState.isCodeEntered,
                         backgroundColor = MaterialTheme.appColors.accent
-                    )
+                    )*/
 
                     Spacer(modifier = Modifier.weight(1f))
                     Footer()

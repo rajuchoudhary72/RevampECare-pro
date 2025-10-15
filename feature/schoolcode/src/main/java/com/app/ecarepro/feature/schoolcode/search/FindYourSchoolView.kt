@@ -52,7 +52,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SchoolSearchScreen(
+fun FindYourSchoolView(
     viewModel: SchoolSearchViewModel = hiltViewModel(),
     onSchoolCodeSelect: (String) -> Unit,
 ) {
