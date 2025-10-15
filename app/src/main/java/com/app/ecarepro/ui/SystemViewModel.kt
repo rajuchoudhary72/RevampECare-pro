@@ -46,7 +46,7 @@ class SystemViewModel @Inject constructor(
     private val userDatabase: UserDatabase,
     private val appRepository: AppRepository,
     private val userRepository: UserRepository,
-    private val schoolRepository: SchoolRepository,
+    val schoolRepository: SchoolRepository,
     private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     private val _openNavigationDrawer = MutableLiveData(false)

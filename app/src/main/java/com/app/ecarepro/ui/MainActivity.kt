@@ -139,6 +139,7 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var syncManager: SyncManager
+
     private val topLevelFragments = mutableListOf(
         R.id.homeFragment,
         R.id.profileFragment,
@@ -413,6 +414,7 @@ class MainActivity : AppCompatActivity() {
                     ),
                     userDtl.schoolCode, getCurrentDateTimeAmPm()
                 )
+                systemViewModel.schoolRepository.validateSchoolCode(userDtl.schoolCode).collect {  }
                 userDataStore.saveAuthToken(userDtl.authToken ?: "")
                 userDataStore.setAsUserAuthenticated(userDtl.authenticated ?: false)
                 userDataStore.saveUserType(userDtl.userType ?: 0)
