@@ -1,4 +1,5 @@
 [versions]
+accompanistPermissions = "0.37.3"
 activity-ktx = "1.8.0"
 agp = "8.13.0"
 coilCompose = "2.7.0"
@@ -60,6 +61,7 @@ material3AdaptiveNav3 = "1.0.0-alpha03"
 
 
 [libraries]
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity-ktx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle-livedata-ktx" }

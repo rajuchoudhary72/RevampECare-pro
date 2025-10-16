@@ -1,10 +1,12 @@
 package com.app.ecarepro.core.location.di
 
+import android.content.Context
 import com.app.ecarepro.core.domain.location.LocationProvider
 import com.app.ecarepro.core.location.FusedLocationProviderImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 
 @Module
@@ -12,7 +14,7 @@ import dagger.hilt.components.SingletonComponent
 abstract class LocationModule {
 
     @Binds
-    internal abstract fun bindLocationProvider(
+    abstract fun bindLocationProvider(
         impl: FusedLocationProviderImpl
     ): LocationProvider
 }

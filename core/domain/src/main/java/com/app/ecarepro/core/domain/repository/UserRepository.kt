@@ -9,6 +9,7 @@ interface UserRepository {
         userName: String,
         password: String,
         schoolCode: String,
+        location: String
     ): Flow<Result<User>>
 
     suspend fun getHomeScreenType(): HomeScreenType

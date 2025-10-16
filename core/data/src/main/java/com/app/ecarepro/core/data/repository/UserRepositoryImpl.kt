@@ -6,6 +6,7 @@ import com.app.ecarepro.core.database.dao.UserDao
 import com.app.ecarepro.core.domain.ext.asResultFlow
 import com.app.ecarepro.core.domain.model.AppConfig
 import com.app.ecarepro.core.domain.model.HomeScreenType
+import com.app.ecarepro.core.domain.model.Location
 import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.core.domain.repository.UserRepository
 import com.app.ecarepro.core.network.UserRemoteDataSource
@@ -23,6 +24,7 @@ class UserRepositoryImpl @Inject constructor(
         userName: String,
         password: String,
         schoolCode: String,
+        location: String
     ): Flow<Result<User>> {
         return asResultFlow {
             userRemoteDataSource.login(

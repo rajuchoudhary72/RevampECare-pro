@@ -3,6 +3,7 @@ package com.app.ecarepro.core.location
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Address
 import android.location.LocationManager
 import android.os.Looper
 import androidx.annotation.RequiresPermission
@@ -10,17 +11,20 @@ import androidx.core.content.ContextCompat
 import com.app.ecarepro.core.domain.location.LocationProvider
 import com.app.ecarepro.core.domain.model.Location
 import com.app.ecarepro.core.domain.model.LocationResult
+import com.app.ecarepro.core.domain.model.LocationAddress
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-internal class FusedLocationProviderImpl(
-    private val context: Context,
+class FusedLocationProviderImpl @Inject constructor(
+    @param:ApplicationContext private val context: Context,
 ) : LocationProvider {
 
     private val fusedClient = LocationServices.getFusedLocationProviderClient(context)
@@ -110,6 +114,10 @@ internal class FusedLocationProviderImpl(
         awaitClose {
             fusedClient.removeLocationUpdates(locationCallback)
         }
+    }
+
+    override suspend fun getAddressFromLocation(location: Location): Result<LocationAddress> {
+        return LocationUtils.getAddressFromLocation(context, location)
     }
 }
 

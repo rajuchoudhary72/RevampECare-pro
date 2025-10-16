@@ -40,6 +40,9 @@ fun EntryProviderBuilder<NavKey>.EntryLoginNavigation(
                 activeUser = user
                 backStack.add(HomeSelectionNavigationGraph.HomeSelection)
             },
+            navigateToBack = {
+                backStack.removeLastOrNull()
+            }
         )
     }
 

@@ -10,6 +10,7 @@ android {
 
 dependencies {
     implementation(projects.core.domain)
+    implementation(projects.core.location)
     implementation(projects.feature.homeselection)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

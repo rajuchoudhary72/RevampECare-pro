@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,6 +25,7 @@ fun TextButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     @DrawableRes leadingIcon: Int = 0,
+    titleColor: Color = MaterialTheme.appColors.textSecondary,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
 ) {
     TextButton(
@@ -44,7 +46,7 @@ fun TextButton(
         }
         Text(
             title,
-            style = MaterialTheme.appTypography.interRegular14px
+            style = MaterialTheme.appTypography.interRegular14px.copy(color = titleColor)
         )
     }
 }

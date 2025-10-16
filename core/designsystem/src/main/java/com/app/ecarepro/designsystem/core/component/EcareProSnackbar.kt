@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,18 +19,20 @@ import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
 
-
+@Immutable
 enum class MessageType {
     INFO,
     SUCCESS,
     WARNING,
     ERROR;
 }
-
+@Immutable
 data class SnackbarMessage(
     val text: String = "Unknown error occurred",
     val type: MessageType = MessageType.ERROR,
-)
+){
+
+}
 
 @Composable
 fun EcareProSnackbar(

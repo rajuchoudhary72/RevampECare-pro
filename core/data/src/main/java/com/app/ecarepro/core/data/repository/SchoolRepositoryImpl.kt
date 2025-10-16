@@ -32,12 +32,13 @@ class SchoolRepositoryImpl @Inject constructor(
                 schoolCode
             }
 
-        }.catch { exception ->
-            if (exception is HttpException && exception.code() == 400) {
-                emit(Result.failure(InvalidSchoolCodeException()))
-            } else {
-                throw exception
+        }.map { result ->
+            result.onFailure { exception ->
+                if (exception is HttpException && exception.code() == 400) {
+                    return@map Result.failure(InvalidSchoolCodeException())
+                }
             }
+            result
         }
     }
 
