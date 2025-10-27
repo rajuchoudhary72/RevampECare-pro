@@ -37,11 +37,13 @@ class LeaveReportViewModel @Inject constructor(
         ord: Int,
         applType: Int,
         pg: Int,
-        attPer:Boolean
+        attPer:Boolean,
+        FromDate:String?,
+        TillDate:String?
     )=viewModelScope.launch {
         runCatching {
             leaveReportMutableStateFlow.value = NetworkResult.Loading( )
-            userRepository.leaveReport( status, ord, applType, pg,attPer)
+            userRepository.leaveReport( status, ord, applType, pg,attPer,FromDate,TillDate)
         }.onSuccess {
             leaveReportMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
