@@ -4,13 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "com.app.ecarepro.feature.login"
+    namespace = "com.app.ecarepro.feature.homeselection"
     testOptions.unitTests.isIncludeAndroidResources = true
 }
 
 dependencies {
     implementation(projects.core.domain)
-    implementation(projects.feature.homeselection)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

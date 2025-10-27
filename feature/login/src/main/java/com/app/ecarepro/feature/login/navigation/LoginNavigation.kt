@@ -8,6 +8,10 @@ import com.app.ecarepro.core.ui.viewmodel.navKeyViewModel
 import com.app.ecarepro.feature.login.LoginScreen
 import com.app.ecarepro.feature.login.LoginViewModel
 import kotlinx.serialization.Serializable
+import com.app.ecarepro.feature.homeselection.navigation.EntryHomeSelectionNavigation
+import com.app.ecarepro.feature.homeselection.navigation.HomeSelectionNavigationGraph
+import androidx.compose.runtime.snapshots.SnapshotStateList
+
 
 @Serializable
 sealed interface LoginNavigationGraph : NavKey {
@@ -18,6 +22,7 @@ sealed interface LoginNavigationGraph : NavKey {
 
 @Composable
 fun EntryProviderBuilder<NavKey>.EntryLoginNavigation(
+    backStack: SnapshotStateList<NavKey>,
     backToSchoolCode: () -> Unit = {},
     navigateToForgotPassword: () -> Unit = {},
     navigateToHelp: () -> Unit = {},
@@ -25,12 +30,24 @@ fun EntryProviderBuilder<NavKey>.EntryLoginNavigation(
 ) {
     entry<LoginNavigationGraph.Login> { navKey ->
         val viewModel: LoginViewModel = navKeyViewModel(navKey)
+        var activeUser: User? = null
+
+
         LoginScreen(
             viewModel = viewModel,
             backToSchoolCode = backToSchoolCode,
             navigateToForgotPassword = navigateToForgotPassword,
             navigateToHelp = navigateToHelp,
-            navigateToMain = navigateToMain,
+            selectHomeScreenType = { user ->
+                activeUser = user
+                backStack.add(HomeSelectionNavigationGraph.HomeSelection)
+            },
         )
     }
+    EntryHomeSelectionNavigation(
+        onComplete = {
+            activeUser?.let { navigateToMain(it) }
+            backStack.removeLastOrNull()
+        }
+    )
 }

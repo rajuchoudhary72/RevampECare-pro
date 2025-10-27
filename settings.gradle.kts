@@ -1,6 +1,6 @@
 import java.net.URI
 
-include(":feature:home")
+
 
 
 pluginManagement {
@@ -36,6 +36,8 @@ include(":core:database")
 include(":feature:onboarding")
 include(":feature:schoolcode")
 include(":feature:login")
+include(":feature:homeselection")
+
 
 
 
