@@ -4,10 +4,14 @@ import com.app.ecarepro.core.data.mapper.asEntity
 import com.app.ecarepro.core.data.mapper.toDomainModel
 import com.app.ecarepro.core.database.dao.UserDao
 import com.app.ecarepro.core.domain.ext.asResultFlow
+import com.app.ecarepro.core.domain.model.AnswerListResponse
 import com.app.ecarepro.core.domain.model.AppConfig
+import com.app.ecarepro.core.domain.model.PostAnswerResponse
+import com.app.ecarepro.core.domain.model.QuestionnaireResponse
 import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.core.domain.repository.UserRepository
 import com.app.ecarepro.core.network.UserRemoteDataSource
+import com.app.ecarepro.core.network.model.questionnaire.NetworkPostAnswerRequest
 import com.app.ecarepro.core.network.model.user.NetworkDeviceInfo
 import com.app.ecarepro.core.network.model.user.NetworkLoginRequest
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +23,8 @@ class UserRepositoryImpl @Inject constructor(
     private val userRemoteDataSource: UserRemoteDataSource,
     private val userDao: UserDao,
 ) : UserRepository {
+
+
     override fun login(
         userName: String,
         password: String,
@@ -47,4 +53,29 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getQuestions(
+        page: Int,
+        myQuestions: Boolean
+    ): Flow<Result<QuestionnaireResponse>> {
+        return asResultFlow {
+            userRemoteDataSource.getQuestionnaireList(page, myQuestions).toDomainModel()
+        }
+    }
+
+    override fun getAnswerList(qid: Int): Flow<Result<AnswerListResponse>> {
+        return asResultFlow {
+            userRemoteDataSource.getAnswerList(qid).toDomainModel()
+        }
+    }
+
+    override fun postAnswer(qid: Int, answer: String): Flow<Result<PostAnswerResponse>> {
+        return asResultFlow {
+            userRemoteDataSource.postAnswer(
+                NetworkPostAnswerRequest(
+                    qid = qid,
+                    answer = answer
+                )
+            ).toDomainModel()
+        }
+    }
 }

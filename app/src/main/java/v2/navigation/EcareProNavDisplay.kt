@@ -12,6 +12,7 @@ import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
+import com.app.ecarepro.feature.questionner.navigation.EntryQuestionnaireNavigation
 import com.app.ecarepro.feature.schoolcode.navigation.EntrySchoolCodeNavigation
 import com.app.ecarepro.feature.schoolcode.navigation.SchoolCodeNavigationGraph
 import com.app.ecarepro.onboarding.feature.navigation.EntryOnboardingNavigation
@@ -50,6 +51,19 @@ fun EcareProNavDisplay(
                 navigateToMain = { user ->
                     navigateToLegacyFlow(LegacyNavigationDestination.Main(user))
                 }
+            )
+
+            EntryQuestionnaireNavigation(
+                onBackClick= {
+                    backStack
+                },
+                navigateToQuestionDetail={
+
+                },
+                navigateToCreateQuestion={
+
+                }
+
             )
         })
 }

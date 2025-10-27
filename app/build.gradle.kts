@@ -139,6 +139,7 @@ dependencies {
     implementation(projects.feature.onboarding)
     implementation(projects.feature.schoolcode)
     implementation(projects.feature.login)
+    implementation(projects.feature.questionner)
 
 
     implementation(projects.core.data)

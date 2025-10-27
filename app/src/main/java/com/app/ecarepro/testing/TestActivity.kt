@@ -34,6 +34,8 @@ import androidx.navigation3.ui.NavDisplay
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
+import com.app.ecarepro.feature.questionner.navigation.EntryQuestionnaireNavigation
+import com.app.ecarepro.feature.questionner.navigation.QuestionnaireNavigationGraph
 import com.app.ecarepro.feature.schoolcode.navigation.EntrySchoolCodeNavigation
 import com.app.ecarepro.feature.schoolcode.navigation.SchoolCodeNavigationGraph
 import com.app.ecarepro.onboarding.feature.navigation.EntryOnboardingNavigation
@@ -41,12 +43,14 @@ import com.app.ecarepro.onboarding.feature.navigation.OnboardingNavigationGraph
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.Serializable
 
+
 // Registry of available module screens
 object ModuleRegistry {
     val screens: Map<String, NavKey> = mapOf(
         "OnBoarding" to OnboardingNavigationGraph.Onboarding,
         "School Code" to SchoolCodeNavigationGraph.SchoolCode,
         "Login" to LoginNavigationGraph.Login(schoolCode = "DEMOIN"),
+        "Questionnaire" to QuestionnaireNavigationGraph.Questionnaire,
     )
 }
 
@@ -102,6 +106,21 @@ fun TestNav() {
                 navigateToMain = {
 
                 }
+            )
+
+
+
+            EntryQuestionnaireNavigation(
+                onBackClick= {
+                    backStack
+                },
+                navigateToQuestionDetail={
+
+                },
+                navigateToCreateQuestion={
+
+                }
+
             )
 
         }
