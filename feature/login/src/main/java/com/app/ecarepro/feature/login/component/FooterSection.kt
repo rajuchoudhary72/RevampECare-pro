@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.LinkAnnotation
@@ -94,25 +95,33 @@ fun FooterSection(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Powered by",
-                style = MaterialTheme.appTypography.interMedium16px.copy(fontSize = 14.sp),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(vertical = 16.dp),
-                color = MaterialTheme.appColors.textPrimary
-            )
-            Image(
-                painter = painterResource(id = R.drawable.franciscan_logo),
-                contentDescription = "Franciscan e-care Logo",
-                modifier = Modifier.size(width = 96.dp, height = 16.dp),
-                colorFilter = ColorFilter.tint(MaterialTheme.appColors.textPrimary)
-            )
-        }
+        Footer()
+    }
+}
+
+@Composable
+fun Footer(
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.appColors.textPrimary
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Powered by",
+            style = MaterialTheme.appTypography.interMedium16px.copy(fontSize = 14.sp),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(vertical = 16.dp),
+            color = color
+        )
+        Image(
+            painter = painterResource(id = R.drawable.franciscan_logo),
+            contentDescription = "Franciscan e-care Logo",
+            modifier = Modifier.size(width = 96.dp, height = 16.dp),
+            colorFilter = ColorFilter.tint(color)
+        )
     }
 }
 

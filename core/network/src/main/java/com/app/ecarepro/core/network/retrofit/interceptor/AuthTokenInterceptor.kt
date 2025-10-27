@@ -1,15 +1,20 @@
 package com.app.ecarepro.core.network.retrofit.interceptor
 
+import com.app.ecarepro.core.domain.auth.TokenProvider
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
-private const val DEFAULT_AUTH_TOKEN = "Kq4IYAuSXLh4EsnexoTSfA=="
 
-internal class AuthTokenInterceptor @Inject constructor() : Interceptor {
+internal class AuthTokenInterceptor @Inject constructor(
+    private val tokeProvider: TokenProvider,
+) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder = chain.request().newBuilder()
-        requestBuilder.header(KEY_AUTH_TOKEN, DEFAULT_AUTH_TOKEN)
+        val authToken =
+            runBlocking { tokeProvider.getAuthToken()}
+        requestBuilder.header(KEY_AUTH_TOKEN, authToken)
         return chain.proceed(requestBuilder.build())
     }
 

@@ -14,6 +14,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
+
+    private const val DATABASE_NAME = "ecarepro-database"
+
     @Provides
     @Singleton
     fun providesEcareProDatabase(
@@ -21,6 +24,7 @@ object DatabaseModule {
     ): EcareProDatabase = Room.databaseBuilder(
         context = context,
         klass = EcareProDatabase::class.java,
-        name = "ecarepro-database"
-    ).build()
+        name = DATABASE_NAME
+    )
+        .build()
 }

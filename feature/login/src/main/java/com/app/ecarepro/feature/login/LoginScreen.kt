@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.app.ecarepro.core.domain.model.LoginResult
 import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.core.location.LocationUtils
 import com.app.ecarepro.designsystem.core.component.EcareProBackground
@@ -50,6 +51,7 @@ fun LoginScreen(
     navigateToForgotPassword: () -> Unit = {},
     navigateToHelp: () -> Unit = {},
     selectHomeScreenType: (User) -> Unit = {},
+    navigateToOtpVerification: (schoolCode: String, username: String, loginResult: LoginResult) -> Unit = {_,_,_ ->},
 ) {
 
     val uiState: LoginUiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -76,9 +78,10 @@ fun LoginScreen(
                     snackbarHostState.showSnackbar(event.message.text)
                 }
 
-                is LoginEvent.NavigateToMainScreen -> selectHomeScreenType(event.user)
+                is LoginEvent.NavigateToSelectHomeScreenType -> selectHomeScreenType(event.user)
                 LoginEvent.TurnOnGps -> LocationUtils.openGpsSettings(context)
                 LoginEvent.OpenAppSettings -> LocationUtils.openAppSettings(context)
+                is LoginEvent.NavigateToOtpVerification -> navigateToOtpVerification(event.schoolCode, event.userName, event.loginResult)
             }
         }
     }

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.core.domain.exception.errorMessage
 import com.app.ecarepro.core.domain.location.LocationProvider
 import com.app.ecarepro.core.domain.model.LocationResult
+import com.app.ecarepro.core.domain.model.LoginResult
 import com.app.ecarepro.core.domain.model.SchoolDetail
 import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.core.domain.repository.SchoolRepository
@@ -114,9 +115,20 @@ class LoginViewModel @AssistedInject constructor(
                 }
                 .collect { result ->
                     result
-                        .onSuccess { user ->
+                        .onSuccess { loginResult ->
                             _uiState.update { it.copy(isLoading = false) }
-                            sendEvent(LoginEvent.NavigateToMainScreen(user))
+                            if (isOtpVerificationRequired(loginResult)) {
+                                sendEvent(
+                                    LoginEvent.NavigateToOtpVerification(
+                                        schoolCode = schoolCode,
+                                        userName = uiState.value.username,
+                                        loginResult = loginResult
+                                    )
+                                )
+                            } else {
+                                sendEvent(LoginEvent.NavigateToSelectHomeScreenType(loginResult.userDetail!!))
+                            }
+
                         }
                         .onFailure { error: Throwable ->
                             val errorMessage = SnackbarMessage(error.errorMessage())
@@ -132,6 +144,9 @@ class LoginViewModel @AssistedInject constructor(
                 }
         }
     }
+
+    private fun isOtpVerificationRequired(loginResult: LoginResult): Boolean =
+        loginResult.authenticated == true && loginResult.isOTPEnabled == true
 
     private fun fetchSchool(schoolCode: String) {
         viewModelScope.launch {
@@ -217,8 +232,15 @@ sealed interface LoginIntent {
 }
 
 sealed interface LoginEvent {
-    data class NavigateToMainScreen(val user: User) : LoginEvent
+    data class NavigateToSelectHomeScreenType(val user: User) : LoginEvent
     data object NavigateToForgotPasswordScreen : LoginEvent
+
+    data class NavigateToOtpVerification(
+        val schoolCode: String,
+        val userName: String,
+        val loginResult: LoginResult,
+    ) : LoginEvent
+
     data object NavigateToBack : LoginEvent
     data object NavigateBackToSchoolCode : LoginEvent
     data object NavigateToHelpScreen : LoginEvent

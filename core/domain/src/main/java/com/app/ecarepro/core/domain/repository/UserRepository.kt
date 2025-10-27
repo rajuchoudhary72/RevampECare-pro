@@ -1,6 +1,7 @@
 package com.app.ecarepro.core.domain.repository
 
 import com.app.ecarepro.core.domain.model.HomeScreenType
+import com.app.ecarepro.core.domain.model.LoginResult
 import com.app.ecarepro.core.domain.model.User
 import kotlinx.coroutines.flow.Flow
 
@@ -10,10 +11,16 @@ interface UserRepository {
         password: String,
         schoolCode: String,
         location: String
-    ): Flow<Result<User>>
+    ): Flow<Result<LoginResult>>
+
+    fun resendOtp(schoolCode: String, otpAuthKey: String): Flow<Result<LoginResult>>
+
+    fun validateOtp(schoolCode: String, otpAuthKey: String, otp:String): Flow<Result<LoginResult>>
 
     suspend fun getHomeScreenType(): HomeScreenType
 
     suspend fun saveHomeScreenType(homeScreenType: HomeScreenType)
+
     suspend fun getActiveUser(): User?
+    suspend fun getActiveUserAuthToken(): String?
 }

@@ -11,4 +11,8 @@
     <string name="feature_login_enable_gps">Enable GPS</string>
     <string name="feature_login_this_app_requires_location_to_be_enabled_to_function_please_enable_it_in_settings">This app requires location to be enabled to function. Please enable it in settings.</string>
     <string name="feature_login_exit">Exit</string>
+    <string name="feature_login_we_just_sent_an_sms">We just sent an SMS</string>
+    <string name="feature_login_verify_otp">Verify OTP</string>
+    <string name="feature_login_didn_t_receive_a_code">Didn’t receive a code?</string>
+    <string name="feature_login_please_wait_seconds_to_resend_otp">Please wait %1$d seconds to Resend OTP</string>
 </resources>

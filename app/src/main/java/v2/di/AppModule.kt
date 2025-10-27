@@ -42,7 +42,6 @@ object AppModule {
             applicationId = BuildConfig.APPLICATION_ID,
             isDebug = BuildConfig.DEBUG,
             appVersionCode = BuildConfig.VERSION_CODE,
-            location = "",
             osVersion =Build.VERSION.RELEASE
         )
     }
