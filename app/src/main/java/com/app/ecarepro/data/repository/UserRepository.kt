@@ -302,7 +302,9 @@ interface UserRepository {
         ord: Int,
         applType: Int,
         pg: Int,
-        attPer:Boolean
+        attPer:Boolean,
+        FromDate:String?,
+        TillDate:String?
     ): NetworkLeaveReport
 
 
