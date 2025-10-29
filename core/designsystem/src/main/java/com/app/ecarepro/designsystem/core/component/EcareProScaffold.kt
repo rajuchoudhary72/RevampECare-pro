@@ -3,6 +3,7 @@ package com.app.ecarepro.designsystem.core.component
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -63,6 +64,7 @@ fun EcareProScaffold(
                 }
             },
             containerColor = containerColor,
+            floatingActionButtonPosition = FabPosition.Center
         ) { paddingValues ->
             content(paddingValues)
         }

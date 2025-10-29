@@ -1,7 +1,7 @@
 package com.app.ecarepro.core.ui
 
-import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.app.ecarepro.designsystem.core.component.DefaultError
 import com.app.ecarepro.designsystem.core.component.Loader
@@ -14,7 +14,7 @@ fun <T> UiStateHandler(
     errorContent: @Composable (String, () -> Unit) -> Unit = { msg, retry ->
         DefaultError(msg, retry)
     },
-    successContent: @Composable (T) -> Unit
+    successContent: @Composable (T) -> Unit,
 ) {
     when (state) {
         is UiState.Loading -> loadingContent()

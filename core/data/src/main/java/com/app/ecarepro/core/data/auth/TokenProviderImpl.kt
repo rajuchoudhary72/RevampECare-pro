@@ -6,12 +6,13 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 class TokenProviderImpl @Inject constructor(
-    private val userRepositoryProvider: Provider<UserRepository>
-): TokenProvider {
+    private val userRepositoryProvider: Provider<UserRepository>,
+) : TokenProvider {
     companion object {
         private const val DEFAULT_AUTH_TOKEN = "Kq4IYAuSXLh4EsnexoTSfA=="
     }
+
     override suspend fun getAuthToken(): String {
-        return userRepositoryProvider.get().getActiveUserAuthToken()?:DEFAULT_AUTH_TOKEN
+        return userRepositoryProvider.get().getActiveUserAuthToken() ?: DEFAULT_AUTH_TOKEN
     }
 }

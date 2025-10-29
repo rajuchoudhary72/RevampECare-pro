@@ -31,6 +31,8 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
+import com.app.ecarepro.feature.dashboard.navigation.DashboardNavigationGraph
+import com.app.ecarepro.feature.dashboard.navigation.EntryDashboardNavigation
 import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
 import com.app.ecarepro.feature.schoolcode.navigation.EntrySchoolCodeNavigation
@@ -46,6 +48,7 @@ object ModuleRegistry {
         "OnBoarding" to OnboardingNavigationGraph.Onboarding,
         "School Code" to SchoolCodeNavigationGraph.SchoolCode,
         "Login" to LoginNavigationGraph.Login(schoolCode = "DEMOIN"),
+        "Dashboard" to DashboardNavigationGraph.Dashboard,
     )
 }
 
@@ -103,6 +106,8 @@ fun TestNav() {
 
                 }
             )
+
+            EntryDashboardNavigation()
 
         }
     )

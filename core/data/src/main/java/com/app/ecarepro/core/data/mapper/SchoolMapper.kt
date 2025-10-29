@@ -16,7 +16,6 @@ fun NetworkSchool.toDomainModel() = School(
 )
 
 
-
 /**
  * Converts the network model [NetworkSchoolDetails] to the database model [SchoolEntity].
  */

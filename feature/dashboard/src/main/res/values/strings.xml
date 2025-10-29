@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_dashboard_menu">Menu</string>
+    <string name="feature_dashboard_home">Home</string>
+    <string name="feature_dashboard_message">Message</string>
+    <string name="feature_dashboard_profile">Profile</string>
+</resources>
