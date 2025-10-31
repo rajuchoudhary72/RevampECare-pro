@@ -272,8 +272,8 @@ class UpdateSParentProfileFragment : Fragment() {
     private fun startImagePicker() {
         FileAccess.checkPermission(this)
         ImagePicker.with(this)
-            .crop(216F, 253F)
-            .maxResultSize(216, 253)
+            .crop(432F, 506F)
+            .maxResultSize(432, 506)
             // .maxResultSize(600, 800) // or higher depending on your use case
             .start()
     }
@@ -288,7 +288,7 @@ class UpdateSParentProfileFragment : Fragment() {
                     val h = bitmap.height
                     val w = bitmap.width
 
-                    if (h >= 253 && w >= 216) {
+                    if (h >= 432 && w >= 506) {
                         val baos = ByteArrayOutputStream()
                         var fis: FileInputStream? = null
                         try {
@@ -318,7 +318,7 @@ class UpdateSParentProfileFragment : Fragment() {
                         uploadPhoto(imageString, imageExt)
 
                     } else {
-                        mainActivity().showMessage("Oops...!!! could not proceed, the image height must be greater than 252 pixels.")
+                        mainActivity().showMessage("Oops...!!! could not proceed, the image height must be greater than 505 pixels.")
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
