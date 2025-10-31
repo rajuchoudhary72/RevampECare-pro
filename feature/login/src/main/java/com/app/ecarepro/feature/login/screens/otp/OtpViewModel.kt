@@ -1,4 +1,4 @@
-package com.app.ecarepro.feature.login.otp
+package com.app.ecarepro.feature.login.screens.otp
 
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,7 @@ import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
 import com.app.ecarepro.designsystem.core.component.MessageType
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
-import com.app.ecarepro.feature.login.otp.OtpViewModel.Companion.RESEND_TIME_INTERVAL_SEC
+import com.app.ecarepro.feature.login.screens.otp.OtpViewModel.Companion.RESEND_TIME_INTERVAL_SEC
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

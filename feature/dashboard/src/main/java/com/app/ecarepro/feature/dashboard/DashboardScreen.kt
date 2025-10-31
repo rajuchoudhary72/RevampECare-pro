@@ -30,8 +30,7 @@ import com.app.ecarepro.feature.dashboard.component.SearchFabButton
 import kotlinx.coroutines.launch
 
 @Composable
-fun DashboardScreen(
-) {
+fun DashboardScreen() {
     val innerNavController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val startDestination = Destination.HOME

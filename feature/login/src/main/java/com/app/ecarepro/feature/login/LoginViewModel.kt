@@ -57,7 +57,12 @@ class LoginViewModel @AssistedInject constructor(
             }
 
             LoginIntent.OnForgotPasswordClicked -> {
-                sendEvent(LoginEvent.NavigateToForgotPasswordScreen)
+                sendEvent(
+                    LoginEvent.NavigateToForgotPasswordScreen(
+                        schoolCode,
+                        _uiState.value.schoolDetails?.isStudentLoginBlocked ?: false
+                    )
+                )
             }
 
             LoginIntent.OnChangeSchoolClicked -> {
@@ -233,7 +238,10 @@ sealed interface LoginIntent {
 
 sealed interface LoginEvent {
     data class NavigateToSelectHomeScreenType(val user: User) : LoginEvent
-    data object NavigateToForgotPasswordScreen : LoginEvent
+    data class NavigateToForgotPasswordScreen(
+        val schoolCode: String,
+        val isStudentLoginBlocked: Boolean,
+    ) : LoginEvent
 
     data class NavigateToOtpVerification(
         val schoolCode: String,

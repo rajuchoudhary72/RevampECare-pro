@@ -48,7 +48,7 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
     backToSchoolCode: () -> Unit = {},
     navigateToBack: () -> Unit = {},
-    navigateToForgotPassword: () -> Unit = {},
+    navigateToForgotPassword: (schoolCode:String, isStudentLoginBlocked: Boolean) -> Unit = {_,_ ->},
     navigateToHelp: () -> Unit = {},
     selectHomeScreenType: (User) -> Unit = {},
     navigateToOtpVerification: (schoolCode: String, username: String, loginResult: LoginResult) -> Unit = {_,_,_ ->},
@@ -70,7 +70,7 @@ fun LoginScreen(
         viewModel.screenEvent.collect { event ->
             when (event) {
                 LoginEvent.NavigateBackToSchoolCode -> backToSchoolCode()
-                LoginEvent.NavigateToForgotPasswordScreen -> navigateToForgotPassword()
+                is LoginEvent.NavigateToForgotPasswordScreen -> navigateToForgotPassword(event.schoolCode, event.isStudentLoginBlocked)
                 LoginEvent.NavigateToHelpScreen -> navigateToHelp()
                 LoginEvent.NavigateToBack -> navigateToBack()
                 is LoginEvent.ShowMessage -> {
