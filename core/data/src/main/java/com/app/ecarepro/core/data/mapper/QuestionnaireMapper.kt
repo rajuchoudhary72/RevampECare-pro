@@ -1,12 +1,18 @@
 package com.app.ecarepro.core.data.mapper
 
+import com.app.ecarepro.core.domain.model.AddQuestionRequest
+import com.app.ecarepro.core.domain.model.AddQuestionResponse
 import com.app.ecarepro.core.domain.model.Answer
 import com.app.ecarepro.core.domain.model.AnswerListResponse
+import com.app.ecarepro.core.domain.model.AttachmentData
 import com.app.ecarepro.core.domain.model.PostAnswerResponse
 import com.app.ecarepro.core.domain.model.Question
 import com.app.ecarepro.core.domain.model.QuestionnaireResponse
+import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionRequest
+import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionResponse
 import com.app.ecarepro.core.network.model.questionnaire.NetworkAnswer
 import com.app.ecarepro.core.network.model.questionnaire.NetworkAnswerListResponse
+import com.app.ecarepro.core.network.model.questionnaire.NetworkAttachmentData
 import com.app.ecarepro.core.network.model.questionnaire.NetworkPostAnswerResponse
 import com.app.ecarepro.core.network.model.questionnaire.NetworkQuestion
 import com.app.ecarepro.core.network.model.questionnaire.NetworkQuestionnaireResponse
@@ -59,6 +65,23 @@ fun NetworkAnswer.toDomainModel() = Answer(
 )
 
 fun NetworkPostAnswerResponse.toDomainModel() = PostAnswerResponse(
+    errorCode = errorCode,
+    status = status,
+    message = message
+)
+
+fun AddQuestionRequest.toNetworkModel() = NetworkAddQuestionRequest(
+    question = question,
+    attachment = attachment.toNetworkModel()
+)
+
+fun AttachmentData.toNetworkModel() = NetworkAttachmentData(
+    attachment = attachment,
+    fileExt = fileExt,
+    fileURL = fileURL
+)
+
+fun NetworkAddQuestionResponse.toDomainModel() = AddQuestionResponse(
     errorCode = errorCode,
     status = status,
     message = message

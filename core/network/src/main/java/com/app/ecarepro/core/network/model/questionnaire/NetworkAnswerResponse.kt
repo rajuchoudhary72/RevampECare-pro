@@ -61,3 +61,34 @@ data class NetworkPostAnswerResponse(
     @SerialName("message")
     val message: String
 )
+
+@InternalSerializationApi
+@Serializable
+data class NetworkAddQuestionRequest(
+    @SerialName("question")
+    val question: String,
+    @SerialName("attachment")
+    val attachment: NetworkAttachmentData
+)
+
+@InternalSerializationApi
+@Serializable
+data class NetworkAttachmentData(
+    @SerialName("attachment")
+    val attachment: String,  // Base64 encoded image
+    @SerialName("fileExt")
+    val fileExt: String,      // File extension like ".png", ".jpg"
+    @SerialName("fileURL")
+    val fileURL: String       // Usually empty for new uploads
+)
+
+@InternalSerializationApi
+@Serializable
+data class NetworkAddQuestionResponse(
+    @SerialName("errorCode")
+    val errorCode: Int,
+    @SerialName("status")
+    val status: String,
+    @SerialName("message")
+    val message: String
+)

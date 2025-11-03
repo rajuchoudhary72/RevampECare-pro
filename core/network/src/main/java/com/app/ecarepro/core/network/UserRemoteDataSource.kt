@@ -1,5 +1,7 @@
 package com.app.ecarepro.core.network
 
+import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionRequest
+import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionResponse
 import com.app.ecarepro.core.network.model.questionnaire.NetworkAnswerListResponse
 import com.app.ecarepro.core.network.model.questionnaire.NetworkPostAnswerRequest
 import com.app.ecarepro.core.network.model.questionnaire.NetworkPostAnswerResponse
@@ -17,5 +19,7 @@ interface UserRemoteDataSource {
     suspend fun getAnswerList(qid: Int): NetworkAnswerListResponse
 
     suspend fun postAnswer(request: NetworkPostAnswerRequest): NetworkPostAnswerResponse
+
+    suspend fun addQuestion(request: NetworkAddQuestionRequest): NetworkAddQuestionResponse
 
 }

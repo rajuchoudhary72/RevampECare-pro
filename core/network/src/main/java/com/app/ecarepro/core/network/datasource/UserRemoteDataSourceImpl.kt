@@ -1,6 +1,8 @@
 package com.app.ecarepro.core.network.datasource
 
 import com.app.ecarepro.core.network.UserRemoteDataSource
+import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionRequest
+import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionResponse
 import com.app.ecarepro.core.network.model.questionnaire.NetworkAnswerListResponse
 import com.app.ecarepro.core.network.model.questionnaire.NetworkPostAnswerRequest
 import com.app.ecarepro.core.network.model.questionnaire.NetworkPostAnswerResponse
@@ -36,6 +38,10 @@ class UserRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun postAnswer(request: NetworkPostAnswerRequest): NetworkPostAnswerResponse {
         return userService.postAnswer(request)
+    }
+
+    override suspend fun addQuestion(request: NetworkAddQuestionRequest): NetworkAddQuestionResponse {
+        return userService.addQuestion(request)
     }
 
 }

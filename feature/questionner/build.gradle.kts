@@ -10,6 +10,7 @@ android {
 
 dependencies {
     implementation(projects.core.domain)
+    implementation(libs.coil.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

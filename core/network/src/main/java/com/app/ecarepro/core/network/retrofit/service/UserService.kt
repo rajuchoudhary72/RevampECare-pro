@@ -1,5 +1,7 @@
 package com.app.ecarepro.core.network.retrofit.service
 
+import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionRequest
+import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionResponse
 import com.app.ecarepro.core.network.model.questionnaire.NetworkAnswerListResponse
 import com.app.ecarepro.core.network.model.questionnaire.NetworkPostAnswerRequest
 import com.app.ecarepro.core.network.model.questionnaire.NetworkPostAnswerResponse
@@ -36,5 +38,10 @@ interface UserService {
     suspend fun postAnswer(
         @Body request: NetworkPostAnswerRequest
     ): NetworkPostAnswerResponse
+
+    @POST("Questionnaire/AddQuestion")
+    suspend fun addQuestion(
+        @Body request: NetworkAddQuestionRequest
+    ): NetworkAddQuestionResponse
 
 }

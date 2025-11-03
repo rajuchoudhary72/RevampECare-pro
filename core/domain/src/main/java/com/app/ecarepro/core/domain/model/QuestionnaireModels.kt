@@ -59,3 +59,23 @@ data class PostAnswerResponse(
     val status: String,
     val message: String
 )
+
+@Immutable
+data class AddQuestionRequest(
+    val question: String,
+    val attachment: AttachmentData
+)
+
+@Immutable
+data class AttachmentData(
+    val attachment: String,  // Base64 encoded image
+    val fileExt: String,      // File extension like ".png", ".jpg"
+    val fileURL: String       // Usually empty for new uploads
+)
+
+@Immutable
+data class AddQuestionResponse(
+    val errorCode: Int,
+    val status: String,
+    val message: String
+)

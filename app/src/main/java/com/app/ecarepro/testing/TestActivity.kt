@@ -34,8 +34,6 @@ import androidx.navigation3.ui.NavDisplay
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
-import com.app.ecarepro.feature.questionner.navigation.EntryQuestionnaireNavigation
-import com.app.ecarepro.feature.questionner.navigation.QuestionnaireNavigationGraph
 import com.app.ecarepro.feature.schoolcode.navigation.EntrySchoolCodeNavigation
 import com.app.ecarepro.feature.schoolcode.navigation.SchoolCodeNavigationGraph
 import com.app.ecarepro.onboarding.feature.navigation.EntryOnboardingNavigation
@@ -50,7 +48,7 @@ object ModuleRegistry {
         "OnBoarding" to OnboardingNavigationGraph.Onboarding,
         "School Code" to SchoolCodeNavigationGraph.SchoolCode,
         "Login" to LoginNavigationGraph.Login(schoolCode = "DEMOIN"),
-        "Questionnaire" to QuestionnaireNavigationGraph.Questionnaire,
+        //"Questionnaire" to QuestionnaireNavigationGraph.Questionnaire,
     )
 }
 
@@ -110,18 +108,18 @@ fun TestNav() {
 
 
 
-            EntryQuestionnaireNavigation(
-                onBackClick= {
-                    backStack
-                },
-                navigateToQuestionDetail={
-
-                },
-                navigateToCreateQuestion={
-
-                }
-
-            )
+//            EntryQuestionnaireNavigation(
+//                onBackClick= {
+//                    backStack
+//                },
+//                navigateToQuestionDetail={
+//
+//                },
+//                navigateToCreateQuestion={
+//
+//                }
+//
+//            )
 
         }
     )

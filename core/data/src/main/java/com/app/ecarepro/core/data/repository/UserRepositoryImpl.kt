@@ -2,8 +2,11 @@ package com.app.ecarepro.core.data.repository
 
 import com.app.ecarepro.core.data.mapper.asEntity
 import com.app.ecarepro.core.data.mapper.toDomainModel
+import com.app.ecarepro.core.data.mapper.toNetworkModel
 import com.app.ecarepro.core.database.dao.UserDao
 import com.app.ecarepro.core.domain.ext.asResultFlow
+import com.app.ecarepro.core.domain.model.AddQuestionRequest
+import com.app.ecarepro.core.domain.model.AddQuestionResponse
 import com.app.ecarepro.core.domain.model.AnswerListResponse
 import com.app.ecarepro.core.domain.model.AppConfig
 import com.app.ecarepro.core.domain.model.PostAnswerResponse
@@ -76,6 +79,12 @@ class UserRepositoryImpl @Inject constructor(
                     answer = answer
                 )
             ).toDomainModel()
+        }
+    }
+
+    override fun addQuestion(request: AddQuestionRequest): Flow<Result<AddQuestionResponse>> {
+        return asResultFlow {
+            userRemoteDataSource.addQuestion(request.toNetworkModel()).toDomainModel()
         }
     }
 }

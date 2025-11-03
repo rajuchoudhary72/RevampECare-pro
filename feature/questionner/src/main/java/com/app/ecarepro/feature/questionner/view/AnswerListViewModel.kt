@@ -26,7 +26,7 @@ class AnswerListViewModel @Inject constructor(
 
     init {
         // Get question ID from navigation arguments
-        val qid = savedStateHandle.get<Int>("qid") ?: 0
+        val qid = savedStateHandle.get<String>("qid")?.toIntOrNull() ?: 0
 
         _uiState.update {
             it.copy(qid = qid)

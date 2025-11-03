@@ -18,23 +18,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -45,14 +42,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.app.ecarepro.feature.questionner.R
 import com.app.ecarepro.core.domain.model.Answer
 import com.app.ecarepro.designsystem.core.component.AppAsyncImage
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
@@ -80,24 +80,6 @@ fun AnswerListScreen(
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Answers") },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.appColors.surface,
-                    titleContentColor = MaterialTheme.appColors.textPrimary,
-                    navigationIconContentColor = MaterialTheme.appColors.textPrimary
-                )
-            )
-        },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = MaterialTheme.appColors.background
     ) { paddingValues ->
@@ -112,14 +94,11 @@ fun AnswerListScreen(
                     questionText = question.que,
                     userName = question.updatedBy,
                     userPhoto = question.photo,
-                    timestamp = question.updatedOn
+                    timestamp = question.updatedOn,
+                    onCancelClick = onNavigateBack,
+                    modifier = Modifier.shadow(4.dp)
                 )
             }
-
-            Divider(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                color = MaterialTheme.appColors.divider
-            )
 
             // Answer list
             if (uiState.isLoading && uiState.answers.isEmpty()) {
@@ -186,6 +165,7 @@ private fun QuestionHeader(
     userName: String,
     userPhoto: String,
     timestamp: String,
+    onCancelClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -230,6 +210,14 @@ private fun QuestionHeader(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.appColors.textSecondary,
                     fontSize = 12.sp
+                )
+            }
+
+            IconButton(onClick = onCancelClick) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Close",
+                    tint = MaterialTheme.appColors.textSecondary
                 )
             }
         }
@@ -320,7 +308,7 @@ private fun AnswerItem(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Divider(color = MaterialTheme.appColors.divider)
+        Divider(color = MaterialTheme.appColors.divider, thickness = 0.5.dp)
     }
 }
 
@@ -334,11 +322,19 @@ private fun AnswerInput(
 ) {
     Row(
         modifier = modifier
-            .background(MaterialTheme.appColors.surface)
+            .shadow(
+                elevation = 16.dp,
+                shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+                clip = false // Allow shadow to be drawn outside the shape
+            )
+            .background(
+                color = MaterialTheme.appColors.surface,
+                shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+            )
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        OutlinedTextField(
+        TextField(
             value = currentText,
             onValueChange = onTextChanged,
             modifier = Modifier.weight(1f),
@@ -349,14 +345,16 @@ private fun AnswerInput(
                 )
             },
             enabled = !isPosting,
-            shape = RoundedCornerShape(24.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.appColors.primary,
-                unfocusedBorderColor = MaterialTheme.appColors.divider,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
                 focusedTextColor = MaterialTheme.appColors.textPrimary,
                 unfocusedTextColor = MaterialTheme.appColors.textPrimary,
                 cursorColor = MaterialTheme.appColors.primary,
-                disabledBorderColor = MaterialTheme.appColors.divider,
                 disabledTextColor = MaterialTheme.appColors.textSecondary
             ),
             maxLines = 4
@@ -365,41 +363,32 @@ private fun AnswerInput(
         Spacer(modifier = Modifier.width(8.dp))
 
         // Send button
-        IconButton(
-            onClick = onSendClick,
-            enabled = currentText.isNotBlank() && !isPosting,
-            modifier = Modifier
-                .size(48.dp)
-                .background(
-                    color = if (currentText.isNotBlank() && !isPosting) {
-                        MaterialTheme.appColors.primary
-                    } else {
-                        MaterialTheme.appColors.divider
-                    },
-                    shape = CircleShape
-                )
+        Box(
+            modifier = Modifier.size(48.dp),
+            contentAlignment = Alignment.Center
         ) {
-            if (isPosting) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(24.dp),
-                    color = Color.White,
-                    strokeWidth = 2.dp
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Default.Send,
-                    contentDescription = "Send",
-                    tint = if (currentText.isNotBlank()) {
-                        Color.White
-                    } else {
-                        MaterialTheme.appColors.textSecondary
-                    },
-                    modifier = Modifier.size(24.dp)
-                )
+            if (currentText.isNotBlank()) {
+                if (isPosting) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = MaterialTheme.appColors.primary,
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    IconButton(onClick = onSendClick) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_send),
+                            contentDescription = "Send",
+                            tint = MaterialTheme.appColors.primary,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
             }
         }
     }
 }
+
 
 // ============================================
 // Preview Section
@@ -415,24 +404,6 @@ private fun AnswerListScreenPreview(
     var currentAnswerText by remember { mutableStateOf("") }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Answers") },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.appColors.surface,
-                    titleContentColor = MaterialTheme.appColors.textPrimary,
-                    navigationIconContentColor = MaterialTheme.appColors.textPrimary
-                )
-            )
-        },
         containerColor = MaterialTheme.appColors.background
     ) { paddingValues ->
         Column(
@@ -445,13 +416,13 @@ private fun AnswerListScreenPreview(
                 questionText = mockQuestion.questionText,
                 userName = mockQuestion.userName,
                 userPhoto = mockQuestion.userPhoto,
-                timestamp = mockQuestion.timestamp
+                timestamp = mockQuestion.timestamp,
+                onCancelClick = onNavigateBack,
+                modifier = Modifier.shadow(4.dp)
             )
 
-            Divider(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                color = MaterialTheme.appColors.divider
-            )
+            Divider(color = MaterialTheme.appColors.divider, modifier = Modifier.fillMaxWidth(), thickness = 4.dp)
+
 
             // Answer list
             LazyColumn(
@@ -461,7 +432,7 @@ private fun AnswerListScreenPreview(
             ) {
                 items(
                     items = mockAnswers,
-                    key = { it.aid }
+                    key = { it.anID }
                 ) { answer ->
                     AnswerItem(
                         answer = answer,
@@ -542,102 +513,103 @@ private fun AnswerListScreenPreviewLight() {
     }
 }
 
-@Preview(showBackground = true, name = "Answer List Screen - Dark")
-@Composable
-private fun AnswerListScreenPreviewDark() {
-    EcareProTheme(darkTheme = true) {
-        AnswerListScreenPreview()
-    }
-}
+//@Preview(showBackground = true, name = "Answer List Screen - Dark")
+//@Composable
+//private fun AnswerListScreenPreviewDark() {
+//    EcareProTheme(darkTheme = true) {
+//        AnswerListScreenPreview()
+//    }
+//}
 
-@Preview(showBackground = true, name = "Answer Item with Delete")
-@Composable
-private fun AnswerItemWithDeletePreview() {
-    EcareProTheme {
-        AnswerItem(
-            answer = Answer(
-                anID = 1,
-                answer = "Sometimes the pages take time to load; a faster refresh would help.",
-                answeredBy = "Harsimrat Kaur",
-                answeredOn = "05 Apr, 25 • 11:26 AM",
-                photo = "https://s3-noi.aces3.ai/franciscan/SchImg/DEMOIN/Parent/Thumb/NoImage.jpg",
-                userID = 2885,
-                userType = 2,
-                isMine = true
-            ),
-            onDeleteClick = {}
-        )
-    }
-}
+//@Preview(showBackground = true, name = "Answer Item with Delete")
+//@Composable
+//private fun AnswerItemWithDeletePreview() {
+//    EcareProTheme {
+//        AnswerItem(
+//            answer = Answer(
+//                anID = 1,
+//                answer = "Sometimes the pages take time to load; a faster refresh would help.",
+//                answeredBy = "Harsimrat Kaur",
+//                answeredOn = "05 Apr, 25 • 11:26 AM",
+//                photo = "https://s3-noi.aces3.ai/franciscan/SchImg/DEMOIN/Parent/Thumb/NoImage.jpg",
+//                userID = 2885,
+//                userType = 2,
+//                isMine = true
+//            ),
+//            onDeleteClick = {}
+//        )
+//    }
+//}
 
-@Preview(showBackground = true, name = "Answer Item without Delete")
-@Composable
-private fun AnswerItemWithoutDeletePreview() {
-    EcareProTheme {
-        AnswerItem(
-            answer = Answer(
-                anID = 2,
-                answer = "It would be nice to get dark mode support for night use.",
-                answeredBy = "Nivedita Chauhan",
-                answeredOn = "05 Apr, 25 • 11:26 AM",
-                photo = "https://s3-noi.aces3.ai/franciscan/SchImg/DEMOIN/Parent/Thumb/NoImage.jpg",
-                userID = 1,
-                userType = 3,
-                isMine = false
-            ),
-            onDeleteClick = {}
-        )
-    }
-}
+//@Preview(showBackground = true, name = "Answer Item without Delete")
+//@Composable
+//private fun AnswerItemWithoutDeletePreview() {
+//    EcareProTheme {
+//        AnswerItem(
+//            answer = Answer(
+//                anID = 2,
+//                answer = "It would be nice to get dark mode support for night use.",
+//                answeredBy = "Nivedita Chauhan",
+//                answeredOn = "05 Apr, 25 • 11:26 AM",
+//                photo = "https://s3-noi.aces3.ai/franciscan/SchImg/DEMOIN/Parent/Thumb/NoImage.jpg",
+//                userID = 1,
+//                userType = 3,
+//                isMine = false
+//            ),
+//            onDeleteClick = {}
+//        )
+//    }
+//}
 
-@Preview(showBackground = true, name = "Question Header")
-@Composable
-private fun QuestionHeaderPreview() {
-    EcareProTheme {
-        QuestionHeader(
-            questionText = "How does the communication between teachers, students, and parents feel through the app?",
-            userName = "Harsimrat Kaur",
-            userPhoto = "https://s3-noi.aces3.ai/franciscan/SchImg/DEMOIN/Parent/Thumb/NoImage.jpg",
-            timestamp = "05 Apr, 25 • 11:26 AM"
-        )
-    }
-}
+//@Preview(showBackground = true, name = "Question Header")
+//@Composable
+//private fun QuestionHeaderPreview() {
+//    EcareProTheme {
+//        QuestionHeader(
+//            questionText = "How does the communication between teachers, students, and parents feel through the app?",
+//            userName = "Harsimrat Kaur",
+//            userPhoto = "https://s3-noi.aces3.ai/franciscan/SchImg/DEMOIN/Parent/Thumb/NoImage.jpg",
+//            timestamp = "05 Apr, 25 • 11:26 AM",
+//            onCancelClick = {}
+//        )
+//    }
+//}
 
-@Preview(showBackground = true, name = "Answer Input - Empty")
-@Composable
-private fun AnswerInputEmptyPreview() {
-    EcareProTheme {
-        AnswerInput(
-            currentText = "",
-            onTextChanged = {},
-            onSendClick = {},
-            isPosting = false
-        )
-    }
-}
+//@Preview(showBackground = true, name = "Answer Input - Empty")
+//@Composable
+//private fun AnswerInputEmptyPreview() {
+//    EcareProTheme {
+//        AnswerInput(
+//            currentText = "",
+//            onTextChanged = {},
+//            onSendClick = {},
+//            isPosting = false
+//        )
+//    }
+//}
 
-@Preview(showBackground = true, name = "Answer Input - With Text")
-@Composable
-private fun AnswerInputWithTextPreview() {
-    EcareProTheme {
-        AnswerInput(
-            currentText = "This is my answer to the question",
-            onTextChanged = {},
-            onSendClick = {},
-            isPosting = false
-        )
-    }
-}
+//@Preview(showBackground = true, name = "Answer Input - With Text")
+//@Composable
+//private fun AnswerInputWithTextPreview() {
+//    EcareProTheme {
+//        AnswerInput(
+//            currentText = "This is my answer to the question",
+//            onTextChanged = {},
+//            onSendClick = {},
+//            isPosting = false
+//        )
+//    }
+//}
 
-@Preview(showBackground = true, name = "Answer Input - Posting")
-@Composable
-private fun AnswerInputPostingPreview() {
-    EcareProTheme {
-        AnswerInput(
-            currentText = "This is my answer",
-            onTextChanged = {},
-            onSendClick = {},
-            isPosting = true
-        )
-    }
-}
+//@Preview(showBackground = true, name = "Answer Input - Posting")
+//@Composable
+//private fun AnswerInputPostingPreview() {
+//    EcareProTheme {
+//        AnswerInput(
+//            currentText = "This is my answer",
+//            onTextChanged = {},
+//            onSendClick = {},
+//            isPosting = true
+//        )
+//    }
+//}

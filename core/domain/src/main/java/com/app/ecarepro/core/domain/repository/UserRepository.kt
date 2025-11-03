@@ -1,5 +1,7 @@
 package com.app.ecarepro.core.domain.repository
 
+import com.app.ecarepro.core.domain.model.AddQuestionRequest
+import com.app.ecarepro.core.domain.model.AddQuestionResponse
 import com.app.ecarepro.core.domain.model.AnswerListResponse
 import com.app.ecarepro.core.domain.model.PostAnswerResponse
 import com.app.ecarepro.core.domain.model.QuestionnaireResponse
@@ -22,4 +24,6 @@ interface UserRepository {
     fun getAnswerList(qid: Int): Flow<Result<AnswerListResponse>>
 
     fun postAnswer(qid: Int, answer: String): Flow<Result<PostAnswerResponse>>
+
+    fun addQuestion(request: AddQuestionRequest): Flow<Result<AddQuestionResponse>>
 }
