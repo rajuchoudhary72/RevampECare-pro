@@ -28,6 +28,7 @@ fun EntryProviderBuilder<NavKey>.EntryLoginNavigation(
     navigateToHelp: () -> Unit = {},
     navigateToMain: (User) -> Unit = {},
 ) {
+    var activeUser: User? = null
     entry<LoginNavigationGraph.Login> { navKey ->
         val viewModel: LoginViewModel = navKeyViewModel(navKey)
         var activeUser: User? = null

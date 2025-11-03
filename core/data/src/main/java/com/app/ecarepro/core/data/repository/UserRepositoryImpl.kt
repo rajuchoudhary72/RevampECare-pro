@@ -5,6 +5,7 @@ import com.app.ecarepro.core.data.mapper.toDomainModel
 import com.app.ecarepro.core.database.dao.UserDao
 import com.app.ecarepro.core.domain.ext.asResultFlow
 import com.app.ecarepro.core.domain.model.AppConfig
+import com.app.ecarepro.core.domain.model.HomeScreenType
 import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.core.domain.repository.UserRepository
 import com.app.ecarepro.core.network.UserRemoteDataSource
@@ -41,10 +42,27 @@ class UserRepositoryImpl @Inject constructor(
                 )
             ).let { response ->
                 val entity = response.userDTL!!.asEntity(schoolCode)
-                userDao.insert(entity)
+                userDao.clearActiveUser()
+                userDao.insertOrUpdateUser(entity.copy(isActive = true))
                 entity.toDomainModel()
             }
         }
     }
+    override suspend fun getHomeScreenType(): HomeScreenType {
+        return userDao.getActiveUser()?.homeScreenType?.let {
+            HomeScreenType.getHomeScreenTypeById(
+                it
+            )
+        } ?: HomeScreenType.DASHBOARD
+    }
 
+    override suspend fun saveHomeScreenType(homeScreenType: HomeScreenType) {
+        userDao.getActiveUser()?.let { activeUser ->
+            userDao.updateUser(activeUser.copy(homeScreenType = homeScreenType.id))
+        }
+    }
+
+    override suspend fun getActiveUser(): User? {
+        return userDao.getActiveUser()?.toDomainModel()
+    }
 }

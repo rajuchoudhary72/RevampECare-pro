@@ -45,6 +45,7 @@ fun EcareProNavDisplay(
                 }
             )
             EntryLoginNavigation(
+                backStack = backStack,
                 backToSchoolCode = {
                     backStack.removeLastOrNull()
                 },

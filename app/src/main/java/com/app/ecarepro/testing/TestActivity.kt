@@ -96,6 +96,7 @@ fun TestNav() {
             )
 
             EntryLoginNavigation(
+                backStack = backStack,
                 backToSchoolCode = {
                     backStack.removeLastOrNull()
                 },
