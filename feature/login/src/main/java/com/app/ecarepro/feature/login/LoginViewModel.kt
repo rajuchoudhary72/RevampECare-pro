@@ -22,14 +22,20 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.app.ecarepro.core.domain.location.LocationProvider
+import com.app.ecarepro.core.domain.model.LocationResult
+
+
 
 @HiltViewModel(assistedFactory = LoginViewModel.Factory::class)
 class LoginViewModel @AssistedInject constructor(
     @Assisted val navKey: LoginNavigationGraph.Login,
     private val schoolRepository: SchoolRepository,
     private val userRepository: UserRepository,
-) : BaseViewModel<LoginIntent, LoginEvent>() {
+    private val locationProvider: LocationProvider,
+    ) : BaseViewModel<LoginIntent, LoginEvent>() {
     private val schoolCode = navKey.schoolCode
+    private var userLocation: String = ""
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
@@ -66,6 +72,34 @@ class LoginViewModel @AssistedInject constructor(
             LoginIntent.OnErrorShown -> {
                 _uiState.update { it.copy(errorMessage = null) }
             }
+
+            LoginIntent.OnLocationPermissionGranted -> {
+                _uiState.update { it.copy(isRequestingPermissions = false) }
+                fetchUserLocation()
+            }
+
+            LoginIntent.OnOpenAppSettings -> {
+                sendEvent(LoginEvent.OpenAppSettings)
+            }
+
+            LoginIntent.OnResumed -> {
+                fetchUserLocation()
+            }
+
+            LoginIntent.OnNavigateToBack -> {
+                _uiState.update {
+                    it.copy(
+                        isRequestingPermissions = false,
+                        isRequestingGpsEnabled = false
+                    )
+                }
+                sendEvent(LoginEvent.NavigateToBack)
+            }
+
+            LoginIntent.OnOpenGpsSettings -> {
+                _uiState.update { it.copy(isRequestingGpsEnabled = false) }
+                sendEvent(LoginEvent.TurnOnGps)
+            }
         }
     }
 
@@ -74,7 +108,8 @@ class LoginViewModel @AssistedInject constructor(
             userRepository.login(
                 userName = uiState.value.username,
                 password = uiState.value.password,
-                schoolCode = schoolCode
+                schoolCode = schoolCode,
+                location = userLocation
             )
                 .onStart {
                     _uiState.update { it.copy(isLoading = true) }
@@ -111,6 +146,55 @@ class LoginViewModel @AssistedInject constructor(
             }
         }
     }
+    private fun fetchUserLocation() {
+        if (userLocation.isNotEmpty()) {
+            return
+        }
+        viewModelScope.launch {
+            val locationResult = locationProvider
+                .getLocation()
+
+            when (locationResult) {
+                is LocationResult.Error -> {
+                    val errorMessage = SnackbarMessage(locationResult.message)
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = errorMessage
+                        )
+                    }
+                    sendEvent(LoginEvent.ShowMessage(errorMessage))
+                    sendEvent(LoginEvent.NavigateBackToSchoolCode)
+                }
+
+                LocationResult.LocationDisabled -> {
+                    _uiState.update { it.copy(isRequestingGpsEnabled = true) }
+                }
+
+                LocationResult.PermissionDenied -> {
+                    _uiState.update { it.copy(isRequestingPermissions = true) }
+                }
+
+                is LocationResult.Success -> {
+                    locationProvider
+                        .getAddressFromLocation(locationResult.location)
+                        .onSuccess { address ->
+                            userLocation = address.city
+                        }
+                        .onFailure {
+                            sendEvent(
+                                LoginEvent.ShowMessage(
+                                    SnackbarMessage(it.errorMessage())
+                                )
+                            )
+                            sendEvent(LoginEvent.NavigateToBack)
+                        }
+                }
+            }
+        }
+
+    }
+
 
     @AssistedFactory
     interface Factory : AssistedViewModelFactory<LoginNavigationGraph.Login, LoginViewModel> {
@@ -127,14 +211,21 @@ sealed interface LoginIntent {
     data object OnChangeSchoolClicked : LoginIntent
     data object OnHelpClicked : LoginIntent
     data object OnErrorShown : LoginIntent
+    data object OnLocationPermissionGranted : LoginIntent
+    data object OnOpenAppSettings : LoginIntent
+    data object OnOpenGpsSettings : LoginIntent
+    data object OnResumed : LoginIntent
+    data object OnNavigateToBack : LoginIntent
 }
 
 sealed interface LoginEvent {
     data class NavigateToMainScreen(val user: User) : LoginEvent
     data object NavigateToForgotPasswordScreen : LoginEvent
+    data object NavigateToBack : LoginEvent
     data object NavigateBackToSchoolCode : LoginEvent
     data object NavigateToHelpScreen : LoginEvent
-
+    data object TurnOnGps : LoginEvent
+    data object OpenAppSettings : LoginEvent
     data class ShowMessage(val message: SnackbarMessage) : LoginEvent
 }
 
@@ -145,6 +236,6 @@ data class LoginUiState(
     val password: String = "",
     val isLoading: Boolean = false,
     val errorMessage: SnackbarMessage? = null,
-) {
-    val areCredentialsEntered: Boolean = username.isNotBlank() && password.isNotBlank()
-}
+    val isRequestingPermissions: Boolean = false,
+    val isRequestingGpsEnabled: Boolean = false,
+)

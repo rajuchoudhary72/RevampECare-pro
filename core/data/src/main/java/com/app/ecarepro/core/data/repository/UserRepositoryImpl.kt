@@ -14,6 +14,8 @@ import com.app.ecarepro.core.network.model.user.NetworkLoginRequest
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import kotlin.let
+import com.app.ecarepro.core.domain.model.Location
+
 
 class UserRepositoryImpl @Inject constructor(
     private val appConfig: AppConfig,
@@ -24,6 +26,7 @@ class UserRepositoryImpl @Inject constructor(
         userName: String,
         password: String,
         schoolCode: String,
+        location: String
     ): Flow<Result<User>> {
         return asResultFlow {
             userRemoteDataSource.login(

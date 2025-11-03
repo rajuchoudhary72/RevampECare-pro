@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
+import androidx.compose.ui.graphics.Color
+
 
 @Composable
 fun TextButton(
@@ -24,6 +26,7 @@ fun TextButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     @DrawableRes leadingIcon: Int = 0,
+    titleColor: Color = MaterialTheme.appColors.textSecondary,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
 ) {
     TextButton(
@@ -44,7 +47,7 @@ fun TextButton(
         }
         Text(
             title,
-            style = MaterialTheme.appTypography.interRegular14px
+            style = MaterialTheme.appTypography.interRegular14px.copy(color = titleColor)
         )
     }
 }

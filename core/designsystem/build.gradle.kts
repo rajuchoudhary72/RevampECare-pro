@@ -21,7 +21,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)    // For GIF support
     implementation(libs.lottie.compose)
-
+    implementation(libs.accompanist.permissions)
 
 
 }

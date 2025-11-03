@@ -37,6 +37,9 @@ include(":feature:onboarding")
 include(":feature:schoolcode")
 include(":feature:login")
 include(":feature:homeselection")
+include(":core:location")
+
+
 
 
 

@@ -99,4 +99,7 @@ data class SchoolCodeUiState(
     val errorMessage: SnackbarMessage? = null,
 ) {
     val isCodeEntered = schoolCode.isNullOrEmpty().not()
+    val hasError = errorMessage != null
+
+
 }

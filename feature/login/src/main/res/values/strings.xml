@@ -2,4 +2,13 @@
 <resources>
     <string name="feature_login_hello_again">Hello again!</string>
     <string name="feature_login_welcome_to_school">Welcome to %s, %s</string>
+    <string name="feature_login_location_permission_required">Location Permission Required</string>
+    <string name="feature_login_this_app_requires_location_access_for_security_and_to_function_correctly_please_grant_the_permission_to_continue">This app requires location access for security and to function correctly. Please grant the permission to continue.</string>
+    <string name="feature_login_location_permission_is_required_to_use_this_app_please_enable_it_in_the_app_settings_or_exit_the_app">Location permission is required to use this app. Please enable it in the app settings or exit the app.</string>
+    <string name="feature_login_permission_denied">Permission Denied</string>
+    <string name="feature_login_grant_permission">Grant Permission</string>
+    <string name="feature_login_go_to_settings">Go to Settings</string>
+    <string name="feature_login_enable_gps">Enable GPS</string>
+    <string name="feature_login_this_app_requires_location_to_be_enabled_to_function_please_enable_it_in_settings">This app requires location to be enabled to function. Please enable it in settings.</string>
+    <string name="feature_login_exit">Exit</string>
 </resources>
