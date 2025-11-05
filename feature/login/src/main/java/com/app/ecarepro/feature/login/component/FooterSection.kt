@@ -46,11 +46,9 @@ fun FooterSection(
                 color = MaterialTheme.appColors.textSecondary
             ),
         ) {
-            append("Need any Help? ") // stringResource(R.string.didnt_know_code)
+            append("Need any Help? ")
         }
 
-
-        // Use LinkAnnotation to make a portion of the text clickable
         pushLink(
             LinkAnnotation.Clickable(
                 tag = "FIND_CODE_TAG",
@@ -64,7 +62,7 @@ fun FooterSection(
                 color = MaterialTheme.appColors.primary,
             )
         ) {
-            append("Click Here") // stringResource(R.string.find_here_link)
+            append("Click Here")
         }
 
         pop()

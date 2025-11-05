@@ -1,5 +1,8 @@
 import java.net.URI
 
+include(":feature:splash")
+
+
 include(":feature:dashboard")
 
 

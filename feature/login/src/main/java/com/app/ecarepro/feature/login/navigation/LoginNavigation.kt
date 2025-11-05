@@ -12,6 +12,8 @@ import com.app.ecarepro.feature.login.LoginScreen
 import com.app.ecarepro.feature.login.LoginViewModel
 import com.app.ecarepro.feature.login.screens.forgotpassword.ForgotPasswordScreen
 import com.app.ecarepro.feature.login.screens.forgotpassword.ForgotPasswordViewModel
+import com.app.ecarepro.feature.login.screens.help.HelpScreen
+import com.app.ecarepro.feature.login.screens.help.HelpViewModel
 import com.app.ecarepro.feature.login.screens.otp.OtpScreen
 import com.app.ecarepro.feature.login.screens.otp.OtpViewModel
 import kotlinx.serialization.Serializable
@@ -34,6 +36,11 @@ sealed interface LoginNavigationGraph : NavKey {
     data class ForgotPassword(
         val schoolCode: String,
         val isStudentLoginBlocked: Boolean,
+    ) : LoginNavigationGraph
+
+    @Serializable
+    data class Help(
+        val schoolCode: String,
     ) : LoginNavigationGraph
 
 }
@@ -59,7 +66,9 @@ fun EntryProviderBuilder<NavKey>.EntryLoginNavigation(
                     LoginNavigationGraph.ForgotPassword(schoolCode, isStudentLoginBlocked)
                 )
             },
-            navigateToHelp = navigateToHelp,
+            navigateToHelp = { schoolCode ->
+                backStack.add(LoginNavigationGraph.Help(schoolCode))
+            },
             selectHomeScreenType = { user ->
                 activeUser = user
                 backStack.add(HomeSelectionNavigationGraph.HomeSelection)
@@ -98,6 +107,16 @@ fun EntryProviderBuilder<NavKey>.EntryLoginNavigation(
     entry<LoginNavigationGraph.ForgotPassword> { navKey ->
         val viewModel: ForgotPasswordViewModel = navKeyViewModel(navKey)
         ForgotPasswordScreen(
+            viewModel = viewModel,
+            navigateToBack = {
+                backStack.removeLastOrNull()
+            }
+        )
+    }
+
+    entry<LoginNavigationGraph.Help> { navKey ->
+        val viewModel: HelpViewModel = navKeyViewModel(navKey)
+        HelpScreen(
             viewModel = viewModel,
             navigateToBack = {
                 backStack.removeLastOrNull()

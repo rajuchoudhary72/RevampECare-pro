@@ -48,7 +48,7 @@ fun LoginScreen(
     backToSchoolCode: () -> Unit = {},
     navigateToBack: () -> Unit = {},
     navigateToForgotPassword: (schoolCode: String, isStudentLoginBlocked: Boolean) -> Unit = { _, _ -> },
-    navigateToHelp: () -> Unit = {},
+    navigateToHelp: (schoolCode: String) -> Unit = {},
     selectHomeScreenType: (User) -> Unit = {},
     navigateToOtpVerification: (schoolCode: String, username: String, loginResult: LoginResult) -> Unit = { _, _, _ -> },
 ) {
@@ -74,7 +74,7 @@ fun LoginScreen(
                     event.isStudentLoginBlocked
                 )
 
-                LoginEvent.NavigateToHelpScreen -> navigateToHelp()
+                is LoginEvent.NavigateToHelpScreen -> navigateToHelp(event.schoolCode)
                 LoginEvent.NavigateToBack -> navigateToBack()
                 is LoginEvent.ShowMessage -> {
                     snackbarMessage = event.message

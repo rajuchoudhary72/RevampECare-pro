@@ -70,7 +70,7 @@ class LoginViewModel @AssistedInject constructor(
             }
 
             LoginIntent.OnHelpClicked -> {
-                sendEvent(LoginEvent.NavigateToHelpScreen)
+                sendEvent(LoginEvent.NavigateToHelpScreen(schoolCode))
             }
 
             LoginIntent.OnErrorShown -> {
@@ -251,7 +251,7 @@ sealed interface LoginEvent {
 
     data object NavigateToBack : LoginEvent
     data object NavigateBackToSchoolCode : LoginEvent
-    data object NavigateToHelpScreen : LoginEvent
+    data class NavigateToHelpScreen(val schoolCode: String) : LoginEvent
     data object TurnOnGps : LoginEvent
     data object OpenAppSettings : LoginEvent
     data class ShowMessage(val message: SnackbarMessage) : LoginEvent

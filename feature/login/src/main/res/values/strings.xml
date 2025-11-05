@@ -29,4 +29,7 @@
     <string name="feature_login_resend_otp">RESEND OTP</string>
     <string name="feature_login_please_wait_seconds_to_resend">Please wait %1$d seconds to resend.</string>
     <string name="feature_login_open_your_email">Open your email</string>
+    <string name="feature_login_help">Help</string>
+    <string name="feature_login_contact_number">Contact number:</string>
+    <string name="feature_login_email_id">Email Id:</string>
 </resources>

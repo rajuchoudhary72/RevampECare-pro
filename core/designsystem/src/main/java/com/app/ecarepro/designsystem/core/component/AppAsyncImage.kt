@@ -2,6 +2,7 @@ package com.app.ecarepro.designsystem.core.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -29,6 +30,7 @@ fun AppAsyncImage(
     placeholder: Painter = painterResource(id = R.drawable.img_placeholder),
     error: Painter = painterResource(id = R.drawable.img_placeholder),
     contentScale: ContentScale = ContentScale.Crop,
+    colorFilter: ColorFilter? = null
 ) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
@@ -39,6 +41,7 @@ fun AppAsyncImage(
         modifier = modifier,
         placeholder = placeholder,
         error = error,
-        contentScale = contentScale
+        contentScale = contentScale,
+        colorFilter = colorFilter
     )
 }

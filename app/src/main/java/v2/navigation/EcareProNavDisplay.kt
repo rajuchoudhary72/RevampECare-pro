@@ -15,6 +15,8 @@ import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
 import com.app.ecarepro.feature.schoolcode.navigation.EntrySchoolCodeNavigation
 import com.app.ecarepro.feature.schoolcode.navigation.SchoolCodeNavigationGraph
+import com.app.ecarepro.feature.splash.navigation.EntrySplashNavigation
+import com.app.ecarepro.feature.splash.navigation.SplashNavigationGraph
 import com.app.ecarepro.onboarding.feature.navigation.EntryOnboardingNavigation
 import com.app.ecarepro.onboarding.feature.navigation.OnboardingNavigationGraph
 
@@ -22,24 +24,37 @@ import com.app.ecarepro.onboarding.feature.navigation.OnboardingNavigationGraph
 fun EcareProNavDisplay(
     navigateToLegacyFlow: (LegacyNavigationDestination) -> Unit,
 ) {
-    val backStack = remember { mutableStateListOf<NavKey>(OnboardingNavigationGraph.Onboarding) }
+    val backStack = remember { mutableStateListOf<NavKey>(SplashNavigationGraph.Splash) }
 
     NavDisplay(
         entryDecorators = listOf(
-            // Add the default decorators for managing scenes and saving state
             rememberSceneSetupNavEntryDecorator(),
             rememberSavedStateNavEntryDecorator(),
-            // Then add the view model store decorator
             rememberViewModelStoreNavEntryDecorator()
         ),
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
 
-            EntryOnboardingNavigation(navigateToAddSchool = {
-                backStack.removeLastOrNull()
-                backStack.add(SchoolCodeNavigationGraph.SchoolCode)
-            })
+            EntrySplashNavigation(
+                navigateToLogin = {
+                    backStack.clear()
+                    backStack.add(OnboardingNavigationGraph.Onboarding)
+                },
+                navigateToDashboard = {
+                    backStack.clear()
+                    backStack.add(DashboardNavigationGraph.Dashboard)
+                }
+            )
+
+
+            EntryOnboardingNavigation(
+                navigateToAddSchool = {
+                    backStack.clear()
+                    backStack.add(SchoolCodeNavigationGraph.SchoolCode)
+                }
+            )
+
 
             EntrySchoolCodeNavigation(
                 backStack = backStack,
