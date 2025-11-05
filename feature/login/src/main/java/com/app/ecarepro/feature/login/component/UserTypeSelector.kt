@@ -19,10 +19,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.app.ecarepro.core.domain.model.UserType
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
-import com.app.ecarepro.feature.login.screens.forgotpassword.UserType
 
 @Composable
 fun UserTypeSelector(
@@ -63,7 +63,7 @@ private fun UserTypeOption(
         border = border
     ) {
         Text(
-            text = stringResource(userType.value),
+            text = stringResource(userType.stringResId),
             style = MaterialTheme.appTypography.interMedium16px,
             color = contentColor,
             modifier = Modifier

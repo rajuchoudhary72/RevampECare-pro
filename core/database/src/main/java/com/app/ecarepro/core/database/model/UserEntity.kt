@@ -13,7 +13,7 @@ data class UserEntity(
     val authToken: String?,
     val authenticated: Boolean?,
     @ColumnInfo("class_id")
-    val classID: String?,
+    val classID: Int?,
     @ColumnInfo("class")
     val className: String?,
     @ColumnInfo("error_code")

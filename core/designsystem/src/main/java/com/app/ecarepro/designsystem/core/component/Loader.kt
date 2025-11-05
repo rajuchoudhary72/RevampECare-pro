@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.app.ecarepro.core.designsystem.R
@@ -50,7 +51,10 @@ fun Loader(
         verticalArrangement = Arrangement.Center
     ) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(lottieRawId))
-        val progress by animateLottieCompositionAsState(composition)
+        val progress by animateLottieCompositionAsState(
+            composition = composition,
+            iterations = LottieConstants.IterateForever
+        )
         LottieAnimation(
             modifier = Modifier.size(150.dp),
             composition = composition,

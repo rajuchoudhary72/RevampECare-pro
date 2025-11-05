@@ -4,12 +4,16 @@ import android.os.CountDownTimer
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.core.domain.exception.errorMessage
+import com.app.ecarepro.core.domain.model.GetCredential
+import com.app.ecarepro.core.domain.model.UserType
+import com.app.ecarepro.core.domain.model.Ward
 import com.app.ecarepro.core.domain.repository.UserRepository
 import com.app.ecarepro.core.ui.viewmodel.AssistedViewModelFactory
 import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
+import com.app.ecarepro.designsystem.core.component.MessageType
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import com.app.ecarepro.feature.login.R
-import com.app.ecarepro.feature.login.component.previewWards
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
 import com.app.ecarepro.feature.login.screens.forgotpassword.ForgotPasswordViewModel.Companion.RESEND_TIME_INTERVAL_SEC
 import dagger.assisted.Assisted
@@ -19,6 +23,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -89,24 +94,189 @@ class ForgotPasswordViewModel @AssistedInject constructor(
     }
 
     private fun selectNextStep() {
+        val currentState = _uiState.value
+        when (currentState.currentStep) {
+            ForgotPasswordStep.SelectUserType -> {
+                _uiState.update { it.copy(currentStep = ForgotPasswordStep.SelectRecoveryMethod) }
+            }
 
+            ForgotPasswordStep.SelectRecoveryMethod -> {
+                fetchWards(
+                    onSuccess = { wards ->
+                        if (wards.isEmpty()) {
+                            selectFinalStep(currentState)
+                        } else {
+                            _uiState.update {
+                                it.copy(
+                                    isLoading = false,
+                                    availableWards = wards,
+                                    selectedWard = wards.firstOrNull(),
+                                    currentStep = ForgotPasswordStep.SelectWard
+                                )
+                            }
+                        }
+                    }
+                )
+            }
+
+            ForgotPasswordStep.SelectWard -> {
+                sendPasswordDetails(
+                    onSuccess = {
+                        selectFinalStep(currentState)
+                    }
+                )
+            }
+
+            else -> {
+                // Handle other steps or do nothing if it's a final step.
+            }
+        }
+    }
+
+    private fun selectFinalStep(currentState: ForgotPasswordUiState) {
+        if (currentState.selectedRecoveryMethod == RecoveryMethod.MOBILE) {
+            _uiState.update {
+                it.copy(
+                    isLoading = false
+                )
+            }
+            sendEvent(ForgotPasswordEvent.NavigateBack)
+        } else {
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    currentStep = ForgotPasswordStep.EmailSentConfirmation,
+                    headlineTitle = R.string.feature_login_sent_you_an_email,
+                    description = R.string.feature_login_forgot_password_email_description,
+                    descriptionArgs = listOf(currentState.recoveryInput)
+                )
+            }
+        }
+    }
+
+    private fun fetchWards(
+        onSuccess: (List<Ward>) -> Unit,
+    ) {
+        viewModelScope.launch {
+            val currentState = _uiState.value
+            userRepository
+                .getCredential(
+                    GetCredential(
+                        schoolCode = schoolCode,
+                        userType = currentState.selectedUserType.id,
+                        receivedOn = currentState.selectedRecoveryMethod.key,
+                        mobile = if (currentState.selectedRecoveryMethod == RecoveryMethod.MOBILE) currentState.recoveryInput else null,
+                        email = if (currentState.selectedRecoveryMethod == RecoveryMethod.EMAIL) currentState.recoveryInput else null
+                    )
+                )
+                .onStart {
+                    _uiState.update { it.copy(isLoading = true) }
+                }
+                .collect { result ->
+                    result
+                        .onSuccess { (message, wards) ->
+                            sendEvent(ForgotPasswordEvent.ShowMessage(SnackbarMessage(text = message, MessageType.SUCCESS)))
+                            onSuccess(wards)
+                        }
+                        .onFailure { error ->
+                            _uiState.update { it.copy(isLoading = false) }
+                            sendEvent(
+                                ForgotPasswordEvent.ShowMessage(
+                                    SnackbarMessage(
+                                        text = error.errorMessage()
+                                    )
+                                )
+                            )
+                        }
+                }
+        }
+    }
+
+    private fun sendPasswordDetails(
+        onSuccess: () -> Unit,
+    ) {
+        val currentState = _uiState.value
+        val selectedWard = currentState.selectedWard ?: return
+        viewModelScope.launch {
+            userRepository
+                .getUsernameByUID(
+                    schoolCode = schoolCode,
+                    userID = selectedWard.userID,
+                    userType = selectedWard.userType,
+                    receivedOn = currentState.selectedRecoveryMethod.key
+                )
+                .onStart {
+                    _uiState.update { it.copy(isLoading = true) }
+                }
+                .collect { result ->
+                    result
+                        .onSuccess { message ->
+                            onSuccess()
+                            sendEvent(
+                                ForgotPasswordEvent.ShowMessage(
+                                    SnackbarMessage(
+                                        text = message,
+                                        type = MessageType.SUCCESS
+                                    )
+                                )
+                            )
+                        }
+                        .onFailure { error ->
+                            _uiState.update { it.copy(isLoading = false) }
+                            sendEvent(
+                                ForgotPasswordEvent.ShowMessage(
+                                    SnackbarMessage(
+                                        text = error.errorMessage()
+                                    )
+                                )
+                            )
+                        }
+                }
+        }
     }
 
     private fun goToPreviousStep() {
+        val currentState = _uiState.value
+        when (currentState.currentStep) {
+            ForgotPasswordStep.EmailSentConfirmation,
+            ForgotPasswordStep.OtpVerification,
+                -> {
+                // If the user type is Parent, the previous step is SelectWard. Otherwise, it's SelectRecoveryMethod.
+                val previousStep = if (currentState.selectedUserType == UserType.PARENT) {
+                    ForgotPasswordStep.SelectWard
+                } else {
+                    ForgotPasswordStep.SelectRecoveryMethod
+                }
+                _uiState.update {
+                    it.copy(
+                        currentStep = previousStep,
+                        headlineTitle = R.string.feature_login_forgot_password_title,
+                        description = R.string.feature_login_forgot_password_description,
+                        descriptionArgs = emptyList() // Clear any arguments
+                    )
+                }
+            }
 
+            ForgotPasswordStep.SelectWard -> {
+                // From ward selection, always go back to recovery method selection.
+                _uiState.update { it.copy(currentStep = ForgotPasswordStep.SelectRecoveryMethod) }
+            }
+
+            ForgotPasswordStep.SelectRecoveryMethod -> {
+                // From recovery method, always go back to user type selection.
+                _uiState.update { it.copy(currentStep = ForgotPasswordStep.SelectUserType) }
+            }
+
+            ForgotPasswordStep.SelectUserType -> {
+                // If we are at the first step, trigger the main navigation back event.
+                sendEvent(ForgotPasswordEvent.NavigateBack)
+            }
+        }
     }
 
     private fun verifyOtp(otp: String) {
         viewModelScope.launch {
-            // TODO: Implement the actual OTP verification logic with your repository
-            // _uiState.update { it.copy(isLoading = true) }
-            // val result = repository.verifyOtp(otp)
-            // if (result.isSuccess) {
-            //     // Navigate to the final "Reset Password" screen
-            //     _uiState.update { it.copy(isLoading = false, currentStep = ForgotPasswordStep.ResetPassword) }
-            // } else {
-            //     _uiState.update { it.copy(isLoading = false, isOtpError = true) }
-            // }
+
         }
     }
 
@@ -128,11 +298,6 @@ class ForgotPasswordViewModel @AssistedInject constructor(
 
     private fun resendOtp() {
         viewModelScope.launch {
-            // TODO: Implement your API call logic to resend the OTP here
-            // val result = repository.sendOtp(uiState.value.recoveryInput)
-            // if (result.isSuccess) { ... }
-
-            // After successfully triggering the resend, restart the timer
             startResendTimer()
         }
     }
@@ -158,18 +323,16 @@ data class ForgotPasswordUiState(
     val isLoading: Boolean = false,
     val selectedUserType: UserType = UserType.PARENT,
     val errorMessage: SnackbarMessage? = null,
-    val availableWards: List<Ward> = previewWards,
+    val availableWards: List<Ward> = emptyList(),
     val selectedWard: Ward? = null,
-    val selectedRecoveryMethod: RecoveryMethod? = RecoveryMethod.MOBILE,
+    val selectedRecoveryMethod: RecoveryMethod = RecoveryMethod.MOBILE,
     val recoveryInput: String = "", // Holds the text for mobile/email
     val recoveryInputError: Boolean = false,
     val otpCode: String = "",
     val isOtpError: Boolean = false,
     val resendTimerSeconds: Int = RESEND_TIME_INTERVAL_SEC,
     val isResendOtpEnabled: Boolean = false,
-
-
-    )
+)
 
 // Represents each screen/step in the flow
 enum class ForgotPasswordStep(val stepName: Int = 0, val progress: String? = null) {
@@ -198,24 +361,13 @@ sealed interface ForgotPasswordIntent {
 sealed interface ForgotPasswordEvent {
     data object NavigateBack : ForgotPasswordEvent
     data object OpenEmailApp : ForgotPasswordEvent
-    // data class ShowMessage(val message: SnackbarMessage) : ForgotPasswordEvent
+    data class ShowMessage(val message: SnackbarMessage) : ForgotPasswordEvent
 }
 
 // Assuming a UserType enum
-enum class UserType(@param:StringRes val value: Int) {
-    PARENT(R.string.feature_login_parent),
-    STUDENT(R.string.feature_login_student),
-    STAFF(R.string.feature_login_staff)
-}
+
 
 enum class RecoveryMethod(val key: String) {
     MOBILE("mob"),
     EMAIL("email")
 }
-
-data class Ward(
-    val id: Int,
-    val name: String,
-    val photoUrl: String?,
-    val isSelected: Boolean,
-)

@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 abstract class BaseViewModel<Intent, Event> : ViewModel() {
 
     // Channel for handling one-time screen events
-    private val _screenEvent = Channel<Event>()
+    private val _screenEvent = Channel<Event>(Channel.UNLIMITED)
     val screenEvent = _screenEvent.receiveAsFlow()
 
     /**

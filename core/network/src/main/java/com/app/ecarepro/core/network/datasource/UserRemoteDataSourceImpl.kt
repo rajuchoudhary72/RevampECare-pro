@@ -2,6 +2,9 @@ package com.app.ecarepro.core.network.datasource
 
 import com.app.ecarepro.core.network.UserRemoteDataSource
 import com.app.ecarepro.core.network.model.unwrapPayload
+import com.app.ecarepro.core.network.model.user.NetworkGetCredentialRequest
+import com.app.ecarepro.core.network.model.user.NetworkGetCredentialsResponse
+import com.app.ecarepro.core.network.model.user.NetworkGetUsernameByUIDResponse
 import com.app.ecarepro.core.network.model.user.NetworkLoginRequest
 import com.app.ecarepro.core.network.model.user.NetworkLoginResponse
 import com.app.ecarepro.core.network.model.user.NetworkResendOtpRequest
@@ -29,6 +32,28 @@ class UserRemoteDataSourceImpl @Inject constructor(
         return userService
             .validateOtp(request)
             .unwrapPayload { this }
+    }
+
+    override suspend fun getCredentials(request: NetworkGetCredentialRequest): NetworkGetCredentialsResponse {
+        return userService
+            .getCredentials(request)
+            .unwrapPayload(successCode = intArrayOf(0,2)) { this }
+    }
+
+    override suspend fun getUsernameByUID(
+        schoolCode: String,
+        userID: Int,
+        userType: Int,
+        receivedOn: String,
+    ): NetworkGetUsernameByUIDResponse {
+        return userService
+            .getUsernameByUID(
+                schoolCode = schoolCode,
+                userID = userID,
+                userType = userType,
+                receivedOn = receivedOn
+            )
+            .unwrapPayload(successCode = intArrayOf(1)) { this }
     }
 
 }

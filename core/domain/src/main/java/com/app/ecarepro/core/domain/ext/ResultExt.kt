@@ -11,5 +11,6 @@ import kotlinx.coroutines.flow.flow
 inline fun <T> asResultFlow(crossinline block: suspend () -> T): Flow<Result<T>> = flow {
     emit(Result.success(block()))
 }.catch { exception ->
+    exception.printStackTrace()
     emit(Result.failure(exception))
 }

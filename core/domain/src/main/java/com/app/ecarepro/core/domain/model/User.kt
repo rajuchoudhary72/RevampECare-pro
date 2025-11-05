@@ -6,7 +6,7 @@ import java.io.Serializable
 data class User(
     val authToken: String?,
     val authenticated: Boolean?,
-    val classID: String?,
+    val classID: Int?,
     val className: String?,
     val isDefaulter: Boolean?,
     val message: String?,

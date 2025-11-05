@@ -22,10 +22,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -38,10 +42,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.app.ecarepro.core.domain.model.UserType
+import com.app.ecarepro.core.domain.model.Ward
 import com.app.ecarepro.designsystem.core.component.Button
 import com.app.ecarepro.designsystem.core.component.CodeInput
 import com.app.ecarepro.designsystem.core.component.EcareProOutlineButton
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
+import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
 import com.app.ecarepro.designsystem.core.theme.appColors
@@ -50,7 +57,6 @@ import com.app.ecarepro.feature.login.R
 import com.app.ecarepro.feature.login.component.ForgotPasswordHeader
 import com.app.ecarepro.feature.login.component.UserTypeSelector
 import com.app.ecarepro.feature.login.component.WardList
-import com.app.ecarepro.feature.login.component.previewWards
 import com.app.ecarepro.feature.login.screens.forgotpassword.ForgotPasswordIntent.OnRecoveryInputChanged
 import com.app.ecarepro.feature.login.screens.forgotpassword.ForgotPasswordIntent.SelectNextStep
 import com.app.ecarepro.feature.login.screens.forgotpassword.ForgotPasswordIntent.SelectRecoveryMethod
@@ -64,6 +70,10 @@ fun ForgotPasswordScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    var snackbarMessage by remember { mutableStateOf<SnackbarMessage?>(null) }
+
     LaunchedEffect(Unit) {
         viewModel.screenEvent.collect { event ->
             when (event) {
@@ -76,11 +86,19 @@ fun ForgotPasswordScreen(
                     val chooser = Intent.createChooser(intent, "Open Email App")
                     context.startActivity(chooser)
                 }
+
+                is ForgotPasswordEvent.ShowMessage -> {
+                    snackbarMessage = event.message
+                    snackbarHostState.showSnackbar(event.message.text)
+                }
             }
         }
     }
 
     ForgotPasswordContent(
+        snackbarHostState = snackbarHostState,
+        snackbarMessage = snackbarMessage,
+        onSnackbarDismissed = { snackbarMessage == null },
         uiState = uiState,
         handleIntent = viewModel::handleIntent
     )
@@ -88,11 +106,18 @@ fun ForgotPasswordScreen(
 
 @Composable
 private fun ForgotPasswordContent(
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    snackbarMessage: SnackbarMessage? = null,
+    onSnackbarDismissed: () -> Unit = {},
     uiState: ForgotPasswordUiState,
     handleIntent: (ForgotPasswordIntent) -> Unit = {},
 ) {
     EcareProScaffold(
         containerColor = White,
+        snackbarHostState = snackbarHostState,
+        snackbarMessage = snackbarMessage,
+        onSnackbarDismissed = onSnackbarDismissed,
+        isLoading = uiState.isLoading
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -171,6 +196,7 @@ private fun ForgotPasswordContent(
                     ForgotPasswordStep.SelectRecoveryMethod -> {
                         Step3_SelectRecoveryMethod(
                             inputValue = uiState.recoveryInput,
+                            selectedUserType = uiState.selectedUserType,
                             onInputValueChange = {
                                 handleIntent(OnRecoveryInputChanged(it))
                             },
@@ -269,7 +295,7 @@ private fun Step1_UserTypeSelection(
         }
 
         Button(
-            title = stringResource(R.string.feature_login_select_your_ward),
+            title = stringResource(R.string.feature_login_continue),
             onClick = onNextClicked,
             enabled = selectedUserType != null,
             modifier = Modifier
@@ -317,7 +343,7 @@ private fun Step2_SelectWard(
                 modifier = Modifier.weight(1f),
                 title = stringResource(R.string.feature_login_continue),
                 onClick = onContinueClicked,
-                enabled = wards.any { it.isSelected },
+                enabled = selectedWard != null,
             )
         }
 
@@ -328,6 +354,7 @@ private fun Step2_SelectWard(
 @Composable
 private fun Step3_SelectRecoveryMethod(
     inputValue: String,
+    selectedUserType: UserType,
     onInputValueChange: (String) -> Unit,
     selectedMethod: RecoveryMethod?,
     onMethodSelected: (RecoveryMethod) -> Unit,
@@ -364,7 +391,7 @@ private fun Step3_SelectRecoveryMethod(
             Spacer(modifier = Modifier.width(12.dp))
             Button(
                 modifier = Modifier.weight(1f),
-                title = stringResource(R.string.feature_login_continue),
+                title = stringResource(if (selectedUserType == UserType.PARENT) R.string.feature_login_select_ward else R.string.feature_login_continue),
                 onClick = onContinueClicked,
                 enabled = selectedMethod != null,
             )
@@ -520,7 +547,7 @@ private fun ForgotPasswordContentStep1Preview() {
     EcareProTheme {
         ForgotPasswordContent(
             uiState = ForgotPasswordUiState(
-                currentStep = ForgotPasswordStep.SelectUserType
+                currentStep = ForgotPasswordStep.SelectUserType,
             )
         )
     }
@@ -545,13 +572,31 @@ private fun ForgotPasswordContentStep3Preview() {
 @Preview(showBackground = true, name = "Step 3: Select Ward")
 @Composable
 private fun ForgotPasswordContentStep2Preview() {
+    val wards = listOf(
+        Ward(
+            childName = "Child 1",
+            classX = "Class 1",
+            memberName = "Member 1",
+            photo = "https://example.com/photo1.jpg",
+            userID = 1,
+            userType = 1
+        ),
+        Ward(
+            childName = "Child 1",
+            classX = "Class 1",
+            memberName = "Member 1",
+            photo = "https://example.com/photo1.jpg",
+            userID = 1,
+            userType = 1
+        )
+    )
     EcareProTheme {
         ForgotPasswordContent(
             uiState = ForgotPasswordUiState(
                 currentStep = ForgotPasswordStep.SelectWard,
                 selectedUserType = UserType.PARENT,
-                availableWards = previewWards, // Using the preview data
-                selectedWard = previewWards.first()
+                availableWards = wards, // Using the preview data
+                selectedWard = wards.first()
             )
         )
     }

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "85bb39a46827b59408a2447eafe61b0a",
+    "identityHash": "32cfb9a2b87bd9c958644f6940c49861",
     "entities": [
       {
         "tableName": "schools",
@@ -144,7 +144,7 @@
       },
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `auth_token` TEXT, `authenticated` INTEGER, `class_id` TEXT, `class` TEXT, `error_code` INTEGER, `is_defaulter` INTEGER, `mobile_number` TEXT, `name` TEXT, `photo_path` TEXT, `role_name` TEXT, `session_id` TEXT, `st_name` TEXT, `user_id` INTEGER, `user_type` INTEGER, `school_code` TEXT NOT NULL, `updated_on` TEXT NOT NULL, `home_screen_type` INTEGER NOT NULL, `is_active` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `auth_token` TEXT, `authenticated` INTEGER, `class_id` INTEGER, `class` TEXT, `error_code` INTEGER, `is_defaulter` INTEGER, `mobile_number` TEXT, `name` TEXT, `photo_path` TEXT, `role_name` TEXT, `session_id` TEXT, `st_name` TEXT, `user_id` INTEGER, `user_type` INTEGER, `school_code` TEXT NOT NULL, `updated_on` TEXT NOT NULL, `home_screen_type` INTEGER NOT NULL, `is_active` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -165,7 +165,7 @@
           {
             "fieldPath": "classID",
             "columnName": "class_id",
-            "affinity": "TEXT"
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "className",
@@ -257,7 +257,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '85bb39a46827b59408a2447eafe61b0a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '32cfb9a2b87bd9c958644f6940c49861')"
     ]
   }
 }

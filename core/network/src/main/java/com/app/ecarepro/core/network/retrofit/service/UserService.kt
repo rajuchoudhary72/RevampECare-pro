@@ -1,6 +1,8 @@
 package com.app.ecarepro.core.network.retrofit.service
 
 import com.app.ecarepro.core.network.model.user.NetworkGetCredentialRequest
+import com.app.ecarepro.core.network.model.user.NetworkGetCredentialsResponse
+import com.app.ecarepro.core.network.model.user.NetworkGetUsernameByUIDResponse
 import com.app.ecarepro.core.network.model.user.NetworkLoginRequest
 import com.app.ecarepro.core.network.model.user.NetworkLoginResponse
 import com.app.ecarepro.core.network.model.user.NetworkResendOtpRequest
@@ -29,14 +31,14 @@ interface UserService {
     @POST("User/GetCredentials")
     suspend fun getCredentials(
         @Body request: NetworkGetCredentialRequest,
-    ): NetworkLoginResponse
+    ): NetworkGetCredentialsResponse
 
     @GET("User/GetUsernameByUID")
     suspend fun getUsernameByUID(
-        @Query("SchCode") SchoolCode: String,
-        @Query("UserID") userID: String,
-        @Query("UserType") userType: String,
+        @Query("SchCode") schoolCode: String,
+        @Query("UserID") userID: Int,
+        @Query("UserType") userType: Int,
         @Query("RcvOn") receivedOn: String,
-    ): NetworkLoginResponse
+    ): NetworkGetUsernameByUIDResponse
 
 }

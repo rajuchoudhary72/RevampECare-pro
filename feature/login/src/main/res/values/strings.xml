@@ -16,9 +16,6 @@
     <string name="feature_login_verify_otp">Verify OTP</string>
     <string name="feature_login_didn_t_receive_a_code">Didn’t receive a code?</string>
     <string name="feature_login_please_wait_seconds_to_resend_otp">Please wait %1$d seconds to Resend OTP</string>
-    <string name="feature_login_parent">Parent</string>
-    <string name="feature_login_student">Student</string>
-    <string name="feature_login_staff">Staff</string>
     <string name="feature_login_forgot_password_title">Forget password</string>
     <string name="feature_login_forgot_password_description">Don’t worry — we’ll help you reset it in just a few steps.</string>
     <string name="feature_login_forgot_password_otp_description">Enter the security code we sent to %s. The OTP is valid for 15 minutes.</string>
