@@ -40,6 +40,8 @@ import com.app.ecarepro.onboarding.feature.navigation.EntryOnboardingNavigation
 import com.app.ecarepro.onboarding.feature.navigation.OnboardingNavigationGraph
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.Serializable
+import com.app.ecarepro.feature.dashboard.navigation.DashboardNavigationGraph
+import com.app.ecarepro.feature.dashboard.navigation.EntryDashboardNavigation
 
 // Registry of available module screens
 object ModuleRegistry {
@@ -47,7 +49,8 @@ object ModuleRegistry {
         "OnBoarding" to OnboardingNavigationGraph.Onboarding,
         "School Code" to SchoolCodeNavigationGraph.SchoolCode,
         "Login" to LoginNavigationGraph.Login(schoolCode = "DEMOIN"),
-    )
+        "Dashboard" to DashboardNavigationGraph.Dashboard,
+        )
 }
 
 @AndroidEntryPoint
@@ -104,7 +107,7 @@ fun TestNav() {
 
                 }
             )
-
+            EntryDashboardNavigation()
         }
     )
 }

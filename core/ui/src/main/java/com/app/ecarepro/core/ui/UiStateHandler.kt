@@ -14,7 +14,7 @@ fun <T> UiStateHandler(
     errorContent: @Composable (String, () -> Unit) -> Unit = { msg, retry ->
         DefaultError(msg, retry)
     },
-    successContent: @Composable (T) -> Unit
+    successContent: @Composable (T) -> Unit,
 ) {
     when (state) {
         is UiState.Loading -> loadingContent()

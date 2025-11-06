@@ -38,6 +38,9 @@ include(":feature:schoolcode")
 include(":feature:login")
 include(":feature:homeselection")
 include(":core:location")
+include(":feature:dashboard")
+
+
 
 
 

@@ -10,6 +10,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.app.ecarepro.feature.dashboard.navigation.EntryDashboardNavigation
 import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
 import com.app.ecarepro.feature.schoolcode.navigation.EntrySchoolCodeNavigation
@@ -53,5 +54,6 @@ fun EcareProNavDisplay(
                     navigateToLegacyFlow(LegacyNavigationDestination.Main(user))
                 }
             )
+            EntryDashboardNavigation()
         })
 }
