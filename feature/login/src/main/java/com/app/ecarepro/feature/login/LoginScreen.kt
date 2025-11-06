@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.app.ecarepro.core.domain.model.LoginResult
 import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.core.location.LocationUtils
 import com.app.ecarepro.designsystem.core.component.EcareProBackground
@@ -50,12 +51,11 @@ fun LoginScreen(
     navigateToForgotPassword: () -> Unit = {},
     navigateToHelp: () -> Unit = {},
     selectHomeScreenType: (User) -> Unit = {},
-    ) {
+    navigateToOtpVerification: (schoolCode: String, username: String, loginResult: LoginResult) -> Unit = {_,_,_ ->},
+) {
 
     val uiState: LoginUiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-
-
     val snackbarHostState = remember { SnackbarHostState() }
     var snackbarMessageType = MessageType.SUCCESS
 
@@ -65,6 +65,7 @@ fun LoginScreen(
             viewModel.handleIntent(LoginIntent.OnResumed)
         }
     )
+
     LaunchedEffect(Unit) {
         viewModel.screenEvent.collect { event ->
             when (event) {
@@ -77,14 +78,13 @@ fun LoginScreen(
                     snackbarHostState.showSnackbar(event.message.text)
                 }
 
-                is LoginEvent.NavigateToMainScreen -> selectHomeScreenType(event.user)
+                is LoginEvent.NavigateToSelectHomeScreenType -> selectHomeScreenType(event.user)
                 LoginEvent.TurnOnGps -> LocationUtils.openGpsSettings(context)
                 LoginEvent.OpenAppSettings -> LocationUtils.openAppSettings(context)
+                is LoginEvent.NavigateToOtpVerification -> navigateToOtpVerification(event.schoolCode, event.userName, event.loginResult)
             }
         }
-
     }
-
 
 
     LoginScreenContent(
@@ -93,6 +93,8 @@ fun LoginScreen(
         uiState = uiState,
         handleIntent = viewModel::handleIntent
     )
+
+
     if (uiState.isRequestingPermissions) {
         locationPermissionRequester(
             handleIntent = viewModel::handleIntent
@@ -122,7 +124,6 @@ private fun LoginScreenContent(
         EcareProBackground(
             overlayColor = MaterialTheme.appColors.background
         ) {
-
             Scaffold(
                 containerColor = Color.Transparent,
                 snackbarHost = {
@@ -194,6 +195,7 @@ private fun LoginScreenContent(
     }
 }
 
+
 @Composable
 private fun GpsEnableRequester(
     handleIntent: (LoginIntent) -> Unit,
@@ -247,6 +249,7 @@ private fun locationPermissionRequester(
         }
     )
 }
+
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {

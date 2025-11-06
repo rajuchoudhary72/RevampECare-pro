@@ -32,7 +32,6 @@ data class AppConfig(
     /** A boolean flag indicating if the current build is a debug version. Useful for enabling debug-only features. */
     val isDebug: Boolean,
 
-    val location: String,
 
     val osVersion: String
 )

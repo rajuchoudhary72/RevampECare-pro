@@ -1,22 +1,31 @@
 package com.app.ecarepro.feature.login.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.NavKey
 import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.core.ui.viewmodel.navKeyViewModel
-import com.app.ecarepro.feature.login.LoginScreen
-import com.app.ecarepro.feature.login.LoginViewModel
-import kotlinx.serialization.Serializable
 import com.app.ecarepro.feature.homeselection.navigation.EntryHomeSelectionNavigation
 import com.app.ecarepro.feature.homeselection.navigation.HomeSelectionNavigationGraph
-import androidx.compose.runtime.snapshots.SnapshotStateList
-
+import com.app.ecarepro.feature.login.LoginScreen
+import com.app.ecarepro.feature.login.LoginViewModel
+import com.app.ecarepro.feature.login.otp.OtpScreen
+import com.app.ecarepro.feature.login.otp.OtpViewModel
+import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface LoginNavigationGraph : NavKey {
     @Serializable
     data class Login(val schoolCode: String) : LoginNavigationGraph
+
+    @Serializable
+    data class OtpVerification(
+        val schoolCode: String,
+        val username: String,
+        val otpAuthKey: String,
+        val message: String,
+    ) : LoginNavigationGraph
 }
 
 
@@ -31,8 +40,6 @@ fun EntryProviderBuilder<NavKey>.EntryLoginNavigation(
     var activeUser: User? = null
     entry<LoginNavigationGraph.Login> { navKey ->
         val viewModel: LoginViewModel = navKeyViewModel(navKey)
-        var activeUser: User? = null
-
 
         LoginScreen(
             viewModel = viewModel,
@@ -43,12 +50,42 @@ fun EntryProviderBuilder<NavKey>.EntryLoginNavigation(
                 activeUser = user
                 backStack.add(HomeSelectionNavigationGraph.HomeSelection)
             },
+            navigateToBack = {
+                backStack.removeLastOrNull()
+            },
+            navigateToOtpVerification = { schoolCode, userName, loginResult ->
+                backStack.add(
+                    LoginNavigationGraph.OtpVerification(
+                        schoolCode = schoolCode,
+                        username = userName,
+                        otpAuthKey = loginResult.otpAuthKey.orEmpty(),
+                        message = loginResult.message
+                    )
+                )
+            }
         )
     }
+
+
+    entry<LoginNavigationGraph.OtpVerification> { navKey ->
+        val viewModel: OtpViewModel = navKeyViewModel(navKey)
+        OtpScreen(
+            viewModel = viewModel,
+            navigateToBack = {
+                backStack.removeLastOrNull()
+            },
+            onOtpVerificationComplete = { user ->
+                activeUser = user
+                backStack.add(HomeSelectionNavigationGraph.HomeSelection)
+            }
+        )
+    }
+
     EntryHomeSelectionNavigation(
         onComplete = {
             activeUser?.let { navigateToMain(it) }
             backStack.removeLastOrNull()
         }
     )
+
 }

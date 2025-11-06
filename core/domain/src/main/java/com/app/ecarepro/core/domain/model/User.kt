@@ -2,7 +2,7 @@ package com.app.ecarepro.core.domain.model
 
 import java.io.Serializable
 
-
+@kotlinx.serialization.Serializable
 data class User(
     val authToken: String?,
     val authenticated: Boolean?,

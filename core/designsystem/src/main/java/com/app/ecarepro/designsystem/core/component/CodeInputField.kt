@@ -29,6 +29,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.app.ecarepro.designsystem.core.theme.White
 import com.app.ecarepro.designsystem.core.theme.appColors
 
 @Composable
@@ -47,6 +48,8 @@ internal fun CodeInputField(
     cornerRadius: Dp,
     backgroundColor: Color,
     textStyle: TextStyle,
+    textColor: Color,
+    textColorError: Color,
 ) {
     val text by remember(value) {
         mutableStateOf(
@@ -63,8 +66,8 @@ internal fun CodeInputField(
         else -> defaultStrokeColor
     }
     val textColor = when {
-        isError -> MaterialTheme.appColors.warning
-        else -> MaterialTheme.appColors.textPrimary
+        isError -> textColorError
+        else -> textColor
     }
 
     Box(
@@ -75,7 +78,7 @@ internal fun CodeInputField(
                 color = strokeColor,
                 shape = RoundedCornerShape(cornerRadius)
             )
-            .background(backgroundColor),
+            .background(if (text.text.isEmpty()) backgroundColor else White),
         contentAlignment = Alignment.Center
     ) {
         BasicTextField(

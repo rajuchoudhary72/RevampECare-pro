@@ -3,8 +3,6 @@ package com.app.ecarepro.designsystem.core.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +32,8 @@ fun CodeInput(
     otpLength: Int = 6,
     strokeWidth: Dp = 1.dp,
     isError: Boolean = false,
+    textColor: Color = MaterialTheme.appColors.textPrimary,
+    textColorError: Color = MaterialTheme.appColors.error,
     defaultStrokeColor: Color = MaterialTheme.appColors.border,
     filledStrokeColor: Color = Blue,
     errorStrokeColor: Color = MaterialTheme.appColors.warning,
@@ -99,7 +99,9 @@ fun CodeInput(
                 cornerRadius = cornerRadius,
                 backgroundColor = backgroundColor,
                 textStyle = textStyle,
-                isError = isError
+                isError = isError,
+                textColor = textColor,
+                textColorError = textColorError
             )
         }
     }

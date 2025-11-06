@@ -1,7 +1,9 @@
 package com.app.ecarepro.core.data.mapper
 
 import com.app.ecarepro.core.database.model.UserEntity
+import com.app.ecarepro.core.domain.model.LoginResult
 import com.app.ecarepro.core.domain.model.User
+import com.app.ecarepro.core.network.model.user.NetworkLoginResponse
 import com.app.ecarepro.core.network.model.user.UserDetails
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -32,7 +34,6 @@ fun UserDetails.asEntity(
 
 fun UserEntity.toDomainModel() = User(
     authToken = authToken,
-    authenticated = authenticated,
     classID = classID,
     className = className,
     isDefaulter = isDefaulter,
@@ -46,5 +47,24 @@ fun UserEntity.toDomainModel() = User(
     status = null,
     userID = userID ?: 0,
     userType = userType,
-    schoolCode = schoolCode
+    schoolCode = schoolCode,
+    authenticated = authenticated
+)
+
+
+fun NetworkLoginResponse.toLoginResult() = LoginResult(
+    authenticated = authenticated,
+    errorCode = errorCode,
+    isDefaulter = isDefaulter,
+    isOTPEnabled = isOTPEnabled,
+    isOTPValidated = isOTPValidated,
+    message = message,
+    otpAuthKey = otpAuthKey,
+    otpMode = otpMode,
+    remainAttempts = remainAttempts,
+    resendWaitSeconds = resendWaitSeconds,
+    schCode = schCode,
+    status = status,
+    userDetail = null
+
 )
