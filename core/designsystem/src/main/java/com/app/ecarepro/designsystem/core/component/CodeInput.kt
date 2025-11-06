@@ -3,6 +3,8 @@ package com.app.ecarepro.designsystem.core.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,6 +33,8 @@ fun CodeInput(
     code: String? = null,
     otpLength: Int = 6,
     strokeWidth: Dp = 1.dp,
+    itemWidth: Dp = Dp.Unspecified,
+    itemHeight: Dp = Dp.Unspecified,
     isError: Boolean = false,
     textColor: Color = MaterialTheme.appColors.textPrimary,
     textColorError: Color = MaterialTheme.appColors.error,
@@ -46,7 +50,17 @@ fun CodeInput(
     onOtpEntered: (String) -> Unit,
 ) {
     var codeState by remember {
-        mutableStateOf(CodeState(code = code?.map { it.toString() }?:List(otpLength) { null }))
+        // --- MODIFIED LOGIC ---
+        // Always create a list of size 'otpLength'.
+        val initialCode = MutableList<String?>(otpLength) { null }.apply {
+            // Fill it with the provided code if it's not null or empty.
+            if (!code.isNullOrEmpty()) {
+                for (i in 0 until minOf(code.length, otpLength)) {
+                    this[i] = code[i].toString()
+                }
+            }
+        }
+        mutableStateOf(CodeState(code = initialCode))
     }
     val focusRequesters = remember {
         List(otpLength) { FocusRequester() }
@@ -60,6 +74,22 @@ fun CodeInput(
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
     ) {
         codeState.code.forEachIndexed { index, value ->
+
+            val itemModifier = Modifier
+                .weight(1f)
+                .then(
+                    // Apply explicit width if provided
+                    if (itemWidth != Dp.Unspecified) Modifier.width(itemWidth)
+                    else Modifier
+                )
+                .then(
+                    // Apply explicit height if provided
+                    if (itemHeight != Dp.Unspecified) Modifier.height(itemHeight)
+                    // Otherwise, if NO explicit height or width, fall back to aspect ratio
+                    else if (itemWidth == Dp.Unspecified) Modifier.aspectRatio(1f)
+                    else Modifier
+                )
+
             CodeInputField(
                 value = value,
                 focusRequester = focusRequesters[index],
@@ -89,9 +119,7 @@ fun CodeInput(
                 onKeyboardBack = {
                     focusRequesters.getOrNull(index - 1)?.requestFocus()
                 },
-                modifier = Modifier
-                    .weight(1f)
-                    .aspectRatio(1f),
+                modifier = itemModifier,
                 strokeWidth = strokeWidth,
                 defaultStrokeColor = defaultStrokeColor,
                 filledStrokeColor = filledStrokeColor,
@@ -116,6 +144,9 @@ internal data class CodeState(
 @Composable
 private fun CodeInputPreview() {
     EcareProTheme {
-        CodeInput(onOtpEntered = {})
+        CodeInput(
+            onOtpEntered = {},
+            code = "13"
+        )
     }
 }

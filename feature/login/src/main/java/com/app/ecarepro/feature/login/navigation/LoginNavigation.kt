@@ -10,8 +10,12 @@ import com.app.ecarepro.feature.homeselection.navigation.EntryHomeSelectionNavig
 import com.app.ecarepro.feature.homeselection.navigation.HomeSelectionNavigationGraph
 import com.app.ecarepro.feature.login.LoginScreen
 import com.app.ecarepro.feature.login.LoginViewModel
-import com.app.ecarepro.feature.login.otp.OtpScreen
-import com.app.ecarepro.feature.login.otp.OtpViewModel
+import com.app.ecarepro.feature.login.screens.forgotpassword.ForgotPasswordScreen
+import com.app.ecarepro.feature.login.screens.forgotpassword.ForgotPasswordViewModel
+import com.app.ecarepro.feature.login.screens.help.HelpScreen
+import com.app.ecarepro.feature.login.screens.help.HelpViewModel
+import com.app.ecarepro.feature.login.screens.otp.OtpScreen
+import com.app.ecarepro.feature.login.screens.otp.OtpViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,6 +30,19 @@ sealed interface LoginNavigationGraph : NavKey {
         val otpAuthKey: String,
         val message: String,
     ) : LoginNavigationGraph
+
+
+    @Serializable
+    data class ForgotPassword(
+        val schoolCode: String,
+        val isStudentLoginBlocked: Boolean,
+    ) : LoginNavigationGraph
+
+    @Serializable
+    data class Help(
+        val schoolCode: String,
+    ) : LoginNavigationGraph
+
 }
 
 
@@ -44,8 +61,14 @@ fun EntryProviderBuilder<NavKey>.EntryLoginNavigation(
         LoginScreen(
             viewModel = viewModel,
             backToSchoolCode = backToSchoolCode,
-            navigateToForgotPassword = navigateToForgotPassword,
-            navigateToHelp = navigateToHelp,
+            navigateToForgotPassword = { schoolCode, isStudentLoginBlocked ->
+                backStack.add(
+                    LoginNavigationGraph.ForgotPassword(schoolCode, isStudentLoginBlocked)
+                )
+            },
+            navigateToHelp = { schoolCode ->
+                backStack.add(LoginNavigationGraph.Help(schoolCode))
+            },
             selectHomeScreenType = { user ->
                 activeUser = user
                 backStack.add(HomeSelectionNavigationGraph.HomeSelection)
@@ -77,6 +100,26 @@ fun EntryProviderBuilder<NavKey>.EntryLoginNavigation(
             onOtpVerificationComplete = { user ->
                 activeUser = user
                 backStack.add(HomeSelectionNavigationGraph.HomeSelection)
+            }
+        )
+    }
+
+    entry<LoginNavigationGraph.ForgotPassword> { navKey ->
+        val viewModel: ForgotPasswordViewModel = navKeyViewModel(navKey)
+        ForgotPasswordScreen(
+            viewModel = viewModel,
+            navigateToBack = {
+                backStack.removeLastOrNull()
+            }
+        )
+    }
+
+    entry<LoginNavigationGraph.Help> { navKey ->
+        val viewModel: HelpViewModel = navKeyViewModel(navKey)
+        HelpScreen(
+            viewModel = viewModel,
+            navigateToBack = {
+                backStack.removeLastOrNull()
             }
         )
     }

@@ -13,7 +13,7 @@ data class UserDetails(
     @SerialName("authenticated")
     val authenticated: Boolean?,
     @SerialName("classID")
-    val classID: String?,
+    val classID: Int?,
     @SerialName("class")
     val classX: String?,
     @SerialName("errorCode")

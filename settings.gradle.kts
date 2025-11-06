@@ -39,6 +39,9 @@ include(":feature:login")
 include(":feature:homeselection")
 include(":core:location")
 include(":feature:dashboard")
+include(":feature:splash")
+
+
 
 
 

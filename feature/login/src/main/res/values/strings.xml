@@ -12,7 +12,24 @@
     <string name="feature_login_this_app_requires_location_to_be_enabled_to_function_please_enable_it_in_settings">This app requires location to be enabled to function. Please enable it in settings.</string>
     <string name="feature_login_exit">Exit</string>
     <string name="feature_login_we_just_sent_an_sms">We just sent an SMS</string>
+    <string name="feature_login_sent_you_an_email">Sent you an email</string>
     <string name="feature_login_verify_otp">Verify OTP</string>
     <string name="feature_login_didn_t_receive_a_code">Didn’t receive a code?</string>
     <string name="feature_login_please_wait_seconds_to_resend_otp">Please wait %1$d seconds to Resend OTP</string>
+    <string name="feature_login_forgot_password_title">Forget password</string>
+    <string name="feature_login_forgot_password_description">Don’t worry — we’ll help you reset it in just a few steps.</string>
+    <string name="feature_login_forgot_password_otp_description">Enter the security code we sent to %s. The OTP is valid for 15 minutes.</string>
+    <string name="feature_login_forgot_password_email_description">An email has been sent to your address %s containing your password.</string>
+    <string name="feature_login_select_user_type">Who are you?</string>
+    <string name="feature_login_select_ward">Select the ward</string>
+    <string name="feature_login_recovery_method">Where should we send you reset link?</string>
+    <string name="feature_login_select_your_ward">Select your ward</string>
+    <string name="feature_login_continue">Continue</string>
+    <string name="feature_login_back">Back</string>
+    <string name="feature_login_resend_otp">RESEND OTP</string>
+    <string name="feature_login_please_wait_seconds_to_resend">Please wait %1$d seconds to resend.</string>
+    <string name="feature_login_open_your_email">Open your email</string>
+    <string name="feature_login_help">Help</string>
+    <string name="feature_login_contact_number">Contact number:</string>
+    <string name="feature_login_email_id">Email Id:</string>
 </resources>

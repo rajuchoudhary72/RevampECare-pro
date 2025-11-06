@@ -1,4 +1,4 @@
-package com.app.ecarepro.feature.login.otp
+package com.app.ecarepro.feature.login.screens.otp
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

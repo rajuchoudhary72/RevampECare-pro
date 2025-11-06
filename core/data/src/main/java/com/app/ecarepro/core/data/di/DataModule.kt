@@ -15,12 +15,12 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindsSchoolRepository(
-        topicsRepository: SchoolRepositoryImpl,
+        schoolRepositoryImpl: SchoolRepositoryImpl,
     ): SchoolRepository
 
     @Binds
     abstract fun bindsUserRepository(
-        topicsRepository: UserRepositoryImpl,
+        userRepositoryImpl: UserRepositoryImpl,
     ): UserRepository
 
 }

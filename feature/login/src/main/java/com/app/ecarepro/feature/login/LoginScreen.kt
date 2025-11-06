@@ -11,13 +11,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,9 +32,8 @@ import com.app.ecarepro.core.domain.model.LoginResult
 import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.core.location.LocationUtils
 import com.app.ecarepro.designsystem.core.component.EcareProBackground
-import com.app.ecarepro.designsystem.core.component.EcareProSnackbar
+import com.app.ecarepro.designsystem.core.component.EcareProScaffold
 import com.app.ecarepro.designsystem.core.component.Loader
-import com.app.ecarepro.designsystem.core.component.MessageType
 import com.app.ecarepro.designsystem.core.component.PermissionRequester
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
@@ -48,16 +47,16 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
     backToSchoolCode: () -> Unit = {},
     navigateToBack: () -> Unit = {},
-    navigateToForgotPassword: () -> Unit = {},
-    navigateToHelp: () -> Unit = {},
+    navigateToForgotPassword: (schoolCode: String, isStudentLoginBlocked: Boolean) -> Unit = { _, _ -> },
+    navigateToHelp: (schoolCode: String) -> Unit = {},
     selectHomeScreenType: (User) -> Unit = {},
-    navigateToOtpVerification: (schoolCode: String, username: String, loginResult: LoginResult) -> Unit = {_,_,_ ->},
+    navigateToOtpVerification: (schoolCode: String, username: String, loginResult: LoginResult) -> Unit = { _, _, _ -> },
 ) {
 
     val uiState: LoginUiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
-    var snackbarMessageType = MessageType.SUCCESS
+    var snackbarMessage by remember { mutableStateOf<SnackbarMessage?>(null) }
 
     OnLifecycleEvent(
         events = arrayOf(Lifecycle.Event.ON_RESUME),
@@ -70,18 +69,26 @@ fun LoginScreen(
         viewModel.screenEvent.collect { event ->
             when (event) {
                 LoginEvent.NavigateBackToSchoolCode -> backToSchoolCode()
-                LoginEvent.NavigateToForgotPasswordScreen -> navigateToForgotPassword()
-                LoginEvent.NavigateToHelpScreen -> navigateToHelp()
+                is LoginEvent.NavigateToForgotPasswordScreen -> navigateToForgotPassword(
+                    event.schoolCode,
+                    event.isStudentLoginBlocked
+                )
+
+                is LoginEvent.NavigateToHelpScreen -> navigateToHelp(event.schoolCode)
                 LoginEvent.NavigateToBack -> navigateToBack()
                 is LoginEvent.ShowMessage -> {
-                    snackbarMessageType = event.message.type
+                    snackbarMessage = event.message
                     snackbarHostState.showSnackbar(event.message.text)
                 }
 
                 is LoginEvent.NavigateToSelectHomeScreenType -> selectHomeScreenType(event.user)
                 LoginEvent.TurnOnGps -> LocationUtils.openGpsSettings(context)
                 LoginEvent.OpenAppSettings -> LocationUtils.openAppSettings(context)
-                is LoginEvent.NavigateToOtpVerification -> navigateToOtpVerification(event.schoolCode, event.userName, event.loginResult)
+                is LoginEvent.NavigateToOtpVerification -> navigateToOtpVerification(
+                    event.schoolCode,
+                    event.userName,
+                    event.loginResult
+                )
             }
         }
     }
@@ -89,7 +96,8 @@ fun LoginScreen(
 
     LoginScreenContent(
         snackbarHostState = snackbarHostState,
-        snackbarMessageType = snackbarMessageType,
+        snackbarMessage = snackbarMessage,
+        onSnackbarDismissed = { snackbarMessage == null },
         uiState = uiState,
         handleIntent = viewModel::handleIntent
     )
@@ -111,8 +119,9 @@ fun LoginScreen(
 
 @Composable
 private fun LoginScreenContent(
-    snackbarHostState: SnackbarHostState,
-    snackbarMessageType: MessageType = MessageType.SUCCESS,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    snackbarMessage: SnackbarMessage? = null,
+    onSnackbarDismissed: () -> Unit = {},
     uiState: LoginUiState,
     handleIntent: (LoginIntent) -> Unit,
 ) {
@@ -124,15 +133,11 @@ private fun LoginScreenContent(
         EcareProBackground(
             overlayColor = MaterialTheme.appColors.background
         ) {
-            Scaffold(
+            EcareProScaffold(
                 containerColor = Color.Transparent,
-                snackbarHost = {
-                    SnackbarHost(hostState = snackbarHostState) {
-                        snackbarHostState.currentSnackbarData?.visuals?.message?.let { text ->
-                            EcareProSnackbar(SnackbarMessage(text, snackbarMessageType))
-                        }
-                    }
-                }
+                snackbarHostState = snackbarHostState,
+                snackbarMessage = snackbarMessage,
+                onSnackbarDismissed = onSnackbarDismissed,
             ) { paddingValues ->
 
                 Column(

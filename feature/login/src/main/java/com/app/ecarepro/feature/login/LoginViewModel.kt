@@ -57,7 +57,12 @@ class LoginViewModel @AssistedInject constructor(
             }
 
             LoginIntent.OnForgotPasswordClicked -> {
-                sendEvent(LoginEvent.NavigateToForgotPasswordScreen)
+                sendEvent(
+                    LoginEvent.NavigateToForgotPasswordScreen(
+                        schoolCode,
+                        _uiState.value.schoolDetails?.isStudentLoginBlocked ?: false
+                    )
+                )
             }
 
             LoginIntent.OnChangeSchoolClicked -> {
@@ -65,7 +70,7 @@ class LoginViewModel @AssistedInject constructor(
             }
 
             LoginIntent.OnHelpClicked -> {
-                sendEvent(LoginEvent.NavigateToHelpScreen)
+                sendEvent(LoginEvent.NavigateToHelpScreen(schoolCode))
             }
 
             LoginIntent.OnErrorShown -> {
@@ -233,7 +238,10 @@ sealed interface LoginIntent {
 
 sealed interface LoginEvent {
     data class NavigateToSelectHomeScreenType(val user: User) : LoginEvent
-    data object NavigateToForgotPasswordScreen : LoginEvent
+    data class NavigateToForgotPasswordScreen(
+        val schoolCode: String,
+        val isStudentLoginBlocked: Boolean,
+    ) : LoginEvent
 
     data class NavigateToOtpVerification(
         val schoolCode: String,
@@ -243,7 +251,7 @@ sealed interface LoginEvent {
 
     data object NavigateToBack : LoginEvent
     data object NavigateBackToSchoolCode : LoginEvent
-    data object NavigateToHelpScreen : LoginEvent
+    data class NavigateToHelpScreen(val schoolCode: String) : LoginEvent
     data object TurnOnGps : LoginEvent
     data object OpenAppSettings : LoginEvent
     data class ShowMessage(val message: SnackbarMessage) : LoginEvent

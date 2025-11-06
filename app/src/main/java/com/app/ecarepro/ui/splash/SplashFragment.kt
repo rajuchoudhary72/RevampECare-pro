@@ -30,7 +30,11 @@ class SplashFragment : Fragment() {
 
     val splashViewModel: SplashViewModel by viewModels()
     val systemViewModel: SystemViewModel by activityViewModels()
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().finish()
+        startActivity(Intent(requireContext(), MainActivity::class.java))
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,7 +46,7 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        startAnimation()
+       // startAnimation()
 
         splashViewModel.school.observe(viewLifecycleOwner) { school ->
             school?.let {

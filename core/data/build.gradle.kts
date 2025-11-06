@@ -8,7 +8,7 @@ android {
 }
 
 dependencies {
-    api(projects.core.network)
+    implementation(projects.core.network)
     api(projects.core.domain)
-    api(projects.core.database)
+    implementation(projects.core.database)
 }
