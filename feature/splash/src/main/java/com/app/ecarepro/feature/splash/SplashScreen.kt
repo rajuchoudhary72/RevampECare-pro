@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.designsystem.core.component.AppAsyncImage
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
@@ -38,14 +39,14 @@ import com.app.ecarepro.designsystem.core.theme.White
 fun SplashScreen(
     viewModel: SplashViewModel = hiltViewModel(),
     navigateToLogin: () -> Unit = {},
-    navigateToDashboard: () -> Unit = {},
+    navigateToDashboard: (User) -> Unit = {},
 ) {
     val uiState: SplashUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.screenEvent.collect { event ->
             when (event) {
-                SplashEvent.NavigateToDashboard -> navigateToDashboard()
+                is SplashEvent.NavigateToDashboard -> navigateToDashboard(event.user)
                 SplashEvent.NavigateToLogin -> navigateToLogin()
             }
         }
@@ -95,7 +96,7 @@ fun SplashScreenContent(
                     .fillMaxWidth(0.7f)
                     .aspectRatio(286f / 92f)
                     .scale(scale.value),
-                imageUrl = uiState.logo,
+                imageUrl = null,
                 placeholder = painterResource(id = uiState.placeholder),
                 error = painterResource(id = uiState.placeholder),
                 contentDescription = "Franciscan e-care",

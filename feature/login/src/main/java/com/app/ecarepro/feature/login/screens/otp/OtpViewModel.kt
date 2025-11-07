@@ -1,6 +1,7 @@
 package com.app.ecarepro.feature.login.screens.otp
 
 import androidx.compose.runtime.Immutable
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.core.domain.exception.errorMessage
 import com.app.ecarepro.core.domain.model.LoginResult
@@ -47,12 +48,15 @@ class OtpViewModel @AssistedInject constructor(
     private var countdownJob: Job? = null
 
     init {
-        startResendCountdown()
+        startResendCountdown(navKey.resendWaitSeconds?:RESEND_TIME_INTERVAL_SEC)
     }
 
     override fun handleIntent(intent: OtpIntent) {
         when (intent) {
-            is OtpIntent.OnOtpChanged -> _uiState.update { it.copy(otp = intent.otp, errorMessage = null) }
+            is OtpIntent.OnOtpChanged -> {
+                if (intent.otp.isDigitsOnly())
+                    _uiState.update { it.copy(otp = intent.otp, errorMessage = null) }
+            }
             OtpIntent.OnVerifyClicked -> verifyOtp()
             OtpIntent.OnResendClicked -> resendOtp()
             OtpIntent.OnBackClicked -> sendEvent(OtpEvent.NavigateBack)
@@ -96,12 +100,19 @@ class OtpViewModel @AssistedInject constructor(
         processOtpResult(
             resultFlow = resultFlow,
             onSuccess = { loginResult ->
-                startResendCountdown()
+                startResendCountdown(navKey.resendWaitSeconds?:RESEND_TIME_INTERVAL_SEC)
                 otpAuthKey = loginResult.otpAuthKey.orEmpty()
                 _uiState.update {
                     it.copy(message = loginResult.message)
                 }
-                sendEvent(OtpEvent.ShowMessage(SnackbarMessage(text = loginResult.message, type = MessageType.SUCCESS)))
+                sendEvent(
+                    OtpEvent.ShowMessage(
+                        SnackbarMessage(
+                            text = loginResult.message,
+                            type = MessageType.SUCCESS
+                        )
+                    )
+                )
             }
         )
     }
@@ -126,15 +137,15 @@ class OtpViewModel @AssistedInject constructor(
         }
     }
 
-    private fun startResendCountdown() {
+    private fun startResendCountdown(resendCountdown: Int) {
         countdownJob?.cancel()
         countdownJob = viewModelScope.launch {
             _uiState.update { it.copy(isResendEnabled = false) }
 
-            (RESEND_TIME_INTERVAL_SEC downTo 1).asFlow()
+            (resendCountdown downTo 1).asFlow()
                 .onEach { delay(1000) }
                 .onStart {
-                    _uiState.update { it.copy(resendCountdown = RESEND_TIME_INTERVAL_SEC) }
+                    _uiState.update { it.copy(resendCountdown = resendCountdown) }
                 }
                 .collect { remainingTime ->
                     _uiState.update { it.copy(resendCountdown = remainingTime) }

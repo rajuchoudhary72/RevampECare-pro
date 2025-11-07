@@ -93,7 +93,7 @@ class TimeTableNavHostFragment : Fragment() {
 
                                     val fragmentList: ArrayList<Fragment> = ArrayList()
 
-                                    data.forEach { itemDat ->
+                                    data.forEach { itemDat: TimeTableData ->
                                         fragmentList.add(
                                             DayWiseTimeTableFragment.newInstance(
                                                 itemDat,
