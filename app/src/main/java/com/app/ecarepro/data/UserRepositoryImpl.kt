@@ -505,9 +505,11 @@ class UserRepositoryImpl @Inject constructor(
         ord: Int,
         applType: Int,
         pg: Int,
-        attPer:Boolean
+        attPer:Boolean,
+        FromDate:String?,
+        TillDate:String?
     ): NetworkLeaveReport {
-        return userService.leaveReport(status, ord, applType, pg,attPer)
+        return userService.leaveReport(status, ord, applType, pg,attPer,FromDate,TillDate)
     }
 
     override suspend fun leaveAction(

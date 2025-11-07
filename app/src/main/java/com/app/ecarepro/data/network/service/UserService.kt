@@ -343,6 +343,8 @@ interface UserService {
         @Query("ApplType") applType: Int,
         @Query("pg") pg: Int,
         @Query("Attper") AttPer: Boolean,
+        @Query("FromDate") FromDate: String?,
+        @Query("TillDate") TillDate: String?,
     ): NetworkLeaveReport
 
     @POST("Leave/Action")
