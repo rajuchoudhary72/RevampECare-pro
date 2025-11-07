@@ -42,7 +42,6 @@ fun EcareProNavDisplay(
                     backStack.add(OnboardingNavigationGraph.Onboarding)
                 },
                 navigateToDashboard = { user ->
-                    backStack.clear()
                     navigateToLegacyFlow(navigateToLegacyFlow, user)
                 }
             )

@@ -40,6 +40,7 @@
             <option value="$PROJECT_DIR$/feature/onboarding" />
             <option value="$PROJECT_DIR$/feature/schoolcode" />
             <option value="$PROJECT_DIR$/feature/splash" />
+            <option value="$PROJECT_DIR$/feature/timetable" />
           </set>
         </option>
       </GradleProjectSettings>

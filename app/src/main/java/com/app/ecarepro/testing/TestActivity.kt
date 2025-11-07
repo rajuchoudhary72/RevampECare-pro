@@ -37,6 +37,8 @@ import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
 import com.app.ecarepro.feature.schoolcode.navigation.EntrySchoolCodeNavigation
 import com.app.ecarepro.feature.schoolcode.navigation.SchoolCodeNavigationGraph
+import com.app.ecarepro.feature.timetable.navigation.EntryTimetableNavigation
+import com.app.ecarepro.feature.timetable.navigation.TimetableNavigationGraph
 import com.app.ecarepro.onboarding.feature.navigation.EntryOnboardingNavigation
 import com.app.ecarepro.onboarding.feature.navigation.OnboardingNavigationGraph
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,6 +51,7 @@ object ModuleRegistry {
         "School Code" to SchoolCodeNavigationGraph.SchoolCode,
         "Login" to LoginNavigationGraph.Login(schoolCode = "DEMOIN"),
         "Dashboard" to DashboardNavigationGraph.Dashboard,
+        "Timetable" to TimetableNavigationGraph.Timetable
     )
 }
 
@@ -108,6 +111,12 @@ fun TestNav() {
             )
 
             EntryDashboardNavigation()
+
+            EntryTimetableNavigation(
+                navigateToBack = {
+                    backStack.removeLastOrNull()
+                }
+            )
 
         }
     )
