@@ -1,6 +1,11 @@
 import java.net.URI
 
+include(":feature:questionner")
 
+
+
+
+include(":feature:home")
 
 
 pluginManagement {

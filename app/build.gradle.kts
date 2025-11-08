@@ -140,6 +140,9 @@ dependencies {
     implementation(projects.feature.schoolcode)
     implementation(projects.feature.login)
     implementation(projects.feature.dashboard)
+    implementation(projects.feature.questionner)
+
+
     implementation(projects.core.data)
 
     implementation(libs.core.ktx)
@@ -256,5 +259,7 @@ dependencies {
 
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.coil3.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
 }

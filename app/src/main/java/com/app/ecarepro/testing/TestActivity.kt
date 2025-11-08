@@ -43,6 +43,7 @@ import kotlinx.serialization.Serializable
 import com.app.ecarepro.feature.dashboard.navigation.DashboardNavigationGraph
 import com.app.ecarepro.feature.dashboard.navigation.EntryDashboardNavigation
 
+
 // Registry of available module screens
 object ModuleRegistry {
     val screens: Map<String, NavKey> = mapOf(
@@ -108,6 +109,22 @@ fun TestNav() {
                 }
             )
             EntryDashboardNavigation()
+
+
+
+//            EntryQuestionnaireNavigation(
+//                onBackClick= {
+//                    backStack
+//                },
+//                navigateToQuestionDetail={
+//
+//                },
+//                navigateToCreateQuestion={
+//
+//                }
+//
+//            )
+
         }
     )
 }
