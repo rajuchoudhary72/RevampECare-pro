@@ -29,6 +29,7 @@ sealed interface LoginNavigationGraph : NavKey {
         val username: String,
         val otpAuthKey: String,
         val message: String,
+        val resendWaitSeconds: Int? = null,
     ) : LoginNavigationGraph
 
 
@@ -50,8 +51,6 @@ sealed interface LoginNavigationGraph : NavKey {
 fun EntryProviderBuilder<NavKey>.EntryLoginNavigation(
     backStack: SnapshotStateList<NavKey>,
     backToSchoolCode: () -> Unit = {},
-    navigateToForgotPassword: () -> Unit = {},
-    navigateToHelp: () -> Unit = {},
     navigateToMain: (User) -> Unit = {},
 ) {
     var activeUser: User? = null
@@ -82,7 +81,8 @@ fun EntryProviderBuilder<NavKey>.EntryLoginNavigation(
                         schoolCode = schoolCode,
                         username = userName,
                         otpAuthKey = loginResult.otpAuthKey.orEmpty(),
-                        message = loginResult.message
+                        message = loginResult.message,
+                        resendWaitSeconds = loginResult.resendWaitSeconds
                     )
                 )
             }

@@ -50,6 +50,7 @@ internal fun CodeInputField(
     textStyle: TextStyle,
     textColor: Color,
     textColorError: Color,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
 ) {
     val text by remember(value) {
         mutableStateOf(
@@ -95,9 +96,7 @@ internal fun CodeInputField(
                 textAlign = TextAlign.Center,
                 color = textColor
             ),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text
-            ),
+            keyboardOptions = keyboardOptions,
             modifier = Modifier
                 .padding(6.dp)
                 .focusRequester(focusRequester)

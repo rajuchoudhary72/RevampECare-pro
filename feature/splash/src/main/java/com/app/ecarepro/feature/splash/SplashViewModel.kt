@@ -1,6 +1,7 @@
 package com.app.ecarepro.feature.splash
 
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.core.domain.repository.SchoolRepository
 import com.app.ecarepro.core.domain.repository.UserRepository
 import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
@@ -44,7 +45,7 @@ class SplashViewModel @Inject constructor(
                 if (activeUser == null) {
                     sendEvent(SplashEvent.NavigateToLogin)
                 } else {
-                    sendEvent(SplashEvent.NavigateToDashboard)
+                    sendEvent(SplashEvent.NavigateToDashboard(activeUser))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -66,5 +67,5 @@ data class SplashUiState(
 sealed interface SplashIntent
 sealed interface SplashEvent {
     data object NavigateToLogin : SplashEvent
-    data object NavigateToDashboard : SplashEvent
+    data class NavigateToDashboard(val user: User) : SplashEvent
 }

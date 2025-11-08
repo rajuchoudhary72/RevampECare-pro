@@ -9,7 +9,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.app.ecarepro.feature.dashboard.navigation.DashboardNavigationGraph
+import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.feature.dashboard.navigation.EntryDashboardNavigation
 import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
@@ -41,9 +41,8 @@ fun EcareProNavDisplay(
                     backStack.clear()
                     backStack.add(OnboardingNavigationGraph.Onboarding)
                 },
-                navigateToDashboard = {
-                    backStack.clear()
-                    backStack.add(DashboardNavigationGraph.Dashboard)
+                navigateToDashboard = { user ->
+                    navigateToLegacyFlow(navigateToLegacyFlow, user)
                 }
             )
 
@@ -69,11 +68,19 @@ fun EcareProNavDisplay(
                     backStack.removeLastOrNull()
                 },
                 navigateToMain = { user ->
-                    navigateToLegacyFlow(LegacyNavigationDestination.Main(user))
+                    navigateToLegacyFlow(navigateToLegacyFlow, user)
                 }
             )
 
             EntryDashboardNavigation()
         }
     )
+}
+
+
+private fun navigateToLegacyFlow(
+    navigateToLegacyFlow: (LegacyNavigationDestination) -> Unit,
+    user: User,
+) {
+    navigateToLegacyFlow(LegacyNavigationDestination.Main(user))
 }

@@ -53,7 +53,7 @@ class UserRemoteDataSourceImpl @Inject constructor(
                 userType = userType,
                 receivedOn = receivedOn
             )
-            .unwrapPayload(successCode = intArrayOf(1)) { this }
+            .unwrapPayload(successCode = intArrayOf(1,0)) { this }
     }
 
 }
