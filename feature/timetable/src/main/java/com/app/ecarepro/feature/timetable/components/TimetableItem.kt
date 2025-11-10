@@ -64,6 +64,7 @@ fun TimetableItem(entry: TimetableEntry) {
                     color = MaterialTheme.appColors.textSecondary
                 )
             }
+
             // Class Info
             Column(
                 modifier = Modifier
