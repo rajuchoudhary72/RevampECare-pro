@@ -69,5 +69,10 @@ val EcareProTypography = AppTypography(
         fontFamily = NunitoFontFamily,
         fontWeight = FontWeight.Black,
         fontSize = 34.sp
+    ),
+    nunitoBlack28px = TextStyle(
+        fontFamily = NunitoFontFamily,
+        fontWeight = FontWeight.Black,
+        fontSize = 28.sp
     )
 )

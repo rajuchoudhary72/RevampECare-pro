@@ -18,6 +18,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import com.app.ecarepro.feature.timetable.navigation.EntryTimetableNavigation
+import com.app.ecarepro.feature.timetable.navigation.TimetableNavigationGraph
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -50,7 +52,8 @@ object ModuleRegistry {
         "School Code" to SchoolCodeNavigationGraph.SchoolCode,
         "Login" to LoginNavigationGraph.Login(schoolCode = "DEMOIN"),
         "Dashboard" to DashboardNavigationGraph.Dashboard,
-        )
+        "Timetable" to TimetableNavigationGraph.Timetable
+    )
 }
 
 @AndroidEntryPoint
@@ -108,6 +111,11 @@ fun TestNav() {
                 }
             )
             EntryDashboardNavigation()
+            EntryTimetableNavigation(
+                navigateToBack = {
+                    backStack.removeLastOrNull()
+                }
+            )
         }
     )
 }

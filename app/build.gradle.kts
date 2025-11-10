@@ -140,6 +140,7 @@ dependencies {
     implementation(projects.feature.schoolcode)
     implementation(projects.feature.login)
     implementation(projects.feature.dashboard)
+    implementation(projects.feature.timetable)
     implementation(projects.core.data)
 
     implementation(libs.core.ktx)
