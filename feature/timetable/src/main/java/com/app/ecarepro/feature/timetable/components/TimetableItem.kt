@@ -17,15 +17,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.app.ecarepro.core.domain.model.Timetable
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
-import com.app.ecarepro.feature.timetable.TimetableEntry
 
 @Composable
-fun TimetableItem(entry: TimetableEntry) {
+fun TimetableItem(entry: Timetable) {
     val backgroundColor =
-        if (entry.isCurrent) MaterialTheme.appColors.primary.copy(alpha = 0.1f) else Color.Transparent
+        if (entry.isCurrent?:false) MaterialTheme.appColors.primary.copy(alpha = 0.1f) else Color.Transparent
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
@@ -45,13 +45,13 @@ fun TimetableItem(entry: TimetableEntry) {
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Text(
-                        text = entry.period.orEmpty(),
+                        text = entry.period.toString(),
                         style = MaterialTheme.appTypography.interSemiBold14px,
                         color = MaterialTheme.appColors.primary,
                     )
                     Text(
                         modifier = Modifier.padding(bottom = 1.dp),
-                        text = getOrdinal(number = entry.period?.toInt() ?: 1),
+                        text = getOrdinal(number = entry.period?: 1),
                         style = MaterialTheme.appTypography.interRegular12px,
                         color = MaterialTheme.appColors.primary,
                     )
@@ -120,8 +120,8 @@ private fun getOrdinal(number: Int): String {
 private fun TimetableItemPreview() {
     EcareProTheme() {
         TimetableItem(
-            entry = TimetableEntry(
-                period = "3",
+            entry = Timetable(
+                period = 3,
                 className = "11-A",
                 subject = "Business studies",
                 time = "09:30 AM - 10:30 AM",
@@ -137,8 +137,8 @@ private fun TimetableItemPreview() {
 private fun TimetableItemPreviewForCurrentPeriod() {
     EcareProTheme() {
         TimetableItem(
-            entry = TimetableEntry(
-                period = "3",
+            entry = Timetable(
+                period = 3,
                 className = "11-A",
                 subject = "Business studies",
                 time = "09:30 AM - 10:30 AM",

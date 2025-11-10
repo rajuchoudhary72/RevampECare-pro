@@ -21,6 +21,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.app.ecarepro.core.domain.model.Timetable
+import com.app.ecarepro.core.domain.model.TimetableData
+import com.app.ecarepro.core.ui.UiState
+import com.app.ecarepro.core.ui.UiStateHandler
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
@@ -56,12 +60,13 @@ fun TimetableScreen(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun TimetableScreenContent(
-    uiState: TimetableUiState,
+    uiState: UiState<TimetableUiState>,
     handleIntent: (TimetableIntent) -> Unit,
 ) {
+
     val pagerState = rememberPagerState(
-        initialPage = uiState.selectedDayIndex,
-        pageCount = { uiState.days.size }
+        initialPage = if (uiState is UiState.Success) uiState.data.selectedDayIndex else 0,
+        pageCount = { if (uiState is UiState.Success) uiState.data.days.size else 0 }
     )
     val coroutineScope = rememberCoroutineScope()
 
@@ -70,7 +75,6 @@ private fun TimetableScreenContent(
             handleIntent(TimetableIntent.OnDaySelected(pagerState.currentPage))
         }
     }
-
 
     EcareProScaffold(
         topBar = {
@@ -82,55 +86,67 @@ private fun TimetableScreenContent(
                     onClickNavigationIcon = { handleIntent(TimetableIntent.OnBackClicked) }
                 )
 
-                DayTabs(
-                    selectedDayIndex = uiState.selectedDayIndex,
-                    days = uiState.days,
-                    onClickDayTabs = {
-                        coroutineScope.launch {
-                            handleIntent(TimetableIntent.OnDaySelected(it))
-                            pagerState.animateScrollToPage(it)
+                if (uiState is UiState.Success && uiState.data.days.isNotEmpty()) {
+                    DayTabs(
+                        selectedDayIndex = uiState.data.selectedDayIndex,
+                        days = uiState.data.days,
+                        onClickDayTabs = {
+                            coroutineScope.launch {
+                                handleIntent(TimetableIntent.OnDaySelected(it))
+                                pagerState.animateScrollToPage(it)
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         },
-        isLoading = uiState.isLoading,
         containerColor = White,
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize()
-            ) { page ->
-                val timetable = uiState.timetables[page] ?: emptyList()
-                if (timetable.isNotEmpty()) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(timetable) { entry ->
-                            if (entry.type == "Recess") {
-                                RecessItem(details = entry.details ?: "")
-                            } else {
-                                TimetableItem(entry = entry)
-                                if (entry.isCurrent.not())
+
+        UiStateHandler(
+            modifier = Modifier.padding(paddingValues),
+            state = uiState,
+        ) { data ->
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize()
+                ) { page ->
+                    val timetable: List<Timetable> = data.timetables[page] ?: emptyList()
+                    if (timetable.isNotEmpty()) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            items(timetable) { entry ->
+                                if (entry.type == "Recess") {
+                                    RecessItem(details = entry.details ?: "")
+                                } else {
+                                    TimetableItem(entry = entry)
                                     HorizontalDivider(
                                         modifier = Modifier.padding(horizontal = 16.dp),
                                         color = MaterialTheme.appColors.divider,
                                         thickness = .5.dp
                                     )
+                                }
                             }
                         }
+                    } else {
+                        EmptyItem()
                     }
-                } else {
-                    EmptyItem()
                 }
             }
+
         }
+
+
     }
+
+
 }
 
 
@@ -138,45 +154,61 @@ private fun TimetableScreenContent(
 @Composable
 private fun TimetableScreenPreview() {
     val mockTimetable = listOf(
-        TimetableEntry(
-            "1",
-            "11-C",
-            "Business studies",
-            "07:30 AM - 08:30 AM",
-            "60 mins",
+        Timetable(
+            period = 3,
+            className = "11-A",
+            subject = "Business studies",
+            time = "09:30 AM - 10:30 AM",
+            duration = "60 mins",
             isCurrent = false
         ),
-        TimetableEntry(
-            "2",
-            "12-A",
-            "Business studies",
-            "08:30 AM - 09:30 AM",
-            "60 mins",
+        Timetable(
+            period = 3,
+            className = "11-A",
+            subject = "Business studies",
+            time = "09:30 AM - 10:30 AM",
+            duration = "60 mins",
             isCurrent = false
         ),
-        TimetableEntry(
-            "3",
-            "11-A",
-            "Business studies",
-            "09:30 AM - 10:30 AM",
-            "60 mins",
-            isCurrent = true
+        Timetable(
+            period = 3,
+            className = "11-A",
+            subject = "Business studies",
+            time = "09:30 AM - 10:30 AM",
+            duration = "60 mins",
+            isCurrent = false
         ),
-        TimetableEntry(type = "Recess", details = "Recess (11:30 PM - 12:30 AM)"),
-        TimetableEntry(
-            "5",
-            "2-A",
-            "Physics",
-            "12:30 AM - 01:30 PM",
-            "60 mins",
+        Timetable(
+            period = 3,
+            className = "11-A",
+            subject = "Business studies",
+            time = "09:30 AM - 10:30 AM",
+            duration = "60 mins",
+            isCurrent = false,
+            type = "recess",
+            details = "Recess (11:30 PM - 12:30 AM)"
+        ),
+        Timetable(
+            period = 3,
+            className = "11-A",
+            subject = "Business studies",
+            time = "09:30 AM - 10:30 AM",
+            duration = "60 mins",
             isCurrent = false
         ),
     )
     EcareProTheme {
         TimetableScreenContent(
-            uiState = TimetableUiState(
-                days = listOf("Day 1", "Day 2", "Day 3", "Day 4", "Day 5"),
-                timetables = mapOf(0 to mockTimetable)
+            uiState = UiState.Success(
+                TimetableUiState(
+                    days = listOf(
+                        TimetableData(day = "Day 1", dayNo = 1, timeTable = emptyList()),
+                        TimetableData(day = "Day 2", dayNo = 1, timeTable = emptyList()),
+                        TimetableData(day = "Day 3", dayNo = 1, timeTable = emptyList()),
+                        TimetableData(day = "Day 4", dayNo = 1, timeTable = emptyList()),
+                    ),
+                    timetables = mapOf(0 to mockTimetable)
+                )
             ),
             handleIntent = {}
         )

@@ -1,17 +1,14 @@
 package com.app.ecarepro.feature.timetable.components
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.app.ecarepro.core.domain.model.TimetableData
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
 import com.app.ecarepro.designsystem.core.theme.appColors
@@ -20,8 +17,8 @@ import com.app.ecarepro.designsystem.core.theme.appTypography
 @Composable
 fun DayTabs(
     selectedDayIndex: Int,
-    days: List<String>,
-    onClickDayTabs:(index:Int) -> Unit
+    days: List<TimetableData>,
+    onClickDayTabs: (index: Int) -> Unit,
 ) {
     PrimaryScrollableTabRow(
         selectedTabIndex = selectedDayIndex,
@@ -29,7 +26,7 @@ fun DayTabs(
         edgePadding = 0.dp,
         minTabWidth = 70.dp
     ) {
-        days.forEachIndexed { index, title ->
+        days.forEachIndexed { index, data ->
             val isSelected = index == selectedDayIndex
             val textStyle =
                 if (isSelected) MaterialTheme.appTypography.interSemiBold14px.copy(fontSize = 16.sp) else MaterialTheme.appTypography.interMedium16px.copy(
@@ -42,7 +39,7 @@ fun DayTabs(
                 },
                 text = {
                     Text(
-                        text = title,
+                        text = data.day.orEmpty(),
                         style = textStyle,
                     )
                 },
@@ -59,7 +56,13 @@ fun DayTabsPreview() {
     EcareProTheme {
         DayTabs(
             selectedDayIndex = 1,
-            days = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"),
+            days = listOf(
+                TimetableData(day = "Day 1", dayNo = 1, timeTable = emptyList()),
+                TimetableData(day = "Day 2", dayNo = 1, timeTable = emptyList()),
+                TimetableData(day = "Day 3", dayNo = 1, timeTable = emptyList()),
+                TimetableData(day = "Day 4", dayNo = 1, timeTable = emptyList()),
+
+                ),
             onClickDayTabs = {}
         )
     }

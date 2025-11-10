@@ -37,7 +37,6 @@ fun Loader(
     showText: Boolean = false,
     loadingText: String = "Loading...",
 ) {
-
     Column(
         modifier = modifier
             .fillMaxSize()
