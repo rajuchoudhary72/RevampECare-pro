@@ -16,7 +16,7 @@ data class NetworkAnswerListResponse(
     @SerialName("qid")
     val qid: Int,
     @SerialName("question")
-    val question: NetworkQuestion,
+    val question: NetworkQuestion?,
     @SerialName("list")
     val list: List<NetworkAnswer>
 )

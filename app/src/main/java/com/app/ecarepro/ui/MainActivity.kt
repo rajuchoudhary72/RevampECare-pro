@@ -1102,7 +1102,12 @@ class MainActivity : AppCompatActivity() {
 
             18 -> navController.navigate(R.id.reportCardDetailsNavHostFragment)
             19 -> navController.navigate(R.id.leaveHistoryFragment)
-            20 -> navController.navigate(R.id.questionnaireListFragment)
+            //20 -> navController.navigate(R.id.questionnaireListFragment)
+            20 -> {
+                //here got go to jectpack compose qiestionner screen
+                val intent = Intent(this, com.app.ecarepro.feature.questionner.QuestionnaireHostActivity::class.java)
+                startActivity(intent)
+            }
             21 -> navController.navigate(R.id.thoughtsListFragment)
 
             22 -> {

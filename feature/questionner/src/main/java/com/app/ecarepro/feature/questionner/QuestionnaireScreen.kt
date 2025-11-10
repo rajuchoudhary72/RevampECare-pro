@@ -3,9 +3,11 @@ package com.app.ecarepro.feature.questionner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -37,8 +39,43 @@ fun QuestionnaireScreen(
     viewModel: QuestionnaireViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     onQuestionClick: (Int) -> Unit = {},
+    onCreateNewClick: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    QuestionnaireScreenContent(
+        uiState = uiState,
+        onBackClick = onBackClick,
+        onTabSelected = { tab ->
+            viewModel.handleIntent(QuestionnaireIntent.OnTabChanged(tab))
+        },
+        onCreateNewClick = {
+            viewModel.handleIntent(QuestionnaireIntent.OnCreateNewClicked)
+            onCreateNewClick()
+        },
+        onLikeClick = { questionId ->
+            viewModel.handleIntent(QuestionnaireIntent.OnLikeClicked(questionId))
+        },
+        onQuestionClick = { questionId ->
+            viewModel.handleIntent(QuestionnaireIntent.OnQuestionClicked(questionId))
+            onQuestionClick(questionId)
+        },
+        onLoadMore = {
+            viewModel.handleIntent(QuestionnaireIntent.LoadMoreQuestions)
+        }
+    )
+}
+
+@Composable
+internal fun QuestionnaireScreenContent(
+    uiState: QuestionnaireUiState,
+    onBackClick: () -> Unit,
+    onTabSelected: (QuestionnaireTab) -> Unit,
+    onCreateNewClick: () -> Unit,
+    onLikeClick: (Int) -> Unit,
+    onQuestionClick: (Int) -> Unit,
+    onLoadMore: () -> Unit
+) {
     val listState = rememberLazyListState()
 
     // Detect when scrolled to bottom for pagination
@@ -54,7 +91,7 @@ fun QuestionnaireScreen(
 
     LaunchedEffect(shouldLoadMore) {
         if (shouldLoadMore) {
-            viewModel.handleIntent(QuestionnaireIntent.LoadMoreQuestions)
+            onLoadMore()
         }
     }
 
@@ -66,16 +103,13 @@ fun QuestionnaireScreen(
         ) {
             Scaffold(
                 containerColor = Color.Transparent,
+                contentWindowInsets = WindowInsets.systemBars,
                 topBar = {
                     QuestionnaireHeader(
                         selectedTab = uiState.selectedTab,
-                        onTabSelected = { tab ->
-                            viewModel.handleIntent(QuestionnaireIntent.OnTabChanged(tab))
-                        },
+                        onTabSelected = onTabSelected,
                         onBackClick = onBackClick,
-                        onCreateNewClick = {
-                            viewModel.handleIntent(QuestionnaireIntent.OnCreateNewClicked)
-                        }
+                        onCreateNewClick = onCreateNewClick
                     )
                 }
             ) { paddingValues ->
@@ -117,21 +151,9 @@ fun QuestionnaireScreen(
                             ) { question ->
                                 QuestionCard(
                                     question = question,
-                                    onLikeClick = {
-                                        viewModel.handleIntent(
-                                            QuestionnaireIntent.OnLikeClicked(question.qid)
-                                        )
-                                    },
-                                    onQuestionClick = {
-                                        viewModel.handleIntent(
-                                            QuestionnaireIntent.OnQuestionClicked(question.qid)
-                                        )
-                                        onQuestionClick(question.qid)
-                                    },
-                                    modifier = Modifier.padding(
-                                        horizontal = 16.dp,
-                                        vertical = 8.dp
-                                    )
+                                    onLikeClick = { onLikeClick(question.qid) },
+                                    onQuestionClick = { onQuestionClick(question.qid) },
+
                                 )
                             }
 
@@ -163,10 +185,105 @@ fun QuestionnaireScreen(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "With Questions")
 @Composable
 fun QuestionnaireScreenPreview() {
     EcareProTheme {
-        QuestionnaireScreen()
+        QuestionnaireScreenContent(
+            uiState = QuestionnaireUiState(
+                selectedTab = QuestionnaireTab.ALL,
+                questions = listOf(
+                    com.app.ecarepro.core.domain.model.Question(
+                        qid = 175,
+                        qType = 1,
+                        que = "How does the communication between teachers, students, and parents feel through the app?",
+                        queImg = null,
+                        updatedBy = "Harsimrat Kaur",
+                        updatedOn = "05 Apr, 25 • 11:26 AM",
+                        photo = "https://s3-noi.aces3.ai/franciscan/SchImg/DEMOIN/Parent/Thumb/NoImage.jpg",
+                        likes = 5,
+                        isILike = false,
+                        totalAnswer = 3,
+                        isAnswered = false,
+                        userID = 2885,
+                        userType = 2,
+                        isVerified = true,
+                        status = null,
+                        isSelected = false
+                    ),
+                    com.app.ecarepro.core.domain.model.Question(
+                        qid = 176,
+                        qType = 1,
+                        que = "What features would you like to see added to the app?",
+                        queImg = null,
+                        updatedBy = "John Doe",
+                        updatedOn = "04 Apr, 25 • 09:15 AM",
+                        photo = "https://s3-noi.aces3.ai/franciscan/SchImg/DEMOIN/Parent/Thumb/NoImage.jpg",
+                        likes = 12,
+                        isILike = true,
+                        totalAnswer = 7,
+                        isAnswered = true,
+                        userID = 2886,
+                        userType = 2,
+                        isVerified = true,
+                        status = null,
+                        isSelected = false
+                    )
+                ),
+                isLoading = false,
+                errorMessage = null,
+                currentPage = 1,
+                totalQuestions = 2,
+                hasMorePages = false
+            ),
+            onBackClick = {},
+            onTabSelected = {},
+            onCreateNewClick = {},
+            onLikeClick = {},
+            onQuestionClick = {},
+            onLoadMore = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Loading State")
+@Composable
+fun QuestionnaireScreenLoadingPreview() {
+    EcareProTheme {
+        QuestionnaireScreenContent(
+            uiState = QuestionnaireUiState(
+                selectedTab = QuestionnaireTab.ALL,
+                questions = emptyList(),
+                isLoading = true,
+                errorMessage = null
+            ),
+            onBackClick = {},
+            onTabSelected = {},
+            onCreateNewClick = {},
+            onLikeClick = {},
+            onQuestionClick = {},
+            onLoadMore = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Empty State")
+@Composable
+fun QuestionnaireScreenEmptyPreview() {
+    EcareProTheme {
+        QuestionnaireScreenContent(
+            uiState = QuestionnaireUiState(
+                selectedTab = QuestionnaireTab.ALL,
+                questions = emptyList(),
+                isLoading = false,
+                errorMessage = null
+            ),
+            onBackClick = {},
+            onTabSelected = {},
+            onCreateNewClick = {},
+            onLikeClick = {},
+            onQuestionClick = {},
+            onLoadMore = {}
+        )
     }
 }

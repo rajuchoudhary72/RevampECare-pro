@@ -49,7 +49,7 @@ fun NetworkAnswerListResponse.toDomainModel() = AnswerListResponse(
     status = status,
     message = message,
     qid = qid,
-    question = question.toDomainModel(),
+    question = question?.toDomainModel(),
     answers = list.map { it.toDomainModel() }
 )
 

@@ -37,7 +37,7 @@ data class AnswerListResponse(
     val status: String,
     val message: String,
     val qid: Int,
-    val question: Question,
+    val question: Question?,
     val answers: List<Answer>
 )
 
