@@ -8,6 +8,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import com.app.ecarepro.core.domain.repository.AcademicRepository
+import com.app.ecarepro.core.data.repository.AcademicRepositoryImpl
+
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -22,5 +26,9 @@ abstract class DataModule {
     abstract fun bindsUserRepository(
         userRepositoryImpl: UserRepositoryImpl,
     ): UserRepository
+    @Binds
+    internal abstract fun bindsAcademicRepository(
+        academicRepositoryImpl: AcademicRepositoryImpl,
+    ): AcademicRepository
 
 }

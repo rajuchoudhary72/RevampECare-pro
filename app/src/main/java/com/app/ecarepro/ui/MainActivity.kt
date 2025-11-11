@@ -391,37 +391,40 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun handleData(bundle: Bundle) {
-        if (bundle.containsKey("user")) {
-            lifecycleScope.launch {
-                val userDtl: User = bundle.getSerializable("user") as User
-                userDataStore.saveUserDetails(
-                    UserDTL(
-                        sessionID = userDtl.sessionID,
-                        authToken = userDtl.authToken,
-                        authenticated = userDtl.authenticated,
-                        classID = userDtl.classID?.toInt(),
-                        classX = userDtl.className,
-                        errorCode = 0,
-                        message = userDtl.message,
-                        mobileNumer = userDtl.mobileNumber,
-                        name = userDtl.name,
-                        photoPath = userDtl.photoPath,
-                        roleName = userDtl.roleName,
-                        stName = userDtl.stName,
-                        status = userDtl.status,
-                        userID = userDtl.userID,
-                        userType = userDtl.userType
-                    ),
-                    userDtl.schoolCode, getCurrentDateTimeAmPm()
-                )
-                systemViewModel.schoolRepository.validateSchoolCode(userDtl.schoolCode).collect {  }
-                userDataStore.saveAuthToken(userDtl.authToken ?: "")
-                userDataStore.setAsUserAuthenticated(userDtl.authenticated ?: false)
-                userDataStore.saveUserType(userDtl.userType ?: 0)
-                userDataStore.saveRoleName(userDtl.roleName ?: "")
-            }
+        lifecycleScope.launch {
+            if (bundle.containsKey("user") && userDataStore.isUserAuthenticated().not()) {
+                lifecycleScope.launch {
+                    val userDtl: User = bundle.getSerializable("user") as User
+                    userDataStore.saveUserDetails(
+                        UserDTL(
+                            sessionID = userDtl.sessionID,
+                            authToken = userDtl.authToken,
+                            authenticated = userDtl.authenticated,
+                            classID = userDtl.classID?.toInt(),
+                            classX = userDtl.className,
+                            errorCode = 0,
+                            message = userDtl.message,
+                            mobileNumer = userDtl.mobileNumber,
+                            name = userDtl.name,
+                            photoPath = userDtl.photoPath,
+                            roleName = userDtl.roleName,
+                            stName = userDtl.stName,
+                            status = userDtl.status,
+                            userID = userDtl.userID,
+                            userType = userDtl.userType
+                        ),
+                        userDtl.schoolCode, getCurrentDateTimeAmPm()
+                    )
+                    systemViewModel.schoolRepository.validateSchoolCode(userDtl.schoolCode).collect {  }
+                    userDataStore.saveAuthToken(userDtl.authToken ?: "")
+                    userDataStore.setAsUserAuthenticated(userDtl.authenticated ?: false)
+                    userDataStore.saveUserType(userDtl.userType ?: 0)
+                    userDataStore.saveRoleName(userDtl.roleName ?: "")
+                }
 
+            }
         }
+
     }
     private fun handleLegacyFlow() {
         if (intent.extras?.getBoolean(EXTRA_LEGACY_FLOW, false) == true) {
