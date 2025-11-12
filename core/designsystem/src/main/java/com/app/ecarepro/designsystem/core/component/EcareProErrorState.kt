@@ -32,7 +32,7 @@ import com.app.ecarepro.designsystem.core.theme.appTypography
 @Composable
 fun EcareProErrorState(
     modifier: Modifier = Modifier,
-    title: String = "Ooops",
+    title: String = "Oops",
     message: String,
     onRetry: () -> Unit,
 ) {
