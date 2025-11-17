@@ -11,14 +11,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.ecarepro.core.domain.model.SchoolDetail
-import com.app.ecarepro.designsystem.core.component.AppAsyncImage
+import com.app.ecarepro.designsystem.core.component.EcareProAsyncImage
 import com.app.ecarepro.designsystem.core.theme.appTypography
 import com.app.ecarepro.feature.homeselection.R
 
 
 @Composable
 fun HeaderSection(schoolDetails: SchoolDetail?) {
-    AppAsyncImage(
+    EcareProAsyncImage(
         imageUrl = schoolDetails?.logo,
         contentDescription = "School Logo",
         modifier = Modifier

@@ -142,6 +142,8 @@ dependencies {
     implementation(projects.feature.login)
     implementation(projects.feature.dashboard)
     implementation(projects.feature.timetable)
+    implementation(projects.feature.syllabus)
+    implementation(projects.feature.docviewer)
     implementation(projects.core.data)
 
     implementation(libs.core.ktx)

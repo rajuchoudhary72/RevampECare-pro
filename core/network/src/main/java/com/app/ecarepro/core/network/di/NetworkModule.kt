@@ -3,6 +3,7 @@ package com.app.ecarepro.core.network.di
 import com.app.ecarepro.core.domain.model.AppConfig
 import com.app.ecarepro.core.network.retrofit.interceptor.AuthTokenInterceptor
 import com.app.ecarepro.core.network.retrofit.service.AcademicService
+import com.app.ecarepro.core.network.retrofit.service.AdminService
 import com.app.ecarepro.core.network.retrofit.service.SchoolService
 import com.app.ecarepro.core.network.retrofit.service.UserService
 import dagger.Module
@@ -70,6 +71,11 @@ internal object NetworkModule {
     fun provideAcademicService(
         @InjectInCoreModule retrofit: Retrofit
     ): AcademicService = retrofit.create(AcademicService::class.java)
+
+    @Provides
+    fun provideAdminService(
+        @InjectInCoreModule retrofit: Retrofit
+    ): AdminService = retrofit.create(AdminService::class.java)
 
 }
 

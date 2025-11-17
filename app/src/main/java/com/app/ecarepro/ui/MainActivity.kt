@@ -98,6 +98,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
+import v2.navigation.ComposeNavigationDestination
 import v2.navigation.EXTRA_DESTINATION_ID
 import v2.navigation.EXTRA_EXTRAS
 import v2.navigation.EXTRA_LEGACY_FLOW
@@ -415,7 +416,8 @@ class MainActivity : AppCompatActivity() {
                         ),
                         userDtl.schoolCode, getCurrentDateTimeAmPm()
                     )
-                    systemViewModel.schoolRepository.validateSchoolCode(userDtl.schoolCode).collect {  }
+                    systemViewModel.schoolRepository.validateSchoolCode(userDtl.schoolCode)
+                        .collect { }
                     userDataStore.saveAuthToken(userDtl.authToken ?: "")
                     userDataStore.setAsUserAuthenticated(userDtl.authenticated ?: false)
                     userDataStore.saveUserType(userDtl.userType ?: 0)
@@ -1033,11 +1035,10 @@ class MainActivity : AppCompatActivity() {
 
             4 -> {
 
-                lifecycleScope.launch {
+                /*lifecycleScope.launch {
                     userDataStore.getUser()?.run {
                         try {
                             if (userType == Constant.STAFF_TYPE) {
-
                                 navController.navigate(R.id.timeTableNavHostFragment)
                             } else {
                                 navController.navigate(
@@ -1052,8 +1053,9 @@ class MainActivity : AppCompatActivity() {
                         } catch (e: Exception) {
                         }
                     }
-                }
+                }*/
 
+                launchComposeFlow(ComposeNavigationDestination.Timetable)
 
             }
 
@@ -2250,8 +2252,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun launchComposeFlow(destination: ComposeNavigationDestination) {
+        val intent = Intent(this, v2.MainActivity::class.java).apply {
+            putExtra(EXTRA_COMPOSE_DESTINATION, destination)
+        }
+        startActivity(intent)
+    }
+
     companion object {
         private const val MY_REQUEST_CODE = 123
+        const val EXTRA_COMPOSE_DESTINATION = "compose_destination"
     }
 }
 

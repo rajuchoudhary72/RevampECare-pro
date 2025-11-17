@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,10 +27,10 @@ import com.app.ecarepro.core.domain.model.TimetableData
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.UiStateHandler
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
+import com.app.ecarepro.designsystem.core.component.EcareProTopAppBar
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
 import com.app.ecarepro.designsystem.core.theme.appColors
-import com.app.ecarepro.feature.timetable.components.AppBar
 import com.app.ecarepro.feature.timetable.components.DayTabs
 import com.app.ecarepro.feature.timetable.components.EmptyItem
 import com.app.ecarepro.feature.timetable.components.RecessItem
@@ -82,8 +83,9 @@ private fun TimetableScreenContent(
                 modifier = Modifier
                     .shadow(elevation = 1.dp),
             ) {
-                AppBar(
-                    onClickNavigationIcon = { handleIntent(TimetableIntent.OnBackClicked) }
+                EcareProTopAppBar(
+                    title = stringResource(R.string.feature_timetable_my_timetable),
+                    onNavigationClicked = { handleIntent(TimetableIntent.OnBackClicked) },
                 )
 
                 if (uiState is UiState.Success && uiState.data.days.isNotEmpty()) {

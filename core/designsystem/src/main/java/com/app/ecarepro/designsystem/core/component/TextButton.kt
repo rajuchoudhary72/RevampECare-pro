@@ -2,6 +2,8 @@ package com.app.ecarepro.designsystem.core.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -19,7 +21,7 @@ import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
 
 @Composable
-fun TextButton(
+fun     TextButton(
     title: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -43,6 +45,7 @@ fun TextButton(
                 contentDescription = null,
                 tint = MaterialTheme.appColors.textSecondary
             )
+            Spacer(modifier = Modifier.width(8.dp))
         }
         Text(
             title,

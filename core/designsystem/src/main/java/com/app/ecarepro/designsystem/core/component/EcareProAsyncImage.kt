@@ -23,7 +23,7 @@ import com.app.ecarepro.core.designsystem.R
  * @param contentScale The scaling to apply to the image.
  */
 @Composable
-fun AppAsyncImage(
+fun EcareProAsyncImage(
     modifier: Modifier = Modifier,
     imageUrl: String?,
     contentDescription: String? = null,

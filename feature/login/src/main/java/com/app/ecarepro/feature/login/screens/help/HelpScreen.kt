@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.ecarepro.core.domain.model.SchoolDetail
-import com.app.ecarepro.designsystem.core.component.AppAsyncImage
+import com.app.ecarepro.designsystem.core.component.EcareProAsyncImage
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
@@ -110,7 +110,7 @@ fun HelpScreenContent(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    AppAsyncImage(
+                    EcareProAsyncImage(
                         imageUrl = school.logo,
                         contentDescription = "School Logo",
                         modifier = Modifier.size(48.dp)

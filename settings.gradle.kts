@@ -1,17 +1,5 @@
 import java.net.URI
 
-include(":feature:timetable")
-
-
-include(":feature:splash")
-
-
-include(":feature:dashboard")
-
-
-include(":core:location")
-
-
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -40,10 +28,16 @@ include(":core:network")
 include(":core:domain")
 include(":core:data")
 include(":core:database")
+include(":core:location")
 
 include(":feature:onboarding")
 include(":feature:schoolcode")
 include(":feature:login")
 include(":feature:homeselection")
+include(":feature:syllabus")
+include(":feature:timetable")
+include(":feature:splash")
+include(":feature:dashboard")
+include(":feature:docviewer")
 
 

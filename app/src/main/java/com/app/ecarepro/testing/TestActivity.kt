@@ -1,7 +1,6 @@
 package com.app.ecarepro.testing
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -33,10 +32,14 @@ import androidx.navigation3.ui.NavDisplay
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.feature.dashboard.navigation.DashboardNavigationGraph
 import com.app.ecarepro.feature.dashboard.navigation.EntryDashboardNavigation
+import com.app.ecarepro.feature.docviewer.navigation.DocViewerNavigationGraph
+import com.app.ecarepro.feature.docviewer.navigation.EntryDocViewerNavigation
 import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
 import com.app.ecarepro.feature.schoolcode.navigation.EntrySchoolCodeNavigation
 import com.app.ecarepro.feature.schoolcode.navigation.SchoolCodeNavigationGraph
+import com.app.ecarepro.feature.syllabus.navigation.EntrySyllabusNavigation
+import com.app.ecarepro.feature.syllabus.navigation.SyllabusNavigationGraph
 import com.app.ecarepro.feature.timetable.navigation.EntryTimetableNavigation
 import com.app.ecarepro.feature.timetable.navigation.TimetableNavigationGraph
 import com.app.ecarepro.onboarding.feature.navigation.EntryOnboardingNavigation
@@ -51,7 +54,8 @@ object ModuleRegistry {
         "School Code" to SchoolCodeNavigationGraph.SchoolCode,
         "Login" to LoginNavigationGraph.Login(schoolCode = "DEMOIN"),
         "Dashboard" to DashboardNavigationGraph.Dashboard,
-        "Timetable" to TimetableNavigationGraph.Timetable
+        "Timetable" to TimetableNavigationGraph.Timetable,
+        "Syllabus" to SyllabusNavigationGraph.Syllabus,
     )
 }
 
@@ -118,6 +122,25 @@ fun TestNav() {
                 }
             )
 
+            EntrySyllabusNavigation(
+                navigateToBack = {
+                    backStack.removeLastOrNull()
+                },
+                openDocVier = { title, url ->
+                    backStack.add(
+                        DocViewerNavigationGraph.DocViewer(
+                            title = title,
+                            docUrl = url
+                        )
+                    )
+                }
+            )
+
+            EntryDocViewerNavigation(
+                navigateToBack = {
+                    backStack.removeLastOrNull()
+                }
+            )
         }
     )
 }
