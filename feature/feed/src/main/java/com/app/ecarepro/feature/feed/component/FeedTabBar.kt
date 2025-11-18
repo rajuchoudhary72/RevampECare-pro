@@ -43,22 +43,22 @@ fun FeedTabBar(
         modifier = modifier
             .fillMaxWidth()
             .background(Color(0xFF4CAF50))
-
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         // Left side - Tabs
         Row(
-            horizontalArrangement = Arrangement.spacedBy(24.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             TabItem(
-                icon = Icons.Default.Schedule,
                 label = "Latest",
                 isSelected = selectedTab == FeedTab.LATEST,
                 onClick = { onTabSelected(FeedTab.LATEST) }
             )
 
             TabItem(
-                icon = Icons.Default.Bookmark,
                 label = "Pinned",
                 isSelected = selectedTab == FeedTab.PINNED,
                 onClick = { onTabSelected(FeedTab.PINNED) }
@@ -72,7 +72,6 @@ fun FeedTabBar(
 
 @Composable
 private fun TabItem(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
     label: String,
     isSelected: Boolean,
     onClick: () -> Unit,
@@ -83,24 +82,16 @@ private fun TabItem(
     Column(
         modifier = modifier
             .clickable(onClick = onClick)
-            .padding(top = 8.dp, start = 12.dp, end = 12.dp),
+            .padding(start = 12.dp, end = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Icon
-        Icon(
-            imageVector = icon,
-            contentDescription = label,
-            tint = contentColor,
-            modifier = Modifier.size(24.dp)
-        )
-
         // Label
         Text(
             text = label,
             color = contentColor,
-            fontSize = 12.sp,
+            fontSize = 14.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-            modifier = Modifier.padding(top = 4.dp, bottom = 6.dp)
+            modifier = Modifier.padding(top = 12.dp, bottom = 8.dp)
         )
 
         // Bottom indicator
@@ -121,31 +112,25 @@ private fun FilterButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
+    Column(
         modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
-            .background(Color(0xFF66BB6A))
             .clickable(onClick = onClick)
             .padding(horizontal = 12.dp, vertical = 8.dp),
-        contentAlignment = Alignment.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Default.FilterList,
-                contentDescription = "Filter",
-                tint = Color.White,
-                modifier = Modifier.size(20.dp)
-            )
-            Text(
-                text = "Filter",
-                color = Color.White,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Normal
-            )
-        }
+        Icon(
+            imageVector = Icons.Default.FilterList,
+            contentDescription = "Filter",
+            tint = Color.White,
+            modifier = Modifier.size(20.dp)
+        )
+        Text(
+            text = "Filter",
+            color = Color.White,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.padding(top = 4.dp)
+        )
     }
 }
 
