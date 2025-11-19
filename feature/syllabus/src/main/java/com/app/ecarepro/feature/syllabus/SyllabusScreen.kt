@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -13,11 +12,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +31,7 @@ import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.UiStateHandler
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
 import com.app.ecarepro.designsystem.core.component.EcareProTopAppBar
+import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
 import com.app.ecarepro.designsystem.core.theme.appColors
@@ -42,22 +46,35 @@ import com.app.ecarepro.feature.syllabus.componets.SyllabusItem
 fun SyllabusScreen(
     viewModel: SyllabusViewModel = hiltViewModel(),
     navigateToBack: () -> Unit,
+    navigateToAddSyllabus: () -> Unit,
     openDocVier: (title: String, url: String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    var snackbarMessage by remember { mutableStateOf<SnackbarMessage?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.screenEvent.collect { event ->
             when (event) {
                 SyllabusEvent.NavigateBack -> navigateToBack()
                 is SyllabusEvent.ViewSyllabus -> openDocVier(event.title, event.url)
+                is SyllabusEvent.ShowMessage -> {
+                    snackbarMessage = event.snackbarMessage
+                    snackbarHostState.showSnackbar(event.snackbarMessage.text)
+                }
+
+                SyllabusEvent.NavigateToAddSyllabus -> navigateToAddSyllabus()
             }
         }
     }
 
     SyllabusScreenContent(
         uiState = uiState,
-        handleIntent = viewModel::handleIntent
+        handleIntent = viewModel::handleIntent,
+        snackbarHostState = snackbarHostState,
+        snackbarMessage = snackbarMessage,
+        onSnackbarDismissed = { snackbarMessage == null },
     )
 }
 
@@ -66,6 +83,9 @@ fun SyllabusScreen(
 private fun SyllabusScreenContent(
     uiState: UiState<SyllabusUiState>,
     handleIntent: (SyllabusIntent) -> Unit,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    snackbarMessage: SnackbarMessage?,
+    onSnackbarDismissed: () -> Unit = {},
 ) {
 
     EcareProScaffold(
@@ -107,6 +127,9 @@ private fun SyllabusScreenContent(
             }
         },
         containerColor = White,
+        snackbarHostState = snackbarHostState,
+        snackbarMessage = snackbarMessage,
+        onSnackbarDismissed = onSnackbarDismissed,
     ) { paddingValues ->
         UiStateHandler(
             modifier = Modifier.padding(paddingValues),
@@ -170,28 +193,12 @@ private fun SyllabusScreenPreview() {
     EcareProTheme {
         SyllabusScreenContent(
             uiState = UiState.Success(
-                SyllabusUiState(
-                    searchQuery = "",
-                    selectedClassIndex = 0,
-                    classTabs = listOf(
-                        ClassTab("All", "All"),
-                        ClassTab("LKG", "LKG"),
-                        ClassTab("HKG", "HKG")
-                    ),
-                    syllabuses = listOf(
-                        Syllabus(1, "English syllabus", "9th class", "English", "08 Aug 2025"),
-                        Syllabus(2, "Chemistry syllabus", "9th class", "Chemistry", "08 Aug 2025")
-                    ),
-                    filteredSyllabuses = listOf(
-                        Syllabus(1, "English syllabus", "9th class", "English", "08 Aug 2025"),
-                        Syllabus(2, "Chemistry syllabus", "9th class", "Chemistry", "08 Aug 2025"),
-                        Syllabus(3, "English syllabus", "9th class", "English", "08 Aug 2025"),
-                        Syllabus(4, "Chemistry syllabus", "9th class", "Chemistry", "08 Aug 2025")
-                    ),
-                    isMenuVisible = false
-                )
+                SyllabusUiState()
             ),
-            handleIntent = {}
+            handleIntent = {},
+            snackbarHostState = SnackbarHostState(),
+            snackbarMessage = null,
+            onSnackbarDismissed = {}
         )
     }
 }

@@ -5,7 +5,7 @@ data class Syllabus(
     val browsedFile: String?,
     val classID: Int?,
     val classIDs: String?,
-    val classSTD: String?,
+    val classSTD: String,
     val fileName: String?,
     val filePath: String?,
     val fileSize: String?,

@@ -36,11 +36,12 @@ fun Loader(
     lottieRawId: Int = R.raw.loader,
     showText: Boolean = false,
     loadingText: String = "Loading...",
+    backgroundColor: Color = Color.Black.copy(alpha = 0.3f)
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.3f))
+            .background(backgroundColor)
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
@@ -60,7 +61,7 @@ fun Loader(
             progress = { progress },
         )
         if (showText) {
-            Spacer(modifier = Modifier.Companion.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = loadingText,
                 style = MaterialTheme.appTypography.interRegular14px,

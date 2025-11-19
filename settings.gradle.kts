@@ -1,5 +1,8 @@
 import java.net.URI
 
+include(":core:download")
+
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {

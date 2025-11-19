@@ -123,6 +123,7 @@ fun TestNav() {
             )
 
             EntrySyllabusNavigation(
+                backStack = backStack,
                 navigateToBack = {
                     backStack.removeLastOrNull()
                 },

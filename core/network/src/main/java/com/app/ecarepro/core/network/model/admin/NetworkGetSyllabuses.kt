@@ -26,7 +26,7 @@ data class NetworkSyllabus(
     @SerialName("classIDs")
     val classIDs: String?,
     @SerialName("classSTD")
-    val classSTD: String?,
+    val classSTD: String,
     @SerialName("fileName")
     val fileName: String?,
     @SerialName("filePath")

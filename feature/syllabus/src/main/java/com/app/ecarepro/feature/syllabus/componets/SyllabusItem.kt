@@ -22,12 +22,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.app.ecarepro.core.domain.model.Syllabus
 import com.app.ecarepro.designsystem.core.component.TextButton
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
 import com.app.ecarepro.feature.syllabus.R
-import com.app.ecarepro.feature.syllabus.Syllabus
 
 @Composable
 fun SyllabusItem(
@@ -50,7 +50,7 @@ fun SyllabusItem(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = syllabus.title,
+                    text = syllabus.title.orEmpty(),
                     style = MaterialTheme.appTypography.interSemiBold14px,
 
                     )
@@ -63,20 +63,20 @@ fun SyllabusItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = syllabus.className,
+                        text = syllabus.classSTD,
                         style = MaterialTheme.appTypography.interMedium16px.copy(fontSize = 12.sp),
                         color = MaterialTheme.appColors.primary
                     )
 
                     Indicator()
                     Text(
-                        text = syllabus.subject,
+                        text = syllabus.subject.orEmpty(),
                         style = MaterialTheme.appTypography.interRegular12px,
                         color = MaterialTheme.appColors.textPrimary
                     )
                     Indicator()
                     Text(
-                        text = syllabus.date,
+                        text = syllabus.updatedOn.orEmpty(),
                         style = MaterialTheme.appTypography.interRegular12px,
                         color = MaterialTheme.appColors.textSecondary
                     )
@@ -151,7 +151,21 @@ private fun Indicator() {
 private fun SyllabusItemPreview() {
     EcareProTheme {
         SyllabusItem(
-            syllabus = Syllabus(1, "English syllabus", "9th class", "English", "08 Aug 2025"),
+            syllabus = Syllabus(
+                browsedFile = null,
+                classID = null,
+                classIDs = null,
+                classSTD = "UKG",
+                id = "",
+                fileName = null,
+                filePath = null,
+                fileSize = null,
+                sections = null,
+                subID = null,
+                subject = "English",
+                title = "English",
+                updatedOn = "13 Aug 2024"
+            ),
             onViewClick = {},
             onMenuClick = {},
             onDownloadClick = {}

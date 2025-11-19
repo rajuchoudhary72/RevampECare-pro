@@ -10,12 +10,11 @@ import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
-import com.app.ecarepro.feature.syllabus.ClassTab
 
 @Composable
 fun ClassTabs(
     selectedClassIndex: Int,
-    classes: List<ClassTab>,
+    classes: List<String>,
     onClickClassTabs: (index: Int) -> Unit,
 ) {
     PrimaryScrollableTabRow(
@@ -24,7 +23,7 @@ fun ClassTabs(
         edgePadding = 0.dp,
         minTabWidth = 70.dp
     ) {
-        classes.forEachIndexed { index, data ->
+        classes.forEachIndexed { index, classStd ->
             val isSelected = index == selectedClassIndex
             val textStyle =
                 if (isSelected) MaterialTheme.appTypography.interSemiBold14px.copy(fontSize = 16.sp)
@@ -32,7 +31,7 @@ fun ClassTabs(
             Tab(
                 selected = isSelected,
                 onClick = { onClickClassTabs(index) },
-                text = { Text(text = data.name, style = textStyle) },
+                text = { Text(text = classStd, style = textStyle) },
                 selectedContentColor = MaterialTheme.appColors.primary,
                 unselectedContentColor = MaterialTheme.appColors.textPrimary,
             )
@@ -45,8 +44,8 @@ fun ClassTabs(
 private fun ClassTabsPreview() {
     EcareProTheme {
         ClassTabs(
-            selectedClassIndex = 0,
-            classes = listOf(ClassTab("All", "All"), ClassTab("LKG", "LKG")),
+            selectedClassIndex = 1,
+            classes = listOf("All", "UKG", "LKG"),
             onClickClassTabs = {}
         )
     }
