@@ -36,6 +36,12 @@ import com.app.ecarepro.feature.timetable.components.RecessItem
 import com.app.ecarepro.feature.timetable.components.TimetableItem
 import kotlinx.coroutines.launch
 
+/**
+ * Composable function that represents the Timetable screen.
+ *
+ * @param viewModel The view model for the Timetable screen.
+ * @param navigateToBack The callback to navigate back to the previous screen.
+ */
 @Composable
 fun TimetableScreen(
     viewModel: TimetableViewModel = hiltViewModel(),
@@ -57,6 +63,12 @@ fun TimetableScreen(
     )
 }
 
+/**
+ * Composable function that represents the content of the Timetable screen.
+ *
+ * @param uiState The state of the UI.
+ * @param handleIntent The callback to handle user intents.
+ */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun TimetableScreenContent(
