@@ -50,12 +50,15 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
+import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.getCurrentDateTimeAmPm
 import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
 import com.app.ecarepro.data.sync.SyncManager
 import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerChildChildItem
@@ -95,6 +98,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
+import v2.navigation.ComposeNavigationDestination
 import v2.navigation.EXTRA_DESTINATION_ID
 import v2.navigation.EXTRA_EXTRAS
 import v2.navigation.EXTRA_LEGACY_FLOW
@@ -106,9 +110,6 @@ import java.security.cert.X509Certificate
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
-import com.app.ecarepro.core.domain.model.User
-import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
-import com.app.ecarepro.data.getCurrentDateTimeAmPm
 
 
 @AndroidEntryPoint
@@ -1032,7 +1033,7 @@ class MainActivity : AppCompatActivity() {
 
             4 -> {
 
-                lifecycleScope.launch {
+              /*  lifecycleScope.launch {
                     userDataStore.getUser()?.run {
                         try {
                             if (userType == Constant.STAFF_TYPE) {
@@ -1051,9 +1052,9 @@ class MainActivity : AppCompatActivity() {
                         } catch (e: Exception) {
                         }
                     }
-                }
+                }*/
 
-
+                launchComposeFlow(ComposeNavigationDestination.Timetable)
             }
 
             5 -> {
@@ -2005,6 +2006,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss()
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -2251,8 +2258,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun launchComposeFlow(destination: ComposeNavigationDestination) {
+        val intent = Intent(this, v2.MainActivity::class.java).apply {
+            putExtra(EXTRA_COMPOSE_DESTINATION, destination)
+        }
+        startActivity(intent)
+    }
+
     companion object {
         private const val MY_REQUEST_CODE = 123
+        const val EXTRA_COMPOSE_DESTINATION = "compose_destination"
     }
 }
 

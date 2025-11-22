@@ -142,6 +142,7 @@ class CalenderActivityNavHost : Fragment() {
                                     val currentMonth = calendar.get(Calendar.MONTH)
 
                                     var i =1
+
                                     for (a in monthCountList) {
                                         if (currentMonth == a ) {
                                             val tabToSelect = binding.tabLayout.getTabAt(i)
