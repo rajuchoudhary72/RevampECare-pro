@@ -41,6 +41,10 @@ data class NetworkTimeTable(
     val subject: String?,
     @SerialName("time")
     val time: String?,
+    @SerialName("duration")
+    val duration: String?,
+    @SerialName("isCurrentPeriod")
+    val isCurrentPeriod: Boolean?,
 )
 
 
@@ -60,6 +64,8 @@ private fun NetworkTimeTable.toTimetableData() = Timetable(
     period = period,
     subject = subject,
     time = time,
+    duration = duration,
+    isCurrentPeriod = isCurrentPeriod,
 )
 
 
