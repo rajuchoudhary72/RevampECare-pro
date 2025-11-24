@@ -9,13 +9,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.app.ecarepro.designsystem.core.component.EcareProErrorState
 import com.app.ecarepro.designsystem.core.component.Loader
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
+import androidx.compose.ui.graphics.Color
+
 
 @Composable
 fun <T> UiStateHandler(
     modifier: Modifier = Modifier,
     state: UiState<T>,
     onRetry: (() -> Unit)? = null,
-    loadingContent: @Composable () -> Unit = { Loader(modifier) },
+    loadingContent: @Composable () -> Unit = { Loader(modifier, backgroundColor = Color.Transparent) },
     errorContent: @Composable (String, () -> Unit) -> Unit = { msg, retry ->
         EcareProErrorState(modifier, message = msg, onRetry = retry)
     },

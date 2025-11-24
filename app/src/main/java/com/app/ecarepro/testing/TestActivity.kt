@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,13 +17,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import com.app.ecarepro.feature.timetable.navigation.EntryTimetableNavigation
-import com.app.ecarepro.feature.timetable.navigation.TimetableNavigationGraph
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -34,16 +30,22 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
+import com.app.ecarepro.feature.dashboard.navigation.DashboardNavigationGraph
+import com.app.ecarepro.feature.dashboard.navigation.EntryDashboardNavigation
+import com.app.ecarepro.feature.docviewer.navigation.DocViewerNavigationGraph
+import com.app.ecarepro.feature.docviewer.navigation.EntryDocViewerNavigation
 import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
 import com.app.ecarepro.feature.schoolcode.navigation.EntrySchoolCodeNavigation
 import com.app.ecarepro.feature.schoolcode.navigation.SchoolCodeNavigationGraph
+import com.app.ecarepro.feature.syllabus.navigation.EntrySyllabusNavigation
+import com.app.ecarepro.feature.syllabus.navigation.SyllabusNavigationGraph
+import com.app.ecarepro.feature.timetable.navigation.EntryTimetableNavigation
+import com.app.ecarepro.feature.timetable.navigation.TimetableNavigationGraph
 import com.app.ecarepro.onboarding.feature.navigation.EntryOnboardingNavigation
 import com.app.ecarepro.onboarding.feature.navigation.OnboardingNavigationGraph
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.Serializable
-import com.app.ecarepro.feature.dashboard.navigation.DashboardNavigationGraph
-import com.app.ecarepro.feature.dashboard.navigation.EntryDashboardNavigation
 
 // Registry of available module screens
 object ModuleRegistry {
@@ -52,7 +54,8 @@ object ModuleRegistry {
         "School Code" to SchoolCodeNavigationGraph.SchoolCode,
         "Login" to LoginNavigationGraph.Login(schoolCode = "DEMOIN"),
         "Dashboard" to DashboardNavigationGraph.Dashboard,
-        "Timetable" to TimetableNavigationGraph.Timetable
+        "Timetable" to TimetableNavigationGraph.Timetable,
+        "Syllabus" to SyllabusNavigationGraph.Syllabus,
     )
 }
 
@@ -110,8 +113,31 @@ fun TestNav() {
 
                 }
             )
+
             EntryDashboardNavigation()
+
             EntryTimetableNavigation(
+                navigateToBack = {
+                    backStack.removeLastOrNull()
+                }
+            )
+
+            EntrySyllabusNavigation(
+                backStack = backStack,
+                navigateToBack = {
+                    backStack.removeLastOrNull()
+                },
+                openDocVier = { title, url ->
+                    backStack.add(
+                        DocViewerNavigationGraph.DocViewer(
+                            title = title,
+                            docUrl = url
+                        )
+                    )
+                }
+            )
+
+            EntryDocViewerNavigation(
                 navigateToBack = {
                     backStack.removeLastOrNull()
                 }

@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.ecarepro.core.domain.model.SchoolDetail
-import com.app.ecarepro.designsystem.core.component.AppAsyncImage
+import com.app.ecarepro.designsystem.core.component.EcareProAsyncImage
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
 import com.app.ecarepro.feature.login.R
@@ -34,7 +34,7 @@ fun HeaderSection(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
-        AppAsyncImage(
+        EcareProAsyncImage(
             imageUrl = schoolDetails?.logo,
             contentDescription = "School Logo",
             modifier = Modifier.size(80.dp),

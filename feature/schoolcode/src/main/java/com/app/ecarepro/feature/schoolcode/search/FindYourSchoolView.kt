@@ -41,7 +41,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.ecarepro.core.domain.model.School
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.UiStateHandler
-import com.app.ecarepro.designsystem.core.component.AppAsyncImage
+import com.app.ecarepro.designsystem.core.component.EcareProAsyncImage
 import com.app.ecarepro.designsystem.core.component.shimmer
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
@@ -185,7 +185,7 @@ fun SchoolListItem(
                     .fillMaxWidth(), verticalAlignment = Alignment.Top
             ) {
 
-                AppAsyncImage(
+                EcareProAsyncImage(
                     imageUrl = school.logo,
                     contentDescription = "School Logo",
                     modifier = Modifier
@@ -281,7 +281,7 @@ fun SchoolListShimmerItem() {
                     .fillMaxWidth(), verticalAlignment = Alignment.Top
             ) {
 
-                AppAsyncImage(
+                EcareProAsyncImage(
                     imageUrl = "",
                     contentDescription = "School Logo",
                     modifier = Modifier

@@ -41,6 +41,13 @@ include(":core:location")
 include(":feature:dashboard")
 include(":feature:splash")
 include(":feature:timetable")
+include(":feature:docviewer")
+include(":feature:syllabus")
+include(":core:download")
+
+
+
+
 
 
 

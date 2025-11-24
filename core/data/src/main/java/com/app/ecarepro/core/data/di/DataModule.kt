@@ -10,6 +10,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import com.app.ecarepro.core.domain.repository.AcademicRepository
 import com.app.ecarepro.core.data.repository.AcademicRepositoryImpl
+import com.app.ecarepro.core.domain.repository.AdminRepository
+import com.app.ecarepro.core.data.repository.AdminRepositoryImpl
+
+
 
 
 
@@ -30,5 +34,8 @@ abstract class DataModule {
     internal abstract fun bindsAcademicRepository(
         academicRepositoryImpl: AcademicRepositoryImpl,
     ): AcademicRepository
-
+    @Binds
+    internal abstract fun bindsAdminRepository(
+        academicRepositoryImpl: AdminRepositoryImpl,
+    ): AdminRepository
 }

@@ -17,7 +17,8 @@ import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
 import androidx.compose.ui.graphics.Color
-
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 
 @Composable
 fun TextButton(
@@ -44,6 +45,7 @@ fun TextButton(
                 contentDescription = null,
                 tint = MaterialTheme.appColors.textSecondary
             )
+            Spacer(modifier = Modifier.width(8.dp))
         }
         Text(
             title,

@@ -13,6 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import kotlin.let
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.unit.dp
+
 
 /**
  * A reusable Scaffold component for the EcarePro application.

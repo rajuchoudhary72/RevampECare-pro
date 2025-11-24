@@ -142,6 +142,9 @@ dependencies {
     implementation(projects.feature.dashboard)
     implementation(projects.feature.timetable)
     implementation(projects.core.data)
+    implementation(projects.feature.docviewer)
+    implementation(projects.feature.syllabus)
+
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)

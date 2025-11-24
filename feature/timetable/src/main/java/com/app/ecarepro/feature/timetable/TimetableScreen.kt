@@ -66,11 +66,22 @@ private fun TimetableScreenContent(
 ) {
 
     val pagerState = rememberPagerState(
-        initialPage = if (uiState is UiState.Success) uiState.data.selectedDayIndex else 0,
+        initialPage = 0,
         pageCount = { if (uiState is UiState.Success) uiState.data.days.size else 0 }
     )
     val coroutineScope = rememberCoroutineScope()
 
+    // Sync pager with ViewModel's selectedDayIndex when data loads
+    LaunchedEffect(uiState) {
+        if (uiState is UiState.Success) {
+            val targetPage = uiState.data.selectedDayIndex
+            if (pagerState.currentPage != targetPage) {
+                pagerState.scrollToPage(targetPage)
+            }
+        }
+    }
+
+    // Update ViewModel when user swipes the pager
     LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
         if (!pagerState.isScrollInProgress) {
             handleIntent(TimetableIntent.OnDaySelected(pagerState.currentPage))
