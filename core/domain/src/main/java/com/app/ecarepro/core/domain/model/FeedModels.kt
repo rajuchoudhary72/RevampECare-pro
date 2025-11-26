@@ -64,3 +64,16 @@ enum class FileType {
     TXT,
     UNKNOWN
 }
+
+/**
+ * Extension function to convert GalleryUpdate to a list of image Attachments
+ */
+fun GalleryUpdate.toAttachments(): List<Attachment> {
+    return fileNames.map { fileName ->
+        Attachment(
+            fileName = fileName,
+            fileUrl = "$fileURL$fileName",
+            fileType = FileType.IMAGE
+        )
+    }
+}

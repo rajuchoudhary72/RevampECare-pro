@@ -246,37 +246,21 @@ private object PreviewMockData {
         chMenuID = 48,
         sbChMenuID = 0,
         module = "Photo",
-        id = "photo_1",
-        caption = "Science Exhibition 2024",
+        id = "gzklUmg3mma+0XPviSQW0w==",
+        caption = "Yoga Days",
         hasAttachment = false,
-        updatedOn = "13 Oct",
-        msgDTL = "Highlights from our annual science exhibition showcasing amazing projects by students.",
+        updatedOn = "19 Nov",
+        msgDTL = null,
         galleryUpdate = GalleryUpdate(
             sMdlID = 1,
             subModule = null,
             total = 3,
-            fileURL = "https://picsum.photos/",
-            fileNames = listOf("800/500", "800/501", "800/502")
+            fileURL = "https://s3-noi.aces3.ai/franciscan/SchImg/DEMOIN/PhotoAlbum/Thumb/",
+            fileNames = listOf("Photo_4443356.jpg", "Photo_4444778.jpg", "Photo_4446294.jpg")
         ),
         webLink = "/Portal/PhotoAlbums",
         feedType = FeedType.PHOTO,
-        attachments = listOf(
-            Attachment(
-                fileName = "photo1.jpg",
-                fileUrl = "https://picsum.photos/800/500",
-                fileType = FileType.IMAGE
-            ),
-            Attachment(
-                fileName = "photo2.jpg",
-                fileUrl = "https://picsum.photos/800/501",
-                fileType = FileType.IMAGE
-            ),
-            Attachment(
-                fileName = "photo3.jpg",
-                fileUrl = "https://picsum.photos/800/502",
-                fileType = FileType.IMAGE
-            )
-        )
+        attachments = emptyList() // galleryUpdate will be converted to attachments in UI
     )
 
     val circularNoAttachment = FeedUpdate(

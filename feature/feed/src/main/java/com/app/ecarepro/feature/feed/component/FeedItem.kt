@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
@@ -42,7 +43,10 @@ import com.app.ecarepro.core.domain.model.Attachment
 import com.app.ecarepro.core.domain.model.FeedType
 import com.app.ecarepro.core.domain.model.FeedUpdate
 import com.app.ecarepro.core.domain.model.FileType
+import com.app.ecarepro.core.domain.model.GalleryUpdate
+import com.app.ecarepro.core.domain.model.toAttachments
 import com.app.ecarepro.designsystem.core.component.AppAsyncImage
+import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 
 @Composable
@@ -106,12 +110,19 @@ fun FeedItem(
                 )
             }
 
-            // Attachments section
-            if (feedUpdate.attachments.isNotEmpty()) {
+            // Attachments section - merge galleryUpdate with regular attachments
+            val allAttachments = buildList {
+                addAll(feedUpdate.attachments)
+                feedUpdate.galleryUpdate?.let { galleryUpdate ->
+                    addAll(galleryUpdate.toAttachments())
+                }
+            }
+
+            if (allAttachments.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(12.dp))
 
-                val imageAttachments = feedUpdate.attachments.filter { it.fileType == FileType.IMAGE }
-                val documentAttachments = feedUpdate.attachments.filter { it.fileType != FileType.IMAGE }
+                val imageAttachments = allAttachments.filter { it.fileType == FileType.IMAGE }
+                val documentAttachments = allAttachments.filter { it.fileType != FileType.IMAGE }
 
                 // Display images
                 if (imageAttachments.isNotEmpty()) {
@@ -281,5 +292,254 @@ private fun FileType.getColor(): Color {
         FileType.XLS, FileType.XLSX -> Color(0xFF388E3C) // Green
         FileType.PPT, FileType.PPTX -> Color(0xFFD84315) // Orange
         else -> MaterialTheme.appColors.textSecondary
+    }
+}
+
+// ============================================
+// Preview Section
+// ============================================
+
+@Preview(showBackground = true, name = "FeedItem - No Attachments")
+@Composable
+private fun FeedItemNoAttachmentsPreview() {
+    EcareProTheme {
+        FeedItem(
+            feedUpdate = FeedUpdate(
+                menuID = 7,
+                chMenuID = 10,
+                sbChMenuID = 0,
+                module = "Circular",
+                id = "circular_1",
+                caption = "Holiday Homework Reminder",
+                hasAttachment = false,
+                updatedOn = "06 Nov",
+                msgDTL = "This is a reminder to complete your holiday homework before the school reopens.",
+                galleryUpdate = null,
+                webLink = "/Portal/Circular?ID=def456",
+                feedType = FeedType.CIRCULAR,
+                attachments = emptyList()
+            ),
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "FeedItem - Single Image")
+@Composable
+private fun FeedItemSingleImagePreview() {
+    EcareProTheme {
+        FeedItem(
+            feedUpdate = FeedUpdate(
+                menuID = 7,
+                chMenuID = 10,
+                sbChMenuID = 0,
+                module = "Circular",
+                id = "circular_2",
+                caption = "Annual Sports Day Announcement",
+                hasAttachment = true,
+                updatedOn = "07 Nov",
+                msgDTL = "We are excited to announce the Annual Sports Day. All students are requested to participate.",
+                galleryUpdate = null,
+                webLink = "/Portal/Circular?ID=abc123",
+                feedType = FeedType.CIRCULAR,
+                attachments = listOf(
+                    Attachment(
+                        fileName = "sports_day.jpg",
+                        fileUrl = "https://picsum.photos/800/600",
+                        fileType = FileType.IMAGE
+                    )
+                )
+            ),
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "FeedItem - Multiple Images (Regular)")
+@Composable
+private fun FeedItemMultipleImagesPreview() {
+    EcareProTheme {
+        FeedItem(
+            feedUpdate = FeedUpdate(
+                menuID = 34,
+                chMenuID = 48,
+                sbChMenuID = 0,
+                module = "Photo",
+                id = "photo_1",
+                caption = "Science Exhibition 2024",
+                hasAttachment = false,
+                updatedOn = "13 Oct",
+                msgDTL = "Highlights from our annual science exhibition showcasing amazing projects by students.",
+                galleryUpdate = null,
+                webLink = "/Portal/PhotoAlbums",
+                feedType = FeedType.PHOTO,
+                attachments = listOf(
+                    Attachment(
+                        fileName = "photo1.jpg",
+                        fileUrl = "https://picsum.photos/800/500",
+                        fileType = FileType.IMAGE
+                    ),
+                    Attachment(
+                        fileName = "photo2.jpg",
+                        fileUrl = "https://picsum.photos/800/501",
+                        fileType = FileType.IMAGE
+                    ),
+                    Attachment(
+                        fileName = "photo3.jpg",
+                        fileUrl = "https://picsum.photos/800/502",
+                        fileType = FileType.IMAGE
+                    ),
+                    Attachment(
+                        fileName = "photo4.jpg",
+                        fileUrl = "https://picsum.photos/800/503",
+                        fileType = FileType.IMAGE
+                    )
+                )
+            ),
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "FeedItem - Gallery Update (API Format)")
+@Composable
+private fun FeedItemGalleryUpdatePreview() {
+    EcareProTheme {
+        FeedItem(
+            feedUpdate = FeedUpdate(
+                menuID = 34,
+                chMenuID = 48,
+                sbChMenuID = 0,
+                module = "Photo",
+                id = "gzklUmg3mma+0XPviSQW0w==",
+                caption = "Yoga Days",
+                hasAttachment = false,
+                updatedOn = "19 Nov",
+                msgDTL = null,
+                galleryUpdate = GalleryUpdate(
+                    sMdlID = 1,
+                    subModule = null,
+                    total = 3,
+                    fileURL = "https://picsum.photos/800/",
+                    fileNames = listOf("500", "501", "502")
+                ),
+                webLink = "/Portal/PhotoAlbums",
+                feedType = FeedType.PHOTO,
+                attachments = emptyList()
+            ),
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "FeedItem - Document Attachments")
+@Composable
+private fun FeedItemDocumentAttachmentsPreview() {
+    EcareProTheme {
+        FeedItem(
+            feedUpdate = FeedUpdate(
+                menuID = 7,
+                chMenuID = 11,
+                sbChMenuID = 0,
+                module = "Notice",
+                id = "notice_1",
+                caption = "Parent-Teacher Meeting Schedule",
+                hasAttachment = true,
+                updatedOn = "16 Oct",
+                msgDTL = "Please find attached the schedule for upcoming parent-teacher meetings.",
+                galleryUpdate = null,
+                webLink = "/Portal/Notice?ID=xyz789",
+                feedType = FeedType.NOTICE,
+                attachments = listOf(
+                    Attachment(
+                        fileName = "PTM_Schedule.pdf",
+                        fileUrl = "https://example.com/ptm.pdf",
+                        fileType = FileType.PDF
+                    ),
+                    Attachment(
+                        fileName = "Guidelines.docx",
+                        fileUrl = "https://example.com/guidelines.docx",
+                        fileType = FileType.DOCX
+                    ),
+                    Attachment(
+                        fileName = "Timetable.xlsx",
+                        fileUrl = "https://example.com/timetable.xlsx",
+                        fileType = FileType.XLSX
+                    )
+                )
+            ),
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "FeedItem - Mixed Attachments")
+@Composable
+private fun FeedItemMixedAttachmentsPreview() {
+    EcareProTheme {
+        FeedItem(
+            feedUpdate = FeedUpdate(
+                menuID = 7,
+                chMenuID = 10,
+                sbChMenuID = 0,
+                module = "Circular",
+                id = "circular_3",
+                caption = "Staff Meeting on Upcoming Exams Schedule",
+                hasAttachment = true,
+                updatedOn = "12 Nov",
+                msgDTL = "Important meeting regarding the upcoming examination schedule. Please review all attached materials.",
+                galleryUpdate = null,
+                webLink = "/Portal/Circular?ID=ib9WicQcCDNjho6kNt6LdA==",
+                feedType = FeedType.CIRCULAR,
+                attachments = listOf(
+                    Attachment(
+                        fileName = "meeting_venue.jpg",
+                        fileUrl = "https://picsum.photos/800/600",
+                        fileType = FileType.IMAGE
+                    ),
+                    Attachment(
+                        fileName = "agenda.jpg",
+                        fileUrl = "https://picsum.photos/800/601",
+                        fileType = FileType.IMAGE
+                    ),
+                    Attachment(
+                        fileName = "Meeting_Agenda.pdf",
+                        fileUrl = "https://example.com/agenda.pdf",
+                        fileType = FileType.PDF
+                    ),
+                    Attachment(
+                        fileName = "Schedule.xlsx",
+                        fileUrl = "https://example.com/schedule.xlsx",
+                        fileType = FileType.XLSX
+                    )
+                )
+            ),
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "FeedItem - Notice with Long Text")
+@Composable
+private fun FeedItemLongTextPreview() {
+    EcareProTheme {
+        FeedItem(
+            feedUpdate = FeedUpdate(
+                menuID = 7,
+                chMenuID = 11,
+                sbChMenuID = 0,
+                module = "Notice",
+                id = "notice_2",
+                caption = "Upcoming Examination Schedule and Preparation Guidelines for All Students",
+                hasAttachment = false,
+                updatedOn = "12 Nov",
+                msgDTL = "This is a comprehensive notice regarding the upcoming examination schedule. All students are requested to prepare accordingly and follow the guidelines mentioned in the circular. Please contact the administration for any clarifications.",
+                galleryUpdate = null,
+                webLink = "/Portal/Notice?ID=zo5uj7DiY0sOEjA1djdU+w==",
+                feedType = FeedType.NOTICE,
+                attachments = emptyList()
+            ),
+            onClick = {}
+        )
     }
 }
