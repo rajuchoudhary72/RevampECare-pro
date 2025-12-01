@@ -1,5 +1,8 @@
 import java.net.URI
 
+include(":feature:assignment")
+
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {
