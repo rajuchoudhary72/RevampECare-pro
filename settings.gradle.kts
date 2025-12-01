@@ -1,5 +1,8 @@
 import java.net.URI
 
+include(":feature:leave")
+
+
 include(":feature:feed")
 
 

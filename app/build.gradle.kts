@@ -141,6 +141,7 @@ dependencies {
     implementation(projects.feature.login)
     implementation(projects.feature.dashboard)
     implementation(projects.feature.questionner)
+    implementation(projects.feature.leave)
 
 
     implementation(projects.core.data)

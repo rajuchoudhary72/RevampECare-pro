@@ -1,6 +1,9 @@
 package com.app.ecarepro.core.network.datasource
 
 import com.app.ecarepro.core.network.UserRemoteDataSource
+import com.app.ecarepro.core.network.model.leave.NetworkLeaveActionRequest
+import com.app.ecarepro.core.network.model.leave.NetworkLeaveActionResponse
+import com.app.ecarepro.core.network.model.leave.NetworkLeaveReportResponse
 import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionRequest
 import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionResponse
 import com.app.ecarepro.core.network.model.questionnaire.NetworkAnswerListResponse
@@ -82,4 +85,25 @@ class UserRemoteDataSourceImpl @Inject constructor(
         return userService.addQuestion(request)
     }
 
+    override suspend fun getLeaveReport(
+        status: Int,
+        order: Int,
+        applType: Int,
+        page: Int,
+        showAttendance: Boolean,
+        duration: Int
+    ): NetworkLeaveReportResponse {
+        return userService.getLeaveReport(
+            status = status,
+            order = order,
+            applType = applType,
+            page = page,
+            showAttendance = showAttendance,
+            duration = duration
+        )
+    }
+
+    override suspend fun leaveAction(request: NetworkLeaveActionRequest): NetworkLeaveActionResponse {
+        return userService.leaveAction(request)
+    }
 }

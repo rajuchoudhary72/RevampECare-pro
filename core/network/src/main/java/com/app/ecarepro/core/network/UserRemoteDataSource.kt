@@ -1,5 +1,8 @@
 package com.app.ecarepro.core.network
 
+import com.app.ecarepro.core.network.model.leave.NetworkLeaveActionRequest
+import com.app.ecarepro.core.network.model.leave.NetworkLeaveActionResponse
+import com.app.ecarepro.core.network.model.leave.NetworkLeaveReportResponse
 import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionRequest
 import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionResponse
 import com.app.ecarepro.core.network.model.questionnaire.NetworkAnswerListResponse
@@ -35,4 +38,15 @@ interface UserRemoteDataSource {
         userType: Int,
         receivedOn: String,
     ): NetworkGetUsernameByUIDResponse
+
+    suspend fun getLeaveReport(
+        status: Int,
+        order: Int,
+        applType: Int,
+        page: Int,
+        showAttendance: Boolean,
+        duration: Int
+    ): NetworkLeaveReportResponse
+
+    suspend fun leaveAction(request: NetworkLeaveActionRequest): NetworkLeaveActionResponse
 }

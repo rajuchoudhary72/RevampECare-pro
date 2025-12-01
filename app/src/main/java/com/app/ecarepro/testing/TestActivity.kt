@@ -42,6 +42,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.Serializable
 import com.app.ecarepro.feature.dashboard.navigation.DashboardNavigationGraph
 import com.app.ecarepro.feature.dashboard.navigation.EntryDashboardNavigation
+import com.app.ecarepro.feature.leave.navigation.EntryLeaveNavigation
+import com.app.ecarepro.feature.leave.navigation.LeaveNavigationGraph
 
 
 // Registry of available module screens
@@ -51,6 +53,9 @@ object ModuleRegistry {
         "School Code" to SchoolCodeNavigationGraph.SchoolCode,
         "Login" to LoginNavigationGraph.Login(schoolCode = "DEMOIN"),
         "Dashboard" to DashboardNavigationGraph.Dashboard,
+        "Leave Report" to LeaveNavigationGraph.LeaveReport,
+        "Leave List" to LeaveNavigationGraph.LeaveList,
+        "Apply Leave" to LeaveNavigationGraph.ApplyLeave,
         )
 }
 
@@ -110,7 +115,11 @@ fun TestNav() {
             )
             EntryDashboardNavigation()
 
-
+            EntryLeaveNavigation(
+                onBackClick = {
+                    backStack.removeLastOrNull()
+                }
+            )
 
 //            EntryQuestionnaireNavigation(
 //                onBackClick= {

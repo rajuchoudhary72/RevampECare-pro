@@ -2,6 +2,9 @@ package com.app.ecarepro.core.domain.repository
 
 import com.app.ecarepro.core.domain.model.GetCredential
 import com.app.ecarepro.core.domain.model.HomeScreenType
+import com.app.ecarepro.core.domain.model.LeaveActionRequest
+import com.app.ecarepro.core.domain.model.LeaveActionResponse
+import com.app.ecarepro.core.domain.model.LeaveReportResponse
 import com.app.ecarepro.core.domain.model.LoginResult
 import com.app.ecarepro.core.domain.model.AddQuestionRequest
 import com.app.ecarepro.core.domain.model.AddQuestionResponse
@@ -46,4 +49,15 @@ interface UserRepository {
         userType: Int,
         receivedOn: String,
     ): Flow<Result<String>>
+
+    fun getLeaveReport(
+        status: Int,
+        order: Int,
+        applType: Int,
+        page: Int,
+        showAttendance: Boolean,
+        duration: Int
+    ): Flow<Result<LeaveReportResponse>>
+
+    fun leaveAction(request: LeaveActionRequest): Flow<Result<LeaveActionResponse>>
 }

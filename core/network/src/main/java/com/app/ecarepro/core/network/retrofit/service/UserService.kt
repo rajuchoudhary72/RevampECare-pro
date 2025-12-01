@@ -1,5 +1,8 @@
 package com.app.ecarepro.core.network.retrofit.service
 
+import com.app.ecarepro.core.network.model.leave.NetworkLeaveActionRequest
+import com.app.ecarepro.core.network.model.leave.NetworkLeaveActionResponse
+import com.app.ecarepro.core.network.model.leave.NetworkLeaveReportResponse
 import com.app.ecarepro.core.network.model.user.NetworkGetCredentialRequest
 import com.app.ecarepro.core.network.model.user.NetworkGetCredentialsResponse
 import com.app.ecarepro.core.network.model.user.NetworkGetUsernameByUIDResponse
@@ -70,4 +73,18 @@ interface UserService {
         @Body request: NetworkAddQuestionRequest
     ): NetworkAddQuestionResponse
 
+    @GET("Leave/Report")
+    suspend fun getLeaveReport(
+        @Query("Status") status: Int,
+        @Query("ord") order: Int,
+        @Query("ApplType") applType: Int,
+        @Query("pg") page: Int,
+        @Query("Attper") showAttendance: Boolean,
+        @Query("Duration") duration: Int = 0
+    ): NetworkLeaveReportResponse
+
+    @POST("Leave/Action")
+    suspend fun leaveAction(
+        @Body request: NetworkLeaveActionRequest
+    ): NetworkLeaveActionResponse
 }

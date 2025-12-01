@@ -13,6 +13,9 @@ import com.app.ecarepro.core.domain.model.AnswerListResponse
 import com.app.ecarepro.core.domain.model.AppConfig
 import com.app.ecarepro.core.domain.model.GetCredential
 import com.app.ecarepro.core.domain.model.HomeScreenType
+import com.app.ecarepro.core.domain.model.LeaveActionRequest
+import com.app.ecarepro.core.domain.model.LeaveActionResponse
+import com.app.ecarepro.core.domain.model.LeaveReportResponse
 import com.app.ecarepro.core.domain.model.LoginResult
 import com.app.ecarepro.core.domain.model.PostAnswerResponse
 import com.app.ecarepro.core.domain.model.QuestionnaireResponse
@@ -20,6 +23,8 @@ import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.core.domain.model.Ward
 import com.app.ecarepro.core.domain.repository.UserRepository
 import com.app.ecarepro.core.network.UserRemoteDataSource
+import com.app.ecarepro.core.network.model.leave.toDomainModel
+import com.app.ecarepro.core.network.model.leave.toNetworkModel
 import com.app.ecarepro.core.network.model.questionnaire.NetworkPostAnswerRequest
 import com.app.ecarepro.core.network.model.user.NetworkDeviceInfo
 import com.app.ecarepro.core.network.model.user.NetworkLoginRequest
@@ -194,6 +199,32 @@ class UserRepositoryImpl @Inject constructor(
     override fun addQuestion(request: AddQuestionRequest): Flow<Result<AddQuestionResponse>> {
         return asResultFlow {
             userRemoteDataSource.addQuestion(request.toNetworkModel()).toDomainModel()
+        }
+    }
+
+    override fun getLeaveReport(
+        status: Int,
+        order: Int,
+        applType: Int,
+        page: Int,
+        showAttendance: Boolean,
+        duration: Int
+    ): Flow<Result<LeaveReportResponse>> {
+        return asResultFlow {
+            userRemoteDataSource.getLeaveReport(
+                status = status,
+                order = order,
+                applType = applType,
+                page = page,
+                showAttendance = showAttendance,
+                duration = duration
+            ).toDomainModel()
+        }
+    }
+
+    override fun leaveAction(request: LeaveActionRequest): Flow<Result<LeaveActionResponse>> {
+        return asResultFlow {
+            userRemoteDataSource.leaveAction(request.toNetworkModel()).toDomainModel()
         }
     }
 }
