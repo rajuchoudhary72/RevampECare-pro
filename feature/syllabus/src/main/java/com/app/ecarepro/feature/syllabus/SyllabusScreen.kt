@@ -198,7 +198,9 @@ private fun SyllabusScreenPreview() {
     EcareProTheme {
         SyllabusScreenContent(
             uiState = UiState.Success(
-                SyllabusUiState()
+                SyllabusUiState(
+                    classTabs = listOf("UKG", "LKG")
+                )
             ),
             handleIntent = {},
             snackbarHostState = SnackbarHostState(),

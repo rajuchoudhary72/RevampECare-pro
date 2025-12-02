@@ -30,6 +30,8 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
+import com.app.ecarepro.feature.assignment.navigation.AssignmentNavigationGraph
+import com.app.ecarepro.feature.assignment.navigation.EntryAssignmentNavigation
 import com.app.ecarepro.feature.dashboard.navigation.DashboardNavigationGraph
 import com.app.ecarepro.feature.dashboard.navigation.EntryDashboardNavigation
 import com.app.ecarepro.feature.docviewer.navigation.DocViewerNavigationGraph
@@ -56,6 +58,7 @@ object ModuleRegistry {
         "Dashboard" to DashboardNavigationGraph.Dashboard,
         "Timetable" to TimetableNavigationGraph.Timetable,
         "Syllabus" to SyllabusNavigationGraph.Syllabus,
+        "Assignment" to AssignmentNavigationGraph.Assignment,
     )
 }
 
@@ -140,6 +143,21 @@ fun TestNav() {
             EntryDocViewerNavigation(
                 navigateToBack = {
                     backStack.removeLastOrNull()
+                }
+            )
+
+            EntryAssignmentNavigation(
+                backStack = backStack,
+                navigateToBack = {
+                    backStack.removeLastOrNull()
+                },
+                openDocVier = { title, url ->
+                    backStack.add(
+                        DocViewerNavigationGraph.DocViewer(
+                            title = title,
+                            docUrl = url
+                        )
+                    )
                 }
             )
         }

@@ -143,6 +143,7 @@ dependencies {
     implementation(projects.feature.dashboard)
     implementation(projects.feature.timetable)
     implementation(projects.feature.syllabus)
+    implementation(projects.feature.assignment)
     implementation(projects.feature.docviewer)
     implementation(projects.core.data)
 
