@@ -36,7 +36,7 @@
     </queries>
 
     <application
-        android:name=".ECateProApp"
+        android:name=".ECareProApplication"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="false"
@@ -52,15 +52,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-        <service
-            android:name=".firebase_messaging.MyFirebaseMessagingService"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDq6yT23T7qHcODFmC3LfnbhXgFI8Z8vDY" />
@@ -72,12 +63,7 @@
             android:value="true" />
 
         <activity
-            android:name="com.app.ecarepro.ui.views.PaymentWebViewActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:hardwareAccelerated="true"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name="v2.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.ECarePro"
@@ -106,16 +92,6 @@
             </intent-filter>
         </receiver>
 
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="@string/default_notification_channel_id" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_launcher" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/md_theme_light_primary" />
-
         <activity
             android:name="com.lassi.presentation.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"
@@ -126,14 +102,6 @@
             android:theme="@style/Base.Theme.AppCompat"
             tools:replace="android:theme" />
 
-        <activity
-            android:name=".testing.TestActivity"
-            android:theme="@style/Base.Theme.AppCompat"
-            tools:replace="android:theme" />
-
-        <!--  <activity
-              android:name="v2.MainActivity"
-              android:exported="false" />-->
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -174,9 +142,6 @@
                 android:resource="@xml/file_provider_paths"
                 tools:replace="android:resource" />
         </provider>
-        <activity
-            android:name=".ui.TryAttendanceTest2"
-            android:screenOrientation="portrait" />
 
     </application>
 
