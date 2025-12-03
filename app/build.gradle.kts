@@ -147,6 +147,10 @@ dependencies {
     implementation(projects.feature.syllabus)
     implementation(projects.feature.assignment)
     implementation(projects.feature.docviewer)
+    implementation(projects.feature.questionner)
+    implementation(projects.feature.leave)
+
+
     implementation(projects.core.data)
 
     implementation(libs.core.ktx)
@@ -165,6 +169,7 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.com.google.firebase.firebase.crashlytics)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+
     kapt(libs.hilt.android.compiler)
 
     /*    *//* Database *//*
@@ -262,5 +267,7 @@ dependencies {
 
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.coil3.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
 }

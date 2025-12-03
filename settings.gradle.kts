@@ -1,9 +1,6 @@
 import java.net.URI
 
-include(":feature:testingmenu")
 
-
-include(":feature:assignment")
 
 
 pluginManagement {
@@ -47,5 +44,11 @@ include(":feature:timetable")
 include(":feature:splash")
 include(":feature:dashboard")
 include(":feature:docviewer")
+include(":feature:testingmenu")
+include(":feature:leave")
+include(":feature:feed")
+include(":feature:assignment")
+include(":feature:questionner")
+include(":feature:home")
 
 
