@@ -40,7 +40,7 @@ fun SplashScreen(
     viewModel: SplashViewModel = hiltViewModel(),
     navigateToLogin: () -> Unit = {},
     navigateToDashboard: (User) -> Unit = {},
-    ) {
+) {
     val uiState: SplashUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {

@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="btn_retry">Retry</string>
+    <string name="core_designsystem_menu">Menu</string>
+    <string name="core_designsystem_close">Close</string>
+    <string name="core_designsystem_permission_denied">Permission Denied</string>
+    <string name="core_designsystem_camera_permission_was_permanently_denied_please_enable_it_in_app_settings">Camera permission was permanently denied. Please enable it in app settings.</string>
+    <string name="core_designsystem_cancel">Cancel</string>
+    <string name="core_designsystem_permission_required">Permission Required</string>
+    <string name="core_designsystem_camera_access_is_needed_to_take_photos">Camera access is needed to take photos.</string>
+    <string name="core_designsystem_try_again">Try Again</string>
+    <string name="core_designsystem_select_file_pdf_doc_docx_xlsx">Select File (PDF/DOC/DOCX/XLSX)</string>
+    <string name="core_designsystem_select_photo">Select Photo</string>
+    <string name="core_designsystem_take_photo">Take Photo</string>
+    <string name="core_designsystem_preparing_file">Preparing file...</string>
+    <string name="core_designsystem_open_settings">Open Settings</string>
 </resources>

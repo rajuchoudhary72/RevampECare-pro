@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.core.domain.exception.errorMessage
 import com.app.ecarepro.core.domain.model.Syllabus
-import com.app.ecarepro.core.domain.repository.AdminRepository
+import com.app.ecarepro.core.domain.repository.SyllabusRepository
 import com.app.ecarepro.core.download.FileDownloader
 import com.app.ecarepro.core.download.model.DownloadRequest
 import com.app.ecarepro.core.ui.UiState
@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SyllabusViewModel @Inject constructor(
-    private val adminRepository: AdminRepository,
+    private val syllabusRepository: SyllabusRepository,
     private val fileDownloader: FileDownloader,
 ) : BaseViewModel<SyllabusIntent, SyllabusEvent>() {
 
@@ -43,7 +43,7 @@ class SyllabusViewModel @Inject constructor(
 
     private fun fetchSyllabus() {
         viewModelScope.launch {
-            adminRepository
+            syllabusRepository
                 .getSyllabus()
                 .onStart {
                     _uiState.update { UiState.Loading }
@@ -76,10 +76,7 @@ class SyllabusViewModel @Inject constructor(
 
     override fun handleIntent(intent: SyllabusIntent) {
         when (intent) {
-            is SyllabusIntent.OnBackClicked -> {
-                viewModelScope.launch { sendEvent(SyllabusEvent.NavigateBack) }
-            }
-
+            is SyllabusIntent.OnBackClicked -> viewModelScope.launch { sendEvent(SyllabusEvent.NavigateBack) }
             is SyllabusIntent.OnSearchQueryChanged -> onSearchQueryChanged(intent.query)
             is SyllabusIntent.OnClassSelected -> onClassSelected(intent.index)
             is SyllabusIntent.OnAddNewClicked -> sendEvent(SyllabusEvent.NavigateToAddSyllabus)
@@ -90,11 +87,54 @@ class SyllabusViewModel @Inject constructor(
             is SyllabusIntent.OnDismissDeleteBottomSheet -> dismissDeleteBottomSheet()
             is SyllabusIntent.OnEditClicked -> {}
             is SyllabusIntent.ShowDeleteBottomSheet -> showDeleteBottomSheet()
-            SyllabusIntent.OnDeleteClicked -> {}
+            is SyllabusIntent.OnDeleteClicked -> deleteSyllabus(intent.syllabusId)
         }
     }
 
-    // Consider adding a helper function for better reusability and clarity
+    private fun deleteSyllabus(syllabusId: String?) {
+        viewModelScope.launch {
+            if (syllabusId == null) {
+                return@launch
+            }
+
+            syllabusRepository
+                .deleteSyllabus(syllabusId)
+                .onStart {
+                    val currentState = (_uiState.value as UiState.Success).data
+                    _uiState.update {
+                        UiState.Success(
+                            currentState.copy(isLoading = true)
+                        )
+                    }
+                }
+                .collect { result ->
+                    result
+                        .onSuccess {
+                            sendEvent(
+                                SyllabusEvent.ShowMessage(
+                                    SnackbarMessage(
+                                        "Syllabus deleted successfully",
+                                        MessageType.SUCCESS
+                                    )
+                                )
+                            )
+                            fetchSyllabus()
+                        }
+                        .onFailure { error ->
+                            sendEvent(
+                                SyllabusEvent.ShowMessage(
+                                    SnackbarMessage(
+                                        error.errorMessage(),
+                                        MessageType.ERROR
+                                    )
+                                )
+                            )
+                        }
+                }
+
+        }
+    }
+
     private fun getSyllabusById(state: SyllabusUiState, syllabusId: String): Syllabus? {
         return state.syllabuses.values.flatten().find { it.id == syllabusId }
     }
@@ -207,13 +247,11 @@ class SyllabusViewModel @Inject constructor(
 
     private fun showMenuBottomSheet(syllabusId: String) {
         val currentState = (_uiState.value as? UiState.Success)?.data ?: return
-        // Toggle reveal - if same item clicked, hide it; if different item, show new one
-        val newSyllabusId = if (currentState.selectedSyllabusId == syllabusId) null else syllabusId
         _uiState.update {
             UiState.Success(
                 currentState.copy(
-                    isMenuVisible = newSyllabusId != null,
-                    selectedSyllabusId = newSyllabusId
+                    isMenuVisible = true,
+                    selectedSyllabusId = syllabusId
                 )
             )
         }
@@ -246,7 +284,6 @@ class SyllabusViewModel @Inject constructor(
     private fun onSearchQueryChanged(query: String) {
         val currentState = (_uiState.value as? UiState.Success)?.data ?: return
         _uiState.update {
-            // The filtering logic now happens inside filterSyllabusByClass
             UiState.Success(
                 currentState.copy(
                     searchQuery = query,
@@ -254,7 +291,7 @@ class SyllabusViewModel @Inject constructor(
                         currentState.syllabuses,
                         currentState.selectedClassIndex,
                         currentState.classTabs,
-                        query // Pass the search query to the filter function
+                        query
                     )
                 )
             )
@@ -267,22 +304,17 @@ class SyllabusViewModel @Inject constructor(
             UiState.Success(
                 currentState.copy(
                     selectedClassIndex = index,
-                    // The filtering logic now happens inside filterSyllabusByClass
                     filteredSyllabuses = filterSyllabusByClass(
                         currentState.syllabuses,
                         index,
                         currentState.classTabs,
-                        currentState.searchQuery // Also apply the existing search query
+                        currentState.searchQuery
                     )
                 )
             )
         }
     }
 
-
-    /**
-     * Filters the complete syllabus map and returns a flat list based on the selected class and search query.
-     */
     private fun filterSyllabusByClass(
         syllabuses: Map<String, List<Syllabus>>,
         selectedTabIndex: Int,
@@ -291,14 +323,12 @@ class SyllabusViewModel @Inject constructor(
     ): List<Syllabus> {
         val selectedClass = classTabs.getOrNull(selectedTabIndex) ?: "All"
 
-        // 1. Get the list of syllabuses for the selected class. If "All", flatten the whole map.
         val syllabusesForSelectedClass = if (selectedClass == "All") {
             syllabuses.values.flatten()
         } else {
             syllabuses[selectedClass] ?: emptyList()
         }
 
-        // 2. Filter this list by the search query.
         return if (searchQuery.isBlank()) {
             syllabusesForSelectedClass
         } else {
@@ -313,6 +343,7 @@ class SyllabusViewModel @Inject constructor(
 
 @Immutable
 data class SyllabusUiState(
+    val isLoading: Boolean = false,
     val searchQuery: String = "",
     val selectedClassIndex: Int = DEFAULT_SELECTED_CLASS_INDEX,
     val classTabs: List<String> = emptyList(),
@@ -335,7 +366,7 @@ sealed interface SyllabusIntent {
     data object OnDismissDeleteBottomSheet : SyllabusIntent
     data object OnEditClicked : SyllabusIntent
     data object ShowDeleteBottomSheet : SyllabusIntent
-    data object OnDeleteClicked : SyllabusIntent
+    data class OnDeleteClicked(val syllabusId: String?) : SyllabusIntent
 }
 
 sealed interface SyllabusEvent {

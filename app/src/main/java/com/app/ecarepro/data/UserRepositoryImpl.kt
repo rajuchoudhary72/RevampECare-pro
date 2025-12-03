@@ -178,7 +178,7 @@ import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProf
 import com.app.ecarepro.ui.edit_profile.staff.model.StaffProfileModel
 import com.app.ecarepro.ui.edit_profile.staff.model.payload.StaffUpdateModel
 import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
-import com.app.ecarepro.ui.studentId.ParentPhotoRequest
+import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -505,11 +505,9 @@ class UserRepositoryImpl @Inject constructor(
         ord: Int,
         applType: Int,
         pg: Int,
-        attPer:Boolean,
-        FromDate:String?,
-        TillDate:String?
+        attPer:Boolean
     ): NetworkLeaveReport {
-        return userService.leaveReport(status, ord, applType, pg,attPer,FromDate,TillDate)
+        return userService.leaveReport(status, ord, applType, pg,attPer)
     }
 
     override suspend fun leaveAction(
@@ -637,8 +635,6 @@ class UserRepositoryImpl @Inject constructor(
     }
     override suspend fun uploadPhoto(request: StudentIDRequest): CommonResponse {
         return userService.uploadPhoto(request)
-    } override suspend fun uploadParentPhoto(request: ParentPhotoRequest): CommonResponse {
-        return userService.uploadParentPhoto(request)
     }
 
     override suspend fun getStudentIDCard(): StudentCardResponse {

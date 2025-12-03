@@ -18,7 +18,6 @@ espresso-core = "3.5.1"
 appcompat = "1.6.1"
 lifecycle-livedata-ktx = "2.7.0"
 lottieCompose = "6.6.10"
-
 material = "1.13.0-alpha07"
 constraintlayout = "2.1.4"
 navigation-fragment-ktx = "2.5.3"
@@ -59,7 +58,6 @@ kotlinSerialization = "2.1.21"
 kotlinxSerializationCore = "1.8.1"
 material3AdaptiveNav3 = "1.0.0-alpha03"
 ui = "1.9.4"
-
 
 
 
@@ -145,6 +143,7 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 retrofit-kotlin-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 androidx-lifecycle-viewModelKtx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
 
+
 # Core Navigation 3 libraries
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
@@ -165,7 +164,6 @@ androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref 
 
 
 
-
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -179,6 +177,7 @@ android-lint = { id = "com.android.lint", version.ref = "agp" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 room = { id = "androidx.room", version.ref = "room" }
+
 ecarepro-android-application-compose = { id = "ecarepro.android.application.compose" }
 ecarepro-android-feature = { id = "ecarepro.android.feature" }
 ecarepro-android-androidLibrary = { id = "ecarepro.android.library" }

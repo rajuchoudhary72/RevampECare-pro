@@ -77,7 +77,7 @@
             android:hardwareAccelerated="true"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.MainActivity"
+            android:name="v2.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.ECarePro"
@@ -131,9 +131,9 @@
             android:theme="@style/Base.Theme.AppCompat"
             tools:replace="android:theme" />
 
-        <activity
-            android:name="v2.MainActivity"
-            android:exported="false" />
+        <!--  <activity
+              android:name="v2.MainActivity"
+              android:exported="false" />-->
 
         <provider
             android:name="androidx.core.content.FileProvider"

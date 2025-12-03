@@ -5,19 +5,18 @@ import com.app.ecarepro.core.network.retrofit.interceptor.AuthTokenInterceptor
 import com.app.ecarepro.core.network.retrofit.service.AcademicService
 import com.app.ecarepro.core.network.retrofit.service.AdminService
 import com.app.ecarepro.core.network.retrofit.service.SchoolService
+import com.app.ecarepro.core.network.retrofit.service.StaffService
 import com.app.ecarepro.core.network.retrofit.service.UserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
-import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
@@ -36,7 +35,7 @@ internal object NetworkModule {
     fun provideRetrofit(
         networkJson: Json,
         tokenInterceptor: AuthTokenInterceptor,
-        appConfig: AppConfig
+        appConfig: AppConfig,
     ): Retrofit {
         val okHttpClient = OkHttpClient
             .Builder()
@@ -59,23 +58,28 @@ internal object NetworkModule {
 
     @Provides
     fun provideSchoolService(
-        @InjectInCoreModule retrofit: Retrofit
+        @InjectInCoreModule retrofit: Retrofit,
     ): SchoolService = retrofit.create(SchoolService::class.java)
 
     @Provides
     fun provideUserService(
-        @InjectInCoreModule retrofit: Retrofit
+        @InjectInCoreModule retrofit: Retrofit,
     ): UserService = retrofit.create(UserService::class.java)
 
     @Provides
     fun provideAcademicService(
-        @InjectInCoreModule retrofit: Retrofit
+        @InjectInCoreModule retrofit: Retrofit,
     ): AcademicService = retrofit.create(AcademicService::class.java)
 
     @Provides
     fun provideAdminService(
-        @InjectInCoreModule retrofit: Retrofit
+        @InjectInCoreModule retrofit: Retrofit,
     ): AdminService = retrofit.create(AdminService::class.java)
+
+    @Provides
+    fun provideStaffService(
+        @InjectInCoreModule retrofit: Retrofit,
+    ): StaffService = retrofit.create(StaffService::class.java)
 
 }
 

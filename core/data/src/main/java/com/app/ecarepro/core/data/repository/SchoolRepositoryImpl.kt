@@ -8,11 +8,11 @@ import com.app.ecarepro.core.domain.ext.asResultFlow
 import com.app.ecarepro.core.domain.model.OnboardingItem
 import com.app.ecarepro.core.domain.model.School
 import com.app.ecarepro.core.domain.model.SchoolDetail
+import com.app.ecarepro.core.domain.model.User
 import com.app.ecarepro.core.domain.repository.SchoolRepository
 import com.app.ecarepro.core.network.SchoolRemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import com.app.ecarepro.core.domain.model.User
 import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 import javax.inject.Inject

@@ -40,7 +40,6 @@ fun HeaderSection(
         )
 
         Spacer(modifier = Modifier.height(32.dp))
-        /* fontWeight = FontWeight.Bold,font*/
         Text(
             text = stringResource(R.string.unlock_your_franciscan_experience_title),
             style = MaterialTheme.appTypography.nunitoBlack34px.copy(fontSize = 28.sp),

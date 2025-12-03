@@ -4,6 +4,7 @@ import android.content.Context
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.AuthInterceptor.Companion.SESSION_ID
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.di.annotations.SessionReCreate
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -35,7 +36,7 @@ class SessionAuthenticator @Inject constructor(
                 ).sessionID
                 userDataStore.saveSessionId(sessionID)
                 response.request.newBuilder()
-                  //  .header(SESSION_ID, sessionID)
+                    .header(SESSION_ID, sessionID)
                     .build()
             } catch (e: Exception) {
                 AppSessionManager.logoutAndRestartApp(true)

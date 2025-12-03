@@ -197,7 +197,7 @@ class CircularDetailsFragment : Fragment() {
         startActivity(Intent.createChooser(shareIntent, "Share"))
     }
     fun formatTextWithLinks(input: String): String {
-        val urlPattern = "(https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=%]+)"
+        val urlPattern = "(https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=]+)"
         return input.replace(Regex(urlPattern)) {
             "<a href='${it.value}'>${it.value}</a>"
         }

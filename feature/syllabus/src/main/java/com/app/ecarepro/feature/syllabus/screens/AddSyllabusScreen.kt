@@ -1,8 +1,6 @@
 package com.app.ecarepro.feature.syllabus.screens
 
-import android.net.Uri
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,12 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.SnackbarHostState
@@ -29,23 +24,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.RoundRect
-import androidx.compose.ui.geometry.toRect
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,13 +37,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.UiStateHandler
 import com.app.ecarepro.designsystem.core.component.Button
-import com.app.ecarepro.designsystem.core.component.EcareProAsyncImage
-import com.app.ecarepro.designsystem.core.component.EcareProLottieAnimation
-import com.app.ecarepro.designsystem.core.component.EcareProOutlinedTextField
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
+import com.app.ecarepro.designsystem.core.component.EcareProSelectionBottomSheet
 import com.app.ecarepro.designsystem.core.component.EcareProTopAppBar
 import com.app.ecarepro.designsystem.core.component.FileUploadBottomSheet
-import com.app.ecarepro.designsystem.core.component.SelectedFileType
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import com.app.ecarepro.designsystem.core.component.UploadOption
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
@@ -67,6 +48,9 @@ import com.app.ecarepro.designsystem.core.theme.White
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
 import com.app.ecarepro.feature.syllabus.R
+import com.app.ecarepro.feature.syllabus.componets.DropdownField
+import com.app.ecarepro.feature.syllabus.componets.FileUploadBox
+import com.app.ecarepro.feature.syllabus.componets.InputField
 
 @Composable
 fun AddSyllabusScreen(
@@ -81,8 +65,9 @@ fun AddSyllabusScreen(
         viewModel.screenEvent.collect { event ->
             when (event) {
                 AddSyllabusEvent.NavigateBack -> navigateToBack()
-                AddSyllabusEvent.ShowSuccessMessage -> {
-
+                is AddSyllabusEvent.ShowSuccessMessage -> {
+                    snackbarMessage = event.snackbarMessage
+                    snackbarHostState.showSnackbar(event.snackbarMessage.text)
                 }
             }
         }
@@ -149,7 +134,8 @@ private fun AddSyllabusContent(
         containerColor = White,
         snackbarHostState = snackbarHostState,
         snackbarMessage = snackbarMessage,
-        onSnackbarDismissed = onSnackbarDismissed
+        onSnackbarDismissed = onSnackbarDismissed,
+        isLoading = if (uiState is UiState.Success) uiState.data.isLoading else false
     ) { paddingValues ->
         UiStateHandler(
             modifier = Modifier.padding(paddingValues),
@@ -168,7 +154,7 @@ private fun AddSyllabusContent(
                             withStyle(style = SpanStyle(color = MaterialTheme.appColors.error)) {
                                 append("*")
                             }
-                            append("Only for classes with section-wise syllabus differences")
+                            append(stringResource(R.string.feature_syllabus_only_for_classes_with_section_wise_syllabus_differences))
                         },
                         style = MaterialTheme.appTypography.interRegular12px,
                         color = MaterialTheme.appColors.textSecondary,
@@ -190,10 +176,12 @@ private fun AddSyllabusContent(
 
                     if (data.selectedTabIndex == 0) {
                         DropdownField(
-                            label = "Select class",
+                            label = stringResource(R.string.feature_syllabus_select_class),
                             value = data.selectedClass,
-                            placeholder = "Class X",
-                            onClick = { }
+                            placeholder = stringResource(R.string.feature_syllabus_class),
+                            onClick = {
+                                handleIntent(AddSyllabusIntent.OnClassSelectClicked)
+                            }
                         )
                     } else {
                         Row(
@@ -202,18 +190,22 @@ private fun AddSyllabusContent(
                         ) {
                             Box(modifier = Modifier.weight(1f)) {
                                 DropdownField(
-                                    label = "Select class",
+                                    label = stringResource(R.string.feature_syllabus_select_class),
                                     value = data.selectedClass,
-                                    placeholder = "Class X",
-                                    onClick = { }
+                                    placeholder = stringResource(R.string.feature_syllabus_class),
+                                    onClick = {
+                                        handleIntent(AddSyllabusIntent.OnClassSelectClicked)
+                                    }
                                 )
                             }
                             Box(modifier = Modifier.weight(1f)) {
                                 DropdownField(
-                                    label = "Select section",
-                                    value = data.selectedSection,
-                                    placeholder = "Section A",
-                                    onClick = { }
+                                    label = stringResource(R.string.feature_syllabus_select_section),
+                                    value = data.selectedSection?.joinToString(),
+                                    placeholder = stringResource(R.string.feature_syllabus_section),
+                                    onClick = {
+                                        handleIntent(AddSyllabusIntent.OnSectionSelectClicked)
+                                    }
                                 )
                             }
                         }
@@ -223,19 +215,19 @@ private fun AddSyllabusContent(
 
 
                     DropdownField(
-                        label = "Select subject",
+                        label = stringResource(R.string.feature_syllabus_select_subject),
                         value = data.selectedSubject,
-                        placeholder = "All subjects",
-                        onClick = { /* Open Dropdown */ }
+                        placeholder = stringResource(R.string.feature_syllabus_all_subjects),
+                        onClick = { handleIntent(AddSyllabusIntent.OnSubjectSelectClicked) }
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
 
                     InputField(
-                        label = "Syllabus title",
+                        label = stringResource(R.string.feature_syllabus_syllabus_title),
                         value = data.title,
-                        placeholder = "Add your title here",
+                        placeholder = stringResource(R.string.feature_syllabus_add_your_title_here),
                         onValueChange = { handleIntent(AddSyllabusIntent.OnTitleChanged(it)) }
                     )
 
@@ -249,8 +241,7 @@ private fun AddSyllabusContent(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     FileUploadBox(
-                        selectedFileUri = data.selectedFileUri,
-                        selectedFileType = data.selectedFileType,
+                        selectedFile = data.selectedFile,
                         onClick = { handleIntent(AddSyllabusIntent.OnAddFileClicked) }
                     )
 
@@ -259,13 +250,13 @@ private fun AddSyllabusContent(
 
                     Button(
                         modifier = Modifier.fillMaxWidth(),
-                        title = "Add new syllabus",
+                        title = stringResource(R.string.feature_syllabus_add_new_syllabus),
                         onClick = { handleIntent(AddSyllabusIntent.OnSubmitClicked) }
                     )
                 }
 
                 FileUploadBottomSheet(
-                    isVisible = data.isFileUploadSheetVisible, // From UiState
+                    isVisible = data.isFileUploadSheetVisible,
                     onDismiss = {
                         handleIntent(AddSyllabusIntent.OnDismissFileUploadSheet)
                     },
@@ -274,164 +265,59 @@ private fun AddSyllabusContent(
                         UploadOption.GALLERY,
                         UploadOption.DOCUMENT
                     ),
-                    onFileSelected = { uri, type ->
-                        handleIntent(AddSyllabusIntent.OnFileSelected(uri, type))
+                    onShowError = { handleIntent(AddSyllabusIntent.OnShowError(it)) },
+                    onFileSelected = { file ->
+                        handleIntent(AddSyllabusIntent.OnFileSelected(file))
                     }
                 )
             }
+
+            EcareProSelectionBottomSheet(
+                title = stringResource(R.string.feature_syllabus_select_class),
+                isVisible = data.isClassSelectSheetVisible,
+                onDismiss = { handleIntent(AddSyllabusIntent.OnDismissClassSelectSheet) },
+                options = data.classes.map { it.className.orEmpty() },
+                selectedOptions = listOf(data.selectedClass.orEmpty()),
+                onOptionsSelected = {
+                    handleIntent(
+                        AddSyllabusIntent.OnClassChanged(
+                            it.firstOrNull().orEmpty()
+                        )
+                    )
+                }
+            )
+
+            EcareProSelectionBottomSheet(
+                title = stringResource(R.string.feature_syllabus_select_section),
+                isVisible = data.isSectionSelectSheetVisible,
+                onDismiss = { handleIntent(AddSyllabusIntent.OnDismissSectionSelectSheet) },
+                options = data.sections.map { it.secName.orEmpty() },
+                selectedOptions = data.selectedSection ?: emptyList(),
+                isMultiSelection = true,
+                onOptionsSelected = {
+                    handleIntent(
+                        AddSyllabusIntent.OnSectionChanged(it)
+                    )
+                }
+            )
+            EcareProSelectionBottomSheet(
+                stringResource(R.string.feature_syllabus_select_subject),
+                isVisible = data.isSubjectSelectSheetVisible,
+                onDismiss = { handleIntent(AddSyllabusIntent.OnDismissSubjectSelectSheet) },
+                options = data.subject.map { it.subjectName.orEmpty() },
+                selectedOptions = listOf(data.selectedSubject.orEmpty()),
+                onOptionsSelected = {
+                    handleIntent(
+                        AddSyllabusIntent.OnSubjectChanged(
+                            it.firstOrNull().orEmpty()
+                        )
+                    )
+                }
+            )
         }
     }
 }
 
-@Composable
-fun DropdownField(
-    label: String,
-    value: String,
-    placeholder: String,
-    onClick: () -> Unit,
-) {
-    Column {
-        Text(
-            text = label,
-            style = MaterialTheme.appTypography.interRegular12px,
-            color = MaterialTheme.appColors.textSecondary
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        EcareProOutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onClick() },
-            value = value,
-            onValueChange = {},
-            placeholder = {
-                Text(
-                    text = placeholder,
-                    style = MaterialTheme.appTypography.interRegular14px,
-                    color = MaterialTheme.appColors.textPrimary
-                )
-            },
-            enabled = false,
-            trailingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_arrow_down),
-                    contentDescription = "Select",
-                    tint = MaterialTheme.appColors.textSecondary
-                )
-            },
-        )
-    }
-}
-
-@Composable
-fun InputField(
-    label: String,
-    value: String,
-    placeholder: String,
-    onValueChange: (String) -> Unit,
-) {
-    Column {
-        Text(
-            text = label,
-            style = MaterialTheme.appTypography.interRegular12px,
-            color = MaterialTheme.appColors.textSecondary
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        EcareProOutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            placeholder = {
-                Text(
-                    text = placeholder,
-                    style = MaterialTheme.appTypography.interRegular14px,
-                    color = MaterialTheme.appColors.textSecondary
-                )
-            },
-            modifier = Modifier.fillMaxWidth(),
-        )
-    }
-}
-
-@Composable
-fun FileUploadBox(
-    onClick: () -> Unit,
-    selectedFileUri: Uri?,
-    selectedFileType: SelectedFileType?,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(150.dp)
-            .background(MaterialTheme.appColors.background, RoundedCornerShape(8.dp))
-            .clip(RoundedCornerShape(8.dp))
-            .clickable { onClick() }
-            .drawBehindBorder(
-                strokeWidth = 1.dp,
-                color = MaterialTheme.appColors.border,
-                cornerRadius = 8.dp,
-                dashLength = 8.dp,
-                gapLength = 8.dp
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        if (selectedFileUri != null) {
-            EcareProAsyncImage(
-                imageUrl = selectedFileUri.toString(),
-            )
-        } else {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                EcareProLottieAnimation(
-                    modifier = Modifier
-                        .height(49.dp)
-                        .width(56.dp),
-                    lottieRawId = R.raw.upload_to_cloud
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Click here to add file",
-                    style = MaterialTheme.appTypography.nunitoBold12px.copy(fontSize = 16.sp),
-                    color = MaterialTheme.appColors.textSecondary
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Max 10 MB files are allowed",
-                    style = MaterialTheme.appTypography.nunitoMedium12px,
-                    color = MaterialTheme.appColors.textSecondary
-                )
-            }
-        }
-
-    }
-}
-
-fun Modifier.drawBehindBorder(
-    strokeWidth: Dp,
-    color: Color,
-    cornerRadius: Dp,
-    dashLength: Dp = 16.dp,
-    gapLength: Dp = 10.dp,
-) = this.drawBehind {
-    val stroke = Stroke(
-        width = strokeWidth.toPx(),
-        pathEffect = PathEffect.dashPathEffect(
-            floatArrayOf(dashLength.toPx(), gapLength.toPx()),
-            0f
-        )
-    )
-
-    val path = Path().apply {
-        addRoundRect(
-            RoundRect(
-                rect = size.toRect(),
-                cornerRadius = CornerRadius(cornerRadius.toPx())
-            )
-        )
-    }
-    drawPath(
-        path = path,
-        color = color,
-        style = stroke
-    )
-}
 
 @Preview(showBackground = true)
 @Composable

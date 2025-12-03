@@ -11,13 +11,20 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.app.ecarepro.core.domain.model.User
+import com.app.ecarepro.feature.assignment.navigation.EntryAssignmentNavigation
+import com.app.ecarepro.feature.dashboard.navigation.DashboardNavigationGraph
 import com.app.ecarepro.feature.dashboard.navigation.EntryDashboardNavigation
+import com.app.ecarepro.feature.docviewer.navigation.DocViewerNavigationGraph
+import com.app.ecarepro.feature.docviewer.navigation.EntryDocViewerNavigation
 import com.app.ecarepro.feature.login.navigation.EntryLoginNavigation
 import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
 import com.app.ecarepro.feature.schoolcode.navigation.EntrySchoolCodeNavigation
 import com.app.ecarepro.feature.schoolcode.navigation.SchoolCodeNavigationGraph
 import com.app.ecarepro.feature.splash.navigation.EntrySplashNavigation
 import com.app.ecarepro.feature.splash.navigation.SplashNavigationGraph
+import com.app.ecarepro.feature.syllabus.navigation.EntrySyllabusNavigation
+import com.app.ecarepro.feature.testingmenu.navigation.EntryTestingMenuNavigation
+import com.app.ecarepro.feature.testingmenu.navigation.TestingMenuNavigationGraph
 import com.app.ecarepro.feature.timetable.navigation.EntryTimetableNavigation
 import com.app.ecarepro.onboarding.feature.navigation.EntryOnboardingNavigation
 import com.app.ecarepro.onboarding.feature.navigation.OnboardingNavigationGraph
@@ -32,8 +39,6 @@ fun EcareProNavDisplay(
         mutableStateListOf(initialKey)
     }
 
-    val context = LocalContext.current as Activity
-
     NavDisplay(
         entryDecorators = listOf(
             rememberSceneSetupNavEntryDecorator(),
@@ -41,14 +46,14 @@ fun EcareProNavDisplay(
             rememberViewModelStoreNavEntryDecorator()
         ),
         backStack = backStack,
-        onBack = {
-            if(backStack.size == 1){
-                backStack.removeLastOrNull()
-            }else{
-                context.finish()
-            }
-        },
         entryProvider = entryProvider {
+
+            EntryTestingMenuNavigation(
+                navigateToBack = { backStack.removeLastOrNull() },
+                navigateToModule = { navKey ->
+                    backStack.add(navKey)
+                }
+            )
 
             EntrySplashNavigation(
                 navigateToLogin = {
@@ -56,10 +61,10 @@ fun EcareProNavDisplay(
                     backStack.add(OnboardingNavigationGraph.Onboarding)
                 },
                 navigateToDashboard = { user ->
-                    navigateToLegacyFlow(navigateToLegacyFlow, user)
+                    backStack.clear()
+                    backStack.add(DashboardNavigationGraph.Dashboard)
                 }
             )
-
 
             EntryOnboardingNavigation(
                 navigateToAddSchool = {
@@ -67,7 +72,6 @@ fun EcareProNavDisplay(
                     backStack.add(SchoolCodeNavigationGraph.SchoolCode)
                 }
             )
-
 
             EntrySchoolCodeNavigation(
                 backStack = backStack,
@@ -82,15 +86,56 @@ fun EcareProNavDisplay(
                     backStack.removeLastOrNull()
                 },
                 navigateToMain = { user ->
-                    navigateToLegacyFlow(navigateToLegacyFlow, user)
+                    backStack.clear()
+                    backStack.add(DashboardNavigationGraph.Dashboard)
                 }
             )
 
-            EntryDashboardNavigation()
+            EntryDashboardNavigation(
+                navigateToTestingMenu = {
+                    backStack.add(TestingMenuNavigationGraph.TestingMenu)
+                }
+            )
 
             EntryTimetableNavigation(
                 navigateToBack = {
                     backStack.removeLastOrNull()
+                }
+            )
+
+            EntrySyllabusNavigation(
+                backStack = backStack,
+                navigateToBack = {
+                    backStack.removeLastOrNull()
+                },
+                openDocVier = { title, url ->
+                    backStack.add(
+                        DocViewerNavigationGraph.DocViewer(
+                            title = title,
+                            docUrl = url
+                        )
+                    )
+                }
+            )
+
+            EntryDocViewerNavigation(
+                navigateToBack = {
+                    backStack.removeLastOrNull()
+                }
+            )
+
+            EntryAssignmentNavigation(
+                backStack = backStack,
+                navigateToBack = {
+                    backStack.removeLastOrNull()
+                },
+                openDocVier = { title, url ->
+                    backStack.add(
+                        DocViewerNavigationGraph.DocViewer(
+                            title = title,
+                            docUrl = url
+                        )
+                    )
                 }
             )
         }

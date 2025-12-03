@@ -1,6 +1,9 @@
 import java.net.URI
 
+include(":feature:testingmenu")
 
+
+include(":feature:assignment")
 
 
 pluginManagement {
@@ -31,34 +34,18 @@ include(":core:network")
 include(":core:domain")
 include(":core:data")
 include(":core:database")
-
+include(":core:location")
+include(":core:common")
+include(":core:download")
 
 include(":feature:onboarding")
 include(":feature:schoolcode")
 include(":feature:login")
 include(":feature:homeselection")
-include(":core:location")
-include(":feature:dashboard")
-include(":feature:splash")
-include(":feature:timetable")
-include(":feature:docviewer")
 include(":feature:syllabus")
-include(":core:download")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+include(":feature:timetable")
+include(":feature:splash")
+include(":feature:dashboard")
+include(":feature:docviewer")
 
 

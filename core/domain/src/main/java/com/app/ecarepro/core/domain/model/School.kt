@@ -1,5 +1,6 @@
 package com.app.ecarepro.core.domain.model
 
+
 data class School(
     val address: String?,
     val city: String?,

@@ -46,7 +46,7 @@ fun OnboardingPagerItem(
         ) {
             Text(
                 text = page.headline,
-                style = MaterialTheme.appTypography.nunitoBlack28px,
+                style = MaterialTheme.appTypography.nunitoBlack34px,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(16.dp))

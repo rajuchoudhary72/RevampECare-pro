@@ -11,5 +11,4 @@ data class AppTypography(
     val nunitoBold12px: TextStyle,
     val nunitoMedium12px: TextStyle,
     val nunitoBlack34px: TextStyle,
-    val nunitoBlack28px: TextStyle,
 )

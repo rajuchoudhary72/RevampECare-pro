@@ -130,6 +130,11 @@ private fun SyllabusScreenContent(
         snackbarHostState = snackbarHostState,
         snackbarMessage = snackbarMessage,
         onSnackbarDismissed = onSnackbarDismissed,
+        isLoading = if (uiState is UiState.Success) {
+            uiState.data.isLoading
+        } else {
+            false
+        }
     ) { paddingValues ->
         UiStateHandler(
             modifier = Modifier.padding(paddingValues),
@@ -177,7 +182,7 @@ private fun SyllabusScreenContent(
                 if (data.isDeleteSheetVisible) {
                     DeleteBottomSheet(
                         onDismiss = { handleIntent(SyllabusIntent.OnDismissDeleteBottomSheet) },
-                        onDeleteClick = { handleIntent(SyllabusIntent.OnDeleteClicked) }
+                        onDeleteClick = { handleIntent(SyllabusIntent.OnDeleteClicked(data.selectedSyllabusId)) }
                     )
                 }
 
@@ -193,7 +198,9 @@ private fun SyllabusScreenPreview() {
     EcareProTheme {
         SyllabusScreenContent(
             uiState = UiState.Success(
-                SyllabusUiState()
+                SyllabusUiState(
+                    classTabs = listOf("UKG", "LKG")
+                )
             ),
             handleIntent = {},
             snackbarHostState = SnackbarHostState(),

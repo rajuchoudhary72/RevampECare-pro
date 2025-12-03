@@ -54,14 +54,15 @@ fun EcareProSelectionBottomSheet(
 ) {
     if (!isVisible) return
 
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
     val scope = rememberCoroutineScope()
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
         containerColor = White,
-        dragHandle = null
+        dragHandle = null,
+        tonalElevation = 1.dp
     ) {
         Column(
             modifier = Modifier
@@ -72,8 +73,7 @@ fun EcareProSelectionBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-                    .padding(top = 10.dp)
-                ,
+                    .padding(top = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -108,12 +108,10 @@ fun EcareProSelectionBottomSheet(
                             .fillMaxWidth()
                             .clickable {
                                 if (isMultiSelection) {
-                                    // Multi-Select Logic
                                     val newList = selectedOptions.toMutableList()
                                     if (isSelected) newList.remove(option) else newList.add(option)
                                     onOptionsSelected(newList)
                                 } else {
-
                                     onOptionsSelected(listOf(option))
                                     scope.launch { sheetState.hide() }
                                         .invokeOnCompletion { onDismiss() }

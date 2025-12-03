@@ -32,8 +32,6 @@ fun FindCodeLink(onFindCodeClicked: () -> Unit) {
             )
         )
 
-
-
         withStyle(
             style = MaterialTheme.appTypography.interMedium16px.toSpanStyle().copy(
                 textDecoration = TextDecoration.Underline,

@@ -25,7 +25,7 @@ interface AssistedViewModelFactory<in P : Any, out VM : ViewModel> {
 @Composable
 inline fun <reified VM : ViewModel, P : Any> navKeyViewModel(
     param: P,
-): VM  {
+): VM {
     // The 'creationCallback' is where the "delegation" happens.
     // We call the 'create' method from our standardized factory interface.
     return hiltViewModel<VM, AssistedViewModelFactory<P, VM>>(

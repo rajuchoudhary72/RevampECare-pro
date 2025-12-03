@@ -35,16 +35,10 @@ import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.listener.ItemListener
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
 @AndroidEntryPoint
 class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
@@ -72,12 +66,6 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
     private var showAttPer=false
     private var scrollYPosition: Int = 0
     private var isDataLoaded: Boolean = false
-    private val dateFrom: Calendar = Calendar.getInstance()
-
-    private val dateTo: Calendar = Calendar.getInstance()
-
-    private var fromDate: String? = null
-    private var toDate:String? =  null
 
 
 
@@ -89,8 +77,6 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
         binding=FragmentLeaveReportBinding.inflate(inflater,container,false)
         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         binding.includeToolbar.toolbarTitle.text = getString(R.string.leave_report)
-        binding.includeToolbar.btnSave.text=getString(R.string.filter)
-        binding.includeToolbar.btnSave.isVisible=true
         leaveReportAdapter = LeaveReportAdapter(leaveReportList, this)
         with(binding) {
             recyclerLeaveReport.adapter = leaveReportAdapter
@@ -104,8 +90,6 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                 binding.llAllApproveRej.isVisible=false
                 binding.cbAllSelect.isVisible=false
                 binding.btnCancel.isVisible=true
-                binding.includeToolbar.btnSave.isVisible=false
-                binding.cbShowAttPer.isVisible=false
             }
 
         }catch (_:Exception){}
@@ -127,7 +111,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                 if (isLoading && isDataLoaded) { // Add isDataLoaded check to prevent initial multiple calls
                     isLoading = false
                     pageIndex += 1
-                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                 }
             }
         }
@@ -139,55 +123,39 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
         binding.toggleButtonTypeLeave.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (binding.toggleButtonTypeLeave.checkedButtonId) {
                 R.id.btn_pen -> {
-                    binding.includeToolbar.btnSave.text=getString(R.string.filter)
-                    fromDate=null
-                    toDate=null
                     leaveReportAdapter.clearData()
                     status=0
                     pageIndex=1
-                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                     if (applType!=3){
                         binding.cbAllSelect.isVisible=true
                         binding.llAllApproveRej.isVisible=true
                     }
-                    binding.cbShowAttPer.isVisible=true
                 }
                 R.id.btn_app -> {
-                    fromDate=null
-                    toDate=null
-                    binding.includeToolbar.btnSave.text=getString(R.string.filter)
                     leaveReportAdapter.clearData()
                     status=1
                     pageIndex=1
-                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                     binding.cbAllSelect.isVisible=false
                     binding.llAllApproveRej.isVisible=false
-                    binding.cbShowAttPer.isVisible=false
                 }
                 R.id.btn_cancel -> {
-                    fromDate=null
-                    toDate=null
-                    binding.includeToolbar.btnSave.text=getString(R.string.filter)
                     leaveReportAdapter.clearData()
                     status=Constant.LEAVE_ACTION_CANCEL
                     pageIndex=1
-                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                     binding.cbAllSelect.isVisible=false
                     binding.llAllApproveRej.isVisible=false
-                    binding.cbShowAttPer.isVisible=false
                 }
 
                 else -> {
-                    fromDate=null
-                    toDate=null
-                    binding.includeToolbar.btnSave.text=getString(R.string.filter)
                     leaveReportAdapter.clearData()
                     status=2
                     pageIndex=1
-                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                     binding.cbAllSelect.isVisible=false
                     binding.llAllApproveRej.isVisible=false
-                    binding.cbShowAttPer.isVisible=false
                 }
             }
         }
@@ -203,7 +171,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                         leaveReportAdapter.clearData()
                         status=0
                         pageIndex=1
-                        leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                        leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                     }
                     dialog.dismiss()
                 }
@@ -240,55 +208,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
 
         binding.cbShowAttPer.setOnCheckedChangeListener { _, isChecked ->
             showAttPer=isChecked
-            leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
-        }
-
-        binding.includeToolbar.btnSave.setOnClickListener {
-
-            pickDateRange()
-        }
-
-    }
-
-
-    private fun pickDateRange() {
-        val builder = MaterialDatePicker.Builder.dateRangePicker()
-        builder.setSelection(androidx.core.util.Pair(dateFrom.timeInMillis, dateTo.timeInMillis))
-
-        val picker = builder.build()
-        picker.show(activity?.supportFragmentManager!!, picker.toString())
-
-        picker.addOnNegativeButtonClickListener { picker.dismiss() }
-        picker.addOnPositiveButtonClickListener {
-            dateFrom.timeInMillis = it.first
-            dateTo.timeInMillis = it.second
-
-            val dateFormate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-            dateFormate.format(Date(dateFrom.timeInMillis))
-            val from = dateFormate.format(Date(dateFrom.timeInMillis))
-            val to = dateFormate.format(Date(dateTo.timeInMillis))
-
-            fromDate = from
-            toDate = to
-
-
-            leaveReportAdapter.clearData()
-            pageIndex=1
-            leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
-
-            updateDateFilterText(true)
-
-        }
-    }
-
-    private fun updateDateFilterText(setAsFilter: Boolean = false) {
-        val dateFormate = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
-        dateFormate.format(Date(dateFrom.timeInMillis))
-        val from = dateFormate.format(Date(dateFrom.timeInMillis))
-        val to = dateFormate.format(Date(dateTo.timeInMillis))
-
-        binding.apply {
-            binding.includeToolbar.btnSave.text="Filter Applied"
+            leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
         }
 
     }
@@ -351,7 +271,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
             }
 
         }
-        leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+        leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
     }
 
     override fun onItemClick(t: Dtl, pos: Int, boolean: Boolean) {
@@ -368,7 +288,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     leaveReportAdapter.clearData()
                     status=0
                     pageIndex=1
-                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                 }
 
             }
@@ -394,7 +314,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     leaveReportAdapter.clearData()
                     status=1
                     pageIndex=1
-                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                     binding.cbAllSelect.isVisible=false
                     binding.llAllApproveRej.isVisible=false
                 }
@@ -456,7 +376,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                 leaveReportAdapter.clearData()
                 status=0
                 pageIndex=1
-                leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
             }
             dialog.dismiss()
         }
@@ -489,7 +409,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                         leaveReportAdapter.clearData()
                         status=0
                         pageIndex=1
-                        leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                        leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                         showActionMessage()
 
                     }
@@ -575,7 +495,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                                     leaveReportAdapter.clearData()
                                     status=0
                                     pageIndex=1
-                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                                 }
                         }else{
                             leaveReportViewModel.leaveAction(applType,
@@ -584,7 +504,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                                     leaveReportAdapter.clearData()
                                     status=0
                                     pageIndex=1
-                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                                 }
                         }
 
@@ -603,7 +523,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                                 leaveReportAdapter.clearData()
                                 status=0
                                 pageIndex=1
-                                leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                                leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                             }
                     }else{
                         leaveReportViewModel.leaveAction(applType,
@@ -612,7 +532,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                                 leaveReportAdapter.clearData()
                                 status=0
                                 pageIndex=1
-                                leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                                leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                             }
                     }
 
@@ -645,7 +565,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                                 if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                                     isLoading = false
                                     pageIndex += 1
-                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer,fromDate,toDate)
+                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                                 }
                             }
 

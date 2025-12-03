@@ -12,10 +12,10 @@ class GetOnboardingItemUseCase @Inject constructor(
     private val schoolRepository: SchoolRepository
 ) {
     private val drawableResIds = listOf(
-        R.drawable.onboarding_1,
-        R.drawable.onboarding_2,
-        R.drawable.onboarding_3,
-        R.drawable.onboarding_4
+        R.drawable.onboarding_image_1,
+        R.drawable.onboarding_image_2,
+        R.drawable.onboarding_image_3,
+        R.drawable.onboarding_image_4
     )
 
     private fun getImageResIdForItem(index: Int): Int {
@@ -37,5 +37,3 @@ class GetOnboardingItemUseCase @Inject constructor(
             }
     }
 }
-
-

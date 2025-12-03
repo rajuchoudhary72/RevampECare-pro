@@ -45,9 +45,9 @@ android {
     defaultConfig {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
-        targetSdk = 35
-        versionCode = 386
-        versionName = "3.7.5"
+        targetSdk = 36
+        versionCode = 373
+        versionName = "3.6.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -135,16 +135,19 @@ android {
 }
 
 dependencies {
+
+    implementation(projects.feature.testingmenu)
+
     implementation(projects.feature.splash)
     implementation(projects.feature.onboarding)
     implementation(projects.feature.schoolcode)
     implementation(projects.feature.login)
     implementation(projects.feature.dashboard)
     implementation(projects.feature.timetable)
-    implementation(projects.core.data)
-    implementation(projects.feature.docviewer)
     implementation(projects.feature.syllabus)
-
+    implementation(projects.feature.assignment)
+    implementation(projects.feature.docviewer)
+    implementation(projects.core.data)
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
@@ -162,7 +165,6 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.com.google.firebase.firebase.crashlytics)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-
     kapt(libs.hilt.android.compiler)
 
     /*    *//* Database *//*

@@ -111,7 +111,6 @@ import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: NotificationViewModel by viewModels()
@@ -141,6 +140,7 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var syncManager: SyncManager
+
     private val topLevelFragments = mutableListOf(
         R.id.homeFragment,
         R.id.profileFragment,
@@ -226,7 +226,6 @@ class MainActivity : AppCompatActivity() {
         //  WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
 
         /*open profile page after click on  profile */
@@ -372,12 +371,12 @@ class MainActivity : AppCompatActivity() {
             val destinationId = intent.extras?.getInt(EXTRA_DESTINATION_ID)
             val extras = intent.extras?.getBundle(EXTRA_EXTRAS)
 
+
             extras?.let {
                 handleData(it)
             }
 
             if (destinationId != null && destinationId != 0 && navGraph.findNode(destinationId) != null) {
-
                 navGraph.setStartDestination(destinationId)
                 navController.setGraph(navGraph, extras)
             } else {
@@ -391,6 +390,7 @@ class MainActivity : AppCompatActivity() {
             navController.setGraph(navGraph, intent.extras)
         }
     }
+
     private fun handleData(bundle: Bundle) {
         lifecycleScope.launch {
             if (bundle.containsKey("user") && userDataStore.isUserAuthenticated().not()) {
@@ -416,7 +416,8 @@ class MainActivity : AppCompatActivity() {
                         ),
                         userDtl.schoolCode, getCurrentDateTimeAmPm()
                     )
-                    systemViewModel.schoolRepository.validateSchoolCode(userDtl.schoolCode).collect {  }
+                    systemViewModel.schoolRepository.validateSchoolCode(userDtl.schoolCode)
+                        .collect { }
                     userDataStore.saveAuthToken(userDtl.authToken ?: "")
                     userDataStore.setAsUserAuthenticated(userDtl.authenticated ?: false)
                     userDataStore.saveUserType(userDtl.userType ?: 0)
@@ -427,6 +428,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
     private fun handleLegacyFlow() {
         if (intent.extras?.getBoolean(EXTRA_LEGACY_FLOW, false) == true) {
             val destinationId = intent.extras?.getInt(EXTRA_DESTINATION_ID)
@@ -1033,11 +1035,10 @@ class MainActivity : AppCompatActivity() {
 
             4 -> {
 
-              /*  lifecycleScope.launch {
+                /*lifecycleScope.launch {
                     userDataStore.getUser()?.run {
                         try {
                             if (userType == Constant.STAFF_TYPE) {
-
                                 navController.navigate(R.id.timeTableNavHostFragment)
                             } else {
                                 navController.navigate(
@@ -1055,6 +1056,7 @@ class MainActivity : AppCompatActivity() {
                 }*/
 
                 launchComposeFlow(ComposeNavigationDestination.Timetable)
+
             }
 
             5 -> {
@@ -1330,7 +1332,7 @@ class MainActivity : AppCompatActivity() {
         menuID: Int,
         childMenuId: Int,
         refId: String? = null,
-        from: String = "other"
+        from: String = "other",
     ) {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
@@ -1625,7 +1627,7 @@ class MainActivity : AppCompatActivity() {
         childChildMenuId: Int,
         refId: String? = null,
         userID: String? = null,
-        from: String = "other"
+        from: String = "other",
     ) {
         systemViewModel.sendAnalyticEvent(
             AnalyticsConstants.Events.MODULE_OPEN, mapOf(
@@ -1663,9 +1665,7 @@ class MainActivity : AppCompatActivity() {
                             10 -> {
                                 navController.navigate(R.id.updateStudentsProfileFragment)
                             }
-                            27-> {
-                                navController.navigate(R.id.updateParentProfileFragment)
-                            }
+
                             26 -> {
                                 navController.navigate(R.id.assignClubStudentListFragment)
                             }
@@ -2005,7 +2005,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

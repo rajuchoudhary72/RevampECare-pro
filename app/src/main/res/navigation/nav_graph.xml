@@ -981,10 +981,6 @@
         android:name="com.app.ecarepro.ui.update_students_profile.UpdateStudentsProfileFragment"
         android:label="UpdateStudentsProfileFragment" />
     <fragment
-        android:id="@+id/updateParentProfileFragment"
-        android:name="com.app.ecarepro.ui.update_parent_profile.UpdateSParentProfileFragment"
-        android:label="UpdateSParentProfileFragment" />
-    <fragment
         android:id="@+id/smsReportFragment"
         android:name="com.app.ecarepro.ui.sms_app_msg_report.sms_report.SmsReportFragment"
         android:label="SmsReportFragment" />

@@ -3,7 +3,6 @@ package com.app.ecarepro.feature.timetable
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.core.domain.exception.errorMessage
-import com.app.ecarepro.core.domain.ext.getTodayDayNumber
 import com.app.ecarepro.core.domain.model.Timetable
 import com.app.ecarepro.core.domain.model.TimetableData
 import com.app.ecarepro.core.domain.repository.AcademicRepository
@@ -44,18 +43,11 @@ class TimetableViewModel @Inject constructor(
                             val timetableMap: Map<Int, List<Timetable>> = days
                                 .mapIndexedNotNull() { index, data -> data.timeTable?.let { index to it } }
                                 .associate { it }
-
-                            // Calculate today's day index
-                            val todayDayNo = getTodayDayNumber()
-                            val initialDayIndex = days.indexOfFirst { it.dayNo == todayDayNo }
-                                .takeIf { it >= 0 } ?: 0
-
                             _uiState.update {
                                 UiState.Success(
                                     TimetableUiState(
                                         days = days,
-                                        timetables = timetableMap,
-                                        selectedDayIndex = initialDayIndex
+                                        timetables = timetableMap
                                     )
                                 )
                             }

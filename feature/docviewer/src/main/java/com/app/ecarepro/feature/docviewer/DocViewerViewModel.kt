@@ -30,12 +30,7 @@ class DocViewerViewModel @AssistedInject constructor(
     override fun handleIntent(intent: DocViewerIntent) {
         when (intent) {
             DocViewerIntent.OnBackClicked -> sendEvent(DocViewerEvent.NavigateBack)
-            DocViewerIntent.OnShareClicked -> {
-                sendEvent(DocViewerEvent.ShareDoc(
-                    url = _uiState.value.docUrl,
-                    title = _uiState.value.title
-                ))
-            }
+            DocViewerIntent.OnShareClicked -> {}
         }
     }
 
@@ -56,7 +51,6 @@ data class DocViewerUiState(
 
 sealed interface DocViewerEvent {
     data object NavigateBack : DocViewerEvent
-    data class ShareDoc(val url: String, val title: String) : DocViewerEvent
 }
 
 sealed interface DocViewerIntent {

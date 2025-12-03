@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.splash
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,11 +31,13 @@ class SplashFragment : Fragment() {
 
     val splashViewModel: SplashViewModel by viewModels()
     val systemViewModel: SystemViewModel by activityViewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().finish()
         startActivity(Intent(requireContext(), MainActivity::class.java))
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,7 +49,9 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       // startAnimation()
+
+
+        /*startAnimation()
 
         splashViewModel.school.observe(viewLifecycleOwner) { school ->
             school?.let {
@@ -60,15 +65,15 @@ class SplashFragment : Fragment() {
                 }
             }
         }
-        /*we comment this code due to we recent  stop user session  */
-        /* viewLifecycleOwner.lifecycleScope.launch {
+
+         viewLifecycleOwner.lifecycleScope.launch {
              try {
                  if (splashViewModel.isUserAuthenticated()) {
                      if (splashViewModel.isUserSessionAvailable()) {
                          moveToHomeScreen()
                      } else {
                          mainActivity().showLoader(true)
-                         *//*if  existing  user logged  and  first time run App after implementation  of user session then
+                        *//* if  existing  user logged  and  first time run App after implementation  of user session then
                         need to pass session ID in header  so  call create session api  *//*
                         systemViewModel.createUserSession { success, message ->
                             viewLifecycleOwner.lifecycleScope.launch {
@@ -84,30 +89,16 @@ class SplashFragment : Fragment() {
                     }
                 }
                 else {
-                    splashViewModel.getSliders()
-                    findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }*/
-
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                if (splashViewModel.isUserAuthenticated()) {
-                    moveToHomeScreen()
-                } else {
-                   /* splashViewModel.getSliders()
-                    findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)*/
-
+                   *//* splashViewModel.getSliders()
+                    findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)*//*
                     requireActivity().finish()
                     startActivity(Intent(requireContext(), MainActivity::class.java))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }
+        }*/
+
     }
 
     private suspend fun moveToHomeScreen() {

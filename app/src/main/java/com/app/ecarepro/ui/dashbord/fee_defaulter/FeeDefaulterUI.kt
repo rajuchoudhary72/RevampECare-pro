@@ -74,10 +74,10 @@ class FeeDefaulterUI : Fragment() {
                                 binding.tvTotalDefaulter.text = it.data.totalDefaulter.toString()
                                 binding.defaultAmount.text = it.data.totalAmount
 
-                                if (!it.data.feeTypes.isNullOrEmpty()) {
+                                if (it.data.feeTypes.isNotEmpty()) {
                                     buildFeeType(it.data.feeTypes)
                                 }
-                                if (!it.data.installments.isNullOrEmpty()) {
+                                if (it.data.installments.isNotEmpty()) {
                                     buildFeeInstallment(it.data.installments)
                                 }
 

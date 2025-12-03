@@ -16,12 +16,11 @@ import javax.inject.Inject
 import com.app.ecarepro.data.network.model.Favourites
 import com.app.ecarepro.data.network.model.NotificationsDto
 import retrofit2.HttpException
-import kotlinx.coroutines.flow.catch
-
 
 import com.app.ecarepro.data.network.model.SyncData
 import com.app.ecarepro.ui.language.LanguageRepository
 import com.app.ecarepro.ui.language.model.TranslationItem
+import kotlinx.coroutines.flow.catch
 
 class AppRepositoryImpl @Inject constructor(
     private val appService: AppService,
@@ -146,7 +145,6 @@ class AppRepositoryImpl @Inject constructor(
             .catch { e ->
                 emit(Result.failure(e))
             }
-
     }
 
 

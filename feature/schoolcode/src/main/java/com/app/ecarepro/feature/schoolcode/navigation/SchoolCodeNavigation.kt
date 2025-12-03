@@ -7,9 +7,9 @@ import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.NavKey
 import com.app.ecarepro.core.ui.viewmodel.navKeyViewModel
 import com.app.ecarepro.feature.schoolcode.SchoolCodeIntent
-import com.app.ecarepro.feature.schoolcode.SchoolCodeView
+import com.app.ecarepro.feature.schoolcode.SchoolCodeScreen
 import com.app.ecarepro.feature.schoolcode.SchoolCodeViewModel
-import com.app.ecarepro.feature.schoolcode.search.FindYourSchoolView
+import com.app.ecarepro.feature.schoolcode.search.SchoolSearchScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -29,7 +29,7 @@ fun EntryProviderBuilder<NavKey>.EntrySchoolCodeNavigation(
 ) {
     val schoolCodeViewModel: SchoolCodeViewModel = hiltViewModel()
     entry<SchoolCodeNavigationGraph.SchoolCode> {
-        SchoolCodeView(
+        SchoolCodeScreen(
             viewModel = schoolCodeViewModel,
             navigateToNextScreen = navigateToLogin,
             navigateToFindCodeScreen = {
@@ -38,7 +38,7 @@ fun EntryProviderBuilder<NavKey>.EntrySchoolCodeNavigation(
         )
     }
     entry<SchoolCodeNavigationGraph.SearchSchoolCode> {
-        FindYourSchoolView(
+        SchoolSearchScreen(
             onSchoolCodeSelect = { schoolCode ->
                 backStack.removeLastOrNull()
                 schoolCodeViewModel.handleIntent(SchoolCodeIntent.OnCodeChanged(schoolCode))

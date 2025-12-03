@@ -21,7 +21,7 @@ class GetActiveUserSchoolUseCase @Inject constructor(
             if (activeUser != null) {
                 emitAll(schoolRepository.getSchoolDetail(activeUser.schoolCode))
             } else {
-                throw kotlin.IllegalStateException("No active user found")
+                throw IllegalStateException("No active user found")
             }
         }
     }

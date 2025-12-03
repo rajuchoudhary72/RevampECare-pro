@@ -142,7 +142,6 @@ import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.statical.StaticGraphResponse
-import com.app.ecarepro.ui.studentId.ParentPhotoRequest
 import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
@@ -308,9 +307,7 @@ interface UserRepository {
         ord: Int,
         applType: Int,
         pg: Int,
-        attPer:Boolean,
-        FromDate:String?,
-        TillDate:String?
+        attPer:Boolean
     ): NetworkLeaveReport
 
 
@@ -406,9 +403,6 @@ interface UserRepository {
        request: StudentIDRequest
     ): CommonResponse
 
-    suspend fun uploadParentPhoto(
-        request: ParentPhotoRequest
-    ): CommonResponse
 
     suspend fun getStudentIDCard(): StudentCardResponse
 

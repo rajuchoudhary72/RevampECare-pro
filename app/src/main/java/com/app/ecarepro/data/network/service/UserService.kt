@@ -1,174 +1,173 @@
 package com.app.ecarepro.data.network.service
 
 import com.app.ecarepro.AssignHouseRequest
+import com.app.ecarepro.data.network.CreateUserSessionRequestDto
+import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
+import com.app.ecarepro.data.network.model.AppointmentFormData
+import com.app.ecarepro.data.network.model.AppointmentSavedDto
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
-import com.app.ecarepro.data.network.model.GetCredentialsRequest
-import com.app.ecarepro.data.network.model.LoginResponseDto
-import com.app.ecarepro.data.network.model.NetworkActivityCalender
-import com.app.ecarepro.data.network.model.NetworkAddAppreciation
-import com.app.ecarepro.data.network.model.NetworkAddInfraction
-import com.app.ecarepro.data.network.model.NetworkAnswerDetails
-import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
-import retrofit2.http.Url
-import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
-
-import com.app.ecarepro.data.network.model.AppointmentFormData
+import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.FormDataDepartmentResponseDto
 import com.app.ecarepro.data.network.model.FormDataDesignationResponseDto
 import com.app.ecarepro.data.network.model.FormDataEmployeeResponseDto
 import com.app.ecarepro.data.network.model.FormDataPurposeResponseDto
+import com.app.ecarepro.data.network.model.GetCredentialsRequest
+import com.app.ecarepro.data.network.model.LoginResponseDto
+import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkAcademicYear
+import com.app.ecarepro.data.network.model.NetworkActivityCalender
+import com.app.ecarepro.data.network.model.NetworkAddAppreciation
+import com.app.ecarepro.data.network.model.NetworkAddInfraction
+import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
+import com.app.ecarepro.data.network.model.NetworkAlbumType
+import com.app.ecarepro.data.network.model.NetworkAnswerDetails
+import com.app.ecarepro.data.network.model.NetworkAppointments
+import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
+import com.app.ecarepro.data.network.model.NetworkAppreciations
+import com.app.ecarepro.data.network.model.NetworkAssignRollNo
 import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkAttedanceSummary
 import com.app.ecarepro.data.network.model.NetworkBirthday
 import com.app.ecarepro.data.network.model.NetworkBookDetails
-import com.app.ecarepro.data.network.model.NetworkClassSyllabus
+import com.app.ecarepro.data.network.model.NetworkBusLocation
 import com.app.ecarepro.data.network.model.NetworkClassAttendance
+import com.app.ecarepro.data.network.model.NetworkClassSyllabus
+import com.app.ecarepro.data.network.model.NetworkClassTeacher
+import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
 import com.app.ecarepro.data.network.model.NetworkCreateLesson
+import com.app.ecarepro.data.network.model.NetworkEBook
+import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.NetworkFavorites
+import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
+import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
+import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
+import com.app.ecarepro.data.network.model.NetworkLeaveReport
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
-import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkLessonPlanDTL
 import com.app.ecarepro.data.network.model.NetworkLessonPlanList
+import com.app.ecarepro.data.network.model.NetworkLibraryDTL
 import com.app.ecarepro.data.network.model.NetworkMarkAttendance
+import com.app.ecarepro.data.network.model.NetworkMediaGallery
+import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkMySubjects
+import com.app.ecarepro.data.network.model.NetworkOutPassReport
 import com.app.ecarepro.data.network.model.NetworkPaySlip
+import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
+import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
+import com.app.ecarepro.data.network.model.NetworkQuestionBank
 import com.app.ecarepro.data.network.model.NetworkQuestionPaper
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
+import com.app.ecarepro.data.network.model.NetworkRechargeLog
 import com.app.ecarepro.data.network.model.NetworkReportCardDetails
+import com.app.ecarepro.data.network.model.NetworkRouteList
+import com.app.ecarepro.data.network.model.NetworkSMSBalnceInfo
+import com.app.ecarepro.data.network.model.NetworkSMSConsumption
+import com.app.ecarepro.data.network.model.NetworkSection
+import com.app.ecarepro.data.network.model.NetworkSmsMsgReport
+import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
+import com.app.ecarepro.data.network.model.NetworkSmsReportModel
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.network.model.NetworkStaffList
 import com.app.ecarepro.data.network.model.NetworkStaffProfile
+import com.app.ecarepro.data.network.model.NetworkStoppage
 import com.app.ecarepro.data.network.model.NetworkStudentAttRepo
 import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.network.model.NetworkStudentListToMarkAtt
 import com.app.ecarepro.data.network.model.NetworkStudentProfile
+import com.app.ecarepro.data.network.model.NetworkStudentToMarkTransAttendane
 import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
 import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
+import com.app.ecarepro.data.network.model.NetworkTeacherSyllabus
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
+import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
+import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
+import com.app.ecarepro.data.network.model.NetworkTransportEditProfile
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.network.model.NetworkVehicleNumber
+import com.app.ecarepro.data.network.model.NetworkVideoAlbum
+import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
+import com.app.ecarepro.data.network.model.NetworkWingReport
 import com.app.ecarepro.data.network.model.PostAnswerPostData
+import com.app.ecarepro.data.network.model.PostLeaveAction
+import com.app.ecarepro.data.network.model.StaffAttendanceDto
+import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.UserProfileDto
+import com.app.ecarepro.data.network.model.UserUndertakingModule
+import com.app.ecarepro.data.network.model.ValidateOtpRequest
+import com.app.ecarepro.data.network.model.VisitorDetailsDto
+import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.data.network.model.create_assignment.PostCreateAssignment
+import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
+import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
 import com.app.ecarepro.data.network.model.post_leave_request.LeaveRequestData
 import com.app.ecarepro.data.network.model.post_lesson.ActionOnLesson
 import com.app.ecarepro.data.network.model.post_lesson.PostLesson
 import com.app.ecarepro.data.network.model.post_mark_attedance.PostMarkAttedance
 import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
+import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_save_appreaction.PostSaveAppreciation
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
+import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChapters
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
+import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
 import com.app.ecarepro.model.ClassMateResponse
+import com.app.ecarepro.model.FeeSummery
+import com.app.ecarepro.model.NetworkKidCornerModel
+import com.app.ecarepro.model.NetworkUserSessionsResponse
+import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.model.StudentTeacherResponse
 import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
 import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
-import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
-import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
-import com.app.ecarepro.ui.statical.StaticGraphResponse
-import com.app.ecarepro.ui.studentId.StudentCardResponse
-import com.app.ecarepro.ui.studentId.StudentIDRequest
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
-import com.app.ecarepro.ui.survey.SurveyListResponse
-
-import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
-import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
-import com.app.ecarepro.data.network.model.NetworkAlbumType
-import com.app.ecarepro.data.network.model.NetworkAppointments
-import com.app.ecarepro.data.network.model.NetworkAppreciations
-import com.app.ecarepro.data.network.model.NetworkAssignRollNo
-import com.app.ecarepro.data.network.model.NetworkBusLocation
-import com.app.ecarepro.data.network.model.NetworkClassTeacher
-import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
-import com.app.ecarepro.data.network.model.NetworkEBook
-import com.app.ecarepro.data.network.model.NetworkFavorites
-import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
-import com.app.ecarepro.data.network.model.NetworkInfractions
-import com.app.ecarepro.data.network.model.NetworkLeaveReport
-import com.app.ecarepro.data.network.model.NetworkLibraryDTL
-import com.app.ecarepro.data.network.model.NetworkMediaGallery
-import com.app.ecarepro.data.network.model.NetworkOutPassReport
-import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
-import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
-import com.app.ecarepro.data.network.model.NetworkQuestionBank
-import com.app.ecarepro.data.network.model.NetworkRechargeLog
-import com.app.ecarepro.data.network.model.NetworkRouteList
-import com.app.ecarepro.data.network.model.NetworkSMSBalnceInfo
-import com.app.ecarepro.data.network.model.NetworkSMSConsumption
-import com.app.ecarepro.data.network.model.NetworkSmsMsgReport
-import com.app.ecarepro.data.network.model.NetworkStoppage
-import com.app.ecarepro.data.network.model.NetworkStudentToMarkTransAttendane
-import com.app.ecarepro.data.network.model.NetworkTeacherSyllabus
-import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
-import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
-import com.app.ecarepro.data.network.model.NetworkVehicleNumber
-import com.app.ecarepro.data.network.model.NetworkVideoAlbum
-import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
-import com.app.ecarepro.data.network.model.PostLeaveAction
-import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
-import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
-import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
-import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
-import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChapters
-import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
-import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
-import com.app.ecarepro.model.FeeSummery
-import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
-import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
-import com.app.ecarepro.data.network.CreateUserSessionRequestDto
-import com.app.ecarepro.data.network.UserSessionResponseDto
-import com.app.ecarepro.data.network.model.AppointmentSavedDto
-import com.app.ecarepro.data.network.model.FeeCollection
-import com.app.ecarepro.data.network.model.NetworkAcademicYear
-import com.app.ecarepro.data.network.model.NetworkEditProfile
-import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
-import com.app.ecarepro.data.network.model.NetworkSection
-import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
-import com.app.ecarepro.data.network.model.NetworkSmsReportModel
-import com.app.ecarepro.data.network.model.NetworkTransportEditProfile
-import com.app.ecarepro.data.network.model.NetworkWingReport
-import com.app.ecarepro.data.network.model.StaffAttendanceDto
-import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
-import com.app.ecarepro.data.network.model.UserUndertakingModule
-import com.app.ecarepro.data.network.model.ValidateOtpRequest
-import com.app.ecarepro.data.network.model.VisitorDetailsDto
-import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
-import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
-import com.app.ecarepro.model.NetworkKidCornerModel
-import com.app.ecarepro.model.PostComplianceData
-import com.app.ecarepro.model.NetworkUserSessionsResponse
+import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProfileModel
 import com.app.ecarepro.ui.edit_profile.staff.model.StaffProfileModel
 import com.app.ecarepro.ui.edit_profile.staff.model.payload.StaffUpdateModel
 import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
-import com.app.ecarepro.ui.studentId.ParentPhotoRequest
+import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
+import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
+import com.app.ecarepro.ui.statical.StaticGraphResponse
+import com.app.ecarepro.ui.studentId.StudentCardResponse
+import com.app.ecarepro.ui.studentId.StudentIDRequest
+import com.app.ecarepro.ui.survey.SurveyListResponse
+import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
+import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import okhttp3.RequestBody
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface UserService {
     @POST("User/ValidateOTP")
     suspend fun validateOTP(
         @Body request: ValidateOtpRequest,
     ): TwoFactorLoginResponseDto
+
     @POST("User/ResendOTP")
     suspend fun resendOTP(
         @Body request: ValidateOtpRequest,
     ): TwoFactorLoginResponseDto
+
     @POST("User/TwoFactorLogin")
     suspend fun twoFactorLogin(
         @Body request: UserLoginRequestDto,
@@ -176,25 +175,29 @@ interface UserService {
 
     @POST("User/CreateSession")
     suspend fun createSession(
-        @Body request: CreateUserSessionRequestDto
+        @Body request: CreateUserSessionRequestDto,
     ): UserSessionResponseDto
+
     @GET("User/Verify")
     suspend fun verifyUser(
         @Query("SchCode") schoolCode: String,
-        @Query("Username") username: String
+        @Query("Username") username: String,
     ): NetworkUserDetailsDto
+
     @GET("User/LogOut")
     suspend fun logout(
         @Query("DeviceType") deviceType: Int = 1,
-        @Query("deviceID") deviceID: String ,
-        @Query("SessionID") sessionID: String ,
+        @Query("deviceID") deviceID: String,
+        @Query("SessionID") sessionID: String,
     ): CommonResponse
+
     @GET("Report/FeeCollection")
     suspend fun feeCollection(
         @Query("FeeTypeId") feeTypeId: Int?,
         @Query("FromDate") fromDate: String?,
         @Query("TillDate") tillDate: String?,
     ): FeeCollection
+
     @POST("User/GetCredentials")
     suspend fun getCredentials(
         @Body request: GetCredentialsRequest,
@@ -215,9 +218,6 @@ interface UserService {
 
     @GET("Library/DTL")
     suspend fun getLibraryDTL(): NetworkLibraryDTL
-
-
-
 
 
     @GET("Academic/TeachersAssignment")
@@ -252,13 +252,13 @@ interface UserService {
 
     @GET("Staff/MyClass")
     suspend fun staffMyClass(
-         @Query("SubID") subID: Int,
-         @Query("OnlyClass") onlyClass: Boolean
+        @Query("SubID") subID: Int,
+        @Query("OnlyClass") onlyClass: Boolean,
     ): NetworkMyClass
 
     @GET("Staff/Sections")
     suspend fun getClassSection(
-        @Query("ClassSTD") classID: Int
+        @Query("ClassSTD") classID: Int,
     ): NetworkSection
 
     @GET("Staff/Payslip")
@@ -268,19 +268,19 @@ interface UserService {
     suspend fun getThoughts(
         @Query("pg") pg: Int,
         @Query("dir") dir: Int,
-        @Query("mythoughts") mythoughts: Boolean
+        @Query("mythoughts") mythoughts: Boolean,
     ): NetworkThoughts
 
 
     @GET("Thoughts/Like")
     suspend fun thoughtsLike(
         @Query("ThID") thID: Int,
-        @Query("Like") like: Boolean
+        @Query("Like") like: Boolean,
     ): CommonResponse
 
     @GET("Thoughts/WhoLiked")
     suspend fun whoLiked(
-        @Query("ThID") thID: Int
+        @Query("ThID") thID: Int,
     ): NetworkWhoLike
 
     @POST("Thoughts/Create")
@@ -290,29 +290,29 @@ interface UserService {
 
     @GET("Thoughts/Delete")
     suspend fun thoughtsDelete(
-        @Query("ThID") thID: Int
+        @Query("ThID") thID: Int,
     ): CommonResponse
 
 
     @GET("Questionnaire/Like")
     suspend fun questionnaireLike(
         @Query("QID") qID: Int,
-        @Query("Like") like: Boolean
+        @Query("Like") like: Boolean,
     ): CommonResponse
 
     @GET("Questionnaire/DeleteAnswer")
     suspend fun deleteAnswer(
-        @Query("AnsID") ansID: Int
+        @Query("AnsID") ansID: Int,
     ): CommonResponse
 
     @GET("Questionnaire/DeleteAnswer")
     suspend fun deleteQID(
-        @Query("QID") QID: Int
+        @Query("QID") QID: Int,
     ): CommonResponse
 
     @GET("Questionnaire/AnswerList")
     suspend fun answerList(
-        @Query("QID") qID: Int
+        @Query("QID") qID: Int,
     ): NetworkAnswerDetails
 
     @POST("Questionnaire/PostAnswer")
@@ -343,8 +343,6 @@ interface UserService {
         @Query("ApplType") applType: Int,
         @Query("pg") pg: Int,
         @Query("Attper") AttPer: Boolean,
-        @Query("FromDate") FromDate: String?,
-        @Query("TillDate") TillDate: String?,
     ): NetworkLeaveReport
 
     @POST("Leave/Action")
@@ -357,7 +355,7 @@ interface UserService {
 
     @GET("Leave/Delete")
     suspend fun leaveDelete(
-        @Query("LvID") lvID: Int
+        @Query("LvID") lvID: Int,
     ): CommonResponse
 
     @GET("DisciplineLog/InfractionTypes")
@@ -365,7 +363,7 @@ interface UserService {
 
     @GET("DisciplineLog/SubInfractionTypes")
     suspend fun subInfractionTypes(
-        @Query("InfrTypeID") infrTypeID: Int
+        @Query("InfrTypeID") infrTypeID: Int,
     ): NetworkSubInfractionTypes
 
 
@@ -380,28 +378,28 @@ interface UserService {
 
     @GET("DisciplineLog/AddInfraction")
     suspend fun addInfraction(
-        @Query("StID") stID: Int
+        @Query("StID") stID: Int,
     ): NetworkAddInfraction
 
     @GET("DisciplineLog/AddStaffInfraction")
     suspend fun addStaffInfraction(
-        @Query("SID") stID: Int
+        @Query("SID") stID: Int,
     ): NetworkAddInfraction
 
     @GET("DisciplineLog/Infractions")
     suspend fun getInfractions(
-        @Query("StID") stID: Int?
+        @Query("StID") stID: Int?,
     ): NetworkInfractions
 
     @GET("DisciplineLog/StaffInfractions")
     suspend fun getStaffInfractions(
-        @Query("SID") SID: Int?
+        @Query("SID") SID: Int?,
     ): NetworkInfractions
 
     @GET("DisciplineLog/DeleteLog")
     suspend fun disciplineLogDeleteLog(
         @Query("ID") id: String,
-        @Query("type") type: Int
+        @Query("type") type: Int,
     ): CommonResponse
 
 
@@ -413,27 +411,23 @@ interface UserService {
     @GET("Report/StudentList")
     suspend fun getStudentList(
         @Query("ScholarType") scholarType: Int,
-        @Query("ShowAll") showAll: Boolean
+        @Query("ShowAll") showAll: Boolean,
     ): NetworkStudentList
 
     @GET("Report/StudentList")
     suspend fun getStudentListSerch(
-        @Query("ScholarType") scholarType: Int
+        @Query("ScholarType") scholarType: Int,
     ): NetworkStudentList
 
 
     @GET("Report/StudentMedicalCard")
     suspend fun getStudentMedicalCard(
-        @Query("StId") StId: String
+        @Query("StId") StId: String,
     ): StudentMedicalCardResponse
 
     @POST("Student/UploadIDCardImg")
     suspend fun uploadPhoto(
-        @Body request: StudentIDRequest
-    ): CommonResponse
-    @POST("Admin/UploadParentPhoto")
-    suspend fun uploadParentPhoto(
-        @Body request: ParentPhotoRequest
+        @Body request: StudentIDRequest,
     ): CommonResponse
 
     @GET("Student/IDCard")
@@ -442,17 +436,17 @@ interface UserService {
 
     @GET("DisciplineLog/AddAppreciation")
     suspend fun addAppreciation(
-        @Query("StID") stID: Int
+        @Query("StID") stID: Int,
     ): NetworkAddAppreciation
 
     @GET("DisciplineLog/Appreciations")
     suspend fun getAppreciations(
-        @Query("StID") stID: Int
+        @Query("StID") stID: Int,
     ): NetworkAppreciations
 
     @GET("DisciplineLog/SubAppreciationTypes")
     suspend fun subAppreciationTypes(
-        @Query("AprID") aprID: Int
+        @Query("AprID") aprID: Int,
     ): NetworkSubAppreciationTypes
 
     @GET("DisciplineLog/AppreciationInstance")
@@ -464,7 +458,7 @@ interface UserService {
 
     @POST("DisciplineLog/SaveAppreciation")
     suspend fun saveAppreciation(
-        @Body request: PostSaveAppreciation
+        @Body request: PostSaveAppreciation,
     ): CommonResponse
 
     @GET("Academic/Assignment")
@@ -476,8 +470,6 @@ interface UserService {
     ): CommonResponse
 
 
-
-
     @GET("Academic/DeleteAssignment")
     suspend fun deleteAssignment(
         @Query("ID") iD: String,
@@ -485,12 +477,12 @@ interface UserService {
 
     @GET("Staff/MySubjects")
     suspend fun mySubjects(
-        @Query("ClassID") classID: Int
+        @Query("ClassID") classID: Int,
     ): NetworkMySubjects
 
     @GET("Staff/Subjects")
     suspend fun staffSubjects(
-        @Query("ClassSTD") classSTD: Int
+        @Query("ClassSTD") classSTD: Int,
     ): NetworkMySubjects
 
     @POST("Academic/PostAssignment")
@@ -535,11 +527,13 @@ interface UserService {
 
     @GET("Report/Statistical")
     suspend fun statistical(): StaticGraphResponse
+
     @GET("Report/AppUsersCount")
     suspend fun appUsersCount(): AppUserReportResponse
 
     @GET("Report/AppUsersDTL")
-    suspend fun appUsersWeb(@Query("UserType") userType:String): AppUserWebResponse
+    suspend fun appUsersWeb(@Query("UserType") userType: String): AppUserWebResponse
+
     @GET("Student/Attendance")
     suspend fun getAttendance(
         @Query("From") from: String,
@@ -550,7 +544,7 @@ interface UserService {
 
     @GET("Academic/TeachersTimetable")
     suspend fun teachersTimetable(
-        @Query("ID") id: String
+        @Query("ID") id: String,
     ): NetworkTeachersTimetable
 
     @GET("Report/Birthday")
@@ -563,7 +557,7 @@ interface UserService {
 
     @GET("ReportCard/DTL")
     suspend fun reportCardDTL(
-        @Query("StID") stID: Int
+        @Query("StID") stID: Int,
     ): NetworkReportCardDetails
 
     @GET("Staff/MarkAttendance")
@@ -573,7 +567,7 @@ interface UserService {
     suspend fun getStudentListToMarkAtt(
         @Query("ClassID") classID: Int,
         @Query("SubID") subID: Int,
-        @Query("AttDate") attDate: String
+        @Query("AttDate") attDate: String,
     ): NetworkStudentListToMarkAtt
 
     @POST("Staff/PostAttendance")
@@ -602,7 +596,7 @@ interface UserService {
     @GET("Staff/LessonPlanDTL")
     suspend fun getLessonPlanDTL(
         @Query("ID") id: String,
-        @Query("TeacherID") teacherID: Int
+        @Query("TeacherID") teacherID: Int,
     ): NetworkLessonPlanDTL
 
     @GET("Report/StaffList")
@@ -613,18 +607,19 @@ interface UserService {
 
     @GET("Staff/List")
     suspend fun getReportLessonStaffProfile(
-        @Query("RptID") sId: Int
+        @Query("RptID") sId: Int,
     ): NetworkStaffList
 
     @GET("Report/StaffProfile")
     suspend fun getStaffProfile(
-        @Query("SID") sId: Int
+        @Query("SID") sId: Int,
     ): NetworkStaffProfile
 
     @GET("Staff/Profile")
     suspend fun getStaffProfileMain(
-        @Query("SID") sId: Int
+        @Query("SID") sId: Int,
     ): NetworkStaffProfile
+
     @GET("User/GetUsernameByUID")
     suspend fun forgotPassword(
         @Query("SchCode") SchCode: String,
@@ -632,6 +627,7 @@ interface UserService {
         @Query("UserType") UserType: String,
         @Query("RcvOn") RcvOn: String,
     ): NetworkUserDetailsDto
+
     @POST("User/ChangeUsername")
     suspend fun changeUsername(
         @Body request: ChangeUserNameRequestDto,
@@ -650,43 +646,43 @@ interface UserService {
     @GET("Staff/CreateLessonPlan")
     suspend fun createLessonPlan(): NetworkCreateLesson
 
-   /* @GET("Report/StudentProfile")
-    suspend fun getStudentProfile(
-        @Query("StID") sId: Int
-    ): NetworkStudentProfile*/
+    /* @GET("Report/StudentProfile")
+     suspend fun getStudentProfile(
+         @Query("StID") sId: Int
+     ): NetworkStudentProfile*/
 
     @GET("Student/Profile")
     suspend fun getStudentProfile(
-        @Query("StID") sId: Int
+        @Query("StID") sId: Int,
     ): NetworkStudentProfile
 
     @GET("Report/AttendanceYrID")
     suspend fun getSAttendanceYrID(
         @Query("StID") sId: Int,
-        @Query("YrID") yrID: Int
+        @Query("YrID") yrID: Int,
     ): NetworkProfileAttendanceDTL
 
     @GET("Report/FeeSummaryYrID")
     suspend fun getFeeSummaryYrID(
         @Query("StID") sId: Int,
-        @Query("YrID") yrID: Int
+        @Query("YrID") yrID: Int,
     ): FeeSummery
 
     @GET("Student/AcademicPerformance")
     suspend fun getAcademicPerformance(
         @Query("StID") sId: Int,
-        @Query("YrID") yrID: Int
+        @Query("YrID") yrID: Int,
     ): NetworkAcademicPerformance
 
     @GET("Report/AttendanceSummary")
     suspend fun getAttendanceSummary(
-        @Query("AttDate") attDate: String
+        @Query("AttDate") attDate: String,
     ): NetworkAttedanceSummary
 
     @GET("Report/ClassAttendance")
     suspend fun getClassAttendance(
         @Query("ID") id: String,
-        @Query("AttDate") attDate: String
+        @Query("AttDate") attDate: String,
     ): NetworkClassAttendance
 
 
@@ -706,7 +702,7 @@ interface UserService {
 
     @GET("User/UsernameAvailability")
     suspend fun checkUsernameAvailability(
-        @Query("NewUsername") newUsername: String
+        @Query("NewUsername") newUsername: String,
     ): CommonResponse
 
     @GET("User/MyProfile")
@@ -715,32 +711,32 @@ interface UserService {
 
     @GET("User/MyProfile")
     suspend fun getUserProfileEdit(
-        @Query("Edit") edit: Boolean = true
+        @Query("Edit") edit: Boolean = true,
     ): NetworkEditProfile
 
     @GET("User/MyProfile")
     suspend fun getUserProfileEditStaff(
-        @Query("Edit") edit: Boolean = true
+        @Query("Edit") edit: Boolean = true,
     ): StaffProfileModel
 
     @POST("User/UpdateParentProfile")
     suspend fun updateParentProfile(
-        @Body request: UpdateProfileModel
+        @Body request: UpdateProfileModel,
     ): CommonResponse
 
     @POST("User/SendStaffProfileRequest")
     suspend fun sendStaffProfileRequest(
-        @Body request: StaffUpdateModel
+        @Body request: StaffUpdateModel,
     ): CommonResponse
 
     @POST("Student/UpdateTransportDetails")
     suspend fun updateTransportProfile(
-        @Body request: UpdateTransportProfileModel
+        @Body request: UpdateTransportProfileModel,
     ): CommonResponse
 
     @POST("User/UploadProfileIMG")
     suspend fun uploadProfileIMG(
-        @Body request: UploadPhotoRequest
+        @Body request: UploadPhotoRequest,
     ): CommonResponse
 
 
@@ -750,7 +746,7 @@ interface UserService {
 
     @GET("User/AppDashboard")
     suspend fun getUserDashboard(
-        @Query("Device") device: Int = 1
+        @Query("Device") device: Int = 1,
     ): UserDashboardDto
 
 
@@ -764,12 +760,12 @@ interface UserService {
 
     @GET("Academic/ClassAssignment")
     suspend fun getClassAssignment(
-        @Query("ID") id: String
+        @Query("ID") id: String,
     ): NetworkAssignments
 
     @GET("Academic/ClassTimetable")
     suspend fun classTimetable(
-        @Query("ID") id: String?
+        @Query("ID") id: String?,
     ): NetworkTeachersTimetable
 
     @GET("Appointment/Overview")
@@ -782,7 +778,7 @@ interface UserService {
     @GET("Appointment/Action")
     suspend fun appointmentAction(
         @Query("Act") act: Int,
-        @Query("AppId") appId: Int
+        @Query("AppId") appId: Int,
     ): CommonResponse
 
     @GET("Transport/Routes")
@@ -791,7 +787,7 @@ interface UserService {
     @GET("Transport/Stoppage")
     suspend fun stoppageList(
         @Query("RouteIDs") routeIDs: String,
-        @Query("Trip") trip: Int
+        @Query("Trip") trip: Int,
     ): NetworkStoppage
 
     @GET("Transport/StudentToMarkTransAttendane")
@@ -800,15 +796,15 @@ interface UserService {
         @Query("StopID") stopID: Int,
         @Query("Trip") trip: Int,
         @Query("AttDate") attDate: String,
-        @Query("StopIDs") stopIDs: String
+        @Query("StopIDs") stopIDs: String,
     ): NetworkStudentToMarkTransAttendane
 
     @GET("Transport/StudentToDrop")
     suspend fun studentToDrop(
-        @Query("RouteID") routeID : Int,
+        @Query("RouteID") routeID: Int,
         @Query("StopID") stopID: Int,
-         @Query("AttDate") attDate: String,
-     ): NetworkStudentToMarkTransAttendane
+        @Query("AttDate") attDate: String,
+    ): NetworkStudentToMarkTransAttendane
 
     @POST("Transport/PostTransAttendance")
     suspend fun postTransAttendance(
@@ -817,7 +813,7 @@ interface UserService {
 
     @GET("Transport/TransAttendanceReport")
     suspend fun transAttendanceReport(
-        @Query("RouteID") routeID : Int,
+        @Query("RouteID") routeID: Int,
         @Query("StopIds") stopID: String,
         @Query("AttDate") attDate: String,
     ): NetworkTransAttendanceReport
@@ -830,70 +826,69 @@ interface UserService {
     @GET("Admin/StudentListToAssignRollNo")
     suspend fun getStudentListToAssignRollNo(
         @Query("ID") iD: String,
-        @Query("Orderby") orderby: Int
+        @Query("Orderby") orderby: Int,
     ): NetworkAssignRollNo
 
     @GET("Staff/ClassTeacherOf")
-    suspend fun getClassTeacherOf(  ): NetworkClassTeacherOf
+    suspend fun getClassTeacherOf(): NetworkClassTeacherOf
 
     @POST("Admin/AssignRollNumber")
     suspend fun assignRollNumber(
-        @Body request: List<AssignRollNoBodyItem>
+        @Body request: List<AssignRollNoBodyItem>,
     ): CommonResponse
 
     @GET("Transport/DropToStudent")
     suspend fun dropToStudent(
-        @Query("StID") stID : Int,
+        @Query("StID") stID: Int,
         @Query("AttDate") attDate: String,
         @Query("hasDroped") hasDropped: Boolean,
     ): CommonResponse
 
     @GET("Report/AppMsgUses")
     suspend fun getAppMsgUses(
-        @Query("FromDate") fromDate : String,
+        @Query("FromDate") fromDate: String,
         @Query("ToDate") toDate: String,
         @Query("WingIds") iD: String,
     ): NetworkSmsMsgReport
 
     @GET("Report/SMSUses")
     suspend fun getSMSUses(
-        @Query("FromDate") fromDate : String,
+        @Query("FromDate") fromDate: String,
         @Query("ToDate") toDate: String,
         @Query("WingIds") iD: String,
     ): NetworkSmsMsgReport
 
     @GET("Report/SMSType")
-    suspend fun getSMSType ( ): NetworkSmsReportModel
+    suspend fun getSMSType(): NetworkSmsReportModel
 
     @GET("Report/SMSReport")
-    suspend fun getSMSReport (
-        @Query("FromDate") fromDate : String,
+    suspend fun getSMSReport(
+        @Query("FromDate") fromDate: String,
         @Query("TillDate") toDate: String,
-        @Query("SMSType")  sMSTypeD: Int,
-        @Query("Page")     page: Int,
+        @Query("SMSType") sMSTypeD: Int,
+        @Query("Page") page: Int,
     ): NetworkSmsReportDetails
-
 
 
     @GET("School/SMSConsumption")
     suspend fun getSMSConsumption(
-        @Query("FromDate") fromDate : String,
-        @Query("ToDate") toDate: String
+        @Query("FromDate") fromDate: String,
+        @Query("ToDate") toDate: String,
     ): NetworkSMSConsumption
 
     @GET("School/SMSBalnceInfo")
-    suspend fun getSMSBalnceInfo(  ): NetworkSMSBalnceInfo
+    suspend fun getSMSBalnceInfo(): NetworkSMSBalnceInfo
 
     @GET("School/RechargeLog")
     suspend fun getRechargeLog(
-        @Query("FromDate") fromDate : String,
-        @Query("ToDate") toDate: String
+        @Query("FromDate") fromDate: String,
+        @Query("ToDate") toDate: String,
     ): NetworkRechargeLog
 
 
     @GET("User/GenerateToken")
     suspend fun getGenerateToken(
-        @Query("Device") device : Int
+        @Query("Device") device: Int,
     ): NetworkGenerateTokenFeePay
 
     @GET("Student/Teachers")
@@ -907,12 +902,12 @@ interface UserService {
     @GET("Admin/StudentListToAssignHouse")
     suspend fun getStudentListToAssignHouse(
         @Query("ID") id: String,
-        @Query("Orderby") orderBy: String
+        @Query("Orderby") orderBy: String,
     ): UserDashboardDto
 
     @POST("Admin/AssignHouse")
     suspend fun assignHouse(
-        @Body request: AssignHouseRequest
+        @Body request: AssignHouseRequest,
     ): CommonResponse
 
     @GET("User/UserUndertaking")
@@ -920,32 +915,33 @@ interface UserService {
 
     @POST("User/SaveUndertakingAckowledgement")
     suspend fun saveUserUndertaking(
-        @Body request: UserUndertakingModule
+        @Body request: UserUndertakingModule,
     ): CommonResponse
 
     @GET("Academic/QuestionPaper")
     suspend fun getQuestionPaper(
         @Query("ClassID") classID: Int,
-        @Query("YrID") yrID: Int
+        @Query("YrID") yrID: Int,
     ): NetworkQuestionPaper
+
     @GET("Survey/List")
     suspend fun surveyList(
-        @Query("pg") pg: Int=1,
-        @Query("isReport") isReport: Boolean=false,
+        @Query("pg") pg: Int = 1,
+        @Query("isReport") isReport: Boolean = false,
     ): SurveyListResponse
 
     @GET("Survey/Questions")
     suspend fun surveyQuestions(
-        @Query("ID") id: String
+        @Query("ID") id: String,
     ): SurveyQuestionsResponse
 
     @POST("Survey/PostAnswer")
     suspend fun submitSurveyQuestions(
-        @Body model: SurveyQuestionsSubmitRequest
+        @Body model: SurveyQuestionsSubmitRequest,
     ): CommonResponse
 
     @GET("Gallery/PhotoAlbumTypes")
-    suspend fun getPhotoAlbumTypes( ): NetworkAlbumType
+    suspend fun getPhotoAlbumTypes(): NetworkAlbumType
 
     @GET("Gallery/PhotoAlbums")
     suspend fun getPhotoAlbums(
@@ -979,14 +975,14 @@ interface UserService {
     suspend fun manageFavorites(
         @Query("ID") id: String,
         @Query("GalleryType") galleryType: Int,
-        @Query("Action") action: String
+        @Query("Action") action: String,
     ): CommonResponse
 
     @GET("Gallery/Like")
     suspend fun manageLikes(
         @Query("ID") id: String,
         @Query("GalleryType") galleryType: Int,
-        @Query("like") like: Boolean
+        @Query("like") like: Boolean,
     ): CommonResponse
 
     @GET("Gallery/MediaGallery")
@@ -995,19 +991,19 @@ interface UserService {
         @Query("QueryType") queryType: Int,
         @Query("Year") year: Int,
         @Query("Date") date: String,
-        @Query("Query") query: String
+        @Query("Query") query: String,
     ): NetworkMediaGallery
 
     @GET("Gallery/KidsCornerAlbums")
     suspend fun getKidsCornerAlbums(
-        @Query("pg") pg: Int
+        @Query("pg") pg: Int,
     ): NetworkKidCornerModel
 
     @GET("Gallery/SearchKidsAlbum")
     suspend fun getSearchKidsAlbum(
         @Query("pg") pg: Int,
         @Query("YrID") yrID: Int,
-        @Query("keyword") keyword: String?
+        @Query("keyword") keyword: String?,
     ): NetworkKidCornerModel
 
     @GET("Gallery/KidsAlbumDetails")
@@ -1018,108 +1014,113 @@ interface UserService {
 
 
     @GET("QuestionBank/MyQuestionBank")
-    suspend fun getMyQuestionBank(  ): NetworkQuestionBank
+    suspend fun getMyQuestionBank(): NetworkQuestionBank
 
     @GET("QuestionBank/Create")
-    suspend fun getQuestionBankCreate(  ): NetworkQuestionBankCreate
-
+    suspend fun getQuestionBankCreate(): NetworkQuestionBankCreate
 
 
     @GET("QuestionBank/GetSubject")
     suspend fun getQuestionBankSubject(
-        @Query("ClassID") classID: Int
+        @Query("ClassID") classID: Int,
     ): NetworkQuestionBankSubject
-
 
 
     @GET("QuestionBank/GetChapters")
     suspend fun getQuestionBankChapters(
         @Query("ClassID") classID: Int,
-        @Query("SubID") subID: Int
+        @Query("SubID") subID: Int,
     ): NetworkQuestionBankChapters
 
     @POST("QuestionBank/PostQuestion")
     suspend fun submitPostQuestion(
-        @Body model: NetworkPostQuestionBank
+        @Body model: NetworkPostQuestionBank,
     ): CommonResponse
 
 
     @GET("QuestionBank/DeleteQuestion")
     suspend fun getDeleteQuestion(
-        @Query("ID") id: String
+        @Query("ID") id: String,
     ): CommonResponse
 
     @GET("Library/eBooks")
     suspend fun getEBook(
-        @Query("query") query: String ,
-        @Query("mode") mode: Int
+        @Query("query") query: String,
+        @Query("mode") mode: Int,
     ): NetworkEBook
 
     @GET("Library/OnlineCode")
     suspend fun getEBookDetails(
-        @Query("AccessionNo") accessionNo: String
+        @Query("AccessionNo") accessionNo: String,
     ): CommonResponse
 
     @GET("Admin/Syllabuses")
-    suspend fun getTeacherSyllabuses( ): NetworkTeacherSyllabus
+    suspend fun getTeacherSyllabuses(): NetworkTeacherSyllabus
 
     @POST("Admin/SaveSyllabus")
     suspend fun saveSyllabus(
         @Body request: PostSyllabus,
     ): CommonResponse
+
     @GET("Admin/DeleteSyllabus")
     suspend fun deleteSyllabus(
-        @Query("ID") ID: String
+        @Query("ID") ID: String,
     ): CommonResponse
 
     @GET("GPS/GetVehicleNumber")
-    suspend fun getVehicleNumber(  ): NetworkVehicleNumber
+    suspend fun getVehicleNumber(): NetworkVehicleNumber
 
     @GET("GPS/Location")
     suspend fun busLocation(
-        @Query("VehicleNumber") vehicleNumber: String
+        @Query("VehicleNumber") vehicleNumber: String,
     ): NetworkBusLocation
+
     @GET
     suspend fun getFormData(
-        @Url url:String
+        @Url url: String,
     ): AppointmentFormData
+
     @GET
     suspend fun getFormDataPurpose(
-        @Url url:String
+        @Url url: String,
     ): FormDataPurposeResponseDto
 
     @GET
     suspend fun getFormDataDepartments(
-        @Url url:String
+        @Url url: String,
     ): FormDataDepartmentResponseDto
 
     @GET
     suspend fun getFormDataDesignationWithDepartment(
-        @Url url:String
+        @Url url: String,
     ): FormDataDesignationResponseDto
 
     @GET
     suspend fun getFormDataEmployee(
-        @Url url:String
+        @Url url: String,
     ): FormDataEmployeeResponseDto
+
     @POST
     suspend fun getVisitorDetails(
-        @Url url:String
+        @Url url: String,
     ): VisitorDetailsDto
+
     @POST
     suspend fun submitForm(
-        @Url url:String,
-        @Body requestBody: RequestBody
+        @Url url: String,
+        @Body requestBody: RequestBody,
     ): AppointmentSavedDto
 
     @POST("Academic/PostAssignmentRemark")
     suspend fun postAssignmentRemark(
-        @Body request:  List<AssignmentRemarkPost>,
+        @Body request: List<AssignmentRemarkPost>,
     ): CommonResponse
+
     @GET("Report/ModeWiseCollection")
     suspend fun modeWiseCollection(
         @Query("CollectionDate") fromDate: String,
     ): ModeWiseCollection
+
     @POST("Admin/UploadStudentPhoto ")
     suspend fun uploadStudentPhoto(
         @Body request: StudentPhotoUploadModel,
@@ -1130,7 +1131,6 @@ interface UserService {
 
     @GET("School/Wings")
     suspend fun wingsList(): NetworkWingReport
-
 
     @GET("User/ActiveSessions")
     suspend fun activeSessions(): NetworkUserSessionsResponse
@@ -1143,7 +1143,7 @@ interface UserService {
     @GET("Report/FeeDefaulters")
     suspend fun getFeeDefaulters(
         @Query("FeeTypeId") feeTypeId: Int?,
-        @Query("InstallIds") installIds: String?
+        @Query("InstallIds") installIds: String?,
     ): NetworkFeeDefaulter
 
     @POST("DisciplineLog/PostCompliance")
@@ -1154,7 +1154,7 @@ interface UserService {
     @GET("DisciplineLog/ResolvedCompliance")
     suspend fun resolvedCompliance(
         @Query("ID") ID: String?,
-        @Query("utype") utype: Int?
+        @Query("utype") utype: Int?,
     ): CommonResponse
 
     @GET("Student/TransportDetails")

@@ -13,8 +13,5 @@ data class StudentRllNo(
     val name: String,
     val photo: String,
     var rollNumber: String,
-    var fatherPhoto: String,
-    var motherPhoto: String,
-    var escortPhoto: String,
     val stID: Int
 )
