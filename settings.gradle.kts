@@ -1,5 +1,11 @@
 import java.net.URI
 
+include(":core:navigation")
+
+
+include(":core:mylibrary")
+
+
 
 
 
