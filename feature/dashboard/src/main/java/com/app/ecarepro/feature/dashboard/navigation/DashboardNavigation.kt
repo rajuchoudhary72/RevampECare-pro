@@ -14,8 +14,12 @@ sealed interface DashboardNavigationGraph : NavKey {
 
 
 @Composable
-fun EntryProviderBuilder<NavKey>.EntryDashboardNavigation() {
+fun EntryProviderBuilder<NavKey>.EntryDashboardNavigation(
+    navigateToTestingMenu:() -> Unit = {}
+) {
     entry<DashboardNavigationGraph.Dashboard> {
-        DashboardScreen()
+        DashboardScreen(
+            navigateToTestingMenu
+        )
     }
 }

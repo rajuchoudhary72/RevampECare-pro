@@ -39,12 +39,12 @@ import com.app.ecarepro.feature.assignment.components.AssignmentList
 import com.app.ecarepro.feature.assignment.components.EmptyState
 import com.app.ecarepro.feature.assignment.components.SearchAndFilterBottomBar
 
-// Ensure you import your SearchBar from your shared components or define one locally
 @Composable
 fun AssignmentScreen(
     viewModel: AssignmentViewModel = hiltViewModel(),
     navigateToBack: () -> Unit,
     navigateToAddAssignment: () -> Unit,
+    navigateToDetails: () -> Unit,
     openDocViewer: (title: String, url: String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -61,6 +61,8 @@ fun AssignmentScreen(
                     snackbarMessage = event.snackbarMessage
                     snackbarHostState.showSnackbar(event.snackbarMessage.text)
                 }
+
+                AssignmentEvent.ViewReport -> navigateToDetails()
             }
         }
     }
@@ -181,7 +183,7 @@ private fun AssignmentScreenPreview() {
             submittedCount = 24,
             totalCount = 30,
             isOverdue = true,
-            filePath = "http://sample.pdf" // Simulating overdue (Red/Orange)
+            filePath = "http://sample.pdf"
         ),
         Assignment(
             id = "4",

@@ -101,8 +101,7 @@ class AssignmentViewModel @Inject constructor(
             is AssignmentIntent.OnSearchQueryChanged -> onSearchQueryChanged(intent.query)
             is AssignmentIntent.OnViewClicked -> viewAssignment(intent.assignment)
             is AssignmentIntent.OnDownloadClicked -> downloadAssignment(intent.assignment)
-            is AssignmentIntent.OnViewReportClicked -> { /* Handle report view logic */
-            }
+            is AssignmentIntent.OnViewReportClicked -> sendEvent(AssignmentEvent.ViewReport)
         }
     }
 
@@ -186,6 +185,8 @@ sealed interface AssignmentIntent {
 sealed interface AssignmentEvent {
     data object NavigateBack : AssignmentEvent
     data object NavigateToAddAssignment : AssignmentEvent
+
+    data object ViewReport : AssignmentEvent
     data class ViewAssignment(val title: String, val url: String) : AssignmentEvent
     data class ShowMessage(val snackbarMessage: SnackbarMessage) :
         AssignmentEvent

@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.app.ecarepro.designsystem.core.component.Button
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
@@ -30,7 +31,9 @@ import com.app.ecarepro.feature.dashboard.component.SearchFabButton
 import kotlinx.coroutines.launch
 
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(
+    navigateToTestingMenu: () -> Unit
+) {
     val innerNavController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val startDestination = Destination.HOME
@@ -87,7 +90,10 @@ fun DashboardScreen() {
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center,
                     ) {
-                        Text(text = "Home")
+                        Button(
+                            title = "Testing Menu",
+                            onClick = navigateToTestingMenu
+                        )
                     }
                 }
                 composable(Destination.MESSAGE.route) {
@@ -118,7 +124,7 @@ fun DashboardScreen() {
 private fun DashboardScreenPreview() {
     EcareProTheme {
         DashboardScreen(
-
+            navigateToTestingMenu = {}
         )
     }
 }

@@ -127,7 +127,6 @@ fun EntryProviderBuilder<NavKey>.EntryLoginNavigation(
     EntryHomeSelectionNavigation(
         onComplete = {
             activeUser?.let { navigateToMain(it) }
-            backStack.removeLastOrNull()
         }
     )
 

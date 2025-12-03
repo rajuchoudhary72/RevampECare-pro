@@ -1,5 +1,8 @@
 import java.net.URI
 
+include(":feature:testingmenu")
+
+
 include(":feature:assignment")
 
 
