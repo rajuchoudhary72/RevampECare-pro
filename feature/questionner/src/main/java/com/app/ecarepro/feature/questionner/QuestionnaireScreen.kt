@@ -31,6 +31,7 @@ import com.app.ecarepro.designsystem.core.component.EcareProBackground
 import com.app.ecarepro.designsystem.core.component.Loader
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
+import com.app.ecarepro.feature.navigation.NavigationManager
 import com.app.ecarepro.feature.questionner.component.QuestionCard
 import com.app.ecarepro.feature.questionner.component.QuestionnaireHeader
 
@@ -55,7 +56,8 @@ fun QuestionnaireScreen(
         },
         onLikeClick = { questionId ->
             viewModel.handleIntent(QuestionnaireIntent.OnLikeClicked(questionId))
-        },
+
+                      },
         onQuestionClick = { questionId ->
             viewModel.handleIntent(QuestionnaireIntent.OnQuestionClicked(questionId))
             onQuestionClick(questionId)
