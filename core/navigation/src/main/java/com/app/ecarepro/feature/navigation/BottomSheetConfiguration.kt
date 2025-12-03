@@ -257,7 +257,6 @@ object BottomSheetDefaults {
             showHeaderContentSeparator = true
         )
     }
-
     /**
      * Info/detail configuration (for displaying information)
      */
