@@ -21,7 +21,7 @@ data class Timetable(
     val period: Int?,
     val subject: String?,
     val time: String?,
-    val isCurrent: Boolean? = false,
+    val isCurrentPeriod: Boolean? = false,
     val type: String? = null,
     val details: String? = null,
     val duration: String? = null,

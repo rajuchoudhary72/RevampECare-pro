@@ -1,11 +1,10 @@
 package com.app.ecarepro.feature.assignment
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
@@ -25,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.ecarepro.core.designsystem.R
+import com.app.ecarepro.core.domain.model.Assignment
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.UiStateHandler
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
@@ -34,7 +34,6 @@ import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
-import com.app.ecarepro.feature.assignment.components.AssignmentItem
 import com.app.ecarepro.feature.assignment.components.AssignmentList
 import com.app.ecarepro.feature.assignment.components.EmptyState
 import com.app.ecarepro.feature.assignment.components.SearchAndFilterBottomBar
@@ -115,6 +114,9 @@ private fun AssignmentScreenContent(
         bottomBar = {
             if (uiState is UiState.Success) {
                 SearchAndFilterBottomBar(
+                    modifier = Modifier
+                        .navigationBarsPadding()
+                        .imePadding(),
                     searchQuery = uiState.data.searchQuery,
                     onSearchQueryChanged = { handleIntent(AssignmentIntent.OnSearchQueryChanged(it)) },
                     onClickFilter = {}
@@ -152,50 +154,43 @@ private fun AssignmentScreenPreview() {
         Assignment(
             id = "1",
             title = "Physics assignment",
-            className = "9th class",
+            classX = "9th class",
             subject = "English",
-            createdDate = "08 Aug 2025",
-            dueDate = "22 Oct",
-            submittedCount = 24,
-            totalCount = 30,
-            isOverdue = false,
-            filePath = "http://sample.pdf"
-        ),
-        Assignment(
-            id = "2",
+            asgDate = "08 Aug 2025",
+            uploadedOn = "22 Oct",
+            asgFile = null,
+            asgFiles = null,
+            asgID = null,
+            assignmentBy = null,
+            hasAttachment = false,
+            isActive = null,
+            isMine = null,
+            lateSubmission = null,
+            stIDs = null,
+            submitDate = null,
+            updateBy = null,
+            userID = null,
+            userType = null
+        ), Assignment(
+            id = "1",
             title = "Physics assignment",
-            className = "9th class",
+            classX = "9th class",
             subject = "English",
-            createdDate = "08 Aug 2025",
-            dueDate = "22 Oct",
-            submittedCount = 24,
-            totalCount = 30,
-            isOverdue = false,
-            filePath = "http://sample.pdf"
-        ),
-        Assignment(
-            id = "3",
-            title = "Physics assignment",
-            className = "9th class",
-            subject = "English",
-            createdDate = "08 Aug 2025",
-            dueDate = "22 Oct",
-            submittedCount = 24,
-            totalCount = 30,
-            isOverdue = true,
-            filePath = "http://sample.pdf"
-        ),
-        Assignment(
-            id = "4",
-            title = "Physics assignment",
-            className = "9th class",
-            subject = "English",
-            createdDate = "08 Aug 2025",
-            dueDate = "22 Oct",
-            submittedCount = 24,
-            totalCount = 30,
-            isOverdue = true,
-            filePath = "http://sample.pdf"
+            asgDate = "08 Aug 2025",
+            uploadedOn = "22 Oct",
+            asgFile = null,
+            asgFiles = null,
+            asgID = null,
+            assignmentBy = null,
+            hasAttachment = false,
+            isActive = null,
+            isMine = null,
+            lateSubmission = null,
+            stIDs = null,
+            submitDate = null,
+            updateBy = null,
+            userID = null,
+            userType = null
         )
     )
     EcareProTheme {

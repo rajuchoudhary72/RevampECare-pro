@@ -162,7 +162,7 @@ private fun TimetableScreenPreview() {
             subject = "Business studies",
             time = "09:30 AM - 10:30 AM",
             duration = "60 mins",
-            isCurrent = false
+            isCurrentPeriod  = false
         ),
         Timetable(
             period = 3,
@@ -170,7 +170,7 @@ private fun TimetableScreenPreview() {
             subject = "Business studies",
             time = "09:30 AM - 10:30 AM",
             duration = "60 mins",
-            isCurrent = false
+            isCurrentPeriod  = false
         ),
         Timetable(
             period = 3,
@@ -178,7 +178,7 @@ private fun TimetableScreenPreview() {
             subject = "Business studies",
             time = "09:30 AM - 10:30 AM",
             duration = "60 mins",
-            isCurrent = false
+            isCurrentPeriod  = false
         ),
         Timetable(
             period = 3,
@@ -186,7 +186,7 @@ private fun TimetableScreenPreview() {
             subject = "Business studies",
             time = "09:30 AM - 10:30 AM",
             duration = "60 mins",
-            isCurrent = false,
+            isCurrentPeriod  = false,
             type = "recess",
             details = "Recess (11:30 PM - 12:30 AM)"
         ),
@@ -196,7 +196,7 @@ private fun TimetableScreenPreview() {
             subject = "Business studies",
             time = "09:30 AM - 10:30 AM",
             duration = "60 mins",
-            isCurrent = false
+            isCurrentPeriod  = false
         ),
     )
     EcareProTheme {

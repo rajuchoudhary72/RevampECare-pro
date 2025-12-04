@@ -2,6 +2,9 @@ package com.app.ecarepro.feature.assignment
 
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.core.domain.exception.errorMessage
+import com.app.ecarepro.core.domain.model.Assignment
+import com.app.ecarepro.core.domain.repository.AcademicRepository
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
 import com.app.ecarepro.designsystem.core.component.MessageType
@@ -9,13 +12,14 @@ import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AssignmentViewModel @Inject constructor(
-    // Inject repositories here, e.g. private val assignmentRepository: AssignmentRepository
+    private val academicRepository: AcademicRepository,
 ) : BaseViewModel<AssignmentIntent, AssignmentEvent>() {
 
     private val _uiState: MutableStateFlow<UiState<AssignmentUiState>> =
@@ -27,70 +31,28 @@ class AssignmentViewModel @Inject constructor(
     }
 
     private fun fetchAssignments() {
-        // SIMULATING DATA FETCH
         viewModelScope.launch {
-            _uiState.update { UiState.Loading }
-
-            // Mock Data matching the screenshot
-            val mockAssignments = listOf(
-                Assignment(
-                    id = "1",
-                    title = "Physics assignment",
-                    className = "9th class",
-                    subject = "English",
-                    createdDate = "08 Aug 2025",
-                    dueDate = "22 Oct",
-                    submittedCount = 24,
-                    totalCount = 30,
-                    isOverdue = false,
-                    filePath = "http://sample.pdf"
-                ),
-                Assignment(
-                    id = "2",
-                    title = "Physics assignment",
-                    className = "9th class",
-                    subject = "English",
-                    createdDate = "08 Aug 2025",
-                    dueDate = "22 Oct",
-                    submittedCount = 24,
-                    totalCount = 30,
-                    isOverdue = false,
-                    filePath = "http://sample.pdf"
-                ),
-                Assignment(
-                    id = "3",
-                    title = "Physics assignment",
-                    className = "9th class",
-                    subject = "English",
-                    createdDate = "08 Aug 2025",
-                    dueDate = "22 Oct",
-                    submittedCount = 24,
-                    totalCount = 30,
-                    isOverdue = true,
-                    filePath = "http://sample.pdf" // Simulating overdue (Red/Orange)
-                ),
-                Assignment(
-                    id = "4",
-                    title = "Physics assignment",
-                    className = "9th class",
-                    subject = "English",
-                    createdDate = "08 Aug 2025",
-                    dueDate = "22 Oct",
-                    submittedCount = 24,
-                    totalCount = 30,
-                    isOverdue = true,
-                    filePath = "http://sample.pdf"
-                )
-            )
-
-            _uiState.update {
-                UiState.Success(
-                    AssignmentUiState(
-                        assignments = mockAssignments,
-                        filteredAssignments = mockAssignments
-                    )
-                )
-            }
+            academicRepository
+                .getTeacherAssignments()
+                .onStart {
+                    _uiState.update { UiState.Loading }
+                }
+                .collect { result ->
+                    result
+                        .onSuccess { assignments ->
+                            _uiState.update {
+                                UiState.Success(
+                                    AssignmentUiState(
+                                        assignments = assignments,
+                                        filteredAssignments = assignments
+                                    )
+                                )
+                            }
+                        }
+                        .onFailure { error ->
+                            _uiState.update { UiState.Error(error.errorMessage()) }
+                        }
+                }
         }
     }
 
@@ -111,9 +73,9 @@ class AssignmentViewModel @Inject constructor(
             currentState.assignments
         } else {
             currentState.assignments.filter {
-                it.title.contains(query, ignoreCase = true) ||
-                        it.className.contains(query, ignoreCase = true) ||
-                        it.subject.contains(query, ignoreCase = true)
+                it.title?.contains(query, ignoreCase = true) == true ||
+                        it.classX?.contains(query, ignoreCase = true) == true ||
+                        it.subject?.contains(query, ignoreCase = true) == true
             }
         }
 
@@ -123,9 +85,9 @@ class AssignmentViewModel @Inject constructor(
     }
 
     private fun viewAssignment(assignment: Assignment) {
-        assignment.filePath?.let {
+        assignment.asgFile?.let {
             viewModelScope.launch {
-                sendEvent(AssignmentEvent.ViewAssignment(assignment.title, it))
+                sendEvent(AssignmentEvent.ViewAssignment(assignment.title ?: "Assignment", it))
             }
         }
     }
@@ -144,20 +106,6 @@ class AssignmentViewModel @Inject constructor(
         }
     }
 }
-
-
-// Domain Model (Sample)
-data class Assignment(
-    val id: String,
-    val title: String,
-    val className: String, val subject: String,
-    val createdDate: String, // e.g., "08 Aug 2025"
-    val dueDate: String,     // e.g., "22 Oct"
-    val submittedCount: Int,
-    val totalCount: Int,
-    val isOverdue: Boolean,
-    val filePath: String? = null,
-)
 
 // UI State
 @Immutable

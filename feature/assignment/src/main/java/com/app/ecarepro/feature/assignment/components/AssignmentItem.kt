@@ -28,10 +28,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.ecarepro.core.designsystem.R
+import com.app.ecarepro.core.domain.model.Assignment
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
-import com.app.ecarepro.feature.assignment.Assignment
 
 @Composable
 fun AssignmentItem(
@@ -40,39 +40,38 @@ fun AssignmentItem(
     onDownloadClick: () -> Unit,
     onViewReportClick: () -> Unit,
 ) {
+    val isOverdue = true
+
     val successColor = Color(0xFF4CAF50) // Green form screenshot
     val warningColor = Color(0xFFFF9800) // Orange from screenshot
     val errorColor = Color(0xFFF44336)   // Red from screenshot
 
     // Determine status color based on Overdue logic or simply use the flag
-    val statusColor = if (assignment.isOverdue) errorColor else successColor
+    val statusColor = if (isOverdue) errorColor else successColor
 
     // Calculate Progress
-    val progress = if (assignment.totalCount > 0)
-        assignment.submittedCount.toFloat() / assignment.totalCount.toFloat()
-    else 0f
+    val progress = 50.0f
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // 1. Header: Title and Due Date Status
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Top
         ) {
             Text(
-                text = assignment.title,
+                text = assignment.title.orEmpty(),
                 style = MaterialTheme.appTypography.interSemiBold14px,
                 color = MaterialTheme.appColors.textPrimary
             )
 
             Text(
-                text = "Submit by ${assignment.dueDate}",
+                text = "Submit by ${assignment.submitDate}",
                 style = MaterialTheme.appTypography.interMedium16px.copy(fontSize = 12.sp),
-                color = if (assignment.isOverdue) warningColor else successColor
+                color = if (isOverdue) warningColor else successColor
             )
         }
 
@@ -82,9 +81,9 @@ fun AssignmentItem(
         Text(
             text = buildAnnotatedString {
                 withStyle(style = SpanStyle(color = successColor)) {
-                    append(assignment.className)
+                    append(assignment.classX)
                 }
-                append(" • ${assignment.subject} • ${assignment.createdDate}")
+                append(" • ${assignment.subject} • ${assignment.uploadedOn}")
             },
             style = MaterialTheme.appTypography.interRegular12px,
             color = MaterialTheme.appColors.textSecondary
@@ -98,7 +97,7 @@ fun AssignmentItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(6.dp),
-            color = if (assignment.isOverdue) warningColor else successColor,
+            color = if (isOverdue) warningColor else successColor,
             trackColor = MaterialTheme.appColors.background,
             strokeCap = StrokeCap.Round,
         )
@@ -118,12 +117,12 @@ fun AssignmentItem(
                 text = buildAnnotatedString {
                     withStyle(
                         style = SpanStyle(
-                            color = if (assignment.isOverdue) warningColor else successColor
+                            color = if (isOverdue) warningColor else successColor
                         )
                     ) {
-                        append("${assignment.submittedCount}")
+                        append("20")
                     }
-                    append(" of ${assignment.totalCount} students submitted")
+                    append(" of 40 students submitted")
                 },
                 style = MaterialTheme.appTypography.interRegular12px,
                 color = MaterialTheme.appColors.textSecondary
@@ -138,21 +137,23 @@ fun AssignmentItem(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // View Button
-            ActionButton(
-                iconRes = R.drawable.ic_eye, // Ensure this drawable exists
-                text = "View",
-                onClick = onViewClick
-            )
+            if (assignment.hasAttachment) {
+                ActionButton(
+                    iconRes = R.drawable.ic_eye, // Ensure this drawable exists
+                    text = "View",
+                    onClick = onViewClick
+                )
 
-            VerticalDivider()
+                VerticalDivider()
 
-            // Download Button
-            ActionButton(
-                iconRes = R.drawable.ic_download, // Ensure this drawable exists
-                text = "Download",
-                onClick = onDownloadClick
-            )
+                // Download Button
+                ActionButton(
+                    iconRes = R.drawable.ic_download, // Ensure this drawable exists
+                    text = "Download",
+                    onClick = onDownloadClick
+                )
+            }
+
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -212,14 +213,23 @@ private fun AssignmentItemPreview() {
             assignment = Assignment(
                 id = "1",
                 title = "Physics assignment",
-                className = "9th class",
+                classX = "9th class",
                 subject = "English",
-                createdDate = "08 Aug 2025",
-                dueDate = "22 Oct",
-                submittedCount = 24,
-                totalCount = 30,
-                isOverdue = false,
-                filePath = "http://sample.pdf"
+                asgDate = "08 Aug 2025",
+                uploadedOn = "22 Oct",
+                asgFile = null,
+                asgFiles = null,
+                asgID = null,
+                assignmentBy = null,
+                hasAttachment = false,
+                isActive = null,
+                isMine = null,
+                lateSubmission = null,
+                stIDs = null,
+                submitDate = null,
+                updateBy = null,
+                userID = null,
+                userType = null
             ),
             onViewClick = {},
             onDownloadClick = {},

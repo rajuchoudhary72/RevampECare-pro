@@ -25,7 +25,7 @@ import com.app.ecarepro.designsystem.core.theme.appTypography
 @Composable
 fun TimetableItem(entry: Timetable) {
     val backgroundColor =
-        if (entry.isCurrent?:false) MaterialTheme.appColors.primary.copy(alpha = 0.1f) else Color.Transparent
+        if (entry.isCurrentPeriod?:false) MaterialTheme.appColors.primary.copy(alpha = 0.1f) else Color.Transparent
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
@@ -126,7 +126,7 @@ private fun TimetableItemPreview() {
                 subject = "Business studies",
                 time = "09:30 AM - 10:30 AM",
                 duration = "60 mins",
-                isCurrent = false
+                isCurrentPeriod  = false
             )
         )
     }
@@ -143,7 +143,7 @@ private fun TimetableItemPreviewForCurrentPeriod() {
                 subject = "Business studies",
                 time = "09:30 AM - 10:30 AM",
                 duration = "60 mins",
-                isCurrent = true
+                isCurrentPeriod  = true
             )
         )
     }
