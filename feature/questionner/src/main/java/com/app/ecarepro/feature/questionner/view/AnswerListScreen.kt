@@ -179,6 +179,7 @@ private fun QuestionHeader(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
             // User avatar
             EcareProAsyncImage(
                 imageUrl = userPhoto,
