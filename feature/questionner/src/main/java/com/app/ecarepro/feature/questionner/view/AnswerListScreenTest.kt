@@ -47,7 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.ecarepro.core.domain.model.Answer
-import com.app.ecarepro.designsystem.core.component.AppAsyncImage
+import com.app.ecarepro.designsystem.core.component.EcareProAsyncImage
 import com.app.ecarepro.designsystem.core.component.EcareProBackground
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
@@ -182,7 +182,7 @@ private fun QuestionHeaderTest(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // User avatar
-            AppAsyncImage(
+            EcareProAsyncImage(
                 imageUrl = userPhoto,
                 contentDescription = "User avatar",
                 modifier = Modifier
@@ -245,7 +245,7 @@ private fun AnswerItemTest(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // User avatar
-            AppAsyncImage(
+            EcareProAsyncImage(
                 imageUrl = answer.photo,
                 contentDescription = "User avatar",
                 modifier = Modifier

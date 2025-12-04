@@ -54,7 +54,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.app.ecarepro.feature.questionner.R
 import com.app.ecarepro.core.domain.model.Answer
-import com.app.ecarepro.designsystem.core.component.AppAsyncImage
+import com.app.ecarepro.designsystem.core.component.EcareProAsyncImage
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 
@@ -180,7 +180,7 @@ private fun QuestionHeader(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // User avatar
-            AppAsyncImage(
+            EcareProAsyncImage(
                 imageUrl = userPhoto,
                 contentDescription = "User avatar",
                 modifier = Modifier
@@ -251,7 +251,7 @@ private fun AnswerItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // User avatar
-            AppAsyncImage(
+            EcareProAsyncImage(
                 imageUrl = answer.photo,
                 contentDescription = "User avatar",
                 modifier = Modifier

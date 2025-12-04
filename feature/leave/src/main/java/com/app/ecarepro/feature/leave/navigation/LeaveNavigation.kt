@@ -9,7 +9,6 @@ import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.NavKey
 import com.app.ecarepro.feature.leave.ApplyLeaveScreen
 import com.app.ecarepro.feature.leave.LeaveListScreen
-import com.app.ecarepro.feature.leave.leave_report.LeaveReportScreen
 import kotlinx.serialization.Serializable
 
 const val LEAVE_LIST_ROUTE = "leave_list"
@@ -54,7 +53,7 @@ fun NavGraphBuilder.applyLeaveScreen(
     }
 }
 
-fun NavGraphBuilder.leaveReportScreen(
+/*fun NavGraphBuilder.leaveReportScreen(
     onBackClick: () -> Unit
 ) {
     composable(route = LEAVE_REPORT_ROUTE) {
@@ -62,7 +61,7 @@ fun NavGraphBuilder.leaveReportScreen(
             onBackClick = onBackClick
         )
     }
-}
+}*/
 
 // Navigation3 support for TestActivity
 @Serializable
@@ -81,11 +80,11 @@ sealed interface LeaveNavigationGraph : NavKey {
 fun EntryProviderBuilder<NavKey>.EntryLeaveNavigation(
     onBackClick: () -> Unit
 ) {
-    entry<LeaveNavigationGraph.LeaveReport> {
+   /* entry<LeaveNavigationGraph.LeaveReport> {
         LeaveReportScreen(
             onBackClick = onBackClick
         )
-    }
+    }*/
 
     entry<LeaveNavigationGraph.LeaveList> {
         LeaveListScreen(

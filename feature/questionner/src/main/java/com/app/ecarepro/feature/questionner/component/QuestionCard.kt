@@ -31,7 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.app.ecarepro.designsystem.core.component.AppAsyncImage
+import com.app.ecarepro.designsystem.core.component.EcareProAsyncImage
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.core.domain.model.Question
@@ -60,7 +60,7 @@ fun QuestionCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // User avatar
-                AppAsyncImage(
+                EcareProAsyncImage(
                     imageUrl = question.photo,
                     contentDescription = "User avatar",
                     modifier = Modifier

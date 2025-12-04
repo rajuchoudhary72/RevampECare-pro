@@ -45,7 +45,7 @@ import com.app.ecarepro.core.domain.model.FeedUpdate
 import com.app.ecarepro.core.domain.model.FileType
 import com.app.ecarepro.core.domain.model.GalleryUpdate
 import com.app.ecarepro.core.domain.model.toAttachments
-import com.app.ecarepro.designsystem.core.component.AppAsyncImage
+import com.app.ecarepro.designsystem.core.component.EcareProAsyncImage
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 
@@ -179,7 +179,7 @@ private fun ImageGallery(
     when {
         images.size == 1 -> {
             // Single image - display full width
-            AppAsyncImage(
+            EcareProAsyncImage(
                 imageUrl = images[0].fileUrl,
                 contentDescription = "Feed image",
                 modifier = Modifier
@@ -196,7 +196,7 @@ private fun ImageGallery(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(images) { image ->
-                    AppAsyncImage(
+                    EcareProAsyncImage(
                         imageUrl = image.fileUrl,
                         contentDescription = "Feed image",
                         modifier = Modifier

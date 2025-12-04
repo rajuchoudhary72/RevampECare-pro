@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.app.ecarepro.core.domain.model.Syllabus
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.UiStateHandler
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
@@ -46,7 +47,7 @@ import com.app.ecarepro.feature.syllabus.componets.SyllabusItem
 fun SyllabusScreen(
     viewModel: SyllabusViewModel = hiltViewModel(),
     navigateToBack: () -> Unit,
-    navigateToAddSyllabus: () -> Unit,
+    navigateToAddSyllabus: (Syllabus?) -> Unit,
     openDocVier: (title: String, url: String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -64,7 +65,8 @@ fun SyllabusScreen(
                     snackbarHostState.showSnackbar(event.snackbarMessage.text)
                 }
 
-                SyllabusEvent.NavigateToAddSyllabus -> navigateToAddSyllabus()
+                SyllabusEvent.NavigateToAddSyllabus -> navigateToAddSyllabus(null)
+                is SyllabusEvent.EditSyllabus -> navigateToAddSyllabus(event.syllabus)
             }
         }
     }
@@ -174,7 +176,7 @@ private fun SyllabusScreenContent(
                 if (data.isMenuVisible) {
                     MenuBottomSheet(
                         onDismiss = { handleIntent(SyllabusIntent.OnDismissMenu) },
-                        onClickEdit = { handleIntent(SyllabusIntent.OnEditClicked) },
+                        onClickEdit = { handleIntent(SyllabusIntent.OnEditClicked(data.selectedSyllabusId)) },
                         onClickDelete = { handleIntent(SyllabusIntent.ShowDeleteBottomSheet) }
                     )
                 }
