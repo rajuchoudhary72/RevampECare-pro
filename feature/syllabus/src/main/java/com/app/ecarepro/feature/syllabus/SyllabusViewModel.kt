@@ -85,10 +85,47 @@ class SyllabusViewModel @Inject constructor(
             is SyllabusIntent.OnMenuClicked -> showMenuBottomSheet(intent.syllabusId)
             is SyllabusIntent.OnDismissMenu -> dismissMenuBottomSheet()
             is SyllabusIntent.OnDismissDeleteBottomSheet -> dismissDeleteBottomSheet()
-            is SyllabusIntent.OnEditClicked -> {}
+            is SyllabusIntent.OnEditClicked -> editSyllabus(intent.syllabusId)
             is SyllabusIntent.ShowDeleteBottomSheet -> showDeleteBottomSheet()
             is SyllabusIntent.OnDeleteClicked -> deleteSyllabus(intent.syllabusId)
         }
+    }
+
+    private fun editSyllabus(syllabusId: String?) {
+        viewModelScope.launch {
+            if (syllabusId == null) {
+                return@launch
+            }
+            val currentState = (_uiState.value as? UiState.Success)?.data
+            if (currentState == null) {
+                sendEvent(
+                    SyllabusEvent.ShowMessage(
+                        SnackbarMessage(
+                            "Could not get current state.",
+                            MessageType.ERROR
+                        )
+                    )
+                )
+                return@launch
+            }
+
+            val syllabus = getSyllabusById(currentState, syllabusId)
+            if (syllabus == null) {
+                sendEvent(
+                    SyllabusEvent.ShowMessage(
+                        SnackbarMessage(
+                            "Syllabus not found.",
+                            MessageType.ERROR
+                        )
+                    )
+                )
+                return@launch
+            }
+
+            sendEvent(SyllabusEvent.EditSyllabus(syllabus))
+            dismissMenuBottomSheet()
+        }
+
     }
 
     private fun deleteSyllabus(syllabusId: String?) {
@@ -364,7 +401,7 @@ sealed interface SyllabusIntent {
     data class OnMenuClicked(val syllabusId: String) : SyllabusIntent
     data object OnDismissMenu : SyllabusIntent
     data object OnDismissDeleteBottomSheet : SyllabusIntent
-    data object OnEditClicked : SyllabusIntent
+    data class OnEditClicked(val syllabusId: String?) : SyllabusIntent
     data object ShowDeleteBottomSheet : SyllabusIntent
     data class OnDeleteClicked(val syllabusId: String?) : SyllabusIntent
 }
@@ -377,6 +414,8 @@ sealed interface SyllabusEvent {
         val title: String,
         val url: String,
     ) : SyllabusEvent
+
+    data class EditSyllabus(val syllabus: Syllabus) : SyllabusEvent
 
     data class ShowMessage(val snackbarMessage: SnackbarMessage) : SyllabusEvent
 }

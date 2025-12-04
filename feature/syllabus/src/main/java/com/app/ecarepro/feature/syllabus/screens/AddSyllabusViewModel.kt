@@ -1,6 +1,7 @@
 package com.app.ecarepro.feature.syllabus.screens
 
 import androidx.compose.runtime.Immutable
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.core.common.Base64Utils
 import com.app.ecarepro.core.domain.exception.errorMessage
@@ -9,12 +10,19 @@ import com.app.ecarepro.core.domain.model.Class
 import com.app.ecarepro.core.domain.model.SaveSyllabus
 import com.app.ecarepro.core.domain.model.Section
 import com.app.ecarepro.core.domain.model.Subject
+import com.app.ecarepro.core.domain.model.Syllabus
 import com.app.ecarepro.core.domain.repository.SyllabusRepository
 import com.app.ecarepro.core.ui.UiState
+import com.app.ecarepro.core.ui.viewmodel.AssistedViewModelFactory
 import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
 import com.app.ecarepro.designsystem.core.component.MessageType
 import com.app.ecarepro.designsystem.core.component.SelectedFileDetails
+import com.app.ecarepro.designsystem.core.component.SelectedFileType
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
+import com.app.ecarepro.feature.syllabus.navigation.SyllabusNavigationGraph
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,12 +32,15 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import java.io.File
 
-@HiltViewModel
-class AddSyllabusViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = AddSyllabusViewModel.Factory::class)
+class AddSyllabusViewModel @AssistedInject constructor(
+    @Assisted val navKey: SyllabusNavigationGraph.AddSyllabus,
     private val syllabusRepository: SyllabusRepository,
 ) : BaseViewModel<AddSyllabusIntent, AddSyllabusEvent>() {
+
+    private val syllabus: Syllabus? = navKey.syllabus
 
     private val _uiState: MutableStateFlow<UiState<AddSyllabusUiState>> =
         MutableStateFlow(UiState.Success(AddSyllabusUiState()))
@@ -147,12 +158,42 @@ class AddSyllabusViewModel @Inject constructor(
                 updateState { it.copy(isLoading = true) }
             }.collect { result ->
                 result.onSuccess { classes ->
-                    val defaultSelectedClass = classes.firstOrNull()?.className
+                    val defaultSelectedClass = if (syllabus != null) {
+                        // In edit mode, try to find the class matching the syllabus
+                        classes.find { it.classID == syllabus.classID }?.className
+                    } else {
+                        // In add mode, default to first class
+                        classes.firstOrNull()?.className
+                    }
+
                     updateState {
                         it.copy(
                             isLoading = false,
                             classes = classes,
-                            selectedClass = defaultSelectedClass
+                            selectedClass = defaultSelectedClass,
+                            title = syllabus?.title ?: "",
+                            // If editing, pre-fill the file details (without the File object)
+                           /* selectedFile = syllabus?.fileName?.let { fileName ->
+                                SelectedFileDetails(
+                                    name = fileName,
+                                    file = File(syllabus.filePath.orEmpty()),
+                                    uri = null,
+                                    size = 0,
+                                    formattedSize = "",
+                                    mimeType = "",
+                                    type = SelectedFileType.DOCUMENT
+                                )
+                            }*/
+                        )
+                    }
+
+                    // If a class was selected (either default or from syllabus), fetch sub-data
+                    // Pass 'true' for isRestoring if we are in edit mode and successfully matched a class
+                    val matchedClass = classes.find { it.className == defaultSelectedClass }
+                    if (matchedClass != null) {
+                        fetchSectionsAndSubjects(
+                            classStd = matchedClass.classID.toString(),
+                            isRestoring = syllabus != null && matchedClass.classID == syllabus.classID
                         )
                     }
                 }.onFailure { error ->
@@ -184,7 +225,7 @@ class AddSyllabusViewModel @Inject constructor(
     }
 
 
-    private fun fetchSectionsAndSubjects(classStd: String) {
+    private fun fetchSectionsAndSubjects(classStd: String, isRestoring: Boolean = false) {
         viewModelScope.launch {
             combine(
                 syllabusRepository.getSections(classStd), syllabusRepository.getSubjects(classStd)
@@ -199,12 +240,35 @@ class AddSyllabusViewModel @Inject constructor(
                         add(0, Subject.SUBJECT_ALL)
                     }
 
+                    // Default Selections
+                    var selectedSectionNames = sections.map { it.secName.orEmpty() }
+                    var selectedSubjectName = subjects.firstOrNull()?.subjectName
+                    var selectedTabIndex = currentState.selectedTabIndex
+
+                    // Logic for Restoring Data in Edit Mode
+                    if (isRestoring && syllabus != null) {
+                        // Restore Subject
+                        val matchedSubject = subjects.find { it.subID == syllabus.subID }
+                        matchedSubject?.let { selectedSubjectName = it.subjectName }
+
+                        // Restore Sections
+                        val syllabusSectionIds = syllabus.classIDs?.split(",")?.mapNotNull { it.trim().toIntOrNull() } ?: emptyList()
+                        if (syllabusSectionIds.isNotEmpty()) {
+                            val matchedSections = sections.filter { it.secID in syllabusSectionIds }
+                            if (matchedSections.isNotEmpty()) {
+                                selectedSectionNames = matchedSections.map { it.secName.orEmpty() }
+                                selectedTabIndex = 1 // Switch to "Section wise" if specific sections are selected
+                            }
+                        }
+                    }
+
                     currentState.copy(
                         isLoading = false,
                         sections = sections,
                         subject = subjects,
-                        selectedSection = sections.map { it.secName.orEmpty() },
-                        selectedSubject = subjects.firstOrNull()?.subjectName
+                        selectedSection = selectedSectionNames,
+                        selectedSubject = selectedSubjectName,
+                        selectedTabIndex = selectedTabIndex
                     )
                 }
 
@@ -289,15 +353,19 @@ class AddSyllabusViewModel @Inject constructor(
         val browsedFileResult = withContext(Dispatchers.IO) {
             val file = currentState.selectedFile?.file
             if (file != null) {
+                // New file selected
                 val base64 = Base64Utils.getBase64StringFromFile(file)
                 val ext = Base64Utils.getFileExtension(file)
                 BrowsedFile(attachment = base64, fileExt = ext)
             } else {
+                // No new file selected (Edit mode with existing file)
                 null
             }
         }
 
-        if (browsedFileResult == null) {
+        // Validation: If we are NOT editing (syllabus == null) AND browsedFileResult is null, it's an error.
+        // If we ARE editing, null browsedFileResult means "keep existing".
+        if (browsedFileResult == null && syllabus == null) {
             updateState { it.copy(isLoading = false) }
             sendError("File not found or invalid.")
             return@launch
@@ -317,11 +385,12 @@ class AddSyllabusViewModel @Inject constructor(
         }
 
         val payload = SaveSyllabus(
+            id = syllabus?.id.orEmpty(), // Pass ID if editing
             classID = selectedClass.classID!!,
             classIDs = selectedSections.joinToString(",") { it.secID.toString() },
             subID = selectedSubject.subID!!,
             title = currentState.title,
-            browsedFile = browsedFileResult,
+            browsedFile = browsedFileResult, // Null here implies no change to file in backend logic usually
             fileName = currentState.selectedFile?.name ?: "unknown"
         )
 
@@ -350,6 +419,12 @@ class AddSyllabusViewModel @Inject constructor(
                 SnackbarMessage(text = message, type = MessageType.ERROR)
             )
         )
+    }
+
+    @AssistedFactory
+    interface Factory :
+        AssistedViewModelFactory<SyllabusNavigationGraph.AddSyllabus, AddSyllabusViewModel> {
+        override fun create(param: SyllabusNavigationGraph.AddSyllabus): AddSyllabusViewModel
     }
 
 }

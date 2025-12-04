@@ -73,7 +73,7 @@ import kotlin.math.log10
 import kotlin.math.pow
 
 data class SelectedFileDetails(
-    val uri: Uri,
+    val uri: Uri?,
     val file: File,         // The actual file object (copied to cache)
     val name: String,       // e.g., "my_document.pdf"
     val size: Long,         // Size in bytes
