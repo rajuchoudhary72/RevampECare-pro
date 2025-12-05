@@ -1,13 +1,15 @@
 package com.app.ecarepro.feature.syllabus
 
-import ClassTabs
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -30,6 +32,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.ecarepro.core.domain.model.Syllabus
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.UiStateHandler
+import com.app.ecarepro.designsystem.core.component.BottomSearchBarView
+import com.app.ecarepro.designsystem.core.component.EcareProClassTabs
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
 import com.app.ecarepro.designsystem.core.component.EcareProTopAppBar
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
@@ -40,7 +44,6 @@ import com.app.ecarepro.designsystem.core.theme.appTypography
 import com.app.ecarepro.feature.syllabus.componets.DeleteBottomSheet
 import com.app.ecarepro.feature.syllabus.componets.EmptyState
 import com.app.ecarepro.feature.syllabus.componets.MenuBottomSheet
-import com.app.ecarepro.feature.syllabus.componets.SearchBar
 import com.app.ecarepro.feature.syllabus.componets.SyllabusItem
 
 @Composable
@@ -112,18 +115,11 @@ private fun SyllabusScreenContent(
                     }
                 )
 
-                SearchBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    searchQuery = if (uiState is UiState.Success) uiState.data.searchQuery else "",
-                    onSearchQueryChanged = { handleIntent(SyllabusIntent.OnSearchQueryChanged(it)) }
-                )
                 if (uiState is UiState.Success) {
-                    ClassTabs(
-                        selectedClassIndex = uiState.data.selectedClassIndex,
-                        classes = uiState.data.classTabs,
-                        onClickClassTabs = { handleIntent(SyllabusIntent.OnClassSelected(it)) }
+                    EcareProClassTabs(
+                        selectedTabIndex = uiState.data.selectedClassIndex,
+                        tabs = uiState.data.classTabs,
+                        onTabClick = { handleIntent(SyllabusIntent.OnClassSelected(it)) }
                     )
                 }
             }
@@ -136,6 +132,39 @@ private fun SyllabusScreenContent(
             uiState.data.isLoading
         } else {
             false
+        },
+
+    /*    bottomBar = {
+            // Bottom Search Bar with filter icon
+            BottomSearchBar(
+                searchQuery = if (uiState is UiState.Success) uiState.data.searchQuery else "",
+                onSearchQueryChanged = { handleIntent(SyllabusIntent.OnSearchQueryChanged(it)) },
+                rightIcon = {
+                    Icon(
+                        imageVector = Icons.Default.FilterList,
+                        contentDescription = "Filter/Sort",
+                        modifier = Modifier.size(20.dp),
+                        tint = MaterialTheme.appColors.textPrimary
+                    )
+                },
+                onRightIconClick = {
+                    // TODO: Implement filter/sort functionality
+                    // You can add a new intent for this
+                }
+            )
+        }*/
+        bottomBar = {
+            // Bottom Search Bar with filter icon using common component
+            BottomSearchBarView(
+                searchText = if (uiState is UiState.Success) uiState.data.searchQuery else "",
+                onSearchTextChange = { handleIntent(SyllabusIntent.OnSearchQueryChanged(it)) },
+                placeholder = "Search by title or subject",
+                rightIconVector = Icons.Default.FilterList,
+                onRightIconClick = {
+                    // TODO: Implement filter/sort functionality
+                    // You can add a new intent for this
+                }
+            )
         }
     ) { paddingValues ->
         UiStateHandler(
