@@ -24,14 +24,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.app.ecarepro.core.domain.model.Assignment
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
-import com.app.ecarepro.feature.assignment.screens.AssignmentDetailsHeader
 
 @Composable
 fun AssignmentDetailsTopBar(
-    details: AssignmentDetailsHeader,
+    assignment: Assignment,
     onCloseClick: () -> Unit,
 ) {
     Column(
@@ -47,7 +47,7 @@ fun AssignmentDetailsTopBar(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = details.title,
+                    text = assignment.title.orEmpty(),
                     style = MaterialTheme.appTypography.interMedium16px,
                     color = MaterialTheme.appColors.textPrimary
                 )
@@ -55,9 +55,9 @@ fun AssignmentDetailsTopBar(
                 Text(
                     text = buildAnnotatedString {
                         withStyle(style = SpanStyle(color = MaterialTheme.appColors.success)) {
-                            append(details.className)
+                            append(assignment.classX)
                         }
-                        append(" • ${details.subject} • ${details.date}")
+                        append(" • ${assignment.subject} • ${assignment.uploadedOn}")
                     },
                     style = MaterialTheme.appTypography.interMedium16px.copy(fontSize = 12.sp),
                     color = MaterialTheme.appColors.textSecondary
@@ -82,11 +82,26 @@ fun AssignmentDetailsTopBar(
 private fun AssignmentDetailsTopBarPreview() {
     EcareProTheme {
         AssignmentDetailsTopBar(
-            details = AssignmentDetailsHeader(
-                title = "Physics Assignment",
-                className = "9th class",
+            assignment = Assignment(
+                id = "1",
+                title = "Physics assignment",
+                classX = "9th class",
                 subject = "English",
-                date = "08 Aug 2025"
+                asgDate = "08 Aug 2025",
+                uploadedOn = "22 Oct",
+                asgFile = null,
+                asgFiles = null,
+                asgID = null,
+                assignmentBy = null,
+                hasAttachment = false,
+                isActive = null,
+                isMine = null,
+                lateSubmission = null,
+                stIDs = null,
+                submitDate = null,
+                updateBy = null,
+                userID = null,
+                userType = null
             ),
             onCloseClick = {}
         )

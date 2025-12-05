@@ -14,4 +14,20 @@
     <string name="core_designsystem_take_photo">Take Photo</string>
     <string name="core_designsystem_preparing_file">Preparing file...</string>
     <string name="core_designsystem_open_settings">Open Settings</string>
+
+    <string name="core_designsystem_click_here_to_add_file">Click here to add file</string>
+    <string name="core_designsystem_max_10_mb_files_are_allowed">Max 10 MB files are allowed</string>
+
+    <string name="core_designsystem_select_class">Select class</string>
+    <string name="core_designsystem_class">Class</string>
+    <string name="core_designsystem_select_student">Select student</string>
+    <string name="core_designsystem_student">Student</string>
+    <string name="core_designsystem_syllabus_title">Assignment title</string>
+    <string name="core_designsystem_add_your_title_here">Add your title here</string>
+    <string name="core_designsystem_add_new_syllabus">Add new syllabus</string>
+    <string name="core_designsystem_only_for_classes_with_section_wise_syllabus_differences">Only for classes with section-wise syllabus differences</string>
+
+    <string name="core_designsystem_select_subject">Select subject</string>
+    <string name="core_designsystem_subjects">Subjects</string>
+
 </resources>

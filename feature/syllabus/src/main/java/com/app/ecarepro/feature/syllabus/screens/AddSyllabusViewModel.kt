@@ -1,7 +1,6 @@
 package com.app.ecarepro.feature.syllabus.screens
 
 import androidx.compose.runtime.Immutable
-import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.core.common.Base64Utils
 import com.app.ecarepro.core.domain.exception.errorMessage
@@ -17,7 +16,6 @@ import com.app.ecarepro.core.ui.viewmodel.AssistedViewModelFactory
 import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
 import com.app.ecarepro.designsystem.core.component.MessageType
 import com.app.ecarepro.designsystem.core.component.SelectedFileDetails
-import com.app.ecarepro.designsystem.core.component.SelectedFileType
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import com.app.ecarepro.feature.syllabus.navigation.SyllabusNavigationGraph
 import dagger.assisted.Assisted
@@ -32,7 +30,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 
 @HiltViewModel(assistedFactory = AddSyllabusViewModel.Factory::class)
 class AddSyllabusViewModel @AssistedInject constructor(
@@ -148,6 +145,12 @@ class AddSyllabusViewModel @AssistedInject constructor(
             is AddSyllabusIntent.OnShowError -> {
                 sendError(intent.error)
             }
+
+            is AddSyllabusIntent.OnDeleteSelectedFile ->{
+                updateState {
+                    it.copy(selectedFile = null)
+                }
+            }
         }
     }
 
@@ -173,17 +176,17 @@ class AddSyllabusViewModel @AssistedInject constructor(
                             selectedClass = defaultSelectedClass,
                             title = syllabus?.title ?: "",
                             // If editing, pre-fill the file details (without the File object)
-                           /* selectedFile = syllabus?.fileName?.let { fileName ->
-                                SelectedFileDetails(
-                                    name = fileName,
-                                    file = File(syllabus.filePath.orEmpty()),
-                                    uri = null,
-                                    size = 0,
-                                    formattedSize = "",
-                                    mimeType = "",
-                                    type = SelectedFileType.DOCUMENT
-                                )
-                            }*/
+                            /* selectedFile = syllabus?.fileName?.let { fileName ->
+                                 SelectedFileDetails(
+                                     name = fileName,
+                                     file = File(syllabus.filePath.orEmpty()),
+                                     uri = null,
+                                     size = 0,
+                                     formattedSize = "",
+                                     mimeType = "",
+                                     type = SelectedFileType.DOCUMENT
+                                 )
+                             }*/
                         )
                     }
 
@@ -252,12 +255,15 @@ class AddSyllabusViewModel @AssistedInject constructor(
                         matchedSubject?.let { selectedSubjectName = it.subjectName }
 
                         // Restore Sections
-                        val syllabusSectionIds = syllabus.classIDs?.split(",")?.mapNotNull { it.trim().toIntOrNull() } ?: emptyList()
+                        val syllabusSectionIds =
+                            syllabus.classIDs?.split(",")?.mapNotNull { it.trim().toIntOrNull() }
+                                ?: emptyList()
                         if (syllabusSectionIds.isNotEmpty()) {
                             val matchedSections = sections.filter { it.secID in syllabusSectionIds }
                             if (matchedSections.isNotEmpty()) {
                                 selectedSectionNames = matchedSections.map { it.secName.orEmpty() }
-                                selectedTabIndex = 1 // Switch to "Section wise" if specific sections are selected
+                                selectedTabIndex =
+                                    1 // Switch to "Section wise" if specific sections are selected
                             }
                         }
                     }
@@ -457,6 +463,7 @@ sealed interface AddSyllabusIntent {
     data class OnSubjectChanged(val value: String) : AddSyllabusIntent
     data class OnTitleChanged(val value: String) : AddSyllabusIntent
     data object OnAddFileClicked : AddSyllabusIntent
+    data class OnDeleteSelectedFile(val file: SelectedFileDetails) : AddSyllabusIntent
     data object OnSubmitClicked : AddSyllabusIntent
     data object OnDismissFileUploadSheet : AddSyllabusIntent
     data class OnFileSelected(val file: SelectedFileDetails) : AddSyllabusIntent

@@ -1,5 +1,6 @@
 package com.app.ecarepro.core.network.retrofit.service
 
+import com.app.ecarepro.core.network.model.academic.NetworkAssignmentSubmissionReport
 import com.app.ecarepro.core.network.model.academic.NetworkTeacherAssignment
 import com.app.ecarepro.core.network.model.academic.NetworkTeacherTimetable
 import retrofit2.http.GET
@@ -16,4 +17,9 @@ interface AcademicService {
     suspend fun getTeacherAssignments(): NetworkTeacherAssignment
 
 
+    @GET("Academic/AssignmnetSubmissionRPT")
+    suspend fun getAssignmentSubmissionReport(
+        @Query("ID") id: String,
+        @Query("NotSubmitted") notSubmitted: Boolean,
+    ): NetworkAssignmentSubmissionReport
 }

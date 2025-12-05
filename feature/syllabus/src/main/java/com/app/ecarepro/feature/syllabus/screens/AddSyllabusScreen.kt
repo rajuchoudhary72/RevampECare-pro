@@ -1,5 +1,6 @@
 package com.app.ecarepro.feature.syllabus.screens
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,10 +38,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.UiStateHandler
 import com.app.ecarepro.designsystem.core.component.Button
+import com.app.ecarepro.designsystem.core.component.EcareProFileAttachment
+import com.app.ecarepro.designsystem.core.component.EcareProFileUploadBottomSheet
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
 import com.app.ecarepro.designsystem.core.component.EcareProSelectionBottomSheet
 import com.app.ecarepro.designsystem.core.component.EcareProTopAppBar
-import com.app.ecarepro.designsystem.core.component.FileUploadBottomSheet
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import com.app.ecarepro.designsystem.core.component.UploadOption
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
@@ -234,15 +236,11 @@ private fun AddSyllabusContent(
                     Spacer(modifier = Modifier.height(16.dp))
 
 
-                    Text(
-                        text = "Add file",
-                        style = MaterialTheme.appTypography.interRegular12px,
-                        color = MaterialTheme.appColors.textSecondary
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    FileUploadBox(
-                        selectedFile = data.selectedFile,
-                        onClick = { handleIntent(AddSyllabusIntent.OnAddFileClicked) }
+
+                    EcareProFileAttachment(
+                        selectedFile = data.selectedFile?.let { listOf(it) }?:emptyList(),
+                        onClickPickFile = { handleIntent(AddSyllabusIntent.OnAddFileClicked) },
+                        onClickDeleteFile = { handleIntent(AddSyllabusIntent.OnDeleteSelectedFile(it)) }
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -255,7 +253,7 @@ private fun AddSyllabusContent(
                     )
                 }
 
-                FileUploadBottomSheet(
+                EcareProFileUploadBottomSheet(
                     isVisible = data.isFileUploadSheetVisible,
                     onDismiss = {
                         handleIntent(AddSyllabusIntent.OnDismissFileUploadSheet)
@@ -266,8 +264,10 @@ private fun AddSyllabusContent(
                         UploadOption.DOCUMENT
                     ),
                     onShowError = { handleIntent(AddSyllabusIntent.OnShowError(it)) },
-                    onFileSelected = { file ->
-                        handleIntent(AddSyllabusIntent.OnFileSelected(file))
+                    onFilesSelected = { file ->
+                        val attachment = file.firstOrNull()
+                        if (attachment != null)
+                            handleIntent(AddSyllabusIntent.OnFileSelected(attachment))
                     }
                 )
             }

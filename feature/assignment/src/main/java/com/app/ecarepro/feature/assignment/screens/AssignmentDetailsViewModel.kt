@@ -1,27 +1,38 @@
 package com.app.ecarepro.feature.assignment.screens
 
 import androidx.compose.runtime.Immutable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.app.ecarepro.core.ui.UiState
+import com.app.ecarepro.core.domain.exception.errorMessage
+import com.app.ecarepro.core.domain.model.Assignment
+import com.app.ecarepro.core.domain.model.AssignmentStudent
+import com.app.ecarepro.core.domain.repository.AcademicRepository
+import com.app.ecarepro.core.ui.viewmodel.AssistedViewModelFactory
 import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
+import com.app.ecarepro.feature.assignment.AssignmentViewModel
+import com.app.ecarepro.feature.assignment.navigation.AssignmentNavigationGraph
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class AssignmentDetailsViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = AssignmentDetailsViewModel.Factory::class)
+class AssignmentDetailsViewModel @AssistedInject constructor(
+    @Assisted val navKey: AssignmentNavigationGraph.AssignmentDetails,
+    private val academicRepository: AcademicRepository,
 ) : BaseViewModel<AssignmentDetailsIntent, AssignmentDetailsEvent>() {
 
-    private val _uiState = MutableStateFlow<UiState<AssignmentDetailsUiState>>(UiState.Loading)
+    private val assignment = navKey.assignment
+
+    private val _uiState = MutableStateFlow(AssignmentDetailsUiState(assignment = assignment))
     val uiState = _uiState.asStateFlow()
 
-    private val assignmentId: String? = savedStateHandle["assignmentId"]
 
     init {
         loadAssignmentDetails()
@@ -29,35 +40,42 @@ class AssignmentDetailsViewModel @Inject constructor(
 
     private fun loadAssignmentDetails() {
         viewModelScope.launch {
-            _uiState.update { UiState.Loading }
-
-            val mockHeader = AssignmentDetailsHeader(
-                title = "Physics Assignment",
-                className = "9th class",
-                subject = "English",
-                date = "08 Aug 2025"
-            )
-
-            val mockStudents = List(20) { index ->
-                StudentSubmissionItem(
-                    id = index.toString(),
-                    rollNo = index + 1,
-                    name = if (index % 2 == 0) "Aditya Chauhan" else "Absam Khan",
-                    submissionMode = "Offline",
-                    isSubmitted = index < 15
+            combine(
+                academicRepository.getAssignmentSubmissionReport(
+                    id = assignment.id,
+                    submitted = true
+                ),
+                academicRepository.getAssignmentSubmissionReport(
+                    id = assignment.id,
+                    submitted = false,
                 )
+            ) { submitted, notSubmitted ->
+                submitted to notSubmitted
             }
-
-            _uiState.update {
-                UiState.Success(
-                    AssignmentDetailsUiState(
-                        headerDetails = mockHeader,
-                        allStudents = mockStudents,
-                        filteredStudents = mockStudents.filter { it.isSubmitted },
-                        selectedTab = SubmissionTab.SUBMITTED
-                    )
-                )
-            }
+                .onStart {
+                    _uiState.update { it.copy(isLoading = true) }
+                }
+                .collect { (submitted, notSubmitted) ->
+                    if (submitted.isFailure || notSubmitted.isFailure) {
+                        _uiState.update {
+                            it.copy(
+                                error = submitted.exceptionOrNull()?.errorMessage()
+                                    ?: notSubmitted.exceptionOrNull()?.errorMessage(),
+                                isLoading = false
+                            )
+                        }
+                    } else {
+                        val submittedList = submitted.getOrNull()?.studentList ?: emptyList()
+                        val notSubmittedList = notSubmitted.getOrNull()?.studentList ?: emptyList()
+                        _uiState.update {
+                            it.copy(
+                                submittedStudent = submittedList,
+                                notSubmittedStudent = notSubmittedList,
+                                isLoading = false
+                            )
+                        }
+                    }
+                }
         }
     }
 
@@ -74,42 +92,27 @@ class AssignmentDetailsViewModel @Inject constructor(
     }
 
     private fun changeTab(tab: SubmissionTab) {
-        val currentState = (_uiState.value as? UiState.Success)?.data ?: return
-
-        val filtered = if (tab == SubmissionTab.SUBMITTED) {
-            currentState.allStudents.filter { it.isSubmitted }
-        } else {
-            currentState.allStudents.filter { !it.isSubmitted }
-        }
-
         _uiState.update {
-            UiState.Success(currentState.copy(selectedTab = tab, filteredStudents = filtered))
+            it.copy(selectedTab = tab)
         }
+    }
+
+    @AssistedFactory
+    interface Factory : AssistedViewModelFactory<AssignmentNavigationGraph.AssignmentDetails, AssignmentDetailsViewModel> {
+        override fun create(param: AssignmentNavigationGraph.AssignmentDetails): AssignmentDetailsViewModel
     }
 }
 
 @Immutable
 data class AssignmentDetailsUiState(
-    val headerDetails: AssignmentDetailsHeader,
-    val allStudents: List<StudentSubmissionItem>,
-    val filteredStudents: List<StudentSubmissionItem>,
-    val selectedTab: SubmissionTab,
+    val isLoading: Boolean = false,
+    val error: String? = null,
+    val assignment: Assignment,
+    val submittedStudent: List<AssignmentStudent> = emptyList(),
+    val notSubmittedStudent: List<AssignmentStudent> = emptyList(),
+    val selectedTab: SubmissionTab = SubmissionTab.SUBMITTED,
 )
 
-data class AssignmentDetailsHeader(
-    val title: String,
-    val className: String,
-    val subject: String,
-    val date: String,
-)
-
-data class StudentSubmissionItem(
-    val id: String,
-    val rollNo: Int,
-    val name: String,
-    val submissionMode: String,
-    val isSubmitted: Boolean,
-)
 
 enum class SubmissionTab(val title: String) {
     SUBMITTED("Submitted"),

@@ -1,6 +1,11 @@
 package com.app.ecarepro.core.domain.model
 
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
 
+
+@Serializable
+@InternalSerializationApi
 data class Assignment(
     val asgDate: String?,
     val asgFile: String?,

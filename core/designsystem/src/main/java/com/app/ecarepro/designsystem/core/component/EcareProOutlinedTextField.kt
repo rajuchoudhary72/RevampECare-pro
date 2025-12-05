@@ -35,7 +35,7 @@ fun EcareProOutlinedTextField(
     label: @Composable (() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = { null },
+    trailingIcon: @Composable (() -> Unit)? = {  },
     isError: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     singleLine: Boolean = true,

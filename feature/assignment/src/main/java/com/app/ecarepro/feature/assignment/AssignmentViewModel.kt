@@ -5,21 +5,27 @@ import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.core.domain.exception.errorMessage
 import com.app.ecarepro.core.domain.model.Assignment
 import com.app.ecarepro.core.domain.repository.AcademicRepository
+import com.app.ecarepro.core.download.FileDownloader
+import com.app.ecarepro.core.download.model.DownloadRequest
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
 import com.app.ecarepro.designsystem.core.component.MessageType
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class AssignmentViewModel @Inject constructor(
     private val academicRepository: AcademicRepository,
+    private val fileDownloader: FileDownloader,
 ) : BaseViewModel<AssignmentIntent, AssignmentEvent>() {
 
     private val _uiState: MutableStateFlow<UiState<AssignmentUiState>> =
@@ -63,7 +69,7 @@ class AssignmentViewModel @Inject constructor(
             is AssignmentIntent.OnSearchQueryChanged -> onSearchQueryChanged(intent.query)
             is AssignmentIntent.OnViewClicked -> viewAssignment(intent.assignment)
             is AssignmentIntent.OnDownloadClicked -> downloadAssignment(intent.assignment)
-            is AssignmentIntent.OnViewReportClicked -> sendEvent(AssignmentEvent.ViewReport)
+            is AssignmentIntent.OnViewReportClicked -> sendEvent(AssignmentEvent.ViewReport(intent.assignment))
         }
     }
 
@@ -94,15 +100,48 @@ class AssignmentViewModel @Inject constructor(
 
     private fun downloadAssignment(assignment: Assignment) {
         viewModelScope.launch {
-            sendEvent(
-                AssignmentEvent.ShowMessage(
-                    SnackbarMessage(
-                        "Download Started...",
-                        MessageType.INFO
+            assignment.asgFile?.let { url ->
+                viewModelScope.launch(Dispatchers.IO) {
+                    val title = assignment.title ?: "Assignment"
+
+                    try {
+                        fileDownloader.download(
+                            DownloadRequest(
+                                url = url,
+                                fileName = title
+                            )
+                        ).first()
+
+                        withContext(Dispatchers.Main) {
+                            sendEvent(
+                                AssignmentEvent.ShowMessage(
+                                    SnackbarMessage("Download Started", MessageType.INFO)
+                                )
+                            )
+                        }
+                    } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            sendEvent(
+                                AssignmentEvent.ShowMessage(
+                                    SnackbarMessage(
+                                        "Download failed. Please try again.",
+                                        MessageType.ERROR
+                                    )
+                                )
+                            )
+                        }
+                    }
+                }
+            } ?: run {
+                sendEvent(
+                    AssignmentEvent.ShowMessage(
+                        SnackbarMessage(
+                            "Assignment file path is not available.",
+                            MessageType.ERROR
+                        )
                     )
                 )
-            )
-            // Add actual download logic here
+            }
         }
     }
 }
@@ -134,7 +173,7 @@ sealed interface AssignmentEvent {
     data object NavigateBack : AssignmentEvent
     data object NavigateToAddAssignment : AssignmentEvent
 
-    data object ViewReport : AssignmentEvent
+    data class ViewReport(val assignment: Assignment) : AssignmentEvent
     data class ViewAssignment(val title: String, val url: String) : AssignmentEvent
     data class ShowMessage(val snackbarMessage: SnackbarMessage) :
         AssignmentEvent

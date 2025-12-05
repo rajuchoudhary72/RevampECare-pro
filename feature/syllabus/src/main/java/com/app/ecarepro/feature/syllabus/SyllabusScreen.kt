@@ -152,7 +152,7 @@ private fun SyllabusScreenContent(
                             .padding(paddingValues)
                             .padding(horizontal = 16.dp, vertical = 10.dp)
                     ) {
-                        items(data.filteredSyllabuses, key = { it.id }) { syllabus ->
+                        items(data.filteredSyllabuses) { syllabus ->
                             SyllabusItem(
                                 syllabus = syllabus,
                                 onViewClick = { handleIntent(SyllabusIntent.OnViewClicked(syllabus.id)) },
