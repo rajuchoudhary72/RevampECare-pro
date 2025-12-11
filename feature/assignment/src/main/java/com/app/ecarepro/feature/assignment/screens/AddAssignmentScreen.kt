@@ -42,8 +42,8 @@ import com.app.ecarepro.designsystem.core.component.Button
 import com.app.ecarepro.designsystem.core.component.EcareProCheckboxWithText
 import com.app.ecarepro.designsystem.core.component.EcareProDatePicker
 import com.app.ecarepro.designsystem.core.component.EcareProDropdownField
-import com.app.ecarepro.designsystem.core.component.EcareProFileUploadBottomSheet
 import com.app.ecarepro.designsystem.core.component.EcareProFileAttachment
+import com.app.ecarepro.designsystem.core.component.EcareProFileUploadBottomSheet
 import com.app.ecarepro.designsystem.core.component.EcareProInputField
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
 import com.app.ecarepro.designsystem.core.component.EcareProSelectionBottomSheet
@@ -55,6 +55,7 @@ import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
 import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
+import com.app.ecarepro.feature.assignment.components.StudentSelectionBottomSheet
 
 @Composable
 fun AddAssignmentScreen(
@@ -82,8 +83,7 @@ fun AddAssignmentScreen(
         handleIntent = viewModel::handleIntent,
         snackbarHostState = snackbarHostState,
         snackbarMessage = snackbarMessage,
-        onSnackbarDismissed = { snackbarMessage == null }
-    )
+        onSnackbarDismissed = { snackbarMessage == null })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,8 +100,7 @@ private fun AddAssignmentContent(
             Column {
                 EcareProTopAppBar(
                     title = "Add assignment",
-                    onNavigationClicked = { handleIntent(AddAssignmentIntent.OnBackClicked) }
-                )
+                    onNavigationClicked = { handleIntent(AddAssignmentIntent.OnBackClicked) })
                 if (uiState is UiState.Success) {
                     PrimaryScrollableTabRow(
                         selectedTabIndex = uiState.data.selectedTabIndex,
@@ -142,8 +141,7 @@ private fun AddAssignmentContent(
         isLoading = if (uiState is UiState.Success) uiState.data.isLoading else false
     ) { paddingValues ->
         UiStateHandler(
-            modifier = Modifier.padding(paddingValues),
-            state = uiState
+            modifier = Modifier.padding(paddingValues), state = uiState
         ) { data ->
             Column(
                 modifier = Modifier
@@ -180,36 +178,36 @@ private fun AddAssignmentContent(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        Box(modifier = Modifier.weight(1f)) {
-                            EcareProDropdownField(
-                                label = stringResource(R.string.core_designsystem_select_class),
-                                value = data.selectedClass,
-                                placeholder = stringResource(R.string.core_designsystem_class),
-                                onClick = {
-                                    handleIntent(AddAssignmentIntent.OnClassSelectClicked)
-                                }
-                            )
-                        }
+
                         Box(modifier = Modifier.weight(1f)) {
                             EcareProDropdownField(
                                 label = stringResource(R.string.core_designsystem_select_subject),
-                                value = "",
+                                value = data.selectedSubject,
                                 placeholder = stringResource(R.string.core_designsystem_subjects),
                                 onClick = {
-                                    handleIntent(AddAssignmentIntent.OnSectionSelectClicked)
-                                }
-                            )
+                                    handleIntent(AddAssignmentIntent.OnSubjectSelectClicked)
+                                })
                         }
+
+                        Box(modifier = Modifier.weight(1f)) {
+                            EcareProDropdownField(
+                                label = stringResource(R.string.core_designsystem_select_class),
+                                value = data.selectedClass.joinToString { it.className.orEmpty() },
+                                placeholder = stringResource(R.string.core_designsystem_class),
+                                onClick = {
+                                    handleIntent(AddAssignmentIntent.OnClassSelectClicked)
+                                })
+                        }
+
                     }
 
                     if (data.selectedTabIndex == 1) {
                         Spacer(modifier = Modifier.height(16.dp))
                         EcareProDropdownField(
                             label = stringResource(R.string.core_designsystem_select_student),
-                            value = data.selectedSubject,
+                            value = data.selectedStudents.joinToString { it.studentName.orEmpty() },
                             placeholder = stringResource(R.string.core_designsystem_student),
-                            onClick = { handleIntent(AddAssignmentIntent.OnSubjectSelectClicked) }
-                        )
+                            onClick = { handleIntent(AddAssignmentIntent.OnStudentSelectClicked) })
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -218,8 +216,7 @@ private fun AddAssignmentContent(
                         label = "Assignment date",
                         value = data.assignmentDate,
                         placeholder = "Click here to add date",
-                        onClick = { handleIntent(AddAssignmentIntent.OnAssignmentDateSelectClicked) }
-                    )
+                        onClick = { handleIntent(AddAssignmentIntent.OnAssignmentDateSelectClicked) })
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -235,24 +232,18 @@ private fun AddAssignmentContent(
                         )
 
                         EcareProSwitch(
-                            checked = data.isSubmissionDateVisible,
-                            onCheckedChange = {
+                            checked = data.isSubmissionDateVisible, onCheckedChange = {
                                 handleIntent(AddAssignmentIntent.ToggleSubmissionDateVisibility)
-                            },
-                            width = 24.dp,
-                            height = 16.dp,
-                            thumbSize = 10.dp
+                            }, width = 24.dp, height = 16.dp, thumbSize = 10.dp
                         )
                     }
 
                     if (data.isSubmissionDateVisible) {
                         Spacer(modifier = Modifier.height(8.dp))
-
                         EcareProDropdownField(
                             value = data.submissionDate,
                             placeholder = "Click here to add date",
-                            onClick = { handleIntent(AddAssignmentIntent.OnSubjectSelectClicked) }
-                        )
+                            onClick = { handleIntent(AddAssignmentIntent.OnSubmissionDateSelectClicked) })
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -273,17 +264,21 @@ private fun AddAssignmentContent(
                         minLines = 3,
                         maxLines = 3,
                         singleLine = false,
-                        onValueChange = { handleIntent(AddAssignmentIntent.OnTypeChanged(it)) }
-                    )
+                        onValueChange = { handleIntent(AddAssignmentIntent.OnTypeChanged(it)) })
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     EcareProFileAttachment(
                         selectedFile = data.selectedFiles,
                         onClickPickFile = { handleIntent(AddAssignmentIntent.OnAddFileClicked) },
-                        onClickPickMoreFile = {handleIntent(AddAssignmentIntent.OnAddFileClicked)},
-                        onClickDeleteFile = { handleIntent(AddAssignmentIntent.OnDeleteSelectedFile(it)) }
-                    )
+                        onClickPickMoreFile = { handleIntent(AddAssignmentIntent.OnAddFileClicked) },
+                        onClickDeleteFile = {
+                            handleIntent(
+                                AddAssignmentIntent.OnDeleteSelectedFile(
+                                    it
+                                )
+                            )
+                        })
                 }
 
                 Column(
@@ -292,20 +287,16 @@ private fun AddAssignmentContent(
                         .padding(8.dp)
                 ) {
                     EcareProCheckboxWithText(
-                        text = "Active",
-                        isChecked = data.isActive,
-                        onCheckedChange = {
+                        text = "Active", isChecked = data.isActive, onCheckedChange = {
                             handleIntent(AddAssignmentIntent.ToggleIsActive)
-                        }
-                    )
+                        })
                     Spacer(modifier = Modifier.height(4.dp))
                     EcareProCheckboxWithText(
                         text = "Allow students for multiple submission",
                         isChecked = data.isAllowedForMultipleSubmission,
                         onCheckedChange = {
                             handleIntent(AddAssignmentIntent.ToggleIsAllowedForMultipleSubmission)
-                        }
-                    )
+                        })
                     Spacer(modifier = Modifier.height(4.dp))
 
                     EcareProCheckboxWithText(
@@ -313,8 +304,7 @@ private fun AddAssignmentContent(
                         isChecked = data.isAllowedForLateSubmission,
                         onCheckedChange = {
                             handleIntent(AddAssignmentIntent.ToggleIsAllowedForLateSubmission)
-                        }
-                    )
+                        })
                 }
 
 
@@ -323,8 +313,7 @@ private fun AddAssignmentContent(
                         .fillMaxWidth()
                         .padding(16.dp),
                     title = "Add new assignment",
-                    onClick = { handleIntent(AddAssignmentIntent.OnSubmitClicked) }
-                )
+                    onClick = { handleIntent(AddAssignmentIntent.OnSubmitClicked) })
 
 
             }
@@ -336,31 +325,43 @@ private fun AddAssignmentContent(
                     handleIntent(AddAssignmentIntent.OnDismissFileUploadSheet)
                 },
                 allowedOptions = listOf(
-                    UploadOption.CAMERA,
-                    UploadOption.GALLERY,
-                    UploadOption.DOCUMENT
+                    UploadOption.CAMERA, UploadOption.GALLERY, UploadOption.DOCUMENT
                 ),
                 allowMultiple = true,
                 onShowError = { handleIntent(AddAssignmentIntent.OnShowError(it)) },
                 onFilesSelected = { files ->
                     handleIntent(AddAssignmentIntent.OnFileSelected(files))
-                }
-            )
+                })
 
             EcareProSelectionBottomSheet(
                 title = stringResource(R.string.core_designsystem_select_class),
                 isVisible = data.isClassSelectSheetVisible,
                 onDismiss = { handleIntent(AddAssignmentIntent.OnDismissClassSelectSheet) },
                 options = data.classes.map { it.className.orEmpty() },
-                selectedOptions = listOf(data.selectedClass.orEmpty()),
+                isMultiSelection = true,
+                selectedOptions = data.selectedClass.map { it.className.orEmpty() },
                 onOptionsSelected = {
                     handleIntent(
                         AddAssignmentIntent.OnClassChanged(
-                            it.firstOrNull().orEmpty()
+                            it
                         )
                     )
-                }
-            )
+                })
+
+            StudentSelectionBottomSheet(
+                title = "Select Student",
+                isVisible = data.isStudentSelectSheetVisible,
+                onDismiss = { handleIntent(AddAssignmentIntent.OnDismissStudentSelectSheet) },
+                options = data.students,
+                isMultiSelection = true,
+                selectedOptions = data.selectedStudents,
+                onOptionsSelected = {
+                    handleIntent(
+                        AddAssignmentIntent.OnStudentChanged(
+                            it
+                        )
+                    )
+                })
 
             EcareProSelectionBottomSheet(
                 stringResource(R.string.core_designsystem_select_subject),
@@ -374,8 +375,7 @@ private fun AddAssignmentContent(
                             it.firstOrNull().orEmpty()
                         )
                     )
-                }
-            )
+                })
 
             EcareProDatePicker(
                 isVisible = data.isAssignmentDatePickerVisible,
@@ -386,8 +386,18 @@ private fun AddAssignmentContent(
                             date
                         )
                     )
-                }
-            )
+                })
+
+            EcareProDatePicker(
+                isVisible = data.isSubmissionDatePickerVisible,
+                onDismiss = { handleIntent(AddAssignmentIntent.OnDismissSubmissionDateSheet) },
+                onDateSelected = { date ->
+                    handleIntent(
+                        AddAssignmentIntent.OnSelectSubmissionDate(
+                            date
+                        )
+                    )
+                })
         }
     }
 }
@@ -416,8 +426,7 @@ fun AddSyllabusSectionWisePreview() {
             handleIntent = {},
             snackbarHostState = SnackbarHostState(),
             snackbarMessage = null,
-            onSnackbarDismissed = {}
-        )
+            onSnackbarDismissed = {})
     }
 }
 

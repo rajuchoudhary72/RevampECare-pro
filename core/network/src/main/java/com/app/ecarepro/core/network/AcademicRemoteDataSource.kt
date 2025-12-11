@@ -1,7 +1,9 @@
 package com.app.ecarepro.core.network
 
+import com.app.ecarepro.core.network.model.CommonNetworkResponse
 import com.app.ecarepro.core.network.model.academic.NetworkAssignment
 import com.app.ecarepro.core.network.model.academic.NetworkAssignmentSubmissionReport
+import com.app.ecarepro.core.network.model.academic.NetworkSaveAssignment
 import com.app.ecarepro.core.network.model.academic.NetworkTeacherTimetable
 
 interface AcademicRemoteDataSource {
@@ -15,4 +17,6 @@ interface AcademicRemoteDataSource {
         id: String,
         submitted: Boolean,
     ): NetworkAssignmentSubmissionReport
+
+    suspend fun saveAssignment(saveAssignment: NetworkSaveAssignment): CommonNetworkResponse
 }

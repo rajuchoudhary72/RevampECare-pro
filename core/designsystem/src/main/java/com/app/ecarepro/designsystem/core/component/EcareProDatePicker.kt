@@ -34,7 +34,7 @@ fun EcareProDatePicker(
     isVisible: Boolean,
     onDismiss: () -> Unit,
     onDateSelected: (String) -> Unit,
-    dateFormat: String = "dd MMM yyyy",
+    dateFormat: String = "yyyy-MM-dd",
 ) {
     if (isVisible.not()) return
 
