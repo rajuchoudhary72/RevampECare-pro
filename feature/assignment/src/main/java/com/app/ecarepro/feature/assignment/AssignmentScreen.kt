@@ -43,7 +43,7 @@ fun AssignmentScreen(
     viewModel: AssignmentViewModel = hiltViewModel(),
     navigateToBack: () -> Unit,
     navigateToAddAssignment: () -> Unit,
-    navigateToDetails: () -> Unit,
+    navigateToDetails: (Assignment) -> Unit,
     openDocViewer: (title: String, url: String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -61,7 +61,7 @@ fun AssignmentScreen(
                     snackbarHostState.showSnackbar(event.snackbarMessage.text)
                 }
 
-                AssignmentEvent.ViewReport -> navigateToDetails()
+                is AssignmentEvent.ViewReport -> navigateToDetails(event.assignment)
             }
         }
     }

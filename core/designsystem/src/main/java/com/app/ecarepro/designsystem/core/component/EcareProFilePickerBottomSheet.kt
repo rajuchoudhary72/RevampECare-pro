@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.OpenableColumns
 import android.provider.Settings
-import android.webkit.MimeTypeMap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -18,6 +17,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,11 +27,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -49,6 +51,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
@@ -92,7 +95,7 @@ enum class SelectedFileType {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FileUploadBottomSheet(
+fun EcareProFileUploadBottomSheet(
     isVisible: Boolean,
     onDismiss: () -> Unit,
     allowedOptions: List<UploadOption> = listOf(
@@ -101,8 +104,10 @@ fun FileUploadBottomSheet(
         UploadOption.DOCUMENT
     ),
     maxFileSizeInMb: Int = 10,
+    allowMultiple: Boolean = false,
+    maxFiles: Int = 5,
     onShowError: (String) -> Unit = {},
-    onFileSelected: (SelectedFileDetails) -> Unit,
+    onFilesSelected: (List<SelectedFileDetails>) -> Unit,
 ) {
     if (!isVisible) return
 
@@ -117,24 +122,51 @@ fun FileUploadBottomSheet(
 
     var tempCameraUri by remember { mutableStateOf<Uri?>(null) }
 
-    val processFile = { uri: Uri, type: SelectedFileType ->
-        val fileSizeInBytes = getFileSizeFromCursor(context, uri)
-        val limitInBytes = maxFileSizeInMb * 1024 * 1024
+    suspend fun getProcessedFileDetails(uri: Uri, type: SelectedFileType): SelectedFileDetails? {
+        return withContext(Dispatchers.IO) {
+            val fileSizeInBytes = getFileSizeFromCursor(context, uri)
+            val limitInBytes = maxFileSizeInMb * 1024 * 1024
 
-        if (fileSizeInBytes > limitInBytes) {
-            onShowError("File size exceeds ${maxFileSizeInMb}MB")
-        } else {
-            scope.launch {
-                isLoading = true
-                val details = getFileDetails(context, uri, type, fileSizeInBytes)
-                isLoading = false
-                if (details != null) {
-                    onFileSelected(details)
-                    sheetState.hide()
-                    onDismiss()
-                } else {
-                    onShowError("Failed to process file.")
+            if (fileSizeInBytes > limitInBytes) {
+                withContext(Dispatchers.Main) {
+                    onShowError("File size exceeds ${maxFileSizeInMb}MB")
                 }
+                null
+            } else {
+                getFileDetails(context, uri, type, fileSizeInBytes)
+            }
+        }
+    }
+
+    val processFiles = { uris: List<Uri>, type: SelectedFileType ->
+        scope.launch {
+            isLoading = true
+            var finalUris = uris
+            if (allowMultiple && uris.size > maxFiles) {
+                onShowError("You can select a maximum of $maxFiles files.")
+                finalUris = uris.take(maxFiles)
+            }
+
+            val validFiles = mutableListOf<SelectedFileDetails>()
+            var hasError = false
+
+            finalUris.forEach { uri ->
+                val details = getProcessedFileDetails(uri, type)
+                if (details != null) {
+                    validFiles.add(details)
+                } else {
+                    hasError = true
+                }
+            }
+
+            isLoading = false
+
+            if (validFiles.isNotEmpty()) {
+                onFilesSelected(validFiles)
+                sheetState.hide()
+                onDismiss()
+            } else if (!hasError) {
+                onShowError("Failed to process file(s).")
             }
         }
     }
@@ -143,7 +175,7 @@ fun FileUploadBottomSheet(
         contract = ActivityResultContracts.TakePicture()
     ) { success ->
         if (success && tempCameraUri != null) {
-            processFile(tempCameraUri!!, SelectedFileType.IMAGE)
+            processFiles(listOf(tempCameraUri!!), SelectedFileType.IMAGE)
         }
     }
 
@@ -173,13 +205,25 @@ fun FileUploadBottomSheet(
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
-        uri?.let { processFile(it, SelectedFileType.IMAGE) }
+        uri?.let { processFiles(listOf(it), SelectedFileType.IMAGE) }
+    }
+
+    val galleryMultipleLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetMultipleContents()
+    ) { uris ->
+        if (uris.isNotEmpty()) processFiles(uris, SelectedFileType.IMAGE)
     }
 
     val documentLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri ->
-        uri?.let { processFile(it, SelectedFileType.DOCUMENT) }
+        uri?.let { processFiles(listOf(it), SelectedFileType.DOCUMENT) }
+    }
+
+    val documentMultipleLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenMultipleDocuments()
+    ) { uris ->
+        if (uris.isNotEmpty()) processFiles(uris, SelectedFileType.DOCUMENT)
     }
 
     ModalBottomSheet(
@@ -259,15 +303,23 @@ fun FileUploadBottomSheet(
                         UploadOption.GALLERY -> {
                             UploadOptionItem(
                                 painter = painterResource(R.drawable.icon_gallery),
-                                title = stringResource(R.string.core_designsystem_select_photo),
-                                onClick = { galleryLauncher.launch("image/*") }
+                                title = if (allowMultiple) "Select photos" else stringResource(R.string.core_designsystem_select_photo),
+                                onClick = {
+                                    if (allowMultiple) {
+                                        galleryMultipleLauncher.launch("image/*")
+                                    } else {
+                                        galleryLauncher.launch("image/*")
+                                    }
+                                }
                             )
                         }
 
                         UploadOption.DOCUMENT -> {
                             UploadOptionItem(
                                 painter = painterResource(R.drawable.icon_document),
-                                title = stringResource(R.string.core_designsystem_select_file_pdf_doc_docx_xlsx),
+                                title = if (allowMultiple) "Select files (PDF, DOC, XLS)" else stringResource(
+                                    R.string.core_designsystem_select_file_pdf_doc_docx_xlsx
+                                ),
                                 onClick = {
                                     val mimeTypes = arrayOf(
                                         "application/pdf",
@@ -276,7 +328,11 @@ fun FileUploadBottomSheet(
                                         "application/vnd.ms-excel",
                                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                     )
-                                    documentLauncher.launch(mimeTypes)
+                                    if (allowMultiple) {
+                                        documentMultipleLauncher.launch(mimeTypes)
+                                    } else {
+                                        documentLauncher.launch(mimeTypes)
+                                    }
                                 }
                             )
                         }
@@ -347,85 +403,91 @@ fun FileUploadBottomSheet(
                 }) { Text(stringResource(R.string.core_designsystem_open_settings)) }
             },
             dismissButton = {
-                TextButton(onClick = { showSettingsDialog = false }) { Text(stringResource(R.string.core_designsystem_cancel)) }
+                TextButton(onClick = {
+                    showSettingsDialog = false
+                }) { Text(stringResource(R.string.core_designsystem_cancel)) }
             },
             containerColor = White
         )
     }
 }
 
-
-private fun launchCamera(context: Context, onUriCreated: (Uri) -> Unit) {
-    val photoFile = createImageFile(context)
-    val authority = "${context.packageName}.myFileProvider"
-    val uri = FileProvider.getUriForFile(context, authority, photoFile)
-    onUriCreated(uri)
-}
-
-private fun createImageFile(context: Context): File {
-    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-    val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-    return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
-}
-
-private fun getFileSizeFromCursor(context: Context, uri: Uri): Long {
-    return try {
-        val cursor = context.contentResolver.query(uri, null, null, null, null)
-        cursor?.use {
-            if (it.moveToFirst()) {
-                val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
-                if (sizeIndex != -1) return it.getLong(sizeIndex)
-            }
-        }
-        0
-    } catch (e: Exception) {
-        0
+@Composable
+private fun UploadOptionItem(
+    painter: Painter,
+    title: String,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painter,
+            contentDescription = title,
+            modifier = Modifier.size(24.dp),
+            tint = MaterialTheme.appColors.textPrimary
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            text = title,
+            style = MaterialTheme.appTypography.interRegular14px,
+            color = MaterialTheme.appColors.textPrimary
+        )
     }
+}
+
+@Composable
+fun CustomDivider() {
+    HorizontalDivider(
+        modifier = Modifier.fillMaxWidth(),
+        thickness = 1.dp,
+        color = Color(0xFFEEEEEE)
+    )
 }
 
 private suspend fun getFileDetails(
     context: Context,
     uri: Uri,
     type: SelectedFileType,
-    knownSize: Long,
+    fileSize: Long,
 ): SelectedFileDetails? {
     return withContext(Dispatchers.IO) {
         try {
             val contentResolver = context.contentResolver
-            var name = "temp_file"
-            var mimeType = contentResolver.getType(uri) ?: "application/octet-stream"
+            val mimeType = contentResolver.getType(uri) ?: "application/octet-stream"
 
+            // Get file name
+            var fileName = "unknown_file"
             contentResolver.query(uri, null, null, null, null)?.use { cursor ->
                 if (cursor.moveToFirst()) {
                     val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
                     if (nameIndex != -1) {
-                        name = cursor.getString(nameIndex)
+                        fileName = cursor.getString(nameIndex)
                     }
                 }
             }
 
-            if (!name.contains(".")) {
-                val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
-                if (extension != null) {
-                    name += ".$extension"
-                }
-            }
-
-            val tempFile = File(context.cacheDir, name)
+            // Copy file to cache directory to ensure we have a File object
+            val tempFile = File(
+                context.cacheDir,
+                "upload_${System.currentTimeMillis()}_${fileName.replace(" ", "_")}"
+            )
             contentResolver.openInputStream(uri)?.use { inputStream ->
                 FileOutputStream(tempFile).use { outputStream ->
                     inputStream.copyTo(outputStream)
                 }
             }
 
-            val finalSize = tempFile.length()
-
             SelectedFileDetails(
                 uri = uri,
                 file = tempFile,
-                name = name,
-                size = finalSize,
-                formattedSize = formatFileSize(finalSize),
+                name = fileName,
+                size = fileSize,
+                formattedSize = formatFileSize(fileSize),
                 mimeType = mimeType,
                 type = type
             )
@@ -436,89 +498,58 @@ private suspend fun getFileDetails(
     }
 }
 
-private fun formatFileSize(size: Long): String {
+fun getFileSizeFromCursor(context: Context, uri: Uri): Long {
+    context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+        if (cursor.moveToFirst()) {
+            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+            if (!cursor.isNull(sizeIndex)) {
+                return cursor.getLong(sizeIndex)
+            }
+        }
+    }
+    // Fallback for content schemes that don't support OpenableColumns.SIZE
+    return try {
+        context.contentResolver.openFileDescriptor(uri, "r")?.use {
+            it.statSize
+        } ?: 0L
+    } catch (e: Exception) {
+        0L
+    }
+}
+
+fun formatFileSize(size: Long): String {
     if (size <= 0) return "0 B"
     val units = arrayOf("B", "KB", "MB", "GB", "TB")
     val digitGroups = (log10(size.toDouble()) / log10(1024.0)).toInt()
     return DecimalFormat("#,##0.#").format(size / 1024.0.pow(digitGroups.toDouble())) + " " + units[digitGroups]
 }
 
-@Composable
-private fun UploadOptionItem(painter: Painter, title: String, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(vertical = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(painter, null, Modifier.size(24.dp), tint = MaterialTheme.appColors.textSecondary)
-        Spacer(Modifier.width(16.dp))
-        Text(
-            title,
-            style = MaterialTheme.appTypography.interRegular16px,
-            color = MaterialTheme.appColors.textPrimary
-        )
-    }
+internal fun launchCamera(context: Context, onUriCreated: (Uri) -> Unit) {
+    val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+    val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+    val file = File.createTempFile(
+        "JPEG_${timeStamp}_",
+        ".jpg",
+        storageDir
+    )
+    val uri = FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.fileProvider",
+        file
+    )
+    onUriCreated(uri)
 }
-
+@Preview(showBackground = true)
 @Composable
-private fun CustomDivider() {
-    HorizontalDivider(Modifier.fillMaxWidth(), 1.dp, Color(0xFFF5F5F5))
-}
-
-@Composable
-@androidx.compose.ui.tooling.preview.Preview(showBackground = true)
-private fun FileUploadBottomSheetPreview() {
+private fun FileUploadBottomSheetSinglePreview() {
     EcareProTheme {
-        FileUploadBottomSheet(
+        EcareProFileUploadBottomSheet (
             isVisible = true,
-            onDismiss = {},
-            allowedOptions = listOf(
-                UploadOption.CAMERA,
-                UploadOption.GALLERY,
-                UploadOption.DOCUMENT
-            ),
-            onFileSelected = {}
+            onDismiss = {  },
+            allowMultiple = false,
+            onFilesSelected = { _ ->  }
         )
     }
 }
 
-@Composable
-@androidx.compose.ui.tooling.preview.Preview(showBackground = true)
-private fun FileUploadBottomSheetLoadingPreview() {
-
-    EcareProTheme {
-        Column(Modifier.height(400.dp)) {
-            // A preview container to simulate bottom sheet background
-            Text("Sheet Content Simulation", modifier = Modifier.padding(16.dp))
-
-            FileUploadBottomSheet(
-                isVisible = true,
-                onDismiss = {},
-                allowedOptions = listOf(UploadOption.CAMERA),
-                onFileSelected = {}
-            )
-        }
-    }
-}
-
-@Composable
-@androidx.compose.ui.tooling.preview.Preview(showBackground = true)
-private fun RationaleDialogPreview() {
-    EcareProTheme {
-        AlertDialog(
-            onDismissRequest = { },
-            title = { Text("Permission Required") },
-            text = { Text("Camera access is needed to take photos.") },
-            confirmButton = {
-                TextButton(onClick = { }) { Text("Try Again") }
-            },
-            dismissButton = {
-                TextButton(onClick = { }) { Text("Cancel") }
-            },
-            containerColor = White
-        )
-    }
-}
 

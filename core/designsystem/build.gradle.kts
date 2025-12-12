@@ -8,6 +8,7 @@ android {
     testOptions.unitTests.isIncludeAndroidResources = true
 }
 dependencies {
+    implementation(projects.core.domain)
     api(libs.androidx.compose.foundation)
     api(libs.androidx.compose.foundation.layout)
     api(libs.androidx.compose.material.iconsExtended)

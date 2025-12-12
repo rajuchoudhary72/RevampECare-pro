@@ -16,12 +16,20 @@ internal class StaffRemoteDataSourceImpl @Inject constructor(
         return staffService.getClasses().unwrapPayload { myClasses }
     }
 
+    override suspend fun getMyClasses(): List<NetworkClass> {
+        return staffService.getClasses(null, null).unwrapPayload { myClasses }
+    }
+
     override suspend fun getSections(classStd: String): List<NetworkSection> {
         return staffService.getSections(classStd).unwrapPayload { sections }
     }
 
     override suspend fun getSubjects(classStd: String): List<NetworkSubject> {
         return staffService.getSubjects(classStd).unwrapPayload { mySubjects }
+    }
+
+    override suspend fun getMySubjects(): List<NetworkSubject> {
+        return staffService.getMySubjects().unwrapPayload { mySubjects }
     }
 
 }

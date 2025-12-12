@@ -56,6 +56,15 @@ enum class DocType(
             }
         }
 
+        fun fromFile(file: File): DocType? {
+            val extension = file.extension
+            return if (extension.isNotBlank()) {
+                fromExtension(".$extension")
+            } else {
+                null
+            }
+        }
+
         /**
          * RECOMMENDED: Determines the DocType from a given MIME type.
          * This is useful for handling files from content resolvers or network responses.

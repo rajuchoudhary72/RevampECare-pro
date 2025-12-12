@@ -18,6 +18,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Singleton
+import com.app.ecarepro.core.network.retrofit.service.SmsService
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -80,6 +82,9 @@ internal object NetworkModule {
     fun provideStaffService(
         @InjectInCoreModule retrofit: Retrofit,
     ): StaffService = retrofit.create(StaffService::class.java)
-
+    @Provides
+    fun provideSmsService(
+        @InjectInCoreModule retrofit: Retrofit,
+    ): SmsService = retrofit.create(SmsService::class.java)
 }
 

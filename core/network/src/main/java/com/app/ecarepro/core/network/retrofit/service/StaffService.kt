@@ -10,8 +10,8 @@ interface StaffService {
 
     @GET("Staff/MyClass")
     suspend fun getClasses(
-        @Query("SubID") subId: Int = 0,
-        @Query("OnlyClass") onlyClass: Boolean = true,
+        @Query("SubID") subId: Int? = 0,
+        @Query("OnlyClass") onlyClass: Boolean? = true,
     ): NetworkClasses
 
     @GET("Staff/Sections")
@@ -23,5 +23,8 @@ interface StaffService {
     suspend fun getSubjects(
         @Query("ClassSTD") classSTD: String,
     ): NetworkClassSubjects
-
+    @GET("Staff/MySubjects")
+    suspend fun getMySubjects(
+        @Query("ClassID") classId: Int = 0
+    ): NetworkClassSubjects
 }
