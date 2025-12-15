@@ -36,7 +36,7 @@ fun EntryProviderBuilder<NavKey>.EntryAssignmentNavigation(
         AssignmentScreen(
             navigateToBack = navigateToBack,
             navigateToAddAssignment = {
-                backStack.add(AssignmentNavigationGraph.AddAssignment())
+                backStack.add(AssignmentNavigationGraph.AddAssignment(it))
             },
             openDocViewer = openDocVier,
             navigateToDetails = { assignment ->

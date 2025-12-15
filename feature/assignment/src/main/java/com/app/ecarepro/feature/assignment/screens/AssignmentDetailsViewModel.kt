@@ -67,10 +67,12 @@ class AssignmentDetailsViewModel @AssistedInject constructor(
                     } else {
                         val submittedList = submitted.getOrNull()?.studentList ?: emptyList()
                         val notSubmittedList = notSubmitted.getOrNull()?.studentList ?: emptyList()
+                        val lateSubmittedList = notSubmitted.getOrNull()?.studentList?.filter { it.isLateSubmitted == true  } ?: emptyList()
                         _uiState.update {
                             it.copy(
                                 submittedStudent = submittedList,
                                 notSubmittedStudent = notSubmittedList,
+                                lateSubmittedStudent = lateSubmittedList,
                                 isLoading = false
                             )
                         }
@@ -110,13 +112,16 @@ data class AssignmentDetailsUiState(
     val assignment: Assignment,
     val submittedStudent: List<AssignmentStudent> = emptyList(),
     val notSubmittedStudent: List<AssignmentStudent> = emptyList(),
+    val lateSubmittedStudent: List<AssignmentStudent> = emptyList(),
     val selectedTab: SubmissionTab = SubmissionTab.SUBMITTED,
 )
 
 
 enum class SubmissionTab(val title: String) {
     SUBMITTED("Submitted"),
-    NOT_SUBMITTED("Not Submitted")
+    NOT_SUBMITTED("Not Submitted"),
+
+    LATE_SUBMITTED("Late Submitted");
 }
 
 sealed interface AssignmentDetailsIntent {

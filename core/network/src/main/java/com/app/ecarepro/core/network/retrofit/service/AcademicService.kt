@@ -5,6 +5,7 @@ import com.app.ecarepro.core.network.model.academic.NetworkAssignmentSubmissionR
 import com.app.ecarepro.core.network.model.academic.NetworkSaveAssignment
 import com.app.ecarepro.core.network.model.academic.NetworkTeacherAssignment
 import com.app.ecarepro.core.network.model.academic.NetworkTeacherTimetable
+import com.app.ecarepro.core.network.model.academic.NetworkDeleteAssignment
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -24,6 +25,11 @@ interface AcademicService {
         @Query("ID") id: String,
         @Query("NotSubmitted") notSubmitted: Boolean,
     ): NetworkAssignmentSubmissionReport
+
+    @GET("Academic/DeleteAssignment")
+    suspend fun deleteAssignment(
+        @Query("ID") id: String
+    ): CommonNetworkResponse
 
     @POST("Academic/PostAssignment")
     suspend fun saveAssignment(

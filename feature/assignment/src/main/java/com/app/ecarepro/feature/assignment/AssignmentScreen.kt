@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,6 +28,7 @@ import com.app.ecarepro.core.designsystem.R
 import com.app.ecarepro.core.domain.model.Assignment
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.UiStateHandler
+import com.app.ecarepro.designsystem.core.component.EcareConfirmationBottomSheet
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
 import com.app.ecarepro.designsystem.core.component.EcareProTopAppBar
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
@@ -36,13 +38,14 @@ import com.app.ecarepro.designsystem.core.theme.appColors
 import com.app.ecarepro.designsystem.core.theme.appTypography
 import com.app.ecarepro.feature.assignment.components.AssignmentList
 import com.app.ecarepro.feature.assignment.components.EmptyState
+import com.app.ecarepro.feature.assignment.components.MenuBottomSheet
 import com.app.ecarepro.feature.assignment.components.SearchAndFilterBottomBar
 
 @Composable
 fun AssignmentScreen(
     viewModel: AssignmentViewModel = hiltViewModel(),
     navigateToBack: () -> Unit,
-    navigateToAddAssignment: () -> Unit,
+    navigateToAddAssignment: (Assignment?) -> Unit,
     navigateToDetails: (Assignment) -> Unit,
     openDocViewer: (title: String, url: String) -> Unit,
 ) {
@@ -54,7 +57,7 @@ fun AssignmentScreen(
         viewModel.screenEvent.collect { event ->
             when (event) {
                 AssignmentEvent.NavigateBack -> navigateToBack()
-                AssignmentEvent.NavigateToAddAssignment -> navigateToAddAssignment()
+                AssignmentEvent.NavigateToAddAssignment -> navigateToAddAssignment(null)
                 is AssignmentEvent.ViewAssignment -> openDocViewer(event.title, event.url)
                 is AssignmentEvent.ShowMessage -> {
                     snackbarMessage = event.snackbarMessage
@@ -62,6 +65,7 @@ fun AssignmentScreen(
                 }
 
                 is AssignmentEvent.ViewReport -> navigateToDetails(event.assignment)
+                is AssignmentEvent.EditAssignment -> navigateToAddAssignment(event.assignment)
             }
         }
     }
@@ -127,20 +131,47 @@ private fun AssignmentScreenContent(
         UiStateHandler(
             modifier = Modifier.padding(paddingValues),
             state = uiState
-        ) { data ->
+        ) { data: AssignmentUiState ->
             if (data.filteredAssignments.isEmpty()) {
                 EmptyState(
                     modifier = Modifier.padding(paddingValues)
                 )
             } else {
-                AssignmentList(
+                PullToRefreshBox(
                     modifier = Modifier
                         .padding(paddingValues)
                         .fillMaxSize(),
-                    assignments = data.filteredAssignments,
-                    onViewClick = { handleIntent(AssignmentIntent.OnViewClicked(it)) },
-                    onDownloadClick = { handleIntent(AssignmentIntent.OnDownloadClicked(it)) },
-                    onViewReportClick = { handleIntent(AssignmentIntent.OnViewReportClicked(it)) }
+                    onRefresh = { handleIntent(AssignmentIntent.OnRefresh)},
+                    isRefreshing = data.isRefresing,
+                ) {
+                    AssignmentList(
+                        modifier = Modifier.fillMaxSize(),
+                        assignments = data.filteredAssignments,
+                        onViewClick = { handleIntent(AssignmentIntent.OnViewClicked(it)) },
+                        onDownloadClick = { handleIntent(AssignmentIntent.OnDownloadClicked(it)) },
+                        onViewReportClick = { handleIntent(AssignmentIntent.OnViewReportClicked(it)) },
+                        onMenuClick = { handleIntent(AssignmentIntent.OnMenuClicked(it)) }
+                    )
+                }
+
+            }
+
+            if (data.isMenuVisible) {
+                MenuBottomSheet(
+                    onDismiss = { handleIntent(AssignmentIntent.OnDismissMenu) },
+                    onClickEdit = { handleIntent(AssignmentIntent.OnEditClicked(data.selectedAssignment)) },
+                    onClickDelete = { handleIntent(AssignmentIntent.ShowDeleteBottomSheet) }
+                )
+            }
+
+            if (data.isDeleteSheetVisible) {
+                EcareConfirmationBottomSheet(
+                    title = "Delete",
+                    description = "Do you want to delete this syllabus?",
+                    buttonText = "Yeah, delete",
+                    buttonColor = MaterialTheme.appColors.error,
+                    onDismiss = { handleIntent(AssignmentIntent.OnDismissDeleteBottomSheet) },
+                    onDeleteClick = { handleIntent(AssignmentIntent.OnDeleteClicked(data.selectedAssignment)) }
                 )
             }
         }

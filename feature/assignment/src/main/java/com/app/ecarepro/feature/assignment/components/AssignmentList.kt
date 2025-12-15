@@ -19,6 +19,7 @@ fun AssignmentList(
     onViewClick: (Assignment) -> Unit,
     onDownloadClick: (Assignment) -> Unit,
     onViewReportClick: (Assignment) -> Unit,
+    onMenuClick: (Assignment) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier
@@ -29,7 +30,8 @@ fun AssignmentList(
                 assignment = assignment,
                 onViewClick = { onViewClick(assignment) },
                 onDownloadClick = { onDownloadClick(assignment) },
-                onViewReportClick = { onViewReportClick(assignment) }
+                onViewReportClick = { onViewReportClick(assignment) },
+                onMenuClick = { onMenuClick(assignment) }
             )
 
             HorizontalDivider(

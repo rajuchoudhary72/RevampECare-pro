@@ -17,4 +17,7 @@ interface AcademicRepository {
     fun saveAssignment(
         assignment: SaveAssignment,
     ): Flow<Result<String>>
+
+    fun deleteAssignment(id: String): Flow<Result<String>>
+
 }

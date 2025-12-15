@@ -11,6 +11,10 @@ import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
 import com.app.ecarepro.designsystem.core.component.MessageType
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
+import com.app.ecarepro.feature.assignment.AssignmentEvent.NavigateBack
+import com.app.ecarepro.feature.assignment.AssignmentEvent.NavigateToAddAssignment
+import com.app.ecarepro.feature.assignment.AssignmentEvent.ViewReport
+import com.app.ecarepro.feature.assignment.screens.AddAssignmentUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,40 +40,193 @@ class AssignmentViewModel @Inject constructor(
         fetchAssignments()
     }
 
-    private fun fetchAssignments() {
+    private fun fetchAssignments(refresh: Boolean = false) {
         viewModelScope.launch {
-            academicRepository
-                .getTeacherAssignments()
+            academicRepository.getTeacherAssignments()
                 .onStart {
-                    _uiState.update { UiState.Loading }
+                    _uiState.update { currentState ->
+                        if (refresh) {
+                            // If refreshing, keep the current data on screen but show the spinner
+                            (currentState as? UiState.Success)?.let { successState ->
+                                UiState.Success(successState.data.copy(isRefresing = true))
+                            } ?: currentState
+                        } else {
+                            // If not refreshing (cold load), show full screen loader
+                            UiState.Loading
+                        }
+                    }
                 }
                 .collect { result ->
+                    result.onSuccess { assignments ->
+                        _uiState.update {
+                            UiState.Success(
+                                AssignmentUiState(
+                                    assignments = assignments,
+                                    filteredAssignments = assignments, // Assuming no filter initially
+                                    isRefresing = false
+                                )
+                            )
+                        }
+                    }.onFailure { error ->
+                        handleFetchError(error, refresh)
+                    }
+                }
+        }
+    }
+
+    // Extract error handling to reduce nesting and complexity
+    private fun handleFetchError(error: Throwable, isRefresh: Boolean) {
+        val message = error.errorMessage() // Your extension function
+
+        if (isRefresh) {
+            // If refreshing, revert the 'isRefresing' flag in UI state
+            _uiState.update { currentState ->
+                (currentState as? UiState.Success)?.let { successState ->
+                    UiState.Success(successState.data.copy(isRefresing = false))
+                } ?: currentState
+            }
+
+            // And show a transient message
+            sendEvent(
+                AssignmentEvent.ShowMessage(
+                    SnackbarMessage(message, MessageType.ERROR)
+                )
+            )
+        } else {
+            // If cold load failed, show error screen
+            _uiState.update { UiState.Error(message) }
+        }
+    }
+
+
+    override fun handleIntent(intent: AssignmentIntent) {
+        when (intent) {
+            AssignmentIntent.OnRefresh -> fetchAssignments(true)
+            is AssignmentIntent.OnBackClicked -> viewModelScope.launch { sendEvent(NavigateBack) }
+            is AssignmentIntent.OnAddNewClicked -> viewModelScope.launch {
+                sendEvent(
+                    NavigateToAddAssignment
+                )
+            }
+
+            is AssignmentIntent.OnSearchQueryChanged -> onSearchQueryChanged(intent.query)
+            is AssignmentIntent.OnViewClicked -> viewAssignment(intent.assignment)
+            is AssignmentIntent.OnDownloadClicked -> downloadAssignment(intent.assignment)
+            is AssignmentIntent.OnViewReportClicked -> sendEvent(ViewReport(intent.assignment))
+            is AssignmentIntent.OnMenuClicked -> showMenuBottomSheet(intent.assignment)
+            AssignmentIntent.OnDismissDeleteBottomSheet -> dismissDeleteBottomSheet()
+            AssignmentIntent.OnDismissMenu -> dismissMenuBottomSheet()
+            is AssignmentIntent.OnEditClicked -> editAssignment(intent.assignment)
+            is AssignmentIntent.ShowDeleteBottomSheet -> showDeleteBottomSheet()
+            is AssignmentIntent.OnDeleteClicked -> deleteAssignment(intent.assignment)
+
+        }
+    }
+
+    private fun deleteAssignment(assignment: Assignment?) {
+        if (assignment == null) return
+        viewModelScope.launch {
+            academicRepository
+                .deleteAssignment(assignment.id)
+                .onStart {
+                    updateState {
+                        it.copy(
+                            isLoading = true,
+                            isDeleteSheetVisible = false
+                        )
+                    }
+                }
+                .collect { result ->
+                    updateState {
+                        it.copy(isLoading = false)
+                    }
                     result
-                        .onSuccess { assignments ->
-                            _uiState.update {
-                                UiState.Success(
-                                    AssignmentUiState(
-                                        assignments = assignments,
-                                        filteredAssignments = assignments
+                        .onSuccess { message ->
+                            sendEvent(
+                                AssignmentEvent.ShowMessage(
+                                    SnackbarMessage(
+                                        message,
+                                        MessageType.SUCCESS
                                     )
                                 )
-                            }
+                            )
+                            handleIntent(AssignmentIntent.OnRefresh)
                         }
                         .onFailure { error ->
-                            _uiState.update { UiState.Error(error.errorMessage()) }
+                            sendEvent(
+                                AssignmentEvent.ShowMessage(
+                                    SnackbarMessage(
+                                        error.errorMessage(),
+                                        MessageType.ERROR
+                                    )
+                                )
+                            )
                         }
                 }
         }
     }
 
-    override fun handleIntent(intent: AssignmentIntent) {
-        when (intent) {
-            is AssignmentIntent.OnBackClicked -> viewModelScope.launch { sendEvent(AssignmentEvent.NavigateBack) }
-            is AssignmentIntent.OnAddNewClicked -> viewModelScope.launch { sendEvent(AssignmentEvent.NavigateToAddAssignment) }
-            is AssignmentIntent.OnSearchQueryChanged -> onSearchQueryChanged(intent.query)
-            is AssignmentIntent.OnViewClicked -> viewAssignment(intent.assignment)
-            is AssignmentIntent.OnDownloadClicked -> downloadAssignment(intent.assignment)
-            is AssignmentIntent.OnViewReportClicked -> sendEvent(AssignmentEvent.ViewReport(intent.assignment))
+    private fun updateState(update: (AssignmentUiState) -> AssignmentUiState) {
+        _uiState.update { currentState ->
+            if (currentState is UiState.Success) {
+                UiState.Success(update(currentState.data))
+            } else {
+                currentState
+            }
+        }
+    }
+    private fun showDeleteBottomSheet() {
+        val currentState = (_uiState.value as? UiState.Success)?.data ?: return
+        _uiState.update {
+            UiState.Success(
+                currentState.copy(
+                    isDeleteSheetVisible = true,
+                    isMenuVisible = false
+                )
+            )
+        }
+    }
+
+    private fun editAssignment(assignment: Assignment?) {
+        if (assignment != null) {
+            sendEvent(AssignmentEvent.EditAssignment(assignment))
+            dismissMenuBottomSheet()
+        }
+    }
+
+    private fun showMenuBottomSheet(assignment: Assignment) {
+        val currentState = (_uiState.value as? UiState.Success)?.data ?: return
+        _uiState.update {
+            UiState.Success(
+                currentState.copy(
+                    isMenuVisible = true,
+                    selectedAssignment = assignment
+                )
+            )
+        }
+    }
+
+    private fun dismissMenuBottomSheet() {
+        val currentState = (_uiState.value as? UiState.Success)?.data ?: return
+        _uiState.update {
+            UiState.Success(
+                currentState.copy(
+                    isMenuVisible = false,
+                    selectedAssignment = null
+                )
+            )
+        }
+    }
+
+    private fun dismissDeleteBottomSheet() {
+        val currentState = (_uiState.value as? UiState.Success)?.data ?: return
+        _uiState.update {
+            UiState.Success(
+                currentState.copy(
+                    isDeleteSheetVisible = false,
+                    selectedAssignment = null
+                )
+            )
         }
     }
 
@@ -150,22 +307,39 @@ class AssignmentViewModel @Inject constructor(
 @Immutable
 data class AssignmentUiState(
     val isLoading: Boolean = false,
+
+    val isRefresing: Boolean = false,
     val searchQuery: String = "",
     val assignments: List<Assignment> = emptyList(),
     val filteredAssignments: List<Assignment> = emptyList(),
-    // Bottom sheet states if needed like in Syllabus
-    val isMenuVisible: Boolean = false,
     val selectedAssignmentId: String? = null,
+    val isMenuVisible: Boolean = false,
+    val isDeleteSheetVisible: Boolean = false,
+    val selectedAssignment: Assignment? = null,
 )
 
 // MVI Intent
 sealed interface AssignmentIntent {
     data object OnBackClicked : AssignmentIntent
+
+    data object OnRefresh : AssignmentIntent
+
     data object OnAddNewClicked : AssignmentIntent
     data class OnSearchQueryChanged(val query: String) : AssignmentIntent
     data class OnViewClicked(val assignment: Assignment) : AssignmentIntent
     data class OnDownloadClicked(val assignment: Assignment) : AssignmentIntent
     data class OnViewReportClicked(val assignment: Assignment) : AssignmentIntent
+
+    data class OnMenuClicked(val assignment: Assignment) : AssignmentIntent
+
+    data object OnDismissMenu : AssignmentIntent
+
+    data object OnDismissDeleteBottomSheet : AssignmentIntent
+
+    data class OnEditClicked(val assignment: Assignment?) : AssignmentIntent
+
+    data object ShowDeleteBottomSheet : AssignmentIntent
+    data class OnDeleteClicked(val assignment: Assignment?) : AssignmentIntent
 }
 
 // MVI Event (One-time effects)
@@ -174,6 +348,7 @@ sealed interface AssignmentEvent {
     data object NavigateToAddAssignment : AssignmentEvent
 
     data class ViewReport(val assignment: Assignment) : AssignmentEvent
+    data class EditAssignment(val assignment: Assignment) : AssignmentEvent
     data class ViewAssignment(val title: String, val url: String) : AssignmentEvent
     data class ShowMessage(val snackbarMessage: SnackbarMessage) :
         AssignmentEvent
