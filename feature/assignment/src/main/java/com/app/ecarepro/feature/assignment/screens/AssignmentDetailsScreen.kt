@@ -107,6 +107,7 @@ private fun AssignmentDetailsContent(
             val students = when (uiState.selectedTab) {
                 SubmissionTab.SUBMITTED -> uiState.submittedStudent
                 SubmissionTab.NOT_SUBMITTED -> uiState.notSubmittedStudent
+                SubmissionTab.LATE_SUBMITTED -> uiState.lateSubmittedStudent
             }
 
             if (students.isEmpty()) {

@@ -13,7 +13,7 @@ import javax.inject.Inject
 import com.app.ecarepro.core.network.model.academic.toDomainModel
 import com.app.ecarepro.core.network.model.academic.toNetworkModel
 import com.app.ecarepro.core.domain.model.SaveAssignment
-
+import com.app.ecarepro.core.network.model.academic.NetworkDeleteAssignment
 
 
 internal class AcademicRepositoryImpl @Inject constructor(
@@ -44,6 +44,13 @@ internal class AcademicRepositoryImpl @Inject constructor(
         return asResultFlow {
             academicRemoteDataSource.saveAssignment(
                 assignment.toNetworkModel()
+            ).message
+        }
+    }
+    override fun deleteAssignment(id: String): Flow<Result<String>> {
+        return asResultFlow {
+            academicRemoteDataSource.deleteAssignment(
+                NetworkDeleteAssignment(id)
             ).message
         }
     }

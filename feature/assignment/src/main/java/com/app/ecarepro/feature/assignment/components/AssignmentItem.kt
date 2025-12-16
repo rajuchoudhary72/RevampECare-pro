@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,6 +40,7 @@ fun AssignmentItem(
     onViewClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onViewReportClick: () -> Unit,
+    onMenuClick: () -> Unit,
 ) {
     val isOverdue = true
 
@@ -59,10 +61,11 @@ fun AssignmentItem(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Top
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
+                modifier = Modifier.weight(1f),
                 text = assignment.title.orEmpty(),
                 style = MaterialTheme.appTypography.interSemiBold14px,
                 color = MaterialTheme.appColors.textPrimary
@@ -73,6 +76,19 @@ fun AssignmentItem(
                 style = MaterialTheme.appTypography.interMedium16px.copy(fontSize = 12.sp),
                 color = if (isOverdue) warningColor else successColor
             )
+
+            if (assignment.isMine == true)
+                IconButton(
+                    modifier = Modifier
+                        .height(22.dp)
+                        .width(32.dp)
+                        .padding(start = 10.dp),
+                    onClick = onMenuClick) {
+                    Icon(
+                        painterResource(R.drawable.ic_hori_menu),
+                        contentDescription = "More options"
+                    )
+                }
         }
 
         Spacer(modifier = Modifier.height(4.dp))
@@ -223,7 +239,7 @@ private fun AssignmentItemPreview() {
                 assignmentBy = null,
                 hasAttachment = false,
                 isActive = null,
-                isMine = null,
+                isMine = true,
                 lateSubmission = null,
                 stIDs = null,
                 submitDate = null,
@@ -233,7 +249,8 @@ private fun AssignmentItemPreview() {
             ),
             onViewClick = {},
             onDownloadClick = {},
-            onViewReportClick = {}
+            onViewReportClick = {},
+            onMenuClick = {}
         )
     }
 }

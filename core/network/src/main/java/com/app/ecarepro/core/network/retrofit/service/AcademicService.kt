@@ -26,6 +26,10 @@ interface AcademicService {
         @Query("NotSubmitted") notSubmitted: Boolean,
     ): NetworkAssignmentSubmissionReport
 
+    @GET("Academic/DeleteAssignment")
+    suspend fun deleteAssignment(
+        @Query("ID") id: String
+    ): CommonNetworkResponse
     @POST("Academic/PostAssignment")
     suspend fun saveAssignment(
         @Body request: NetworkSaveAssignment,

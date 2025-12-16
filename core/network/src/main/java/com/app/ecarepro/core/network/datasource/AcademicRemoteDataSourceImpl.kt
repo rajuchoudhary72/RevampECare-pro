@@ -9,6 +9,7 @@ import com.app.ecarepro.core.network.model.academic.NetworkTeacherTimetable
 import com.app.ecarepro.core.network.model.unwrapPayload
 import com.app.ecarepro.core.network.retrofit.service.AcademicService
 import javax.inject.Inject
+import com.app.ecarepro.core.network.model.academic.NetworkDeleteAssignment
 
 internal class AcademicRemoteDataSourceImpl @Inject constructor(
     private val academicService: AcademicService,
@@ -33,6 +34,11 @@ internal class AcademicRemoteDataSourceImpl @Inject constructor(
     override suspend fun saveAssignment(saveAssignment: NetworkSaveAssignment): CommonNetworkResponse {
         return academicService.saveAssignment(
             saveAssignment
+        ).unwrapPayload { this }
+    }
+    override suspend fun deleteAssignment(deleteAssignment: NetworkDeleteAssignment): CommonNetworkResponse {
+        return academicService.deleteAssignment(
+            deleteAssignment.id
         ).unwrapPayload { this }
     }
 }

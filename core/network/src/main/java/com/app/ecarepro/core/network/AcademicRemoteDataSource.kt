@@ -5,7 +5,7 @@ import com.app.ecarepro.core.network.model.academic.NetworkAssignment
 import com.app.ecarepro.core.network.model.academic.NetworkTeacherTimetable
 import com.app.ecarepro.core.network.model.academic.NetworkAssignmentSubmissionReport
 import com.app.ecarepro.core.network.model.academic.NetworkSaveAssignment
-
+import com.app.ecarepro.core.network.model.academic.NetworkDeleteAssignment
 
 interface AcademicRemoteDataSource {
     suspend fun getTeacherTimeline(
@@ -17,4 +17,5 @@ interface AcademicRemoteDataSource {
         submitted: Boolean,
     ): NetworkAssignmentSubmissionReport
     suspend fun saveAssignment(saveAssignment: NetworkSaveAssignment): CommonNetworkResponse
+    suspend fun deleteAssignment(deleteAssignment: NetworkDeleteAssignment): CommonNetworkResponse
 }

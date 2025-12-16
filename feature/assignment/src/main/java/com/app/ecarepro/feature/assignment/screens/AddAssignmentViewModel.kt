@@ -26,6 +26,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -44,10 +45,8 @@ class AddAssignmentViewModel @AssistedInject constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
-        fetchClasses()
-        fetchStudents()
+        fetchAssignmentSubjectsAndClasses()
     }
-
 
     override fun handleIntent(intent: AddAssignmentIntent) {
         when (intent) {
@@ -193,58 +192,46 @@ class AddAssignmentViewModel @AssistedInject constructor(
         }
     }
 
-
-    private fun fetchClasses() {
+    private fun fetchAssignmentSubjectsAndClasses() {
         viewModelScope.launch {
-            syllabusRepository.getAssignmentClasses().onStart {
-                updateState { it.copy(isLoading = true) }
-            }.collect { result ->
-                result.onSuccess { classes ->
-                    val defaultSelectedClass = assignment?.classX
-
-                    updateState {
-                        it.copy(
-                            isLoading = false,
-                            classes = classes,
-                            title = assignment?.title ?: "",
-                        )
-                    }
-
-                    // If a class was selected (either default or from syllabus), fetch sub-data
-                    // Pass 'true' for isRestoring if we are in edit mode and successfully matched a class
-                    val matchedClass = classes.find { it.className == defaultSelectedClass }
-                    if (matchedClass != null) {
-                        fetchStudents(
-                            classStd = matchedClass.classID.toString(),
-                            isRestoring = assignment != null && matchedClass.className == assignment.classX
-                        )
-                    }
-                }.onFailure { error ->
-                    updateState { it.copy(isLoading = false) }
-                    sendError(error.errorMessage())
-                }
+            combine(
+                syllabusRepository.getAssignmentClasses(),
+                syllabusRepository.getAssignmentSubjects()
+            ) { classes, subjects ->
+                classes to subjects
             }
-        }
-    }
+                .onStart { }
+                .collect { (classes, subjects) ->
+                    if (classes.isFailure || subjects.isFailure) {
+                        _uiState.update {
+                            UiState.Error(
+                                classes.exceptionOrNull()?.errorMessage()
+                                    ?: subjects.exceptionOrNull()?.errorMessage()
+                                    ?: "Unknown error"
+                            )
+                        }
+                    } else {
+                        val classList = classes.getOrNull() ?: emptyList()
+                        val subjectList = subjects.getOrNull() ?: emptyList()
+
+                        val selectedSubject =
+                            subjectList.firstOrNull { it.subjectName == assignment?.subject }?.subjectName
 
 
-    private fun fetchStudents() {
-        viewModelScope.launch {
-            syllabusRepository.getAssignmentSubjects().onStart {
-                updateState { it.copy(isLoading = true) }
-            }.collect { result ->
-                result.onSuccess { subjects ->
-                    updateState {
-                        it.copy(
-                            isLoading = false,
-                            subject = subjects,
-                        )
+                        updateState { currentState ->
+                            currentState.copy(
+                                classes = classList,
+                                subject = subjectList,
+                                selectedSubject = selectedSubject,
+                                title = assignment?.title.orEmpty(),
+                                isActive = assignment?.isActive ?: true,
+                                isAllowedForLateSubmission = assignment?.lateSubmission ?: true,
+                                assignmentDate = assignment?.asgDate.orEmpty(),
+                                submissionDate = assignment?.submitDate.orEmpty()
+                            )
+                        }
                     }
-                }.onFailure { error ->
-                    updateState { it.copy(isLoading = false) }
-                    sendError(error.errorMessage())
                 }
-            }
         }
     }
 
@@ -395,7 +382,8 @@ class AddAssignmentViewModel @AssistedInject constructor(
             // 1. Resolve Class and Subject IDs
             val subjectObj =
                 currentState.subject.find { it.subjectName == currentState.selectedSubject }
-            val classIds = currentState.selectedClass.joinToString(separator = ",") { it.classID.toString() }
+            val classIds =
+                currentState.selectedClass.joinToString(separator = ",") { it.classID.toString() }
             val subjectId = subjectObj?.subID ?: 0
 
             // 2. Process Files (Convert to Base64)
