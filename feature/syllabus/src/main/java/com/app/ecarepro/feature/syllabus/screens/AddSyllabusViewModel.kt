@@ -145,7 +145,6 @@ class AddSyllabusViewModel @AssistedInject constructor(
             is AddSyllabusIntent.OnShowError -> {
                 sendError(intent.error)
             }
-
             is AddSyllabusIntent.OnDeleteSelectedFile ->{
                 updateState {
                     it.copy(selectedFile = null)
@@ -176,17 +175,17 @@ class AddSyllabusViewModel @AssistedInject constructor(
                             selectedClass = defaultSelectedClass,
                             title = syllabus?.title ?: "",
                             // If editing, pre-fill the file details (without the File object)
-                            /* selectedFile = syllabus?.fileName?.let { fileName ->
-                                 SelectedFileDetails(
-                                     name = fileName,
-                                     file = File(syllabus.filePath.orEmpty()),
-                                     uri = null,
-                                     size = 0,
-                                     formattedSize = "",
-                                     mimeType = "",
-                                     type = SelectedFileType.DOCUMENT
-                                 )
-                             }*/
+                           /* selectedFile = syllabus?.fileName?.let { fileName ->
+                                SelectedFileDetails(
+                                    name = fileName,
+                                    file = File(syllabus.filePath.orEmpty()),
+                                    uri = null,
+                                    size = 0,
+                                    formattedSize = "",
+                                    mimeType = "",
+                                    type = SelectedFileType.DOCUMENT
+                                )
+                            }*/
                         )
                     }
 
@@ -262,8 +261,7 @@ class AddSyllabusViewModel @AssistedInject constructor(
                             val matchedSections = sections.filter { it.secID in syllabusSectionIds }
                             if (matchedSections.isNotEmpty()) {
                                 selectedSectionNames = matchedSections.map { it.secName.orEmpty() }
-                                selectedTabIndex =
-                                    1 // Switch to "Section wise" if specific sections are selected
+                                selectedTabIndex = 1 // Switch to "Section wise" if specific sections are selected
                             }
                         }
                     }

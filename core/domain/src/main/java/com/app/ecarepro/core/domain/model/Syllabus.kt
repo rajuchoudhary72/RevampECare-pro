@@ -1,5 +1,4 @@
 package com.app.ecarepro.core.domain.model
-
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 

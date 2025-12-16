@@ -30,8 +30,7 @@ fun TextComponentView(component: TextComponent, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(component.style.backgroundColor)
-            .padding(8.dp),
+            .background(component.style.backgroundColor),
         contentAlignment = component.style.alignment
     ) {
         androidx.compose.material3.Text(
@@ -59,6 +58,7 @@ fun TextComponentPreview() {
                 text = "Default TextComponent"
             )
         )
+
 
         // Customized TextComponent (Nunito Bold, White text, Black background, Center)
         TextComponentView(

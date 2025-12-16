@@ -4,6 +4,7 @@ import com.app.ecarepro.core.domain.model.SaveAssignment
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.collections.map
 
 @Serializable
 @InternalSerializationApi

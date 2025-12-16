@@ -1,12 +1,22 @@
 package com.app.ecarepro.core.network.retrofit.service
 
+import com.app.ecarepro.core.network.model.leave.NetworkLeaveActionRequest
+import com.app.ecarepro.core.network.model.leave.NetworkLeaveActionResponse
+import com.app.ecarepro.core.network.model.leave.NetworkLeaveReportResponse
 import com.app.ecarepro.core.network.model.user.NetworkGetCredentialRequest
 import com.app.ecarepro.core.network.model.user.NetworkGetCredentialsResponse
 import com.app.ecarepro.core.network.model.user.NetworkGetUsernameByUIDResponse
+import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionRequest
+import com.app.ecarepro.core.network.model.questionnaire.NetworkAddQuestionResponse
+import com.app.ecarepro.core.network.model.questionnaire.NetworkAnswerListResponse
+import com.app.ecarepro.core.network.model.questionnaire.NetworkPostAnswerRequest
+import com.app.ecarepro.core.network.model.questionnaire.NetworkPostAnswerResponse
+import com.app.ecarepro.core.network.model.questionnaire.NetworkQuestionnaireResponse
 import com.app.ecarepro.core.network.model.user.NetworkLoginRequest
 import com.app.ecarepro.core.network.model.user.NetworkLoginResponse
 import com.app.ecarepro.core.network.model.user.NetworkResendOtpRequest
 import com.app.ecarepro.core.network.model.user.NetworkValidateOtpRequest
+import kotlinx.serialization.InternalSerializationApi
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -41,4 +51,40 @@ interface UserService {
         @Query("RcvOn") receivedOn: String,
     ): NetworkGetUsernameByUIDResponse
 
+
+    @GET("Questionnaire/List")
+    suspend fun getQuestionnaireList(
+        @Query("pg") pg: Int,
+        @Query("myque") myQuestions: Boolean,
+    ): NetworkQuestionnaireResponse
+
+    @GET("Questionnaire/AnswerList")
+    suspend fun getAnswerList(
+        @Query("QID") qid: Int
+    ): NetworkAnswerListResponse
+
+    @POST("Questionnaire/PostAnswer")
+    suspend fun postAnswer(
+        @Body request: NetworkPostAnswerRequest
+    ): NetworkPostAnswerResponse
+
+    @POST("Questionnaire/AddQuestion")
+    suspend fun addQuestion(
+        @Body request: NetworkAddQuestionRequest
+    ): NetworkAddQuestionResponse
+
+    @GET("Leave/Report")
+    suspend fun getLeaveReport(
+        @Query("Status") status: Int,
+        @Query("ord") order: Int,
+        @Query("ApplType") applType: Int,
+        @Query("pg") page: Int,
+        @Query("Attper") showAttendance: Boolean,
+        @Query("Duration") duration: Int = 0
+    ): NetworkLeaveReportResponse
+
+    @POST("Leave/Action")
+    suspend fun leaveAction(
+        @Body request: NetworkLeaveActionRequest
+    ): NetworkLeaveActionResponse
 }

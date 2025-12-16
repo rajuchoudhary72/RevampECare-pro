@@ -1,6 +1,5 @@
 package com.app.ecarepro.feature.syllabus.screens
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,11 +37,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.UiStateHandler
 import com.app.ecarepro.designsystem.core.component.Button
-import com.app.ecarepro.designsystem.core.component.EcareProFileAttachment
-import com.app.ecarepro.designsystem.core.component.EcareProFileUploadBottomSheet
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
 import com.app.ecarepro.designsystem.core.component.EcareProSelectionBottomSheet
 import com.app.ecarepro.designsystem.core.component.EcareProTopAppBar
+import com.app.ecarepro.designsystem.core.component.EcareProFileAttachment
+import com.app.ecarepro.designsystem.core.component.EcareProFileUploadBottomSheet
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import com.app.ecarepro.designsystem.core.component.UploadOption
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
@@ -234,7 +233,6 @@ private fun AddSyllabusContent(
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
-
 
 
                     EcareProFileAttachment(

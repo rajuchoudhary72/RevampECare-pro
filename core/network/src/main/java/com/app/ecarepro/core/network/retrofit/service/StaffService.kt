@@ -23,10 +23,8 @@ interface StaffService {
     suspend fun getSubjects(
         @Query("ClassSTD") classSTD: String,
     ): NetworkClassSubjects
-
     @GET("Staff/MySubjects")
     suspend fun getMySubjects(
         @Query("ClassID") classId: Int = 0
     ): NetworkClassSubjects
-
 }

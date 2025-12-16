@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.app.ecarepro.core.domain.ext.toOrdinal
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
 import com.app.ecarepro.designsystem.core.theme.White
 import com.app.ecarepro.designsystem.core.theme.appColors
@@ -28,10 +29,11 @@ fun ClassTabs(
             val textStyle =
                 if (isSelected) MaterialTheme.appTypography.interSemiBold14px.copy(fontSize = 16.sp)
                 else MaterialTheme.appTypography.interMedium16px.copy(fontSize = 14.sp)
+            val displayText = classStd.toOrdinal()
             Tab(
                 selected = isSelected,
                 onClick = { onClickClassTabs(index) },
-                text = { Text(text = classStd, style = textStyle) },
+                text = { Text(text = displayText, style = textStyle) },
                 selectedContentColor = MaterialTheme.appColors.primary,
                 unselectedContentColor = MaterialTheme.appColors.textPrimary,
             )
@@ -44,8 +46,8 @@ fun ClassTabs(
 private fun ClassTabsPreview() {
     EcareProTheme {
         ClassTabs(
-            selectedClassIndex = 1,
-            classes = listOf("All", "UKG", "LKG"),
+            selectedClassIndex = 2,
+            classes = listOf("All", "1", "2", "3", "4", "5", "UKG", "LKG"),
             onClickClassTabs = {}
         )
     }

@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.app.ecarepro.core.domain.ext.toOrdinal
 import com.app.ecarepro.core.domain.model.Syllabus
 import com.app.ecarepro.designsystem.core.component.TextButton
 import com.app.ecarepro.designsystem.core.theme.EcareProTheme
@@ -62,8 +63,9 @@ fun SyllabusItem(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    val displayText = syllabus.classSTD.toOrdinal()
                     Text(
-                        text = syllabus.classSTD,
+                        text = displayText,
                         style = MaterialTheme.appTypography.interMedium16px.copy(fontSize = 12.sp),
                         color = MaterialTheme.appColors.primary
                     )
@@ -107,7 +109,7 @@ fun SyllabusItem(
                     .padding(horizontal = 2.dp),
                 title = "View",
                 onClick = onViewClick,
-                leadingIcon = R.drawable.ic_eye,
+                leadingIcon = R.drawable.view_icon,
                 contentPadding = PaddingValues(),
                 titleColor = MaterialTheme.appColors.textSecondary
             )

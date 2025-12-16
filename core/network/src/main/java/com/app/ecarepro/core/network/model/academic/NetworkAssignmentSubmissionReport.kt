@@ -6,6 +6,7 @@ import com.app.ecarepro.core.network.model.NetworkResponse
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.collections.map
 
 @Serializable
 @InternalSerializationApi

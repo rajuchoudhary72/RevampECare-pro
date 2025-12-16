@@ -251,6 +251,8 @@ class SyllabusViewModel @Inject constructor(
         val currentState = (_uiState.value as? UiState.Success)?.data ?: return
         val syllabus = getSyllabusById(currentState, syllabusId)
 
+
+
         syllabus?.filePath?.let {
             sendEvent(
                 SyllabusEvent.ViewSyllabus(

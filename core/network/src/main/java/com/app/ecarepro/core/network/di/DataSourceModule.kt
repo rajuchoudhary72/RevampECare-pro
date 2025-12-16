@@ -45,10 +45,8 @@ abstract class DataSourceModule {
     internal abstract fun bindsStaffRemoteDataSource(
         dataSource: StaffRemoteDataSourceImpl,
     ): StaffRemoteDataSource
-
     @Binds
     internal abstract fun bindsSmsRemoteDataSource(
         dataSource: SmsRemoteDataSourceImpl,
     ): SmsRemoteDataSource
-
 }
