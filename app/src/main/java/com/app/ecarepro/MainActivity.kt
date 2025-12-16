@@ -12,6 +12,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
+        // Turn off the decor fitting system windows, which allows us to handle insets,
+        // including IME animations
         super.onCreate(savedInstanceState)
         setContent {
             EcareProTheme {
