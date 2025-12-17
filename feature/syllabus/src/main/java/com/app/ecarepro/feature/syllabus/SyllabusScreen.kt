@@ -33,6 +33,7 @@ import com.app.ecarepro.core.domain.model.Syllabus
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.UiStateHandler
 import com.app.ecarepro.designsystem.core.component.BottomSearchBarView
+import com.app.ecarepro.designsystem.core.component.ECAttachment
 import com.app.ecarepro.designsystem.core.component.EcareProClassTabs
 import com.app.ecarepro.designsystem.core.component.EcareProScaffold
 import com.app.ecarepro.designsystem.core.component.EcareProTopAppBar
@@ -51,7 +52,7 @@ fun SyllabusScreen(
     viewModel: SyllabusViewModel = hiltViewModel(),
     navigateToBack: () -> Unit,
     navigateToAddSyllabus: (Syllabus?) -> Unit,
-    openDocVier: (title: String, url: String) -> Unit,
+    navigateToAttachmentList: (List<ECAttachment>) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -62,7 +63,7 @@ fun SyllabusScreen(
         viewModel.screenEvent.collect { event ->
             when (event) {
                 SyllabusEvent.NavigateBack -> navigateToBack()
-                is SyllabusEvent.ViewSyllabus -> openDocVier(event.title, event.url)
+                is SyllabusEvent.NavigateToAttachmentList -> navigateToAttachmentList(event.attachments)
                 is SyllabusEvent.ShowMessage -> {
                     snackbarMessage = event.snackbarMessage
                     snackbarHostState.showSnackbar(event.snackbarMessage.text)

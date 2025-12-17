@@ -6,6 +6,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.NavKey
 import com.app.ecarepro.core.ui.viewmodel.navKeyViewModel
+import com.app.ecarepro.designsystem.core.component.ECAttachment
 import com.app.ecarepro.feature.syllabus.SyllabusScreen
 import com.app.ecarepro.feature.syllabus.screens.AddSyllabusScreen
 import com.app.ecarepro.feature.syllabus.screens.AddSyllabusViewModel
@@ -26,12 +27,12 @@ sealed interface SyllabusNavigationGraph : NavKey {
 fun EntryProviderBuilder<NavKey>.EntrySyllabusNavigation(
     backStack: SnapshotStateList<NavKey>,
     navigateToBack: () -> Unit,
-    openDocVier: (title: String, url: String) -> Unit,
+    navigateToAttachmentList: (List<ECAttachment>) -> Unit,
 ) {
     entry<SyllabusNavigationGraph.Syllabus> {
         SyllabusScreen(
             navigateToBack = navigateToBack,
-            openDocVier = openDocVier,
+            navigateToAttachmentList = navigateToAttachmentList,
             navigateToAddSyllabus = { syllabus ->
                 backStack.add(SyllabusNavigationGraph.AddSyllabus(syllabus))
             }
