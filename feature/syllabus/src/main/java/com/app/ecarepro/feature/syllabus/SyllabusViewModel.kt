@@ -9,6 +9,7 @@ import com.app.ecarepro.core.download.FileDownloader
 import com.app.ecarepro.core.download.model.DownloadRequest
 import com.app.ecarepro.core.ui.UiState
 import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
+import com.app.ecarepro.designsystem.core.component.ECAttachment
 import com.app.ecarepro.designsystem.core.component.MessageType
 import com.app.ecarepro.designsystem.core.component.SnackbarMessage
 import com.app.ecarepro.feature.syllabus.SyllabusViewModel.Companion.DEFAULT_SELECTED_CLASS_INDEX
@@ -251,16 +252,22 @@ class SyllabusViewModel @Inject constructor(
         val currentState = (_uiState.value as? UiState.Success)?.data ?: return
         val syllabus = getSyllabusById(currentState, syllabusId)
 
-
-
-        syllabus?.filePath?.let {
+        if (syllabus == null) {
             sendEvent(
-                SyllabusEvent.ViewSyllabus(
-                    title = syllabus.title ?: "Syllabus",
-                    url = it
+                SyllabusEvent.ShowMessage(
+                    SnackbarMessage(
+                        "Syllabus not found.",
+                        MessageType.ERROR
+                    )
                 )
             )
-        } ?: run {
+            return
+        }
+
+        val filePath = syllabus.filePath
+        val fileName = syllabus.title ?: syllabus.fileName
+
+        if (filePath.isNullOrBlank() || fileName.isNullOrBlank()) {
             sendEvent(
                 SyllabusEvent.ShowMessage(
                     SnackbarMessage(
@@ -269,7 +276,20 @@ class SyllabusViewModel @Inject constructor(
                     )
                 )
             )
+            return
         }
+
+        val attachment = ECAttachment(
+            id = syllabus.id,
+            name = fileName,
+            url = filePath
+        )
+
+        sendEvent(
+            SyllabusEvent.NavigateToAttachmentList(
+                attachments = listOf(attachment)
+            )
+        )
     }
 
     private fun showDeleteBottomSheet() {
@@ -412,9 +432,9 @@ sealed interface SyllabusEvent {
     data object NavigateBack : SyllabusEvent
 
     data object NavigateToAddSyllabus : SyllabusEvent
-    data class ViewSyllabus(
-        val title: String,
-        val url: String,
+
+    data class NavigateToAttachmentList(
+        val attachments: List<ECAttachment>
     ) : SyllabusEvent
 
     data class EditSyllabus(val syllabus: Syllabus) : SyllabusEvent

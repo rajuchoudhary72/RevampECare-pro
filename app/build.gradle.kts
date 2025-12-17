@@ -152,6 +152,7 @@ dependencies {
 
 
     implementation(projects.core.data)
+    implementation(projects.core.download)
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
@@ -227,7 +228,7 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     //implementation("com.caverock:androidsvg:1.4")
-
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
     implementation("com.intuit.sdp:sdp-android:1.0.5")
     implementation("de.hdodenhof:circleimageview:2.2.0")
