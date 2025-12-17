@@ -141,7 +141,7 @@ private fun AssignmentScreenContent(
                     modifier = Modifier
                         .padding(paddingValues)
                         .fillMaxSize(),
-                    onRefresh = { handleIntent(AssignmentIntent.OnRefresh)},
+                    onRefresh = { handleIntent(AssignmentIntent.OnRefresh) },
                     isRefreshing = data.isRefresing,
                 ) {
                     AssignmentList(
@@ -201,7 +201,9 @@ private fun AssignmentScreenPreview() {
             submitDate = null,
             updateBy = null,
             userID = null,
-            userType = null
+            userType = null,
+            totalStudents = 20,
+            totalSubmitted = 5
         ), Assignment(
             id = "1",
             title = "Physics assignment",
@@ -221,7 +223,9 @@ private fun AssignmentScreenPreview() {
             submitDate = null,
             updateBy = null,
             userID = null,
-            userType = null
+            userType = null,
+            totalStudents = 20,
+            totalSubmitted = 10
         )
     )
     EcareProTheme {

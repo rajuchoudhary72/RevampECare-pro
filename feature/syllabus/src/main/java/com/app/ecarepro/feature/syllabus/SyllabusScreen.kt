@@ -1,7 +1,6 @@
 package com.app.ecarepro.feature.syllabus
 
 import ClassTabs
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -142,14 +142,19 @@ private fun SyllabusScreenContent(
             modifier = Modifier.padding(paddingValues),
             state = uiState
         ) { data ->
-            Box {
+            PullToRefreshBox(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
+                isRefreshing = data.isRefreshing,
+                onRefresh = {handleIntent(SyllabusIntent.OnRefresh)}
+            ) {
                 if (data.filteredSyllabuses.isEmpty()) {
                     EmptyState()
                 } else {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(paddingValues)
                             .padding(horizontal = 16.dp, vertical = 10.dp)
                     ) {
                         items(data.filteredSyllabuses) { syllabus ->
@@ -187,8 +192,8 @@ private fun SyllabusScreenContent(
                         onDeleteClick = { handleIntent(SyllabusIntent.OnDeleteClicked(data.selectedSyllabusId)) }
                     )
                 }
-
             }
+
         }
     }
 }

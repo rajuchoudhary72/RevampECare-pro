@@ -330,7 +330,7 @@ class AddSyllabusViewModel @AssistedInject constructor(
             } else if (title.isBlank()) {
                 showValidateWarning("Please enter title")
                 return false
-            } else if (selectedFile == null) {
+            } else if (selectedFile == null && syllabus == null) {
                 showValidateWarning("Please select file")
                 return false
             } else {

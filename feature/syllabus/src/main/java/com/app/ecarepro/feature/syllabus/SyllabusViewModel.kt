@@ -41,12 +41,23 @@ class SyllabusViewModel @Inject constructor(
         fetchSyllabus()
     }
 
-    private fun fetchSyllabus() {
+    private fun fetchSyllabus(isRefreshing: Boolean = false) {
         viewModelScope.launch {
             syllabusRepository
                 .getSyllabus()
                 .onStart {
-                    _uiState.update { UiState.Loading }
+
+                    _uiState.update { currentState ->
+                        if (isRefreshing) {
+                            // If refreshing, keep the current data on screen but show the spinner
+                            (currentState as? UiState.Success)?.let { successState ->
+                                UiState.Success(successState.data.copy(isRefreshing = true))
+                            } ?: currentState
+                        } else {
+                            // If not refreshing (cold load), show full screen loader
+                            UiState.Loading
+                        }
+                    }
                 }.collect { result ->
                     result
                         .onSuccess { syllabuses ->
@@ -67,10 +78,32 @@ class SyllabusViewModel @Inject constructor(
                             }
                         }
                         .onFailure { error ->
-                            _uiState.update { UiState.Error(error.errorMessage()) }
-
+                            handleFetchError(error, isRefreshing)
                         }
                 }
+        }
+    }
+
+    private fun handleFetchError(error: Throwable, isRefresh: Boolean) {
+        val message = error.errorMessage() // Your extension function
+
+        if (isRefresh) {
+            // If refreshing, revert the 'isRefresing' flag in UI state
+            _uiState.update { currentState ->
+                (currentState as? UiState.Success)?.let { successState ->
+                    UiState.Success(successState.data.copy(isRefreshing = false))
+                } ?: currentState
+            }
+
+            // And show a transient message
+            sendEvent(
+                SyllabusEvent.ShowMessage(
+                    SnackbarMessage(message, MessageType.ERROR)
+                )
+            )
+        } else {
+            // If cold load failed, show error screen
+            _uiState.update { UiState.Error(message) }
         }
     }
 
@@ -88,6 +121,7 @@ class SyllabusViewModel @Inject constructor(
             is SyllabusIntent.OnEditClicked -> editSyllabus(intent.syllabusId)
             is SyllabusIntent.ShowDeleteBottomSheet -> showDeleteBottomSheet()
             is SyllabusIntent.OnDeleteClicked -> deleteSyllabus(intent.syllabusId)
+            SyllabusIntent.OnRefresh -> fetchSyllabus(true)
         }
     }
 
@@ -381,6 +415,8 @@ class SyllabusViewModel @Inject constructor(
 @Immutable
 data class SyllabusUiState(
     val isLoading: Boolean = false,
+
+    val isRefreshing: Boolean = false,
     val searchQuery: String = "",
     val selectedClassIndex: Int = DEFAULT_SELECTED_CLASS_INDEX,
     val classTabs: List<String> = emptyList(),
@@ -404,6 +440,7 @@ sealed interface SyllabusIntent {
     data class OnEditClicked(val syllabusId: String?) : SyllabusIntent
     data object ShowDeleteBottomSheet : SyllabusIntent
     data class OnDeleteClicked(val syllabusId: String?) : SyllabusIntent
+    data object OnRefresh : SyllabusIntent
 }
 
 sealed interface SyllabusEvent {

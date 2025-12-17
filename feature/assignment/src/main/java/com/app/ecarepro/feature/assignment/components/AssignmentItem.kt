@@ -19,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -42,17 +41,19 @@ fun AssignmentItem(
     onViewReportClick: () -> Unit,
     onMenuClick: () -> Unit,
 ) {
-    val isOverdue = true
 
-    val successColor = Color(0xFF4CAF50) // Green form screenshot
-    val warningColor = Color(0xFFFF9800) // Orange from screenshot
-    val errorColor = Color(0xFFF44336)   // Red from screenshot
+    val totalStudents = assignment.totalStudents ?: 0
+    val totalSubmitted = assignment.totalSubmitted ?: 0
 
-    // Determine status color based on Overdue logic or simply use the flag
-    val statusColor = if (isOverdue) errorColor else successColor
+    val progress = if (totalStudents > 0) {
+        (totalSubmitted.toFloat() / totalStudents) * 100
+    } else 0f
 
-    // Calculate Progress
-    val progress = 50.0f
+    val progressColor = when {
+        progress <= 25 -> MaterialTheme.appColors.error
+        progress <= 75 -> MaterialTheme.appColors.warning
+        else -> MaterialTheme.appColors.success
+    }
 
     Column(
         modifier = Modifier
@@ -74,7 +75,7 @@ fun AssignmentItem(
             Text(
                 text = "Submit by ${assignment.submitDate}",
                 style = MaterialTheme.appTypography.interMedium16px.copy(fontSize = 12.sp),
-                color = if (isOverdue) warningColor else successColor
+                color = progressColor
             )
 
             if (assignment.isMine == true)
@@ -83,7 +84,8 @@ fun AssignmentItem(
                         .height(22.dp)
                         .width(32.dp)
                         .padding(start = 10.dp),
-                    onClick = onMenuClick) {
+                    onClick = onMenuClick
+                ) {
                     Icon(
                         painterResource(R.drawable.ic_hori_menu),
                         contentDescription = "More options"
@@ -96,7 +98,7 @@ fun AssignmentItem(
         // 2. Subtitle: Class • Subject • Date
         Text(
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = successColor)) {
+                withStyle(style = SpanStyle(color = progressColor)) {
                     append(assignment.classX)
                 }
                 append(" • ${assignment.subject} • ${assignment.uploadedOn}")
@@ -109,36 +111,32 @@ fun AssignmentItem(
 
         // 3. Progress Bar
         LinearProgressIndicator(
-            progress = { progress },
+            progress = { progress/100f },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(6.dp),
-            color = if (isOverdue) warningColor else successColor,
-            trackColor = MaterialTheme.appColors.background,
+            color = progressColor,
+            trackColor = MaterialTheme.appColors.border,
             strokeCap = StrokeCap.Round,
+            drawStopIndicator = {}
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // 4. Submission Count Text
-        // Logic to flip text positions based on screenshot variation (some have date on left, count on right)
-        // For now, following the standard layout in screenshot 1
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Some items in screenshot show "Submit by..." here, others show count.
-            // We will stick to the Count logic for consistency or conditional check.
             Text(
                 text = buildAnnotatedString {
                     withStyle(
                         style = SpanStyle(
-                            color = if (isOverdue) warningColor else successColor
+                            color = progressColor
                         )
                     ) {
-                        append("20")
+                        append(assignment.totalSubmitted.toString())
                     }
-                    append(" of 40 students submitted")
+                    append(" of ${assignment.totalStudents} students submitted")
                 },
                 style = MaterialTheme.appTypography.interRegular12px,
                 color = MaterialTheme.appColors.textSecondary
@@ -148,14 +146,14 @@ fun AssignmentItem(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // 5. Action Buttons Row
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (assignment.hasAttachment) {
                 ActionButton(
-                    iconRes = R.drawable.ic_eye, // Ensure this drawable exists
+                    iconRes = R.drawable.ic_eye,
                     text = "View",
                     onClick = onViewClick
                 )
@@ -164,7 +162,7 @@ fun AssignmentItem(
 
                 // Download Button
                 ActionButton(
-                    iconRes = R.drawable.ic_download, // Ensure this drawable exists
+                    iconRes = R.drawable.ic_download,
                     text = "Download",
                     onClick = onDownloadClick
                 )
@@ -175,7 +173,7 @@ fun AssignmentItem(
 
             // View Report Button
             ActionButton(
-                iconRes = com.app.ecarepro.feature.assignment.R.drawable.icon_calendar, // Ensure this drawable exists
+                iconRes = com.app.ecarepro.feature.assignment.R.drawable.icon_calendar,
                 text = "View report",
                 onClick = onViewReportClick
             )
@@ -245,7 +243,9 @@ private fun AssignmentItemPreview() {
                 submitDate = null,
                 updateBy = null,
                 userID = null,
-                userType = null
+                userType = null,
+                totalStudents = 20,
+                totalSubmitted = 5
             ),
             onViewClick = {},
             onDownloadClick = {},

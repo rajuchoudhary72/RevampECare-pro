@@ -101,7 +101,9 @@ private fun AssignmentDetailsTopBarPreview() {
                 submitDate = null,
                 updateBy = null,
                 userID = null,
-                userType = null
+                userType = null,
+                totalSubmitted = 10,
+                totalStudents = 20
             ),
             onCloseClick = {}
         )

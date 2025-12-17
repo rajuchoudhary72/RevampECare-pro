@@ -170,7 +170,7 @@ class AddAssignmentViewModel @AssistedInject constructor(
                 updateState {
                     it.copy(
                         isFileUploadSheetVisible = false,
-                        selectedFiles = intent.file
+                        selectedFiles = it.selectedFiles + intent.file
                     )
                 }
             }
@@ -344,7 +344,7 @@ class AddAssignmentViewModel @AssistedInject constructor(
             } else if (type.isBlank()) {
                 showValidateWarning("Please enter type")
                 return false
-            } else if (selectedFiles.isEmpty()) {
+            } else if (selectedFiles.isEmpty() && assignment == null) {
                 showValidateWarning("Please select file")
                 return false
             } else {

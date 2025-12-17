@@ -62,6 +62,10 @@ data class NetworkAssignment(
     val userID: Int?,
     @SerialName("userType")
     val userType: Int?,
+    @SerialName("totalSubmitted")
+    val totalSubmitted: Int?,
+    @SerialName("totalStudents")
+    val totalStudents: Int?,
 )
 
 
@@ -84,5 +88,7 @@ fun NetworkAssignment.toDomainModel() = Assignment(
     updateBy = updateBy,
     uploadedOn = uploadedOn,
     userID = userID,
-    userType = userType
+    userType = userType,
+    totalSubmitted = totalSubmitted,
+    totalStudents = totalStudents
 )

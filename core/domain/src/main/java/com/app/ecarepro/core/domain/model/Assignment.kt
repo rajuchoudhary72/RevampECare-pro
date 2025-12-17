@@ -26,4 +26,6 @@ data class Assignment(
     val uploadedOn: String?,
     val userID: Int?,
     val userType: Int?,
+    val totalSubmitted: Int?,
+    val totalStudents: Int?,
 )
