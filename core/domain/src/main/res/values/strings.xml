@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="core_domain_parent">Parent</string>
-    <string name="core_domain_student">Student</string>
-    <string name="core_domain_staff">Staff</string>
-</resources>

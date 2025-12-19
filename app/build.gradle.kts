@@ -10,8 +10,6 @@ plugins {
     alias(libs.plugins.kotlinParcelize)
     id("com.google.devtools.ksp")
     id("com.google.firebase.firebase-perf")
-    alias(libs.plugins.compose)
-    alias(libs.plugins.ecarepro.android.application.compose)
 
 }
 
@@ -41,13 +39,13 @@ android {
         }
     }
     namespace = "com.app.ecarepro"
-    compileSdk = 36
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
-        targetSdk = 36
-        versionCode = 373
-        versionName = "3.6.2"
+        targetSdk = 35
+        versionCode = 393
+        versionName = "3.8.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -98,12 +96,11 @@ android {
         viewBinding = true
         dataBinding = true
         buildConfig = true
-        compose = true
     }
     flavorDimensions += listOf("apps")
 
     productFlavors {
-        create("Franciscane-Care") {
+        create("Franciscan e-Care") {
             dimension = "apps"
             resValue("string", "app_name", "Franciscan e-Care")
             signingConfig = signingConfigs.getByName("Franciscan e-Care")
@@ -116,7 +113,7 @@ android {
             versionName = "2.0.15"
             signingConfig = signingConfigs.getByName("MYSFHS")
         }
-        create("MYSFPSPlay") {
+        create("MYSFPS Play") {
             dimension = "apps"
             resValue("string", "app_name", "MYSFPS")
             applicationId = "com.franciscan.strawberry_play"
@@ -135,20 +132,6 @@ android {
 }
 
 dependencies {
-
-    implementation(projects.feature.testingmenu)
-
-    implementation(projects.feature.splash)
-    implementation(projects.feature.onboarding)
-    implementation(projects.feature.schoolcode)
-    implementation(projects.feature.login)
-    implementation(projects.feature.dashboard)
-    implementation(projects.feature.timetable)
-    implementation(projects.feature.syllabus)
-    implementation(projects.feature.assignment)
-    implementation(projects.feature.docviewer)
-    implementation(projects.core.data)
-
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -164,7 +147,6 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
     implementation(libs.com.google.firebase.firebase.crashlytics)
-    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     kapt(libs.hilt.android.compiler)
 
     /*    *//* Database *//*
@@ -239,7 +221,7 @@ dependencies {
     implementation  ( "com.google.firebase:firebase-messaging-ktx")
 
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.2")
     implementation("com.kizitonwose.calendar:view:2.5.4")
 
     implementation ("com.github.bumptech.glide:glide:4.4.0")
@@ -251,16 +233,6 @@ dependencies {
 
     // For Kotlin users also import the Kotlin extensions library for Play In-App Update:
     implementation("com.google.android.play:app-update-ktx:2.1.0")
-
-
-    // Re-vamp
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material3.adaptive)
-    implementation(libs.androidx.compose.material3.adaptive.layout)
- //   implementation(libs.androidx.compose.material3.adaptive.navigation)
-
-    implementation(libs.androidx.navigation3.ui)
-    implementation(libs.androidx.navigation3.runtime)
+    implementation("jp.wasabeef:richeditor-android:2.0.0")
 
 }

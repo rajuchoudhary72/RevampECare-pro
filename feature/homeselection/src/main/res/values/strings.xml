@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="feature_homeselection_how_do_you_want_to_start">How Do You Want to Start?</string>
-    <string name="feature_homeselection_begin_with_dashboard_feeds_or_favorites_whichever_suits_you_best_you_can_update_this_later_in_settings">Begin with Dashboard, Feeds, or Favorites — whichever suits you best. You can update this later in Settings.</string>
-    <string name="feature_homeselection_you_can_switch_anytime_later_from_settings">You can switch anytime later from settings</string>
-    <string name="feature_homeselection_set_as_home">Set as Home</string>
-</resources>

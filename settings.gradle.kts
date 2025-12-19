@@ -1,13 +1,6 @@
 import java.net.URI
 
-include(":feature:testingmenu")
-
-
-include(":feature:assignment")
-
-
 pluginManagement {
-    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -24,28 +17,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "ECareProNewUI"
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
 include(":app")
-
-include(":core:designsystem")
-include(":core:ui")
-include(":core:network")
-include(":core:domain")
-include(":core:data")
-include(":core:database")
-include(":core:location")
-include(":core:common")
-include(":core:download")
-
-include(":feature:onboarding")
-include(":feature:schoolcode")
-include(":feature:login")
-include(":feature:homeselection")
-include(":feature:syllabus")
-include(":feature:timetable")
-include(":feature:splash")
-include(":feature:dashboard")
-include(":feature:docviewer")
-
-
+ 

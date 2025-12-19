@@ -28,6 +28,23 @@
         <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
 
+        <!--Typography-->
+        <item name="textAppearanceDisplayLarge">@style/TextAppearance.ECarePro.DisplayLarge</item>
+        <item name="textAppearanceDisplayMedium">@style/TextAppearance.ECarePro.DisplayMedium</item>
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.ECarePro.DisplaySmall</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.ECarePro.HeadlineLarge</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.ECarePro.HeadlineMedium
+        </item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.ECarePro.HeadlineSmall</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.ECarePro.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.ECarePro.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.ECarePro.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.ECarePro.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.ECarePro.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.ECarePro.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.ECarePro.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.ECarePro.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.ECarePro.LabelSmall</item>
 
     </style>
 </resources>
