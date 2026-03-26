@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.kotlinParcelize)
     id("com.google.devtools.ksp")
     id("com.google.firebase.firebase-perf")
+    alias(libs.plugins.compose)
+    alias(libs.plugins.ecarepro.android.application.compose)
 
 }
 
@@ -39,13 +41,13 @@ android {
         }
     }
     namespace = "com.app.ecarepro"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
-        targetSdk = 35
-        versionCode = 393
-        versionName = "3.8.2"
+        targetSdk = 36
+        versionCode = 373
+        versionName = "3.6.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -96,11 +98,12 @@ android {
         viewBinding = true
         dataBinding = true
         buildConfig = true
+        compose = true
     }
     flavorDimensions += listOf("apps")
 
     productFlavors {
-        create("Franciscan e-Care") {
+        create("Franciscane-Care") {
             dimension = "apps"
             resValue("string", "app_name", "Franciscan e-Care")
             signingConfig = signingConfigs.getByName("Franciscan e-Care")
@@ -113,7 +116,7 @@ android {
             versionName = "2.0.15"
             signingConfig = signingConfigs.getByName("MYSFHS")
         }
-        create("MYSFPS Play") {
+        create("MYSFPSPlay") {
             dimension = "apps"
             resValue("string", "app_name", "MYSFPS")
             applicationId = "com.franciscan.strawberry_play"
@@ -132,6 +135,55 @@ android {
 }
 
 dependencies {
+
+    implementation(projects.feature.testingmenu)
+
+    implementation(projects.feature.splash)
+    implementation(projects.feature.onboarding)
+    implementation(projects.feature.schoolcode)
+    implementation(projects.feature.login)
+    implementation(projects.feature.dashboard)
+    implementation(projects.feature.timetable)
+    implementation(projects.feature.syllabus)
+    implementation(projects.feature.assignment)
+    implementation(projects.feature.docviewer)
+    implementation(projects.feature.questionner)
+    implementation(projects.feature.leave)
+    implementation(projects.feature.discipline)
+    implementation(projects.feature.studentprofile)
+    implementation(projects.feature.staffprofile)
+    implementation(projects.feature.taskmanger)
+    implementation(projects.feature.marksmanager)
+    implementation(projects.feature.knowyourteacher)
+    implementation(projects.feature.classteacher)
+    implementation(projects.feature.transportAtt)
+    implementation(projects.feature.message)
+    implementation(projects.feature.announcement)
+    implementation(projects.feature.gallery)
+    implementation(projects.feature.updateRecord)
+    implementation(projects.feature.calendar)
+    implementation(projects.feature.survey)
+    implementation(projects.feature.library)
+    implementation(projects.feature.ebook)
+    implementation(projects.feature.fee)
+    implementation(projects.feature.feed)
+    implementation(projects.feature.setting)
+
+    implementation(projects.feature.report)
+
+    implementation(projects.feature.smsdailyconsumption)
+    implementation(projects.feature.conversationreport)
+    implementation(projects.feature.globalsearch)
+    implementation(projects.feature.profile)
+    implementation(projects.feature.notice)
+    implementation(projects.feature.questionpaper)
+    implementation(projects.feature.homeselection)
+
+
+
+    implementation(projects.core.data)
+    implementation(projects.core.download)
+
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -147,6 +199,8 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
     implementation(libs.com.google.firebase.firebase.crashlytics)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+
     kapt(libs.hilt.android.compiler)
 
     /*    *//* Database *//*
@@ -204,7 +258,7 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     //implementation("com.caverock:androidsvg:1.4")
-
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
     implementation("com.intuit.sdp:sdp-android:1.0.5")
     implementation("de.hdodenhof:circleimageview:2.2.0")
@@ -221,7 +275,7 @@ dependencies {
     implementation  ( "com.google.firebase:firebase-messaging-ktx")
 
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.2")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     implementation("com.kizitonwose.calendar:view:2.5.4")
 
     implementation ("com.github.bumptech.glide:glide:4.4.0")
@@ -233,6 +287,18 @@ dependencies {
 
     // For Kotlin users also import the Kotlin extensions library for Play In-App Update:
     implementation("com.google.android.play:app-update-ktx:2.1.0")
-    implementation("jp.wasabeef:richeditor-android:2.0.0")
+
+
+    // Re-vamp
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.androidx.compose.material3.adaptive.layout)
+ //   implementation(libs.androidx.compose.material3.adaptive.navigation)
+
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.coil3.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
 }
