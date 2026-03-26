@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="task_manager_title">ટાસ્ક મેનેજર</string>
+    <string name="task_manager_add_new_task">+ નવું ટાસ્ક ઉમેરો</string>
+    <string name="task_manager_search_hint">ટાસ્ક નામ દ્વારા શોધો</string>
+    <string name="task_manager_no_tasks_found">કોઈ ટાસ્ક મળ્યું નથી\nટાસ્ક ઉપલબ્ધ થાય ત્યારે અહીં દેખાશે</string>
+    <string name="task_manager_overdue_tasks_label">વિલંબિત ટાસ્ક</string>
+    <string name="task_manager_due_today_label">આજે બાકી</string>
+    <string name="task_manager_upcoming_tasks_label">આગામી ટાસ્ક</string>
+    <string name="task_manager_closed_tasks_label">બંધ ટાસ્ક</string>
+    <string name="task_manager_select_assignee_title">સોંપનાર પસંદ કરો</string>
+    <string name="task_manager_search_assignee_hint">સોંપનારનું નામ શોધો</string>
+    <string name="task_manager_priority_title">પ્રાધાન્ય</string>
+    <string name="task_manager_status_title">સ્થિતિ</string>
+    <string name="task_manager_expand_description">વિસ્તૃત કરો</string>
+    <string name="task_manager_collapse_description">સંકુચિત કરો</string>
+    <string name="task_manager_task_name_label">ટાસ્ક નામ</string>
+    <string name="task_manager_description_label">વર્ણન ઉમેરો</string>
+    <string name="task_manager_select_watchers_label">નિરીક્ષકો પસંદ કરો</string>
+    <string name="task_manager_start_date_label">શરૂ થવાની તારીખ</string>
+    <string name="task_manager_end_date_label">સમાપ્ત થવાની તારીખ</string>
+</resources>

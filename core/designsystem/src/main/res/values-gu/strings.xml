@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="btn_retry">ફરી પ્રયાસ કરો</string>
+    <string name="core_designsystem_menu">મેનૂ</string>
+    <string name="core_designsystem_close">બંધ કરો</string>
+    <string name="core_designsystem_permission_denied">પરવાનગી નકારી</string>
+    <string name="core_designsystem_camera_permission_was_permanently_denied_please_enable_it_in_app_settings">કૅમેરા પરવાનગી કાયમ માટે નકારી. કૃપા ઍપ સેટિંગ્સમાં સક્ષમ કરો.</string>
+    <string name="core_designsystem_cancel">રદ કરો</string>
+    <string name="core_designsystem_permission_required">પરવાનગી જરૂરી છે</string>
+    <string name="core_designsystem_camera_access_is_needed_to_take_photos">ફોટો લેવા કૅમેરા ઍક્સેસ જરૂરી છે.</string>
+    <string name="core_designsystem_try_again">ફરી પ્રયાસ કરો</string>
+    <string name="core_designsystem_select_file_pdf_doc_docx_xlsx">ફાઇલ પસંદ કરો (PDF/DOC/DOCX/XLSX)</string>
+    <string name="core_designsystem_select_photo">ફોટો પસંદ કરો</string>
+    <string name="core_designsystem_take_photo">ફોટો લો</string>
+    <string name="core_designsystem_preparing_file">ફાઇલ તૈયાર થઈ રહી છે…</string>
+    <string name="core_designsystem_open_settings">સેટિંગ્સ ખોલો</string>
+    <string name="core_designsystem_click_here_to_add_file">ફાઇલ ઉમેરવા અહીં ક્લિક કરો</string>
+    <string name="core_designsystem_max_10_mb_files_are_allowed">મહત્તમ 10 MB ફાઇલ માન્ય છે</string>
+    <string name="core_designsystem_select_class">વર્ગ પસંદ કરો</string>
+    <string name="core_designsystem_class">વર્ગ</string>
+    <string name="core_designsystem_select_student">વિદ્યાર્થી પસંદ કરો</string>
+    <string name="core_designsystem_student">વિદ્યાર્થી</string>
+    <string name="core_designsystem_syllabus_title">સોંપણી શીર્ષક</string>
+    <string name="core_designsystem_add_your_title_here">અહીં શીર્ષક ઉમેરો</string>
+    <string name="core_designsystem_add_new_syllabus">નવો અભ્યાસક્રમ ઉમેરો</string>
+    <string name="core_designsystem_only_for_classes_with_section_wise_syllabus_differences">ફક્ત એ વર્ગો માટે જ્યાં વિભાગ-વાર અભ્યાસક્રમ ભિન્ન છે</string>
+    <string name="core_designsystem_select_subject">વિષય પસંદ કરો</string>
+    <string name="core_designsystem_subjects">વિષય</string>
+</resources>

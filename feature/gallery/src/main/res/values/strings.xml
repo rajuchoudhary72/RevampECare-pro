@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gallery_your_bookmarks">Your bookmarks</string>
+    <string name="gallery_no_bookmarks_yet">No bookmarks yet</string>
+    <string name="gallery_kids_corner_title">Kids corner</string>
+    <string name="gallery_all_years_label">All years</string>
+    <string name="gallery_select_year_title">Select year</string>
+    <string name="gallery_search_by_title_hint">Search by title</string>
+    <string name="gallery_no_albums_found">No albums found</string>
+    <string name="gallery_memories_label">memories</string>
+    <string name="gallery_media_gallery_title">Media gallery</string>
+    <string name="gallery_all_search_option">All search</string>
+    <string name="gallery_newspaper_option">Newspaper</string>
+    <string name="gallery_headline_option">Headline</string>
+    <string name="gallery_publish_date_option">Publish date</string>
+    <string name="gallery_select_search_title">Select search</string>
+    <string name="gallery_year_filter_option">Year</string>
+    <string name="gallery_media_details_title">Media details</string>
+    <string name="gallery_added_label">Added</string>
+    <string name="gallery_updated_on_label">Updated on</string>
+    <string name="gallery_newspaper_label">Newspaper</string>
+    <string name="gallery_unable_to_load_video">Unable to load video</string>
+    <string name="gallery_photo_album_title">Photo Album</string>
+    <string name="gallery_search_by_album_name_hint">Search by album name</string>
+    <string name="gallery_items_label">items</string>
+    <string name="gallery_view_more">view more…</string>
+    <string name="gallery_view_less">view less</string>
+    <string name="gallery_toggle_layout_description">Toggle layout</string>
+    <string name="gallery_bookmark_label">Bookmark</string>
+    <string name="gallery_like_label">Like</string>
+    <string name="gallery_share_label">Share</string>
+    <string name="gallery_video_album_title">Video Album</string>
+    <string name="gallery_no_video_albums_found">No video albums found</string>
+    <string name="gallery_videos_label">videos</string>
+    <string name="gallery_play_description">Play</string>
+    <string name="gallery_all_videos_title">All Videos</string>
+    <string name="gallery_bookmarked_label">Bookmarked</string>
+</resources>

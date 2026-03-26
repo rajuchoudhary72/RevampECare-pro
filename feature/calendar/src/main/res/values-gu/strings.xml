@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="activity_calendar_title">પ્રવૃત્તિ કૅલેન્ડર</string>
+    <string name="activity_calendar_no_activities">આ મહિને કોઈ પ્રવૃત્તિ નથી</string>
+</resources>

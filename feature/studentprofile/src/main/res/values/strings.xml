@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_studentprofile_title">Student Profiles</string>
+    <string name="feature_studentprofile_search_placeholder">Search by name or roll number</string>
+    <string name="feature_studentprofile_empty_state">No student profiles found</string>
+    <string name="feature_studentprofile_class">Class</string>
+    <string name="feature_studentprofile_section">Section</string>
+    <string name="feature_studentprofile_roll_number">Roll Number</string>
+    <string name="feature_studentprofile_student_name">Student Name</string>
+</resources>

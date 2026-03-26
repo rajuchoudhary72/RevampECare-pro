@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ebook_title">e-books</string>
+    <string name="ebook_search_hint">Search by name, author or publication…</string>
+    <string name="ebook_something_went_wrong">Something went wrong</string>
+    <string name="ebook_no_results_found">No results found</string>
+</resources>

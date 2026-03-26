@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_syllabus_select_class">Select class</string>
+    <string name="feature_syllabus_class">Class</string>
+    <string name="feature_syllabus_select_section">Select section</string>
+    <string name="feature_syllabus_section">Section</string>
+    <string name="feature_syllabus_syllabus_title">Syllabus title</string>
+    <string name="feature_syllabus_add_your_title_here">Add your title here</string>
+    <string name="feature_syllabus_add_new_syllabus">Add new syllabus</string>
+    <string name="feature_syllabus_only_for_classes_with_section_wise_syllabus_differences">Only for classes with section-wise syllabus differences</string>
+    <string name="feature_syllabus_click_here_to_add_file">Click here to add file</string>
+    <string name="feature_syllabus_max_10_mb_files_are_allowed">Max 10 MB files are allowed</string>
+    <string name="feature_syllabus_select_subject">Select subject</string>
+    <string name="feature_syllabus_all_subjects">All subjects</string>
+    <string name="feature_syllabus_title">Syllabus</string>
+    <string name="feature_syllabus_add_new">Add new</string>
+    <string name="feature_syllabus_search_placeholder">Search by title or subject</string>
+    <string name="feature_syllabus_empty_state">No results.\nMaybe try a broader search?</string>
+</resources>

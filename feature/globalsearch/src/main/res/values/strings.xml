@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_search_placeholder">Search for student, class etc..</string>
+    <string name="global_search_filter_label">Filter</string>
+    <string name="global_search_student_label">Student</string>
+    <string name="global_search_staff_label">Staff</string>
+    <string name="global_search_module_label">Module</string>
+    <string name="global_search_initial_title">Your search journey starts here</string>
+    <string name="global_search_no_results">No results.\nMaybe try a broader search?</string>
+    <string name="global_search_error_retry">Something went wrong.\nTap to retry.</string>
+</resources>

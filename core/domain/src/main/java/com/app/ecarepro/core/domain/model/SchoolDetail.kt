@@ -1,0 +1,30 @@
+package com.app.ecarepro.core.domain.model
+
+
+data class SchoolDetail(
+    val schoolCode: String,
+    val active: Int?,
+    val assessmentMarksURL: String?,
+    val city: String?,
+    val contactEmail: String?,
+    val eCareProSch: Boolean?,
+    val feePaymentURL: String?,
+    val feeReportURL: String?,
+    val isBoardingSchool: Boolean?,
+    val isStudentLoginBlocked: Boolean?,
+    val logo: String?,
+    val logoNScName: String?,
+    val logoScName: String?,
+    val marksEntryURL: String?,
+    val schAdd1: String?,
+    val schAdd2: String?,
+    val schUpdatedOn: String?,
+    val schoolName: String?,
+    val state: String?,
+    val supportDays: String?,
+    val supportEmail: String?,
+    val supportHours: String?,
+    val supportPhone: String?,
+    val themColor: String?,
+    val webSite: String?,
+)

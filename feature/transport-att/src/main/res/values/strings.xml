@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="transport_att_title">Transport attendance</string>
+    <string name="transport_att_view_out_pass_button">View Out Pass</string>
+    <string name="transport_att_select_date_label">Select date of attendance</string>
+    <string name="transport_att_select_date_hint">Select date</string>
+    <string name="transport_att_select_trip_type_label">Select trip type</string>
+    <string name="transport_att_select_route_label">Select route</string>
+    <string name="transport_att_select_stop_label">Select stop</string>
+    <string name="transport_att_mark_attendance_button">Mark attendance</string>
+    <string name="transport_att_view_attendance_button">View attendance</string>
+    <string name="transport_att_to_school_label">To the school</string>
+    <string name="transport_att_from_school_label">From the school</string>
+    <string name="transport_att_drop_student_label">Drop student</string>
+    <string name="transport_att_close_description">Close</string>
+    <string name="transport_att_out_pass_title">Out Pass</string>
+    <string name="transport_att_view_attendance_title">View Attendance</string>
+</resources>

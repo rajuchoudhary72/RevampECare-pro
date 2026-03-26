@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_studentprofile_title">छात्र प्रोफाइल</string>
+    <string name="feature_studentprofile_search_placeholder">नाम या रोल नंबर से खोजें</string>
+    <string name="feature_studentprofile_empty_state">कोई छात्र प्रोफाइल नहीं मिली</string>
+    <string name="feature_studentprofile_class">कक्षा</string>
+    <string name="feature_studentprofile_section">अनुभाग</string>
+    <string name="feature_studentprofile_roll_number">रोल नंबर</string>
+    <string name="feature_studentprofile_student_name">छात्र का नाम</string>
+</resources>

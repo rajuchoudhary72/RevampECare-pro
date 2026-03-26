@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="update_record_class_promotion_title">વર્ગ પ્રોત્સાહન</string>
+    <string name="update_record_manage_roll_number_title">રોલ નંબર વ્યવસ્થાપન</string>
+    <string name="update_record_update_house_title">હાઉસ અપડેટ કરો</string>
+    <string name="update_record_update_profile_picture_title">પ્રોફાઇલ ચિત્ર અપડેટ કરો</string>
+    <string name="update_record_search_hint">નામ, પ્રવેશ ક્રમાંક દ્વારા શોધો…</string>
+    <string name="update_record_select_section_title">વિભાગ પસંદ કરો</string>
+    <string name="update_record_no_students_found">કોઈ વિદ્યાર્થી મળ્યો નથી</string>
+    <string name="update_record_admission_no_label">પ્રવેશ ક્રમાંક</string>
+    <string name="update_record_roll_no_label">રોલ નંબર</string>
+    <string name="update_record_promoted_label">પ્રોત્સાહિત</string>
+    <string name="update_record_promote_button">પ્રોત્સાહિત કરો</string>
+    <string name="update_record_save_button">સાચવો</string>
+    <string name="update_record_select_class_label">વર્ગ પસંદ કરો</string>
+    <string name="update_record_select_house_label">હાઉસ પસંદ કરો</string>
+</resources>

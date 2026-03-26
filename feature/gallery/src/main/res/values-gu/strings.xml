@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gallery_your_bookmarks">તમારા બુકમાર્ક</string>
+    <string name="gallery_no_bookmarks_yet">હજી કોઈ બુકમાર્ક નથી</string>
+    <string name="gallery_kids_corner_title">બાળ ખૂણો</string>
+    <string name="gallery_all_years_label">બધા વર્ષ</string>
+    <string name="gallery_select_year_title">વર્ષ પસંદ કરો</string>
+    <string name="gallery_search_by_title_hint">શીર્ષક દ્વારા શોધો</string>
+    <string name="gallery_no_albums_found">કોઈ આલ્બમ મળ્યો નથી</string>
+    <string name="gallery_memories_label">યાદો</string>
+    <string name="gallery_media_gallery_title">મીડિયા ગૅલેરી</string>
+    <string name="gallery_all_search_option">બધી શોધ</string>
+    <string name="gallery_newspaper_option">સમાચારપત્ર</string>
+    <string name="gallery_headline_option">શીર્ષક</string>
+    <string name="gallery_publish_date_option">પ્રકાશન તારીખ</string>
+    <string name="gallery_select_search_title">શોધ પસંદ કરો</string>
+    <string name="gallery_year_filter_option">વર્ષ</string>
+    <string name="gallery_media_details_title">મીડિયા વિગતો</string>
+    <string name="gallery_added_label">ઉમેર્યું</string>
+    <string name="gallery_updated_on_label">અપડેટ કર્યું</string>
+    <string name="gallery_newspaper_label">સમાચારપત્ર</string>
+    <string name="gallery_unable_to_load_video">વીડિઓ લોડ કરવામાં અસમર્થ</string>
+    <string name="gallery_photo_album_title">ફોટો આલ્બમ</string>
+    <string name="gallery_search_by_album_name_hint">આલ્બમ નામ દ્વારા શોધો</string>
+    <string name="gallery_items_label">આઇટમ</string>
+    <string name="gallery_view_more">વધુ જુઓ…</string>
+    <string name="gallery_view_less">ઓછું જુઓ</string>
+    <string name="gallery_toggle_layout_description">લેઆઉટ બદલો</string>
+    <string name="gallery_bookmark_label">બુકમાર્ક</string>
+    <string name="gallery_like_label">પસંદ</string>
+    <string name="gallery_share_label">શેર કરો</string>
+    <string name="gallery_video_album_title">વીડિઓ આલ્બમ</string>
+    <string name="gallery_no_video_albums_found">કોઈ વીડિઓ આલ્બમ મળ્યો નથી</string>
+    <string name="gallery_videos_label">વીડિઓ</string>
+    <string name="gallery_play_description">ચલાવો</string>
+    <string name="gallery_all_videos_title">બધા વીડિઓ</string>
+    <string name="gallery_bookmarked_label">બુકમાર્ક કર્યું</string>
+</resources>

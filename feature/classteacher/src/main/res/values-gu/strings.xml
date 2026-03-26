@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="class_teacher_list_title">વર્ગ શિક્ષક</string>
+    <string name="class_teacher_search_hint">નામ, વર્ગ, હોદ્દા દ્વારા શોધો…</string>
+    <string name="class_teacher_no_data">કોઈ વર્ગ શિક્ષક મળ્યા નથી</string>
+</resources>

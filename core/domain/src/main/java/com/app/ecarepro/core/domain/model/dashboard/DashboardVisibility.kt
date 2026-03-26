@@ -1,0 +1,28 @@
+package com.app.ecarepro.core.domain.model.dashboard
+
+data class DashboardVisibility(
+    val showProgressStats: Boolean = false,
+    val showProCards: Boolean = false,
+    val showCards: Boolean = false,
+    val showFeeDafaulter: Boolean = false,
+    val showBDayCards: Boolean = false,
+    val showStuCategoryStatistics: Boolean = false,
+    val showAttendanceSummary: Boolean = false,
+    val showFeed: Boolean = false,
+    val showStuReligionWiseStatistics: Boolean = false,
+    val showLibraryDTL: Boolean = false,
+    val showStaffAttendanceSummary: Boolean = false,
+    val showBankBalance: Boolean = false,
+    val showTeacherTimetable: Boolean = false,
+    val showFeeCollection: Boolean = false,
+    val showAdmissionComparison: Boolean = false,
+    val showAdmissionModeComparison: Boolean = false,
+    val showClassTimetable: Boolean = false,
+    val showStuStatusWiseStatistics: Boolean = false,
+    val showActivities: Boolean = false,
+    val showQuestionnaire: Boolean = false,
+    val showCollectionModeWise: Boolean = false,
+    val showStudentBDayCards: Boolean = false,
+    val showTeacherWorkLoad: Boolean = false,
+    val showLibraryFineStatus: Boolean = false,
+)

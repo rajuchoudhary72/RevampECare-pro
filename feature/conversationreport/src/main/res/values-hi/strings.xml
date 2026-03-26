@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_report_title">वार्तालाप रिपोर्ट</string>
+    <string name="conversation_start_date">प्रारंभ तिथि</string>
+    <string name="conversation_end_date">समाप्ति तिथि</string>
+    <string name="conversation_sent_to">भेजा गया:</string>
+    <string name="conversation_sent_by">द्वारा भेजा:</string>
+    <string name="conversation_sent_on">भेजा गया:</string>
+    <string name="conversation_read_by">पढ़ा गया</string>
+    <string name="conversation_recipients">प्राप्तकर्ता</string>
+    <string name="conversation_recipient_count">%d प्राप्तकर्ता</string>
+    <string name="conversation_view_recipients">प्राप्तकर्ता देखें</string>
+    <string name="conversation_subject">विषय</string>
+    <string name="conversation_status">स्थिति:</string>
+    <string name="conversation_read_on">पढ़ा गया</string>
+    <string name="conversation_unread">अपठित</string>
+    <string name="conversation_no_results">कोई वार्तालाप नहीं मिली</string>
+    <string name="conversation_delete_title">हटाएं</string>
+    <string name="conversation_delete_message">क्या आप इस वार्तालाप को हटाना चाहते हैं?</string>
+    <string name="conversation_delete_confirm">हाँ, हटाएं</string>
+    <string name="conversation_filter_title">फ़िल्टर करें</string>
+    <string name="conversation_filter_all">सभी</string>
+    <string name="conversation_filter_staff">स्टाफ</string>
+    <string name="conversation_filter_parents">अभिभावक</string>
+    <string name="conversation_filter_student">छात्र</string>
+    <string name="conversation_sender">प्रेषक</string>
+    <string name="conversation_recipients_label">प्राप्तकर्ता</string>
+    <string name="conversation_has_word">संदेश में शब्द है</string>
+    <string name="conversation_any">कोई भी</string>
+    <string name="conversation_specific">विशिष्ट</string>
+    <string name="conversation_type_word">शब्द टाइप करें</string>
+    <string name="conversation_apply">लागू करें</string>
+    <string name="conversation_clear_all">सब साफ़ करें</string>
+</resources>

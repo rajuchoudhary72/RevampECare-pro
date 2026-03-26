@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="task_manager_title">Task manager</string>
+    <string name="task_manager_add_new_task">+ Add new task</string>
+    <string name="task_manager_search_hint">Search by task name</string>
+    <string name="task_manager_no_tasks_found">No tasks found\nTasks will appear here when available</string>
+    <string name="task_manager_overdue_tasks_label">Overdue tasks</string>
+    <string name="task_manager_due_today_label">Due today</string>
+    <string name="task_manager_upcoming_tasks_label">Upcoming tasks</string>
+    <string name="task_manager_closed_tasks_label">Closed tasks</string>
+    <string name="task_manager_select_assignee_title">Select assignee</string>
+    <string name="task_manager_search_assignee_hint">Search by assignee name</string>
+    <string name="task_manager_priority_title">Priority</string>
+    <string name="task_manager_status_title">Status</string>
+    <string name="task_manager_expand_description">Expand</string>
+    <string name="task_manager_collapse_description">Collapse</string>
+    <string name="task_manager_task_name_label">Task name</string>
+    <string name="task_manager_description_label">Add description</string>
+    <string name="task_manager_select_watchers_label">Select watchers</string>
+    <string name="task_manager_start_date_label">Start date</string>
+    <string name="task_manager_end_date_label">End date</string>
+</resources>

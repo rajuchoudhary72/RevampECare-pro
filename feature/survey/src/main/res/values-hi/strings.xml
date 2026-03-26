@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="survey_title">सर्वेक्षण</string>
+    <string name="survey_form_title">सर्वेक्षण फॉर्म</string>
+    <string name="survey_result_title">सर्वेक्षण परिणाम</string>
+    <string name="survey_submit">जमा करें</string>
+    <string name="survey_mandatory_note">(*) अनिवार्य प्रश्न</string>
+    <string name="survey_answer_mandatory">कृपया अनिवार्य प्रश्नों का उत्तर दें</string>
+    <string name="survey_submit_success">प्रतिक्रिया सफलतापूर्वक दर्ज की गई।</string>
+    <string name="survey_already_responded">आपकी प्रतिक्रिया के लिए धन्यवाद। आपकी प्रतिक्रिया पहले से दर्ज है।</string>
+    <string name="survey_closed">सर्वेक्षण बंद</string>
+    <string name="survey_published_on">प्रकाशित:</string>
+    <string name="survey_open_till">तक खुला:</string>
+    <string name="survey_responded_on">उत्तर दिया गया</string>
+    <string name="survey_total_responses">कुल प्रतिक्रियाएँ -</string>
+    <string name="survey_enter_response">अपना उत्तर दर्ज करें</string>
+    <string name="survey_no_surveys">कोई सर्वेक्षण उपलब्ध नहीं</string>
+</resources>

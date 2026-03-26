@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="update_record_class_promotion_title">Class promotion</string>
+    <string name="update_record_manage_roll_number_title">Manage roll number</string>
+    <string name="update_record_update_house_title">Update house</string>
+    <string name="update_record_update_profile_picture_title">Update profile picture</string>
+    <string name="update_record_search_hint">Search by name, admission number…</string>
+    <string name="update_record_select_section_title">Select section</string>
+    <string name="update_record_no_students_found">No students found</string>
+    <string name="update_record_admission_no_label">Admission No</string>
+    <string name="update_record_roll_no_label">Roll No</string>
+    <string name="update_record_promoted_label">Promoted</string>
+    <string name="update_record_promote_button">Promote</string>
+    <string name="update_record_save_button">Save</string>
+    <string name="update_record_select_class_label">Select class</string>
+    <string name="update_record_select_house_label">Select house</string>
+</resources>

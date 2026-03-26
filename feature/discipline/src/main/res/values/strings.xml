@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="discipline_infractions_title">Infractions</string>
+    <string name="discipline_appreciation_title">Appreciation List</string>
+    <string name="discipline_search_by_student_hint">Search by name, admission number…</string>
+    <string name="discipline_search_by_staff_hint">Search by name, designation…</string>
+    <string name="discipline_no_students_found">No students found</string>
+    <string name="discipline_no_staff_found">No staff found</string>
+    <string name="discipline_add_infraction_label">Add infraction</string>
+    <string name="discipline_add_appreciation_label">Add Appreciation</string>
+    <string name="discipline_view_all_label">View all</string>
+    <string name="discipline_select_category_label">Select appreciation category</string>
+    <string name="discipline_select_category_hint">Select category</string>
+    <string name="discipline_select_subcategory_label">Select appreciation subcategory</string>
+    <string name="discipline_select_subcategory_hint">Select subcategory</string>
+    <string name="discipline_count_label">Appreciation count</string>
+    <string name="discipline_count_hint">No of instance</string>
+    <string name="discipline_reward_label">Reward</string>
+    <string name="discipline_remarks_label">Add remarks</string>
+    <string name="discipline_reason_label">Reason for appreciation</string>
+</resources>

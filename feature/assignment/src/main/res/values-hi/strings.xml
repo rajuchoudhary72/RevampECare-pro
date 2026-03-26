@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="assignment_title">असाइनमेंट</string>
+    <string name="assignment_add_new_button">नया जोड़ें</string>
+    <string name="assignment_no_results">कोई परिणाम नहीं। शायद व्यापक खोज करें?</string>
+    <string name="assignment_delete_title">हटाएं</string>
+    <string name="assignment_delete_question">क्या आप इस असाइनमेंट को हटाना चाहते हैं?</string>
+    <string name="assignment_yeah_delete_button">हाँ, हटाएं</string>
+    <string name="assignment_add_assignment_title">असाइनमेंट जोड़ें</string>
+    <string name="assignment_select_student_label">छात्र चुनें</string>
+    <string name="assignment_date_label">असाइनमेंट की तारीख</string>
+    <string name="assignment_date_hint">तारीख जोड़ने के लिए यहाँ क्लिक करें</string>
+    <string name="assignment_type_label">असाइनमेंट टाइप करें</string>
+    <string name="assignment_type_hint">अपना प्रकार यहाँ जोड़ें</string>
+    <string name="assignment_select_student_hint">छात्र चुनें</string>
+</resources>

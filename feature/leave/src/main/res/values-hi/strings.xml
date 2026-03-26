@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_leave_type_label">छुट्टी का प्रकार *</string>
+    <string name="feature_leave_select_type">छुट्टी का प्रकार चुनें</string>
+    <string name="feature_leave_available_days">उपलब्ध: %1$s दिन</string>
+    <string name="feature_leave_document_attachment">दस्तावेज़ संलग्नक</string>
+    <string name="feature_leave_attach_required">दस्तावेज़ संलग्न करें (आवश्यक)</string>
+    <string name="feature_leave_attach_optional">दस्तावेज़ संलग्न करें (वैकल्पिक)</string>
+    <string name="feature_leave_max_file_size">अधिकतम फ़ाइल आकार: 10 MB</string>
+    <string name="feature_leave_apply_leave">छुट्टी आवेदन करें</string>
+    <string name="feature_leave_retry">पुनः प्रयास करें</string>
+    <string name="feature_leave_terms_conditions">नियम एवं शर्तें</string>
+    <string name="feature_leave_no_terms">कोई नियम और शर्तें उपलब्ध नहीं</string>
+    <string name="feature_leave_close">बंद करें</string>
+    <string name="feature_leave_submit_request">छुट्टी अनुरोध जमा करें</string>
+    <string name="feature_leave_no_applications">कोई छुट्टी आवेदन नहीं</string>
+    <string name="feature_leave_reason_label">कारण *</string>
+    <string name="feature_leave_select_reason">कारण चुनें</string>
+    <string name="feature_leave_duration_label">छुट्टी की अवधि *</string>
+    <string name="feature_leave_from_date">आरंभ तिथि</string>
+    <string name="feature_leave_to_date">समाप्ति तिथि</string>
+    <string name="feature_leave_total_duration">कुल अवधि:</string>
+    <string name="feature_leave_agree_to">मैं सहमत हूँ </string>
+    <string name="feature_leave_terms_link">नियम और शर्तों</string>
+    <string name="feature_leave_select_date">तिथि चुनें</string>
+    <string name="feature_leave_ok">ठीक है</string>
+    <string name="feature_leave_cancel">रद्द करें</string>
+    <string name="feature_leave_balance_title">छुट्टी शेष</string>
+    <string name="feature_leave_balance_available">उपलब्ध: %1$s दिन</string>
+    <string name="feature_leave_balance_total">कुल: %1$s दिन</string>
+    <string name="feature_leave_balance_used">उपयोग किया: %1$s दिन</string>
+</resources>

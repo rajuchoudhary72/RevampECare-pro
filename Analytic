@@ -1,0 +1,508 @@
+/*
+ * =================================================================================================
+ *
+ *                             SINGLE-FILE ANALYTICS MODULE DESIGN
+ *
+ * This file contains the complete, end-to-end implementation for a modular and scalable
+ * analytics system for the ECarePro-Android project.
+ *
+ * It is structured to demonstrate how different pieces of code would be organized across
+ * various modules (`analytics`, `feature/login`, `feature/schoolcode`, etc.).
+ *
+ * Use this file for your technical design review to showcase the proposed architecture.
+ *
+ * =================================================================================================
+ */
+
+// =================================================================================================
+// ---------------------------------- START: `analytics` MODULE ----------------------------------
+//
+// This section represents the code that would live inside the new `:analytics` module.
+// Its responsibility is to provide a generic framework for logging events to one or more
+// analytics providers without knowing the specifics of any feature event.
+//
+// =================================================================================================
+
+package com.app.ecarepro.analytics
+
+import android.content.Context
+import android.os.Bundle
+import com.app.ecarepro.core.domain.auth.TokenProvider
+import com.app.ecarepro.core.domain.model.User
+import com.google.firebase.analytics.FirebaseAnalytics
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import dagger.multibindings.IntoSet
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
+import javax.inject.Singleton
+
+// -------------------------------------------------------------------------------------
+// 1. Generic Analytics Event Contract (`:analytics` module)
+//
+// This is the core abstraction. Any event from any feature module will implement this
+// interface. It's simple and will not change.
+// -------------------------------------------------------------------------------------
+
+/**
+ * A generic interface that all feature-specific analytics events must implement.
+ * This contract ensures that every event provides a name and a map of its parameters.
+ */
+interface AnalyticsEvent {
+    /**
+     * The name of the event, e.g., "sign_in_success", "school_code_entered".
+     * This is what will appear in your analytics provider's dashboard.
+     */
+    val name: String
+
+    /**
+     * A map of key-value pairs that provide context for the event.
+     * e.g., mapOf("method" to "password", "from_screen" to "LoginScreen")
+     */
+    val params: Map<String, Any>
+}
+
+
+// -------------------------------------------------------------------------------------
+// 2. Analytics Provider Contract (`:analytics` module)
+//
+// Defines the contract for any analytics service (Firebase, Adobe, etc.).
+// Each provider will have its own implementation of this interface.
+// -------------------------------------------------------------------------------------
+
+/**
+ * Defines the contract for an analytics service provider.
+ */
+interface AnalyticsProvider {
+    /**
+     * Sets a user property or attribute (e.g., user role, school code).
+     * @param key The name of the property.
+     * @param value The value of the property.
+     */
+    fun setUserProperty(key: String, value: String)
+
+    /**
+     * Logs a custom event.
+     * @param event The analytics event to log.
+     */
+    fun logEvent(event: AnalyticsEvent)
+}
+
+
+// -------------------------------------------------------------------------------------
+// 3. The Central Analytics Manager (`:analytics` module)
+//
+// This is the main class the application will interact with. It manages all registered
+// providers and automatically enriches every event with base-level attributes
+// (like user_id, is_logged_in, etc.) before dispatching it.
+// -------------------------------------------------------------------------------------
+
+/**
+ * Manages all analytics tracking by delegating to a list of registered providers.
+ * It enriches events with base attributes and provides a single point of entry
+ * for logging events and identifying users.
+ */
+@Singleton
+class AnalyticsManager @Inject constructor(
+    // Using Hilt's multibinding to inject all available AnalyticsProvider implementations.
+    private val providers: Set<@JvmSuppressWildcards AnalyticsProvider>,
+    private val tokenProvider: TokenProvider // To get user info for base attributes.
+) {
+
+    /**
+     * Identifies the user across all analytics providers. Call this after a
+     * successful login or when user data is first available.
+     *
+     * @param user The user model containing details to set as user properties.
+     */
+    fun identifyUser(user: User) {
+        providers.forEach { provider ->
+            provider.setUserProperty("user_id", user.userID.toString())
+            provider.setUserProperty("user_role", user.roleName ?: "unknown")
+            user.schoolCode?.let { provider.setUserProperty("school_code", it) }
+        }
+    }
+
+    /**
+     * Logs an analytics event. It first enriches the event with base attributes
+     * and then dispatches it to all registered analytics providers.
+     *
+     * @param event The feature-specific event to log, which implements [AnalyticsEvent].
+     */
+    fun logEvent(event: AnalyticsEvent) {
+        // 1. Create a combined map of base attributes + event-specific attributes.
+        val enrichedParams = buildBaseAttributes() + event.params
+
+        // 2. Create a new anonymous object that represents the final, enriched event.
+        val enrichedEvent = object : AnalyticsEvent {
+            override val name: String = event.name
+            override val params: Map<String, Any> = enrichedParams
+        }
+
+        // 3. Dispatch the enriched event to all providers.
+        providers.forEach { it.logEvent(enrichedEvent) }
+    }
+
+    /**
+     * Constructs a map of base attributes to be included with every event.
+     * This ensures consistency and reduces boilerplate in feature modules.
+     */
+    private fun buildBaseAttributes(): Map<String, Any> {
+        // runBlocking is acceptable here as TokenProvider should be fast, reading from memory/DataStore.
+        // This is a rare exception where blocking on the calling thread is simple and effective.
+        val currentUser = runBlocking { tokenProvider.getActiveUser().first() }
+
+        return mapOf(
+            "timestamp_utc" to System.currentTimeMillis(),
+            "is_logged_in" to (currentUser != null),
+            "user_id" to (currentUser?.userID?.toString() ?: "guest")
+            // Add other global attributes like app_version, os_version, etc. here.
+        )
+    }
+}
+
+
+// -------------------------------------------------------------------------------------
+// 4. Concrete Firebase Implementation (`:analytics` module)
+//
+// An example of a concrete implementation for Firebase Analytics.
+// -------------------------------------------------------------------------------------
+
+package com.app.ecarepro.analytics.firebase
+
+// All required imports are already at the top of the file.
+
+@Singleton
+class FirebaseAnalyticsProvider @Inject constructor(
+    @ApplicationContext context: Context
+) : AnalyticsProvider {
+
+    private val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
+
+    override fun setUserProperty(key: String, value: String) {
+        firebaseAnalytics.setUserProperty(key, value)
+    }
+
+    override fun logEvent(event: AnalyticsEvent) {
+        val bundle = Bundle().apply {
+            event.params.forEach { (key, value) ->
+                // Firebase Analytics values must be String, Long, or Double.
+                // We convert everything to String for simplicity.
+                putString(key, value.toString())
+            }
+        }
+        firebaseAnalytics.logEvent(event.name, bundle)
+    }
+}
+
+
+// -------------------------------------------------------------------------------------
+// 5. Dependency Injection with Hilt (`:analytics` module)
+//
+// This Hilt module binds the concrete provider(s) to the `AnalyticsProvider` interface.
+// The `@IntoSet` annotation is key, as it tells Hilt to add the binding to a
+// `Set<AnalyticsProvider>`, which `AnalyticsManager` then consumes.
+// -------------------------------------------------------------------------------------
+
+package com.app.ecarepro.analytics.di
+
+// All required imports are already at the top of the file.
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class AnalyticsModule {
+
+    @Binds
+    @IntoSet // This is the magic! It adds the binding to a Set<AnalyticsProvider>.
+    abstract fun bindFirebaseAnalyticsProvider(
+        provider: FirebaseAnalyticsProvider
+    ): AnalyticsProvider
+
+    /*
+    // FUTURE-PROOFING EXAMPLE: Adding Adobe Analytics would be this simple.
+    // 1. Create AdobeAnalyticsProvider.kt implementing AnalyticsProvider.
+    // 2. Add the binding below.
+    // No other code in the app needs to change.
+
+    @Binds
+    @IntoSet
+    abstract fun bindAdobeAnalyticsProvider(
+        provider: AdobeAnalyticsProvider
+    ): AnalyticsProvider
+    */
+}
+
+
+// =================================================================================================
+// ----------------------------------- END: `analytics` MODULE -----------------------------------
+// =================================================================================================
+
+
+// =================================================================================================
+// ---------------------------- START: `feature/login` & `feature/schoolcode` --------------------------
+//
+// This section demonstrates how feature modules would define their own analytics events
+// and integrate the `AnalyticsManager`.
+//
+// =================================================================================================
+
+// -------------------------------------------------------------------------------------
+// 6. Feature-Specific Event Definitions
+//
+// These data classes live inside their respective feature modules (e.g., `:feature/login`).
+// They implement the generic `AnalyticsEvent` interface from the `:analytics` module.
+// -------------------------------------------------------------------------------------
+
+// --- LIVES IN: `feature/login/src/main/java/com/app/ecarepro/feature/login/analytics/` ---
+package com.app.ecarepro.feature.login.analytics
+
+import com.app.ecarepro.analytics.AnalyticsEvent // Implements the generic interface.
+
+/** Analytics event fired when the user initiates a login attempt. */
+data class SignInAttemptEvent(private val fromScreen: String) : AnalyticsEvent {
+    override val name: String = "sign_in_attempt"
+    override val params: Map<String, Any> = mapOf("from_screen" to fromScreen)
+}
+
+/** Analytics event fired upon a successful login. */
+data class SignInSuccessEvent(private val method: String) : AnalyticsEvent {
+    override val name: String = "sign_in_success"
+    override val params: Map<String, Any> = mapOf("method" to method)
+}
+
+/** Analytics event for a login-related failure. */
+data class SignInFailedEvent(private val reason: String) : AnalyticsEvent {
+    override val name: String = "sign_in_failed"
+    override val params: Map<String, Any> = mapOf("reason" to reason)
+}
+
+/** A generic screen view event scoped to the login flow. */
+data class LoginScreenViewEvent(private val screenName: String) : AnalyticsEvent {
+    override val name: String = "screen_view"
+    override val params: Map<String, Any> = mapOf(
+        "screen_name" to screenName,
+        "flow" to "login" // Example of a flow-specific parameter
+    )
+}
+
+// --- LIVES IN: `feature/schoolcode/src/main/java/com/app/ecarepro/feature/schoolcode/analytics/` ---
+package com.app.ecarepro.feature.schoolcode.analytics
+
+import com.app.ecarepro.analytics.AnalyticsEvent
+
+/** Analytics event for when a user successfully verifies a school code. */
+data class SchoolCodeVerifiedEvent(private val schoolCode: String) : AnalyticsEvent {
+    override val name: String = "school_code_verified"
+    override val params: Map<String, Any> = mapOf("school_code" to schoolCode)
+}
+
+/** Analytics event for when a school code fails verification. */
+data class SchoolCodeFailedEvent(private val schoolCode: String, private val reason: String) : AnalyticsEvent {
+    override val name: String = "school_code_failed"
+    override val params: Map<String, Any> = mapOf(
+        "school_code" to schoolCode,
+        "reason" to reason
+    )
+}
+
+
+// -------------------------------------------------------------------------------------
+// 7. ViewModel Integration (`:feature/login` and `:feature/schoolcode` modules)
+//
+// This shows the final step: injecting and using the `AnalyticsManager` in ViewModels.
+// This requires the feature's `build.gradle.kts` to have `implementation(project(":analytics"))`.
+// -------------------------------------------------------------------------------------
+
+// --- LIVES IN: `feature/login/src/main/java/com/app/ecarepro/feature/login/LoginViewModel.kt` ---
+
+package com.app.ecarepro.feature.login
+
+// Imports from other modules
+import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.analytics.AnalyticsManager // <-- Import from :analytics module
+import com.app.ecarepro.core.domain.exception.errorMessage
+import com.app.ecarepro.core.domain.location.LocationProvider
+import com.app.ecarepro.core.domain.model.LoginResult
+import com.app.ecarepro.core.domain.repository.SchoolRepository
+import com.app.ecarepro.core.domain.repository.UserRepository
+import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
+import com.app.ecarepro.designsystem.core.component.SnackbarMessage
+// Feature-specific analytics events
+import com.app.ecarepro.feature.login.analytics.LoginScreenViewEvent
+import com.app.ecarepro.feature.login.analytics.SignInAttemptEvent
+import com.app.ecarepro.feature.login.analytics.SignInFailedEvent
+import com.app.ecarepro.feature.login.analytics.SignInSuccessEvent
+import com.app.ecarepro.feature.login.navigation.LoginNavigationGraph
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+// Original imports and classes from LoginViewModel are assumed to be here...
+// NOTE: `LoginViewModel` constructor is updated to inject `AnalyticsManager`.
+
+@HiltViewModel(assistedFactory = LoginViewModel.Factory::class)
+class UpdatedLoginViewModel @AssistedInject constructor(
+    @Assisted navKey: LoginNavigationGraph.Login,
+    private val schoolRepository: SchoolRepository,
+    private val userRepository: UserRepository,
+    private val locationProvider: LocationProvider,
+    private val analyticsManager: AnalyticsManager // <-- INJECTED
+) : BaseViewModel<LoginIntent, LoginEvent>() {
+
+    // Existing state and properties
+    private val schoolCode = navKey.schoolCode
+    private var userLocation: String = ""
+    private val _uiState = MutableStateFlow(LoginUiState())
+    val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
+
+    init {
+        fetchSchool(schoolCode)
+        // Log the initial screen view event
+        analyticsManager.logEvent(LoginScreenViewEvent(screenName = "LoginScreen"))
+    }
+
+    override fun handleIntent(intent: LoginIntent) {
+        when (intent) {
+            LoginIntent.OnLoginClicked -> {
+                // Log the user's attempt to log in
+                analyticsManager.logEvent(SignInAttemptEvent(fromScreen = "LoginScreen"))
+                login()
+            }
+            // ... handle other intents as before
+            else -> { /* Other intent handling logic */ }
+        }
+    }
+
+    private fun login() {
+        viewModelScope.launch {
+            userRepository.login(
+                userName = uiState.value.username,
+                password = uiState.value.password,
+                schoolCode = schoolCode,
+                location = userLocation
+            ).onStart {
+                _uiState.update { it.copy(isLoading = true) }
+            }.collect { result ->
+                result.onSuccess { loginResult ->
+                    _uiState.update { it.copy(isLoading = false) }
+
+                    // On success, identify the user and log a success event
+                    loginResult.userDetail?.let { user ->
+                        analyticsManager.identifyUser(user)
+                        analyticsManager.logEvent(SignInSuccessEvent(method = "password"))
+                    }
+
+                    if (isOtpVerificationRequired(loginResult)) {
+                        // ... navigation logic
+                    } else {
+                        sendEvent(LoginEvent.NavigateToSelectHomeScreenType(loginResult.userDetail!!))
+                    }
+
+                }.onFailure { error: Throwable ->
+                    val errorMessage = SnackbarMessage(error.errorMessage())
+                    _uiState.update { it.copy(isLoading = false, errorMessage = errorMessage) }
+                    sendEvent(LoginEvent.ShowMessage(errorMessage))
+
+                    // Log the failure event
+                    analyticsManager.logEvent(SignInFailedEvent(reason = error.errorMessage()))
+                }
+            }
+        }
+    }
+
+    // ... other existing functions like fetchSchool, isOtpVerificationRequired, etc.
+    private fun isOtpVerificationRequired(loginResult: LoginResult): Boolean = loginResult.authenticated == true && loginResult.isOTPEnabled == true
+    private fun fetchSchool(schoolCode: String) { /* ... */ }
+}
+
+
+// --- LIVES IN: `feature/schoolcode/src/main/java/com/app/ecarepro/feature/schoolcode/SchoolCodeViewModel.kt` ---
+
+package com.app.ecarepro.feature.schoolcode
+
+// Imports from other modules
+import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.analytics.AnalyticsManager // <-- Import from :analytics module
+import com.app.ecarepro.core.domain.exception.InvalidSchoolCodeException
+import com.app.ecarepro.core.domain.repository.SchoolRepository
+import com.app.ecarepro.core.ui.viewmodel.BaseViewModel
+import com.app.ecarepro.designsystem.core.component.MessageType
+import com.app.ecarepro.designsystem.core.component.SnackbarMessage
+// Feature-specific analytics events
+import com.app.ecarepro.feature.schoolcode.analytics.SchoolCodeFailedEvent
+import com.app.ecarepro.feature.schoolcode.analytics.SchoolCodeVerifiedEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+
+@HiltViewModel
+class UpdatedSchoolCodeViewModel @Inject constructor(
+    private val schoolRepository: SchoolRepository,
+    private val analyticsManager: AnalyticsManager // <-- INJECTED
+) : BaseViewModel<SchoolCodeIntent, SchoolCodeEvent>() {
+
+    private val _uiState = MutableStateFlow(SchoolCodeUiState())
+    val uiState: StateFlow<SchoolCodeUiState> = _uiState.asStateFlow()
+
+    override fun handleIntent(intent: SchoolCodeIntent) {
+        // ... existing intent handling
+        when (intent) {
+            is SchoolCodeIntent.OnCodeChanged -> {
+                updateSchoolCode(intent.code)
+                // Don't verify on every character change, just update state.
+            }
+            SchoolCodeIntent.OnNextClicked -> {
+                verifySchoolCode()
+            }
+            // ... other intents
+        }
+    }
+
+    private fun verifySchoolCode() {
+        viewModelScope.launch {
+            val schoolCode = uiState.value.schoolCode ?: return@launch
+            schoolRepository.getSchoolDetails(schoolCode).onStart {
+                _uiState.update { it.copy(isLoading = true) }
+            }.collect { result ->
+                _uiState.update { it.copy(isLoading = false) }
+                if (result.isSuccess) {
+                    // Log success event
+                    analyticsManager.logEvent(SchoolCodeVerifiedEvent(schoolCode))
+                    sendEvent(SchoolCodeEvent.NavigateToNextScreen(schoolCode))
+                } else {
+                    val exception = result.exceptionOrNull()
+                    val reason = exception?.message ?: "Unknown error"
+
+                    // Log failure event
+                    analyticsManager.logEvent(SchoolCodeFailedEvent(schoolCode, reason))
+
+                    val message = if (exception is InvalidSchoolCodeException) {
+                        SnackbarMessage(reason, type = MessageType.WARNING)
+                    } else {
+                        SnackbarMessage(reason, type = MessageType.ERROR)
+                    }
+                    _uiState.update { it.copy(errorMessage = message) }
+                }
+            }
+        }
+    }
+     private fun updateSchoolCode(code: String) {
+        _uiState.update { it.copy(schoolCode = code) }
+    }
+}

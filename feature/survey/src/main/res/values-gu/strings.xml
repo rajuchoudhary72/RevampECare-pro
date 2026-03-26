@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="survey_title">સર્વે</string>
+    <string name="survey_form_title">સર્વે ફૉર્મ</string>
+    <string name="survey_result_title">સર્વે પરિણામ</string>
+    <string name="survey_submit">સબમિટ કરો</string>
+    <string name="survey_mandatory_note">(*) ફરજિયાત પ્રશ્નો</string>
+    <string name="survey_answer_mandatory">કૃપા ફરજિયાત પ્રશ્નોના જવાબ આપો</string>
+    <string name="survey_submit_success">પ્રતિભાવ સફળતાપૂર્વક નોંધ્યો.</string>
+    <string name="survey_already_responded">તમારા પ્રતિભાવ બદલ આભાર. તમારો પ્રતિભાવ પહેલેથી નોંધ્યો છે.</string>
+    <string name="survey_closed">સર્વે બંધ</string>
+    <string name="survey_published_on">પ્રકાશિત:</string>
+    <string name="survey_open_till">સુધી ખુલ્લો:</string>
+    <string name="survey_responded_on">પ્રતિભાવ આપ્યો</string>
+    <string name="survey_total_responses">કુલ પ્રતિભાવ -</string>
+    <string name="survey_enter_response">તમારો જવાબ દાખલ કરો</string>
+    <string name="survey_no_surveys">કોઈ સર્વે ઉપલબ્ધ નથી</string>
+</resources>

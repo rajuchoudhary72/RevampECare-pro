@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_timetable_my_timetable">मेरी समय-सारणी</string>
+    <string name="feature_timetable_no_classes_scheduled">इस दिन के लिए कोई कक्षा निर्धारित नहीं है।</string>
+</resources>

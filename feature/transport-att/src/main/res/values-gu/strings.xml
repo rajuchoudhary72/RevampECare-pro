@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="transport_att_title">પરિવહન હાજરી</string>
+    <string name="transport_att_view_out_pass_button">આઉટ પાસ જુઓ</string>
+    <string name="transport_att_select_date_label">હાજરી તારીખ પસંદ કરો</string>
+    <string name="transport_att_select_date_hint">તારીખ પસંદ કરો</string>
+    <string name="transport_att_select_trip_type_label">પ્રવાસ પ્રકાર પસંદ કરો</string>
+    <string name="transport_att_select_route_label">માર્ગ પસંદ કરો</string>
+    <string name="transport_att_select_stop_label">સ્ટૉપ પસંદ કરો</string>
+    <string name="transport_att_mark_attendance_button">હાજરી નોંધો</string>
+    <string name="transport_att_view_attendance_button">હાજરી જુઓ</string>
+    <string name="transport_att_to_school_label">શાળા તરફ</string>
+    <string name="transport_att_from_school_label">શાળાથી</string>
+    <string name="transport_att_drop_student_label">વિદ્યાર્થીને છોડો</string>
+    <string name="transport_att_close_description">બંધ કરો</string>
+    <string name="transport_att_out_pass_title">આઉટ પાસ</string>
+    <string name="transport_att_view_attendance_title">હાજરી જુઓ</string>
+</resources>

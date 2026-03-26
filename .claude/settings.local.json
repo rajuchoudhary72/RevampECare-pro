@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew clean:*)",
+      "Bash(./gradlew:*)",
+      "Bash(gradlew.bat :core:designsystem:compileDebugKotlin:*)",
+      "Bash(gradlew.bat :feature:studentprofile:compileDebugKotlin:*)",
+      "Bash(gradlew.bat:*)",
+      "Bash(./gradlew.bat:*)",
+      "Bash(cat:*)",
+      "Bash(dir:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(.gradlew.bat :feature:studentprofile:compileDebugKotlin:*)",
+      "WebFetch(domain:jsonblob.com)",
+      "Bash(ls:*)",
+      "Bash(findstr:*)"
+      "Bash(.gradlew.bat :feature:studentprofile:compileDebugKotlin:*)",
+      "WebFetch(domain:apiuat.franciscanecare.net)",
+      "Bash(find:*)",
+      "Bash(grep:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

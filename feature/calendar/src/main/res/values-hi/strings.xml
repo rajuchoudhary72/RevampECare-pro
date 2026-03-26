@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="activity_calendar_title">गतिविधि कैलेंडर</string>
+    <string name="activity_calendar_no_activities">इस महीने कोई गतिविधि नहीं</string>
+</resources>

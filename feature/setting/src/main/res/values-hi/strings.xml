@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">सेटिंग्स</string>
+    <string name="settings_rate_us">Play Store पर रेटिंग दें</string>
+    <string name="settings_change_username">उपयोगकर्ता नाम बदलें</string>
+    <string name="settings_change_password">पासवर्ड बदलें</string>
+    <string name="settings_change_language">भाषा बदलें</string>
+    <string name="settings_sync_data">डेटा सिंक करें</string>
+    <string name="settings_last_sync">अंतिम सिंक: %s</string>
+    <string name="settings_confirm_update">पुष्टि करें और अपडेट करें</string>
+    <string name="settings_existing_username">मौजूदा उपयोगकर्ता नाम</string>
+    <string name="settings_new_username">नया उपयोगकर्ता नाम</string>
+    <string name="settings_new_username_placeholder">यहाँ उपयोगकर्ता नाम दर्ज करें</string>
+    <string name="settings_current_password">वर्तमान पासवर्ड</string>
+    <string name="settings_new_password">नया पासवर्ड</string>
+    <string name="settings_confirm_password">पासवर्ड की पुष्टि करें</string>
+    <string name="settings_rules">नियम:</string>
+    <string name="settings_username_rule_1">उपयोगकर्ता नाम में केवल अक्षर और अंक (A-Z, a-z, 0-9) होने चाहिए</string>
+    <string name="settings_username_rule_2">उपयोगकर्ता नाम में कोई विशेष वर्ण नहीं होना चाहिए</string>
+    <string name="settings_username_rule_3">उपयोगकर्ता नाम 5 से 10 अक्षरों के बीच होना चाहिए</string>
+    <string name="settings_username_rule_4">उपयोगकर्ता नाम सफलतापूर्वक बदलने के बाद, आपको लॉगिन पेज पर भेजा जाएगा</string>
+    <string name="settings_password_rule_1">पासवर्ड में कम से कम एक अंक या विशेष वर्ण होना चाहिए (# और &amp; को छोड़कर)</string>
+    <string name="settings_password_rule_2">पासवर्ड 5 से 10 अक्षरों के बीच होना चाहिए</string>
+    <string name="settings_password_rule_3">पासवर्ड सफलतापूर्वक बदलने के बाद, आपको लॉगिन पेज पर भेजा जाएगा</string>
+</resources>

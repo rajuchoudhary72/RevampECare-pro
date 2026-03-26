@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="class_teacher_list_title">Class Teacher</string>
+    <string name="class_teacher_search_hint">Search by name, class, designation…</string>
+    <string name="class_teacher_no_data">No class teachers found</string>
+</resources>

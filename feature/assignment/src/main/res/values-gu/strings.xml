@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="assignment_title">સોંપણીઓ</string>
+    <string name="assignment_add_new_button">નવું ઉમેરો</string>
+    <string name="assignment_no_results">કોઈ પરિણામ નહીં. વ્યાપક શોધ કરવાનો પ્રયાસ કરો?</string>
+    <string name="assignment_delete_title">કાઢી નાખો</string>
+    <string name="assignment_delete_question">શું તમે આ સોંપણી કાઢી નાખવા માંગો છો?</string>
+    <string name="assignment_yeah_delete_button">હા, કાઢો</string>
+    <string name="assignment_add_assignment_title">સોંપણી ઉમેરો</string>
+    <string name="assignment_select_student_label">વિદ્યાર્થી પસંદ કરો</string>
+    <string name="assignment_date_label">સોંપણી તારીખ</string>
+    <string name="assignment_date_hint">તારીખ ઉમેરવા અહીં ક્લિક કરો</string>
+    <string name="assignment_type_label">તમારી સોંપણી ટાઇપ કરો</string>
+    <string name="assignment_type_hint">તમારો પ્રકાર અહીં ઉમેરો</string>
+    <string name="assignment_select_student_hint">વિદ્યાર્થી પસંદ કરો</string>
+</resources>

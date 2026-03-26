@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_timetable_my_timetable">My Timetable</string>
+    <string name="feature_timetable_no_classes_scheduled">No classes scheduled for this day.</string>
+</resources>

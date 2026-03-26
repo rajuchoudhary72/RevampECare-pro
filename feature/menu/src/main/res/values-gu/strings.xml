@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_title">મેનૂ</string>
+    <string name="menu_switch_account">ખાતું બદલો</string>
+    <string name="menu_current_account">વર્તમાન ખાતું</string>
+    <string name="menu_failed_to_load">મેનૂ લોડ કરવામાં નિષ્ફળ. કૃપા ફરી પ્રયાસ કરો.</string>
+    <string name="menu_retry">ફરી પ્રયાસ કરો</string>
+    <string name="menu_no_items">કોઈ મેનૂ આઇટમ ઉપલબ્ધ નથી.</string>
+</resources>

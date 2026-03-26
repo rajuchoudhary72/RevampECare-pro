@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="know_your_teacher_list_title">अपने शिक्षक को जानें</string>
+    <string name="know_your_teacher_search_hint">नाम, पदनाम से खोजें…</string>
+    <string name="know_your_teacher_no_data">कोई शिक्षक नहीं मिला</string>
+    <string name="know_your_teacher_detail_title">शिक्षक विवरण</string>
+</resources>

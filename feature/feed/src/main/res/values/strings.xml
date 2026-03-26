@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feed_title">Feed</string>
+    <string name="feed_no_updates_available">No updates available</string>
+</resources>

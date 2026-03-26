@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="discipline_infractions_title">उल्लंघन</string>
+    <string name="discipline_appreciation_title">प्रशंसा सूची</string>
+    <string name="discipline_search_by_student_hint">नाम, प्रवेश संख्या से खोजें…</string>
+    <string name="discipline_search_by_staff_hint">नाम, पदनाम से खोजें…</string>
+    <string name="discipline_no_students_found">कोई छात्र नहीं मिला</string>
+    <string name="discipline_no_staff_found">कोई कर्मचारी नहीं मिला</string>
+    <string name="discipline_add_infraction_label">उल्लंघन जोड़ें</string>
+    <string name="discipline_add_appreciation_label">प्रशंसा जोड़ें</string>
+    <string name="discipline_view_all_label">सभी देखें</string>
+    <string name="discipline_select_category_label">प्रशंसा श्रेणी चुनें</string>
+    <string name="discipline_select_category_hint">श्रेणी चुनें</string>
+    <string name="discipline_select_subcategory_label">प्रशंसा उपश्रेणी चुनें</string>
+    <string name="discipline_select_subcategory_hint">उपश्रेणी चुनें</string>
+    <string name="discipline_count_label">प्रशंसा की संख्या</string>
+    <string name="discipline_count_hint">उदाहरणों की संख्या</string>
+    <string name="discipline_reward_label">पुरस्कार</string>
+    <string name="discipline_remarks_label">टिप्पणी जोड़ें</string>
+    <string name="discipline_reason_label">प्रशंसा का कारण</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_homeselection_how_do_you_want_to_start">आप कैसे शुरू करना चाहते हैं?</string>
+    <string name="feature_homeselection_begin_with_dashboard_feeds_or_favorites_whichever_suits_you_best_you_can_update_this_later_in_settings">डैशबोर्ड, फ़ीड या पसंदीदा से शुरू करें — जो भी आपको सबसे अच्छा लगे। आप इसे बाद में सेटिंग्स में अपडेट कर सकते हैं।</string>
+    <string name="feature_homeselection_you_can_switch_anytime_later_from_settings">आप बाद में सेटिंग्स से कभी भी बदल सकते हैं</string>
+    <string name="feature_homeselection_set_as_home">होम के रूप में सेट करें</string>
+</resources>

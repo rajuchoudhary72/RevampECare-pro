@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_syllabus_select_class">વર્ગ પસંદ કરો</string>
+    <string name="feature_syllabus_class">વર્ગ</string>
+    <string name="feature_syllabus_select_section">વિભાગ પસંદ કરો</string>
+    <string name="feature_syllabus_section">વિભાગ</string>
+    <string name="feature_syllabus_syllabus_title">અભ્યાસક્રમ શીર્ષક</string>
+    <string name="feature_syllabus_add_your_title_here">અહીં શીર્ષક ઉમેરો</string>
+    <string name="feature_syllabus_add_new_syllabus">નવો અભ્યાસક્રમ ઉમેરો</string>
+    <string name="feature_syllabus_only_for_classes_with_section_wise_syllabus_differences">ફક્ત એ વર્ગો માટે જ્યાં વિભાગ-વાર અભ્યાસક્રમ ભિન્ન છે</string>
+    <string name="feature_syllabus_click_here_to_add_file">ફાઇલ ઉમેરવા અહીં ક્લિક કરો</string>
+    <string name="feature_syllabus_max_10_mb_files_are_allowed">મહત્તમ 10 MB ફાઇલ માન્ય છે</string>
+    <string name="feature_syllabus_select_subject">વિષય પસંદ કરો</string>
+    <string name="feature_syllabus_all_subjects">બધા વિષય</string>
+    <string name="feature_syllabus_title">અભ્યાસક્રમ</string>
+    <string name="feature_syllabus_add_new">નવું ઉમેરો</string>
+    <string name="feature_syllabus_search_placeholder">શીર્ષક અથવા વિષય દ્વારા શોધો</string>
+    <string name="feature_syllabus_empty_state">કોઈ પરિણામ નહીં.\nકદાચ વ્યાપક શોધ અજમાવો?</string>
+</resources>

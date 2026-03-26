@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_syllabus_select_class">कक्षा चुनें</string>
+    <string name="feature_syllabus_class">कक्षा</string>
+    <string name="feature_syllabus_select_section">अनुभाग चुनें</string>
+    <string name="feature_syllabus_section">अनुभाग</string>
+    <string name="feature_syllabus_syllabus_title">पाठ्यक्रम शीर्षक</string>
+    <string name="feature_syllabus_add_your_title_here">यहाँ शीर्षक जोड़ें</string>
+    <string name="feature_syllabus_add_new_syllabus">नया पाठ्यक्रम जोड़ें</string>
+    <string name="feature_syllabus_only_for_classes_with_section_wise_syllabus_differences">केवल उन कक्षाओं के लिए जहाँ अनुभागवार पाठ्यक्रम में अंतर है</string>
+    <string name="feature_syllabus_click_here_to_add_file">फ़ाइल जोड़ने के लिए यहाँ क्लिक करें</string>
+    <string name="feature_syllabus_max_10_mb_files_are_allowed">अधिकतम 10 MB फ़ाइलें अनुमत हैं</string>
+    <string name="feature_syllabus_select_subject">विषय चुनें</string>
+    <string name="feature_syllabus_all_subjects">सभी विषय</string>
+    <string name="feature_syllabus_title">पाठ्यक्रम</string>
+    <string name="feature_syllabus_add_new">नया जोड़ें</string>
+    <string name="feature_syllabus_search_placeholder">शीर्षक या विषय से खोजें</string>
+    <string name="feature_syllabus_empty_state">कोई परिणाम नहीं।\nशायद एक व्यापक खोज आज़माएं?</string>
+</resources>

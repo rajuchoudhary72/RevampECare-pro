@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="survey_title">Survey</string>
+    <string name="survey_form_title">Survey Form</string>
+    <string name="survey_result_title">Survey Result</string>
+    <string name="survey_submit">Submit</string>
+    <string name="survey_mandatory_note">(*) Mandatory Questions</string>
+    <string name="survey_answer_mandatory">Please answer the mandatory questions</string>
+    <string name="survey_submit_success">Response posted successfully.</string>
+    <string name="survey_already_responded">Thanks for your response. Your response has already been recorded.</string>
+    <string name="survey_closed">Survey Closed</string>
+    <string name="survey_published_on">Published On:</string>
+    <string name="survey_open_till">Open Till:</string>
+    <string name="survey_responded_on">Responded On</string>
+    <string name="survey_total_responses">Total Response(s) -</string>
+    <string name="survey_enter_response">Enter your response</string>
+    <string name="survey_no_surveys">No surveys available</string>
+</resources>

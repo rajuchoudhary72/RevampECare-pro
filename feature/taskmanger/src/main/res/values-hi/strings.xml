@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="task_manager_title">टास्क मैनेजर</string>
+    <string name="task_manager_add_new_task">+ नया टास्क जोड़ें</string>
+    <string name="task_manager_search_hint">टास्क नाम से खोजें</string>
+    <string name="task_manager_no_tasks_found">कोई टास्क नहीं मिला\nटास्क उपलब्ध होने पर यहाँ दिखेंगे</string>
+    <string name="task_manager_overdue_tasks_label">अतिदेय टास्क</string>
+    <string name="task_manager_due_today_label">आज देय</string>
+    <string name="task_manager_upcoming_tasks_label">आगामी टास्क</string>
+    <string name="task_manager_closed_tasks_label">बंद टास्क</string>
+    <string name="task_manager_select_assignee_title">असाइनी चुनें</string>
+    <string name="task_manager_search_assignee_hint">असाइनी नाम से खोजें</string>
+    <string name="task_manager_priority_title">प्राथमिकता</string>
+    <string name="task_manager_status_title">स्थिति</string>
+    <string name="task_manager_expand_description">विस्तार करें</string>
+    <string name="task_manager_collapse_description">संकुचित करें</string>
+    <string name="task_manager_task_name_label">टास्क नाम</string>
+    <string name="task_manager_description_label">विवरण जोड़ें</string>
+    <string name="task_manager_select_watchers_label">दर्शक चुनें</string>
+    <string name="task_manager_start_date_label">प्रारंभ तिथि</string>
+    <string name="task_manager_end_date_label">समाप्ति तिथि</string>
+</resources>

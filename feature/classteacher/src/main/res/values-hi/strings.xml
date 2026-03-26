@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="class_teacher_list_title">कक्षा अध्यापक</string>
+    <string name="class_teacher_search_hint">नाम, कक्षा, पदनाम से खोजें…</string>
+    <string name="class_teacher_no_data">कोई कक्षा अध्यापक नहीं मिला</string>
+</resources>

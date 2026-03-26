@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_dailyConsumption_title">दैनिक उपभोग</string>
+    <string name="sms_dailyConsumption_smsCount">एसएमएस गणना:</string>
+    <string name="sms_dailyConsumption_totalSMS">कुल एसएमएस:</string>
+    <string name="sms_dailyConsumption_startDate">प्रारंभ तिथि</string>
+    <string name="sms_dailyConsumption_endDate">समाप्ति तिथि</string>
+    <string name="sms_dailyConsumption_noData">कोई डेटा नहीं मिला</string>
+</resources>

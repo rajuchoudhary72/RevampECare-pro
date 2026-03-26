@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="message_title">संदेश</string>
+    <string name="message_search_hint">नाम, पदनाम से खोजें</string>
+    <string name="message_new_message_description">नया संदेश</string>
+    <string name="message_in_app_message_label">इन-ऐप संदेश</string>
+    <string name="message_free_badge">मुफ़्त</string>
+    <string name="message_text_message_label">टेक्स्ट संदेश (₹)</string>
+    <string name="message_whatsapp_label">व्हाट्सएप (₹)</string>
+    <string name="message_inbox_tab">इनबॉक्स</string>
+    <string name="message_timeline_tab">टाइमलाइन</string>
+    <string name="message_sent_tab">भेजा गया</string>
+    <string name="message_users_tab">उपयोगकर्ता</string>
+    <string name="message_delete_title">संदेश हटाएं</string>
+    <string name="message_select_user_type_label">उपयोगकर्ता प्रकार चुनें</string>
+</resources>

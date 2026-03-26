@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feed_title">फ़ीड</string>
+    <string name="feed_no_updates_available">कोई अपडेट उपलब्ध नहीं</string>
+</resources>

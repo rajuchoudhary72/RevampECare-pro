@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="message_title">Messages</string>
+    <string name="message_search_hint">Search by name, designation</string>
+    <string name="message_new_message_description">New message</string>
+    <string name="message_in_app_message_label">In app message</string>
+    <string name="message_free_badge">FREE</string>
+    <string name="message_text_message_label">Text message (₹)</string>
+    <string name="message_whatsapp_label">Whatsapp (₹)</string>
+    <string name="message_inbox_tab">Inbox</string>
+    <string name="message_timeline_tab">Timeline</string>
+    <string name="message_sent_tab">Sent</string>
+    <string name="message_users_tab">Users</string>
+    <string name="message_delete_title">Delete Message</string>
+    <string name="message_select_user_type_label">Select User Type</string>
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="btn_retry">पुनः प्रयास करें</string>
+    <string name="core_designsystem_menu">मेनू</string>
+    <string name="core_designsystem_close">बंद करें</string>
+    <string name="core_designsystem_permission_denied">अनुमति अस्वीकार</string>
+    <string name="core_designsystem_camera_permission_was_permanently_denied_please_enable_it_in_app_settings">कैमरा अनुमति स्थायी रूप से अस्वीकार कर दी गई है। कृपया ऐप सेटिंग्स में इसे सक्षम करें।</string>
+    <string name="core_designsystem_cancel">रद्द करें</string>
+    <string name="core_designsystem_permission_required">अनुमति आवश्यक है</string>
+    <string name="core_designsystem_camera_access_is_needed_to_take_photos">फोटो लेने के लिए कैमरा एक्सेस आवश्यक है।</string>
+    <string name="core_designsystem_try_again">पुनः प्रयास करें</string>
+    <string name="core_designsystem_select_file_pdf_doc_docx_xlsx">फ़ाइल चुनें (PDF/DOC/DOCX/XLSX)</string>
+    <string name="core_designsystem_select_photo">फोटो चुनें</string>
+    <string name="core_designsystem_take_photo">फोटो लें</string>
+    <string name="core_designsystem_preparing_file">फ़ाइल तैयार हो रही है…</string>
+    <string name="core_designsystem_open_settings">सेटिंग्स खोलें</string>
+    <string name="core_designsystem_click_here_to_add_file">फ़ाइल जोड़ने के लिए यहाँ क्लिक करें</string>
+    <string name="core_designsystem_max_10_mb_files_are_allowed">अधिकतम 10 MB फ़ाइलें अनुमत हैं</string>
+    <string name="core_designsystem_select_class">कक्षा चुनें</string>
+    <string name="core_designsystem_class">कक्षा</string>
+    <string name="core_designsystem_select_student">छात्र चुनें</string>
+    <string name="core_designsystem_student">छात्र</string>
+    <string name="core_designsystem_syllabus_title">असाइनमेंट शीर्षक</string>
+    <string name="core_designsystem_add_your_title_here">यहाँ शीर्षक जोड़ें</string>
+    <string name="core_designsystem_add_new_syllabus">नया पाठ्यक्रम जोड़ें</string>
+    <string name="core_designsystem_only_for_classes_with_section_wise_syllabus_differences">केवल उन कक्षाओं के लिए जहाँ अनुभागवार पाठ्यक्रम में अंतर है</string>
+    <string name="core_designsystem_select_subject">विषय चुनें</string>
+    <string name="core_designsystem_subjects">विषय</string>
+</resources>

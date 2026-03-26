@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_timetable_my_timetable">મારું સમય-પત્રક</string>
+    <string name="feature_timetable_no_classes_scheduled">આ દિવસ માટે કોઈ વર્ગ નિર્ધારિત નથી.</string>
+</resources>

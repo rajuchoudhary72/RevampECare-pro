@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="global_search_placeholder">छात्र, कक्षा आदि खोजें..</string>
+    <string name="global_search_filter_label">फ़िल्टर</string>
+    <string name="global_search_student_label">छात्र</string>
+    <string name="global_search_staff_label">कर्मचारी</string>
+    <string name="global_search_module_label">मॉड्यूल</string>
+    <string name="global_search_initial_title">आपकी खोज यात्रा यहाँ से शुरू होती है</string>
+    <string name="global_search_no_results">कोई परिणाम नहीं।\nशायद थोड़ी व्यापक खोज करें?</string>
+    <string name="global_search_error_retry">कुछ गलत हो गया।\nपुनः प्रयास करने के लिए टैप करें।</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ebook_title">ई-पुस्तकें</string>
+    <string name="ebook_search_hint">नाम, लेखक या प्रकाशन से खोजें…</string>
+    <string name="ebook_something_went_wrong">कुछ गलत हो गया</string>
+    <string name="ebook_no_results_found">कोई परिणाम नहीं मिला</string>
+</resources>

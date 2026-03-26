@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_title">Menu</string>
+    <string name="menu_switch_account">Switch Account</string>
+    <string name="menu_current_account">Current Account</string>
+    <string name="menu_failed_to_load">Failed to load menu. Please try again.</string>
+    <string name="menu_retry">Retry</string>
+    <string name="menu_no_items">No menu items available.</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="transport_att_title">परिवहन उपस्थिति</string>
+    <string name="transport_att_view_out_pass_button">आउट पास देखें</string>
+    <string name="transport_att_select_date_label">उपस्थिति की तारीख चुनें</string>
+    <string name="transport_att_select_date_hint">तारीख चुनें</string>
+    <string name="transport_att_select_trip_type_label">यात्रा प्रकार चुनें</string>
+    <string name="transport_att_select_route_label">मार्ग चुनें</string>
+    <string name="transport_att_select_stop_label">स्टॉप चुनें</string>
+    <string name="transport_att_mark_attendance_button">उपस्थिति दर्ज करें</string>
+    <string name="transport_att_view_attendance_button">उपस्थिति देखें</string>
+    <string name="transport_att_to_school_label">विद्यालय की ओर</string>
+    <string name="transport_att_from_school_label">विद्यालय से</string>
+    <string name="transport_att_drop_student_label">छात्र को छोड़ें</string>
+    <string name="transport_att_close_description">बंद करें</string>
+    <string name="transport_att_out_pass_title">आउट पास</string>
+    <string name="transport_att_view_attendance_title">उपस्थिति देखें</string>
+</resources>

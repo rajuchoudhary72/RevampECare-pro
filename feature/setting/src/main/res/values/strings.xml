@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Settings</string>
+    <string name="settings_rate_us">Rate us on Play Store</string>
+    <string name="settings_change_username">Change username</string>
+    <string name="settings_change_password">Change password</string>
+    <string name="settings_change_language">Change language</string>
+    <string name="settings_sync_data">Sync data</string>
+    <string name="settings_last_sync">Last sync: %s</string>
+    <string name="settings_confirm_update">Confirm &amp; Update</string>
+    <string name="settings_existing_username">Existing username</string>
+    <string name="settings_new_username">New username</string>
+    <string name="settings_new_username_placeholder">Enter username here</string>
+    <string name="settings_current_password">Current password</string>
+    <string name="settings_new_password">New password</string>
+    <string name="settings_confirm_password">Confirm password</string>
+    <string name="settings_rules">RULES:</string>
+    <string name="settings_username_rule_1">Username must consist of alphanumeric characters (A-Z, a-z, 0-9)</string>
+    <string name="settings_username_rule_2">No special characters allowed in username</string>
+    <string name="settings_username_rule_3">Username must be in between 5 to 10 characters</string>
+    <string name="settings_username_rule_4">Once username will be successfully changed, you will be redirected to login page</string>
+    <string name="settings_password_rule_1">Password must consist of at least one number or special characters except for # and &amp;</string>
+    <string name="settings_password_rule_2">Password must be in between 5 to 10 characters</string>
+    <string name="settings_password_rule_3">Once password will be successfully changed, you will be redirected to login page</string>
+</resources>

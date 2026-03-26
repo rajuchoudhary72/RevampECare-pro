@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="update_record_class_promotion_title">कक्षा पदोन्नति</string>
+    <string name="update_record_manage_roll_number_title">रोल नंबर प्रबंधन</string>
+    <string name="update_record_update_house_title">हाउस अपडेट करें</string>
+    <string name="update_record_update_profile_picture_title">प्रोफ़ाइल चित्र अपडेट करें</string>
+    <string name="update_record_search_hint">नाम, प्रवेश संख्या से खोजें…</string>
+    <string name="update_record_select_section_title">अनुभाग चुनें</string>
+    <string name="update_record_no_students_found">कोई छात्र नहीं मिला</string>
+    <string name="update_record_admission_no_label">प्रवेश संख्या</string>
+    <string name="update_record_roll_no_label">रोल नंबर</string>
+    <string name="update_record_promoted_label">पदोन्नत</string>
+    <string name="update_record_promote_button">पदोन्नत करें</string>
+    <string name="update_record_save_button">सहेजें</string>
+    <string name="update_record_select_class_label">कक्षा चुनें</string>
+    <string name="update_record_select_house_label">हाउस चुनें</string>
+</resources>

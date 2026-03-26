@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="know_your_teacher_list_title">Know Your Teacher</string>
+    <string name="know_your_teacher_search_hint">Search by name, designation…</string>
+    <string name="know_your_teacher_no_data">No teachers found</string>
+    <string name="know_your_teacher_detail_title">Teacher Details</string>
+</resources>

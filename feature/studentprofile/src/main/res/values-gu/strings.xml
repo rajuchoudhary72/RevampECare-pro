@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_studentprofile_title">વિદ્યાર્થી પ્રોફાઇલ</string>
+    <string name="feature_studentprofile_search_placeholder">નામ અથવા રોલ નંબર દ્વારા શોધો</string>
+    <string name="feature_studentprofile_empty_state">કોઈ વિદ્યાર્થી પ્રોફાઇલ મળી નથી</string>
+    <string name="feature_studentprofile_class">વર્ગ</string>
+    <string name="feature_studentprofile_section">વિભાગ</string>
+    <string name="feature_studentprofile_roll_number">રોલ નંબર</string>
+    <string name="feature_studentprofile_student_name">વિદ્યાર્થીનું નામ</string>
+</resources>

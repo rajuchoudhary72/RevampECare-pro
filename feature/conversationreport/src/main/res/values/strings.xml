@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="conversation_report_title">Conversation report</string>
+    <string name="conversation_start_date">Start date</string>
+    <string name="conversation_end_date">End date</string>
+    <string name="conversation_sent_to">Sent to:</string>
+    <string name="conversation_sent_by">Sent by:</string>
+    <string name="conversation_sent_on">Sent on:</string>
+    <string name="conversation_read_by">Read by</string>
+    <string name="conversation_recipients">recipient(s)</string>
+    <string name="conversation_recipient_count">%d recipient(s)</string>
+    <string name="conversation_view_recipients">View recipient(s)</string>
+    <string name="conversation_subject">Subject</string>
+    <string name="conversation_status">Status:</string>
+    <string name="conversation_read_on">Read on</string>
+    <string name="conversation_unread">Unread</string>
+    <string name="conversation_no_results">No conversations found</string>
+    <string name="conversation_delete_title">Delete</string>
+    <string name="conversation_delete_message">Do you want to delete this conversation?</string>
+    <string name="conversation_delete_confirm">Yeah, delete</string>
+    <string name="conversation_filter_title">Filter by</string>
+    <string name="conversation_filter_all">All</string>
+    <string name="conversation_filter_staff">Staff</string>
+    <string name="conversation_filter_parents">Parents</string>
+    <string name="conversation_filter_student">Student</string>
+    <string name="conversation_sender">Sender</string>
+    <string name="conversation_recipients_label">Recipient(s)</string>
+    <string name="conversation_has_word">Has the word in the message</string>
+    <string name="conversation_any">Any</string>
+    <string name="conversation_specific">Specific</string>
+    <string name="conversation_type_word">Type the word</string>
+    <string name="conversation_apply">Apply</string>
+    <string name="conversation_clear_all">Clear all</string>
+</resources>

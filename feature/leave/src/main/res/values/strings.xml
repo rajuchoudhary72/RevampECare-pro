@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_leave_type_label">Leave Type *</string>
+    <string name="feature_leave_select_type">Select leave type</string>
+    <string name="feature_leave_available_days">Available: %1$s days</string>
+    <string name="feature_leave_document_attachment">Document Attachment</string>
+    <string name="feature_leave_attach_required">Attach Document (Required)</string>
+    <string name="feature_leave_attach_optional">Attach Document (Optional)</string>
+    <string name="feature_leave_max_file_size">Max file size: 10 MB</string>
+    <string name="feature_leave_apply_leave">Apply Leave</string>
+    <string name="feature_leave_retry">Retry</string>
+    <string name="feature_leave_terms_conditions">Terms &amp; Conditions</string>
+    <string name="feature_leave_no_terms">No terms and conditions available</string>
+    <string name="feature_leave_close">Close</string>
+    <string name="feature_leave_submit_request">Submit Leave Request</string>
+    <string name="feature_leave_no_applications">No leave applications</string>
+    <string name="feature_leave_reason_label">Reason *</string>
+    <string name="feature_leave_select_reason">Select reason</string>
+    <string name="feature_leave_duration_label">Leave Duration *</string>
+    <string name="feature_leave_from_date">From Date</string>
+    <string name="feature_leave_to_date">To Date</string>
+    <string name="feature_leave_total_duration">Total Duration:</string>
+    <string name="feature_leave_agree_to">I agree to the </string>
+    <string name="feature_leave_terms_link">terms and conditions</string>
+    <string name="feature_leave_select_date">Select date</string>
+    <string name="feature_leave_ok">OK</string>
+    <string name="feature_leave_cancel">Cancel</string>
+    <string name="feature_leave_balance_title">Leave Balance</string>
+    <string name="feature_leave_balance_available">Available: %1$s days</string>
+    <string name="feature_leave_balance_total">Total: %1$s days</string>
+    <string name="feature_leave_balance_used">Used: %1$s days</string>
+</resources>
